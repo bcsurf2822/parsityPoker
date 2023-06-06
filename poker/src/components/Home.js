@@ -1,4 +1,5 @@
 import React from 'react';
+import Login from './Login';
 import Navbar from './Navbar';
 import Options from './Options';
 import Footer from './Footer';
@@ -7,11 +8,30 @@ const Background = () => (
   <div className="background"></div>
 );
 
+function TitleConatiner() {
+  return (
+    <div className="container">
+      <div className="row">
+        <div className="col">
+          <div className="p-3 border bg-light"><h1>Welcome To PKR Poker</h1>
+          <p>A Cryptocurrency Poker Platform </p></div>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col">
+          <div className="p-3 border bg-light"><Login /></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const Foreground = () => (
   <div className="foreground">
-    <h1>Welcome to PKR Poker</h1>
+    <TitleConatiner />
   </div>
 );
+
 
 class Home extends React.Component {
 
@@ -19,10 +39,6 @@ class Home extends React.Component {
     return (
       <div className="App">
               <Options
-          joinGame={this.handleJoinGame}
-          hostGame={this.handleHostGame}
-          tutorial={this.handleTutorial}
-          settings={this.handleSettings}
         />
           <div className="app">
     <Background />

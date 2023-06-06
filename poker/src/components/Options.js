@@ -4,7 +4,7 @@ const Options = () => {
       <div class="container-fluid">
       <ul class="nav nav-underline">
   <li class="nav-item">
-    <h6>PKR LOGO**</h6>
+    <h6>**LOGO**</h6>
   </li>
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Settings</a>
@@ -18,12 +18,11 @@ const Options = () => {
     </ul>
   </li>
 </ul>
-        <button>Features</button>
+        <button>About</button>
         <button>Promotions</button>
         <button>Tables</button>
-        <button>Login</button>
         <button>Register</button>
-        <a class="navbar-brand">**Player Name and Avatar</a>
+        <a class="navbar-brand">**Player Name and Avatar**</a>
       </div>
     </nav>
   );
