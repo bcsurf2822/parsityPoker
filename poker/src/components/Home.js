@@ -27,17 +27,5 @@ const Home = () => {
   );
 };
 
-// class Home extends React.Component {
-
-//   render() {
-//     return (
-//       <div className="App">
-//     <Background />
-//     <Foreground />
-//         <Footer />
-//       </div>
-//     );
-//   }
-// }
 
 export default Home;
