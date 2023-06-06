@@ -6,6 +6,7 @@ import About from "./components/pages/About";
 import Register from "./components/pages/Registration";
 import Promotions from "./components/pages/Promotions";
 import Navbar from "./components/Navbar";
+import Tables from "./components/pages/Tables";
 
 const Background = () => (
   <div className="background"></div>
@@ -21,8 +22,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Home/>}/>
           <Route path="/about" element={<About/>}/>
-          <Route path="/register" element={<Register/>}/>
+          <Route path="/registration" element={<Register/>}/>
           <Route path="/promotions" element={<Promotions/>}/>
+          <Route path="/tables" element={<Tables/>}/>
+
 
         </Routes>
       </Router>
