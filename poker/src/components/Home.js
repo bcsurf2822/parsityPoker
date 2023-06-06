@@ -3,42 +3,32 @@ import Navbar from './Navbar';
 import Options from './Options';
 import Footer from './Footer';
 
+const Background = () => (
+  <div className="background"></div>
+);
+
+const Foreground = () => (
+  <div className="foreground">
+    <h1>Welcome to PKR Poker</h1>
+  </div>
+);
+
 class Home extends React.Component {
-  state = {
-    score: 0,
-    // add other state properties as needed
-  };
-
-  handleLogout = () => {
-    // handle logout
-  };
-
-  handleJoinGame = () => {
-    // handle join game
-  };
-
-  handleHostGame = () => {
-    // handle host game
-  };
-
-  handleTutorial = () => {
-    // handle tutorial
-  };
-
-  handleSettings = () => {
-    // handle settings
-  };
 
   render() {
     return (
       <div className="App">
-        <Navbar score={this.state.score} logout={this.handleLogout} />
-        <Options
+              <Options
           joinGame={this.handleJoinGame}
           hostGame={this.handleHostGame}
           tutorial={this.handleTutorial}
           settings={this.handleSettings}
         />
+          <div className="app">
+    <Background />
+    <Foreground />
+  </div>
+        <Navbar logout={this.handleLogout} />
         <Footer />
       </div>
     );

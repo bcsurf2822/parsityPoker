@@ -1,13 +1,50 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.app {
+  overflow: hidden;
+  position: relative;
+  height: 100vh; /* Fill the viewport */
+}
+
+.background {
+  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAguXNanVeFTURVXWFMPQOjmXEallNAJMHkxXBFl-t-A&usqp=CAU&ec=48665699"); /* Replace with your background image URL */
+  height: 200vh; /* Double the height of the viewport for scrolling */
+  width: 100%;
+  position: absolute;
+  top: 0;
+  background-attachment: scroll;
+  background-size: cover;
+  background-repeat: no-repeat;
+  will-change: transform; /* Optimizes animations */
+  z-index: -1;
+  animation: scroll 20s linear infinite;
+}
+
+.foreground {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100vh);
+  }
 }

@@ -1,7 +1,7 @@
 const Footer = () => {
   return (
     <div>
-      <p>2023 Poker Game. All rights reserved.</p>
+      <p>2023 PKR Poker. All rights reserved.</p>
     </div>
   );
 };
