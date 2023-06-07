@@ -5,6 +5,7 @@ export const login = createAsyncThunk(
   "authentication/login",
   async ({ username, password }) => {
     const response = await axios.post("http://localhost:4000/login", { username, password });
+    console.log(response.data)
     return response.data; // This should return the user data if login was successful
   }
 );
@@ -34,6 +35,7 @@ const authenticationSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isAuthenticated = true;
         state.loading = false;
+        state.user = action.payload
       })
       .addCase(login.rejected, (state, action) => {
         state.isAuthenticated = false;

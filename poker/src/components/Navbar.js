@@ -1,16 +1,30 @@
-
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { Navbar, Nav, NavDropdown, Button } from 'react-bootstrap';
+import { useSelector, useDispatch } from "react-redux";
+import { Navbar, Nav, NavDropdown, Button } from "react-bootstrap";
+import { logout } from "../rtk/slices/authenticationSlice";
 
 const MyNav = () => {
   const navigate = useNavigate();
-  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.auth.user);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-  const toHome = function () { navigate("/"); };
-  const toPromo = function () { navigate("/Promotions"); };
-  const toAbout = function () { navigate("/About"); };
-  const toTables = function () { navigate("/Tables"); };
+  const toHome = function () {
+    navigate("/");
+  };
+  const toPromo = function () {
+    navigate("/Promotions");
+  };
+  const toAbout = function () {
+    navigate("/About");
+  };
+  const toTables = function () {
+    navigate("/Tables");
+  };
+  const toLogout = function () {
+    dispatch(logout());
+    navigate("/")
+  }
 
   return (
     <Navbar bg="light" expand="lg" sticky="top">
@@ -22,18 +36,24 @@ const MyNav = () => {
           <Nav.Link onClick={toAbout}>About</Nav.Link>
           <Nav.Link onClick={toPromo}>Promotions</Nav.Link>
           <Nav.Link onClick={toTables}>Tables</Nav.Link>
-          <NavDropdown title="Settings" id="basic-nav-dropdown">
-            <NavDropdown.Item href="#">Profile</NavDropdown.Item>
-            <NavDropdown.Item href="#">Advanced Settings</NavDropdown.Item>
-            <NavDropdown.Item href="#">Hand History</NavDropdown.Item>
-            <NavDropdown.Item href="#">Account History</NavDropdown.Item>
-            <NavDropdown.Item href="#">Log Out</NavDropdown.Item>
-          </NavDropdown>
+          {isAuthenticated && (
+            <NavDropdown title="Settings" id="basic-nav-dropdown">
+              <NavDropdown.Item href="#">Profile</NavDropdown.Item>
+              <NavDropdown.Item href="#">Advanced Settings</NavDropdown.Item>
+              <NavDropdown.Item href="#">Hand History</NavDropdown.Item>
+              <NavDropdown.Item href="#">Account History</NavDropdown.Item>
+              <NavDropdown.Item
+              onClick={toLogout}
+            >Log Out</NavDropdown.Item>
+            </NavDropdown>
+          )}
         </Nav>
       </Navbar.Collapse>
-      <Navbar.Text>
-        Signed in as: <a href="#login">**Player Name and Avatar**</a>
-      </Navbar.Text>
+      {isAuthenticated && (
+        <Navbar.Text>
+          Signed in as: <a href="#login">{userInfo?.username}</a>
+        </Navbar.Text>
+      )}
     </Navbar>
   );
 };

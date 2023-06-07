@@ -6,7 +6,7 @@ import Footer from "./Footer";
 const Home = () => {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
 
-  const userState = useSelector(state => state.auth.username);
+  const userInfo = useSelector(state => state.auth.user);
 
   return (
     <div className="App">
@@ -23,7 +23,7 @@ const Home = () => {
           <div className="col">
             <div className="p-3 border bg-light">
               {!isAuthenticated && <Login /> }
-              {isAuthenticated && <h2>Welcome Back {userState}!</h2>}
+              {isAuthenticated && <h2>Welcome Back {userInfo.username}!</h2>}
             </div>
           </div>
         </div>
