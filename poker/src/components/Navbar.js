@@ -21,10 +21,22 @@ const MyNav = () => {
   const toTables = function () {
     navigate("/Tables");
   };
+  const toProfile = function () {
+    navigate("/Profile");
+  };
+  const toHands = function () {
+    navigate("/handhistory");
+  };
+  const toAdvanced = function () {
+    navigate("/advancedsettings");
+  };
+  const toAccountHistory = function () {
+    navigate("/accounthistory");
+  };
   const toLogout = function () {
     dispatch(logout());
-    navigate("/")
-  }
+    navigate("/");
+  };
 
   return (
     <Navbar bg="light" expand="lg" sticky="top">
@@ -38,21 +50,33 @@ const MyNav = () => {
           <Nav.Link onClick={toTables}>Tables</Nav.Link>
           {isAuthenticated && (
             <NavDropdown title="Settings" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#">Profile</NavDropdown.Item>
-              <NavDropdown.Item href="#">Advanced Settings</NavDropdown.Item>
-              <NavDropdown.Item href="#">Hand History</NavDropdown.Item>
-              <NavDropdown.Item href="#">Account History</NavDropdown.Item>
-              <NavDropdown.Item
-              onClick={toLogout}
-            >Log Out</NavDropdown.Item>
+              <NavDropdown.Item href="#" onClick={toProfile}>
+                Profile
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#" onClick={toAdvanced}>
+                Advanced Settings
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#" onClick={toHands}>
+                Hand History
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#" onClick={toAccountHistory}>
+                Account History
+              </NavDropdown.Item>
+              <NavDropdown.Item onClick={toLogout}>Log Out</NavDropdown.Item>
             </NavDropdown>
           )}
         </Nav>
       </Navbar.Collapse>
       {isAuthenticated && (
-        <Navbar.Text>
-          Signed in as: <a href="#login">{userInfo?.username}</a>
-        </Navbar.Text>
+      <Navbar.Text>
+      Signed in as: 
+      <a 
+        onClick={toProfile} 
+        href="#" 
+        style={{fontWeight: 'bold', fontSize: '18px', cursor: 'pointer'}}>
+          {userInfo?.username}
+      </a>
+    </Navbar.Text>
       )}
     </Navbar>
   );
