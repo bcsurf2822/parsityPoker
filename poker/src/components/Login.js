@@ -1,7 +1,10 @@
-import axios from 'axios';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../rtk/slices/authenticationSlice';
 
 function Login() {
+  const dispatch = useDispatch();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -13,30 +16,24 @@ function Login() {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = async (e) => {
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-
-    const proxy = "http://localhost:4000/login"
-
-    try {
-      // Send a POST request to the login endpoint
-      const response = await axios.post(proxy, {
-        username,
-        password,
-      });
-
-      // Authentication successful
-      console.log(response.data); // Display the response data or perform any desired actions
-    } catch (error) {
-      // Authentication failed
-      console.error(error.response.data); // Display the error message or handle the error as needed
-    }
+    dispatch(login({ username, password }))
   };
+
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const loading = useSelector(state => state.auth.loading);
+  const error = useSelector(state => state.auth.error);
+
+  if (isAuthenticated) {
+    return <p>Welcome Back1</p>;
+  }
 
   return (
     <div>
       <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleLogin}>
         <label>
           Username:
           <input type="text" value={username} onChange={handleUsernameChange} />
@@ -47,7 +44,7 @@ function Login() {
           <input type="password" value={password} onChange={handlePasswordChange} />
         </label>
         <br />
-        <button onClick={handleSubmit}>Login</button>
+        <button type="submit" disabled={loading}>Login</button>
       </form>
     </div>
   );

@@ -25,45 +25,43 @@ const Navbar = () => {
   };
 
   return (
-    <nav class="navbar sticky-top bg-body-tertiary">
-      <div class="container-fluid">
-        <ul class="nav nav-underline">
-          <li class="nav-item">
+    <nav className="navbar sticky-top bg-body-tertiary">
+      <div className="container-fluid">
+        <ul className="nav nav-underline">
+          <li className="nav-item">
             <h6>**LOGO**</h6>
           </li>
-          <li class="nav-item dropdown">
+          <li className="nav-item dropdown">
             <a
-              class="nav-link dropdown-toggle"
+              className="nav-link dropdown-toggle"
               data-bs-toggle="dropdown"
-              href="#"
-              role="button"
-              aria-expanded="false"
+
             >
               Settings
             </a>
-            <ul class="dropdown-menu">
+            <ul className="dropdown-menu">
               <li>
-                <a class="dropdown-item" href="#">
+                <a className="dropdown-item" href="#">
                   Profile
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="#">
+                <a className="dropdown-item" href="#">
                   Advanced Settings
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="#">
+                <a className="dropdown-item" href="#">
                   Hand History
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="#">
+                <a className="dropdown-item" href="#">
                   Account History
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="#">
+                <a className="dropdown-item" href="#">
                   Log Out
                 </a>
               </li>
@@ -75,7 +73,7 @@ const Navbar = () => {
         <button onClick={toPromo}>Promotions</button>
         <button onClick={toTables}>Tables</button>
         <button onClick={toRegistration}>Register</button>
-        <a class="navbar-brand">**Player Name and Avatar**</a>
+        <a className="navbar-brand">**Player Name and Avatar**</a>
       </div>
     </nav>
   );
