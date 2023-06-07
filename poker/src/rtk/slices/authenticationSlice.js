@@ -23,6 +23,7 @@ const authenticationSlice = createSlice({
     isAuthenticated: false,
     loading: false,
     error: null,
+    user: null,
   },
   reducers: {},
   extraReducers: (builder) => {

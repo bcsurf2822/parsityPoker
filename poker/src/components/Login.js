@@ -1,9 +1,19 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../rtk/slices/authenticationSlice';
+import { useNavigate } from 'react-router-dom';
+
+import { Form, Button, Card } from 'react-bootstrap';
 
 function Login() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+
+  const toRegistration = function () {
+    navigate("/Registration");
+  };
+
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -31,21 +41,27 @@ function Login() {
   }
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <label>
-          Username:
-          <input type="text" value={username} onChange={handleUsernameChange} />
-        </label>
-        <br />
-        <label>
-          Password:
-          <input type="password" value={password} onChange={handlePasswordChange} />
-        </label>
-        <br />
-        <button type="submit" disabled={loading}>Login</button>
-      </form>
+    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
+      <Card style={{ width: '30rem' }}>
+        <Card.Body>
+          <Card.Title>Login</Card.Title>
+          <Form onSubmit={handleLogin}>
+            <Form.Group className="mb-3">
+              <Form.Label>Username:</Form.Label>
+              <Form.Control type="text" value={username} onChange={handleUsernameChange} />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Password:</Form.Label>
+              <Form.Control type="password" value={password} onChange={handlePasswordChange} />
+            </Form.Group>
+            <Button variant="primary" type="submit" disabled={loading}>Login</Button>
+            <p className="mt-3">
+              Don't have an account? 
+              <Button variant="link" onClick={toRegistration}>Create Account Here</Button>
+            </p>
+          </Form>
+        </Card.Body>
+      </Card>
     </div>
   );
 }

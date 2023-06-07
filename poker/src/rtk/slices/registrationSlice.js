@@ -3,13 +3,18 @@ import axios from "axios";
 
 export const register = createAsyncThunk(
   "registration/register",
-  async ({ email, username, password }) => {
-    const response = await axios.post("http://localhost:4000/register", {
-      username,
-      email,
-      password,
-    });
-    return response.data;
+  async ({ email, username, password }, thunkAPI) => {
+    try {
+      const response = await axios.post("http://localhost:4000/register", {
+        username,
+        email,
+        password,
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error.response); // Log the entire error object
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
   }
 );
 
@@ -19,6 +24,7 @@ const registrationSlice = createSlice({
     user: null,
     loading: false,
     error: null,
+    isRegistered: false,
   },
   reducers: {},
   extraReducers : (builder) =>  {
@@ -30,10 +36,12 @@ const registrationSlice = createSlice({
     .addCase (register.fulfilled, (state, action) => {
       state.user = action.payload;
       state.loading = false;
+      state.isRegistered = true;
     })
     .addCase(register.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
+      console.log(action.error);
     })
   }
 });

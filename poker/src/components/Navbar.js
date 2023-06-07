@@ -1,82 +1,40 @@
-import { Link } from "react-router-dom";
+
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Navbar, Nav, NavDropdown, Button } from 'react-bootstrap';
 
-const Navbar = () => {
+const MyNav = () => {
   const navigate = useNavigate();
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
 
-  const toHome = function () {
-    navigate("/");
-  };
-
-  const toPromo = function () {
-    navigate("/Promotions");
-  };
-
-  const toAbout = function () {
-    navigate("/About");
-  };
-
-  const toRegistration = function () {
-    navigate("/Registration");
-  };
-
-  const toTables = function () {
-    navigate("/Tables");
-  };
+  const toHome = function () { navigate("/"); };
+  const toPromo = function () { navigate("/Promotions"); };
+  const toAbout = function () { navigate("/About"); };
+  const toTables = function () { navigate("/Tables"); };
 
   return (
-    <nav className="navbar sticky-top bg-body-tertiary">
-      <div className="container-fluid">
-        <ul className="nav nav-underline">
-          <li className="nav-item">
-            <h6>**LOGO**</h6>
-          </li>
-          <li className="nav-item dropdown">
-            <a
-              className="nav-link dropdown-toggle"
-              data-bs-toggle="dropdown"
-
-            >
-              Settings
-            </a>
-            <ul className="dropdown-menu">
-              <li>
-                <a className="dropdown-item" href="#">
-                  Profile
-                </a>
-              </li>
-              <li>
-                <a className="dropdown-item" href="#">
-                  Advanced Settings
-                </a>
-              </li>
-              <li>
-                <a className="dropdown-item" href="#">
-                  Hand History
-                </a>
-              </li>
-              <li>
-                <a className="dropdown-item" href="#">
-                  Account History
-                </a>
-              </li>
-              <li>
-                <a className="dropdown-item" href="#">
-                  Log Out
-                </a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <button onClick={toHome}>Home</button>
-        <button onClick={toAbout}>About</button>
-        <button onClick={toPromo}>Promotions</button>
-        <button onClick={toTables}>Tables</button>
-        <button onClick={toRegistration}>Register</button>
-        <a className="navbar-brand">**Player Name and Avatar**</a>
-      </div>
-    </nav>
+    <Navbar bg="light" expand="lg" sticky="top">
+      <Navbar.Brand href="#">**LOGO**</Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="mr-auto">
+          <Nav.Link onClick={toHome}>Home</Nav.Link>
+          <Nav.Link onClick={toAbout}>About</Nav.Link>
+          <Nav.Link onClick={toPromo}>Promotions</Nav.Link>
+          <Nav.Link onClick={toTables}>Tables</Nav.Link>
+          <NavDropdown title="Settings" id="basic-nav-dropdown">
+            <NavDropdown.Item href="#">Profile</NavDropdown.Item>
+            <NavDropdown.Item href="#">Advanced Settings</NavDropdown.Item>
+            <NavDropdown.Item href="#">Hand History</NavDropdown.Item>
+            <NavDropdown.Item href="#">Account History</NavDropdown.Item>
+            <NavDropdown.Item href="#">Log Out</NavDropdown.Item>
+          </NavDropdown>
+        </Nav>
+      </Navbar.Collapse>
+      <Navbar.Text>
+        Signed in as: <a href="#login">**Player Name and Avatar**</a>
+      </Navbar.Text>
+    </Navbar>
   );
 };
-
-export default Navbar;
+export default MyNav;

@@ -3,9 +3,9 @@ import "./App.css";
 
 import Home from "./components/Home";
 import About from "./components/pages/About";
-import Register from "./components/pages/Registration";
+import RegistrationPage from "./components/pages/Registration";
 import Promotions from "./components/pages/Promotions";
-import Navbar from "./components/Navbar";
+import MyNav from "./components/Navbar";
 import Tables from "./components/pages/Tables";
 
 const Background = () => (
@@ -18,11 +18,11 @@ function App() {
     <div className="App">
       <Background />
       <Router>
-      <Navbar/>
+      <MyNav/>
         <Routes>
           <Route path="/" element={<Home/>}/>
           <Route path="/about" element={<About/>}/>
-          <Route path="/registration" element={<Register/>}/>
+          <Route path="/registration" element={<RegistrationPage/>}/>
           <Route path="/promotions" element={<Promotions/>}/>
           <Route path="/tables" element={<Tables/>}/>
 
