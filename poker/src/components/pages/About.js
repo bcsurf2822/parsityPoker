@@ -1,6 +1,12 @@
+import { useNavigate } from "react-router-dom";
+import Cards from "../tables/Cards";
+
 const About = () => {
+  const navigate = useNavigate();
+
   return (  
-    <div>About Us</div>
+      <Cards />
+    
   );
 }
  

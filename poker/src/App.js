@@ -11,6 +11,8 @@ import Profile from "./components/settings/Profile";
 import Hands from "./components/settings/Hands";
 import Advanced from "./components/settings/Advanced";
 import History from "./components/settings/History";
+import Cards from "./components/tables/Cards";
+import Room from "./components/tables/Room";
 
 const Background = () => (
   <div className="background"></div>
@@ -33,6 +35,8 @@ function App() {
           <Route path="/handhistory" element={<Hands/>}/>
           <Route path="/accounthistory" element={<History/>}/>
           <Route path="/advancedsettings" element={<Advanced/>}/>
+          <Route path="/cards" element={Cards} />
+          <Route path="/room" element={Room} />
 
 
         </Routes>
