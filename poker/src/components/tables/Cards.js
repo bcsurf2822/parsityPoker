@@ -1,28 +1,12 @@
+import React from 'react';
+import Card from './TestCards';
 
-
-const Cards = () => {
-  const map = new Map([
-    ["Two", "🂢"],
-    ["Three", "🂣"],
-    ["Four", "🂤"],
-    ["Five", "🂥"],
-    ["Six", "🂦"],
-    ["Seven", "🂧"],
-    ["Eight", "🂨"],
-    ["Nine", "🂩"],
-    ["Ten", "🂪"],
-    ["Jack", "🂫"],
-    ["Queen", "🂭"],
-    ["King", "🂮"],
-    ["Ace", "🂡"]
-  ]);
-
+const Deck = ({ deck }) => {
   return (
-    <div>
-     <h2>Cards Room</h2>
-     {map}
+    <div className="deck">
+      {deck.map((card, index) => <Card key={index} card={card} />)}
     </div>
-  )
-}
+  );
+};
 
-export default Cards;
+export default Deck;
