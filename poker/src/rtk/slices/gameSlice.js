@@ -42,12 +42,42 @@ export const getDeck = createAsyncThunk(
   }
 );
 
+export const dealCards = createAsyncThunk(
+  "deck/dealCards",
+  async ({ deckId }, thunkAPI) => {
+    try {
+      const deckResponse = await axios.get(`http://localhost:4000/deck/${deckId}`);
+      const deck = deckResponse.data.cards;
+
+      let players = [];
+      let dealtCardsIndexes = [];
+
+      for (let round = 0; round < 2; round++) {
+        for (let player = 0; player < 6; player++) {
+          const cardIndex = 6 * round + player;
+          if (!players[player]) players[player] = { id: player + 1, cards: [] };
+          players[player].cards.push(deck[cardIndex]);
+          dealtCardsIndexes.push(cardIndex);
+        }
+      }
+
+      return { players, dealtCardsIndexes };
+
+    } catch (error) {
+      console.log(error.response);
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const deckSlice = createSlice({
   name: "deck",
   initialState: {
     deckId: null,
     card: null,
     deck: [],
+    players: [],
+    dealtCardsIndexes: [],
     loading: false,
     error: null,
   },
@@ -89,7 +119,12 @@ const deckSlice = createSlice({
       .addCase(getDeck.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
-      });
+      })
+      .addCase(dealCards.fulfilled, (state, action) => {
+        state.players = action.payload.players; // players with their cards
+        state.dealtCardsIndexes = action.payload.dealtCardsIndexes; // store the indexes of dealt cards
+        state.loading = false;
+      })
   },
 });
 
