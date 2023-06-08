@@ -40,7 +40,7 @@ const authenticationSlice = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.isAuthenticated = false;
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.error.message || 'Login failed';
       })
       .addCase(logout.fulfilled, (state) => {
         state.isAuthenticated = false;
