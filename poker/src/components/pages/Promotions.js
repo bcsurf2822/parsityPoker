@@ -9,6 +9,8 @@ const Promotions = () => {
   const card = useSelector(state => state.deck.card);
   const players = useSelector(state => state.deck.players);
   const dealtCardsIndexes = useSelector(state => state.deck.dealtCardsIndexes);
+  const communityCards = useSelector(state => state.deck.communityCards);
+  const skippedCards = useSelector(state => state.deck.skippedCards);
 
   useEffect(() => {
     if (deckId) {
@@ -35,6 +37,25 @@ const Promotions = () => {
 
   return (
     <div>
+      <div>
+  <h3>Community Cards:</h3>
+  <div>
+    {communityCards.map((card, cardIndex) => (
+      <p key={cardIndex}>
+        Card {cardIndex + 1}: {card.rank} of {card.suit}
+      </p>
+    ))}
+  </div>
+</div>
+
+<div>
+  <h2>Skipped Cards</h2>
+  {skippedCards.map((card, index) => (
+    <p key={index} style={{ color: 'red' }}>
+      Card {index + 1}: {card.rank} of {card.suit}
+    </p>
+  ))}
+</div>
       <button onClick={handleNewGame}>Start New Game</button>
       <button onClick={handleDrawCard}>Draw Card</button>
       <div>

@@ -51,6 +51,8 @@ export const dealCards = createAsyncThunk(
 
       let players = [];
       let dealtCardsIndexes = [];
+      let communityCards = [];
+      let skippedCards = [];
 
       for (let round = 0; round < 2; round++) {
         for (let player = 0; player < 6; player++) {
@@ -61,8 +63,27 @@ export const dealCards = createAsyncThunk(
         }
       }
 
-      return { players, dealtCardsIndexes };
+      // Skip card 12
+      skippedCards.push(deck[12]);
+      dealtCardsIndexes.push(12);
+      // Deal the flop
+      communityCards.push(deck[13], deck[14], deck[15]);
+      
 
+      // Skip a card before dealing the turn
+      skippedCards.push(deck[16]);
+      // Deal the turn
+      communityCards.push(deck[17]);
+     
+
+      // Skip a card before dealing the river
+      skippedCards.push(deck[18]);
+      // Deal the river
+      communityCards.push(deck[19]);
+      dealtCardsIndexes.push(12, 13, 14, 15, 16, 17, 18, 19);
+
+      return { players, dealtCardsIndexes, communityCards, skippedCards };
+      
     } catch (error) {
       console.log(error.response);
       return thunkAPI.rejectWithValue(error.response.data);
@@ -78,6 +99,8 @@ const deckSlice = createSlice({
     deck: [],
     players: [],
     dealtCardsIndexes: [],
+    communityCards: [],
+    skippedCards: [],
     loading: false,
     error: null,
   },
@@ -121,8 +144,10 @@ const deckSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(dealCards.fulfilled, (state, action) => {
-        state.players = action.payload.players; // players with their cards
-        state.dealtCardsIndexes = action.payload.dealtCardsIndexes; // store the indexes of dealt cards
+        state.players = action.payload.players;
+        state.dealtCardsIndexes = action.payload.dealtCardsIndexes;
+        state.communityCards = action.payload.communityCards; // add community cards to state
+        state.skippedCards = action.payload.skippedCards; // add skipped cards to state
         state.loading = false;
       })
   },
