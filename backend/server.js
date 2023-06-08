@@ -24,6 +24,9 @@ app.use(loginRoute);
 const logoutRoute = require('./routes/logout');
 app.use(logoutRoute);
 
+const deckRoute = require("./routes/cards");
+app.use(deckRoute);
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
