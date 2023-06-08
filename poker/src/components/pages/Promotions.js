@@ -57,7 +57,6 @@ const Promotions = () => {
   ))}
 </div>
       <button onClick={handleNewGame}>Start New Game</button>
-      <button onClick={handleDrawCard}>Draw Card</button>
       <div>
         {players.map((player, index) => (
           <div key={index}>
@@ -71,13 +70,6 @@ const Promotions = () => {
             </div>
           </div>
         ))}
-      </div>
-      <div>
-        {card && (
-          <p>
-            Drawn Card: {card.rank} of {card.suit}
-          </p>
-        )}
       </div>
       <div>
         {deck && deck.map((card, index) => (

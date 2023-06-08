@@ -42,6 +42,7 @@ export const getDeck = createAsyncThunk(
   }
 );
 
+//Support 6 players right now
 export const dealCards = createAsyncThunk(
   "deck/dealCards",
   async ({ deckId }, thunkAPI) => {
@@ -90,6 +91,34 @@ export const dealCards = createAsyncThunk(
     }
   }
 );
+//--For support of Less Players **
+// export const dealCards = createAsyncThunk(
+//   "deck/dealCards",
+//   async ({ deckId, numPlayers }, thunkAPI) => {
+//     try {
+//       // ...
+
+//       // Set number of players
+//       let players = Array(numPlayers).fill(null).map((_, index) => ({ id: index + 1, cards: [] }));
+
+//       for (let round = 0; round < 2; round++) {
+//         for (let playerIndex = 0; playerIndex < numPlayers; playerIndex++) {
+//           const cardIndex = numPlayers * round + playerIndex;
+//           players[playerIndex].cards.push(deck[cardIndex]);
+//           dealtCardsIndexes.push(cardIndex);
+//         }
+//       }
+
+//       // Deal community cards and add skipped cards in the same way
+//       // ...
+
+//       return { players, dealtCardsIndexes, communityCards, skippedCards };
+
+//     } catch (error) {
+//       // ...
+//     }
+//   }
+// );
 
 const deckSlice = createSlice({
   name: "deck",
