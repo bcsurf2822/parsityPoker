@@ -48,3 +48,13 @@ code {
     transform: translateY(-100vh);
   }
 }
+
+.player-spot {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.table {
+  margin-top: auto;
+  margin-bottom: auto;
+}

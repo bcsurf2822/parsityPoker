@@ -14,15 +14,11 @@ import History from "./components/settings/History";
 import Cards from "./components/tables/Cards";
 import Room from "./components/tables/Room";
 
-const Background = () => (
-  <div className="background"></div>
-);
 
 
 function App() {
   return (
     <div className="App">
-      <Background />
       <Router>
       <MyNav/>
         <Routes>
