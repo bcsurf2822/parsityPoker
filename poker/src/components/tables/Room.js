@@ -1,6 +1,7 @@
 import { Container, Row, Col } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import Player from "./Players";
+import PlayerOptions from "./PlayerOptions";
 
 const Room = () => {
   const userInfo = useSelector((state) => state.auth.user);
@@ -38,12 +39,15 @@ const Room = () => {
         </Col>
         <Col></Col>
         <Col className="d-flex justify-content-center">
-          {isAuthenticated ? (
-            <Player name={userInfo.username}  chips={userInfo.balance} bet={20} isDealer={true} />
-          ) : (
-            <Player name="Player 6"  chips={500} bet={20} isDealer={true} />
-          )}
-        </Col>
+  {isAuthenticated ? (
+    <div>
+      <Player name={userInfo.username}  chips={userInfo.balance} bet={20} isDealer={true} />
+      <PlayerOptions />
+    </div>
+  ) : (
+    <Player name="Player 6"  chips={500} bet={20} isDealer={true} />
+  )}
+</Col>
         <Col></Col>
       </Row>
     </Container>

@@ -1,6 +1,9 @@
-import { Card } from "react-bootstrap";
+import { Card, Dropdown, Button } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 const Player = ({ name, avatar, chips, bet, isDealer }) => {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  
   return (
     <Card style={{ width: '18rem' }}>
       <Card.Img variant="top" src={avatar} />

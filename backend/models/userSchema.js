@@ -20,6 +20,9 @@ const UserSchema = new Schema ({
     type: Number,
     default: 0
   },
+  bankBalance : {type: Number,
+  default: 10000
+},
   avatar: {
     type: String,
     default: 'default-avatar.jpg'

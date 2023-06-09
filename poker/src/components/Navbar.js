@@ -53,6 +53,12 @@ const MyNav = () => {
               <NavDropdown.Item href="#" onClick={toProfile}>
                 Profile
               </NavDropdown.Item>
+              <NavDropdown.Item href="#" onClick={toProfile}>
+                Deposit
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#" onClick={toProfile}>
+                Withdrawl
+              </NavDropdown.Item>
               <NavDropdown.Item href="#" onClick={toAdvanced}>
                 Advanced Settings
               </NavDropdown.Item>
