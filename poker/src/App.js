@@ -13,6 +13,9 @@ import Advanced from "./components/settings/Advanced";
 import History from "./components/settings/History";
 import Cards from "./components/tables/Cards";
 import Room from "./components/tables/Room";
+import Withdrawl from "./components/settings/Withdrawl";
+import Deposit from "./components/settings/Deposit";
+
 
 
 
@@ -31,6 +34,8 @@ function App() {
           <Route path="/handhistory" element={<Hands/>}/>
           <Route path="/accounthistory" element={<History/>}/>
           <Route path="/advancedsettings" element={<Advanced/>}/>
+          <Route path="/deposit" element={<Deposit/>}/>
+          <Route path="/withdrawl" element={<Withdrawl/>}/>
           <Route path="/cards" element={Cards} />
           <Route path="/room" element={Room} />
 

@@ -24,6 +24,12 @@ const MyNav = () => {
   const toProfile = function () {
     navigate("/Profile");
   };
+  const toDeposit = function () {
+    navigate("/Deposit");
+  };
+  const toWithdrawl = function () {
+    navigate("/Withdrawl");
+  };
   const toHands = function () {
     navigate("/handhistory");
   };
@@ -53,10 +59,10 @@ const MyNav = () => {
               <NavDropdown.Item href="#" onClick={toProfile}>
                 Profile
               </NavDropdown.Item>
-              <NavDropdown.Item href="#" onClick={toProfile}>
+              <NavDropdown.Item href="#" onClick={toDeposit}>
                 Deposit
               </NavDropdown.Item>
-              <NavDropdown.Item href="#" onClick={toProfile}>
+              <NavDropdown.Item href="#" onClick={toWithdrawl}>
                 Withdrawl
               </NavDropdown.Item>
               <NavDropdown.Item href="#" onClick={toAdvanced}>

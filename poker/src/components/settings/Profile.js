@@ -13,7 +13,10 @@ const Profile = () => {
           Email: {user.email}
         </Card.Text>
         <Card.Text>
-          Account Balance: {user.balance}
+          Account Balance: ${user.balance}
+        </Card.Text>
+        <Card.Text>
+          Bank Balance: ${user.bankBalance}
         </Card.Text>
         <Card.Text>
           Last Login: {user.lastLogin}
