@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { startNewGame, drawCard, getDeck, dealCards } from "../../rtk/slices/gameSlice";
+import cardToFilename from "../../actions/cardImages";
 
 const Promotions = () => {
   const dispatch = useDispatch();
@@ -35,15 +36,14 @@ const Promotions = () => {
     }
   };
 
+
   return (
     <div>
-      <div>
+<div>
   <h3>Community Cards:</h3>
   <div>
     {communityCards.map((card, cardIndex) => (
-      <p key={cardIndex}>
-        Card {cardIndex + 1}: {card.rank} of {card.suit}
-      </p>
+      <img key={cardIndex} src={`/deck/${cardToFilename(card.rank, card.suit)}`} alt={`${card.rank} of ${card.suit}`} />
     ))}
   </div>
 </div>
@@ -63,9 +63,7 @@ const Promotions = () => {
             <h3>Player {player.id}</h3>
             <div>
               {player.cards.map((card, cardIndex) => (
-                <p key={cardIndex}>
-                  Card {cardIndex + 1}: {card.rank} of {card.suit}
-                </p>
+                <img src={`/deck/${cardToFilename(card.rank, card.suit)}`} alt={`${card.rank} of ${card.suit}`} />
               ))}
             </div>
           </div>
