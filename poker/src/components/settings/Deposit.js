@@ -11,7 +11,7 @@ const Deposit = () => {
   const handleDeposit = async (e) => {
     e.preventDefault();
     if(amount !== '') {
-      dispatch(deposit({ userId: user._id, amount: Number(amount) }));
+      dispatch(deposit({ userId: user.id, amount: Number(amount) }));
     }
     setAmount('');
   };
