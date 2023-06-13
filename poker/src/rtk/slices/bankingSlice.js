@@ -46,7 +46,7 @@ const bankingSlice = createSlice({
       })
       .addCase(withdraw.fulfilled, (state, action) => {
         state.loading = false;
-        state.balance -= action.payload.accountBalance;
+        state.balance = action.payload.accountBalance;
       })
       .addCase(withdraw.rejected, (state, action) => {
         state.loading = false;

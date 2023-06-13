@@ -24,23 +24,25 @@ router.post('/deposit', async (req, res) => {
   }
 });
 
-// router.post('/withdraw', async (req, res) => {
-//   const { userId, amount } = req.body;
-//   try {
- 
-//     const user = await User.findByIdAndUpdate(userId, 
-//       { 
-//         $inc: { 
-//           accountBalance: -amount, 
-//           bankBalance: amount 
-//         } 
-//       }, 
-//       { new: true } 
-//     );
-//     res.json(user);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// });
+router.post('/withdraw', async (req, res) => {
+  const { userId, amount } = req.body;
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (user.accountBalance < amount) {
+      return res.status(400).json({ message: "Insufficient balance" });
+    }
+
+    user.accountBalance -= amount;
+    user.bankBalance += amount;
+    await user.save();
+  
+    res.json({accountBalance: user.accountBalance, bankBalance: user.bankBalance});
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 module.exports = router;
