@@ -181,6 +181,34 @@ export const getWinner = createAsyncThunk(
       console.log("API", response);
       console.log("API Data", data);
 
+      console.log("Winner Data", data.winners[0]);
+      console.log("Winner Cards", data.winners[0].cards);
+      console.log("Winner Hand", data.winners[0].hand);
+      console.log("Winner Results", data.winners[0].result);
+
+      console.log("Player 1 Results", data.players[0].result)
+      console.log("Player 2 Results", data.players[1].result)
+      console.log("Player 3 Results", data.players[2].result)
+      console.log("Player 4 Results", data.players[3].result)
+      console.log("Player 5 Results", data.players[4].result)
+      console.log("Player 6 Results", data.players[5].result)
+
+      console.log("Players Cards", data.players[0].cards)
+
+      let winnerCards = data.winners[0].cards;
+
+      for (let i = 0; i < data.players.length; i++) {
+          let playerCards = data.players[i].cards;
+          
+          for (let j = 0; j < winnerCards.length; j++) {
+              for (let k = 0; k < playerCards.length; k++) {
+                  if (winnerCards[j] === playerCards[k]) {
+                      console.log(`Player ${i + 1} has a matching card: ${playerCards[k]}`);
+                  }
+              }
+          }
+      }
+
       return data;
     } catch (error) {
       console.log(error.response);
@@ -213,34 +241,6 @@ export const revealRiver = createAsyncThunk(
     return result;
   }
 );
-//--For support of Less Players **
-// export const dealCards = createAsyncThunk(
-//   "deck/dealCards",
-//   async ({ deckId, numPlayers }, thunkAPI) => {
-//     try {
-//       // ...
-
-//       // Set number of players
-//       let players = Array(numPlayers).fill(null).map((_, index) => ({ id: index + 1, cards: [] }));
-
-//       for (let round = 0; round < 2; round++) {
-//         for (let playerIndex = 0; playerIndex < numPlayers; playerIndex++) {
-//           const cardIndex = numPlayers * round + playerIndex;
-//           players[playerIndex].cards.push(deck[cardIndex]);
-//           dealtCardsIndexes.push(cardIndex);
-//         }
-//       }
-
-//       // Deal community cards and add skipped cards in the same way
-//       // ...
-
-//       return { players, dealtCardsIndexes, communityCards, skippedCards };
-
-//     } catch (error) {
-//       // ...
-//     }
-//   }
-// );
 
 const deckSlice = createSlice({
   name: "deck",
@@ -249,6 +249,7 @@ const deckSlice = createSlice({
     card: null,
     deck: [],
     players: [],
+    winner: null,
     dealtCardsIndexes: [],
     communityCards: [],
     skippedCards: [],
@@ -321,7 +322,7 @@ const deckSlice = createSlice({
         state.dealtCardsIndexes = action.payload.dealtCardsIndexes;
       })
       .addCase(getWinner.fulfilled, (state, action) => {
-        state.winner = action.payload;
+        state.winner = action.payload.winners[0]; 
       });
   },
 });

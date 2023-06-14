@@ -14,8 +14,8 @@ const Home = () => {
         <div className="row">
           <div className="col">
             <div className="p-3 border bg-light">
-              <h1>Welcome To PKR Poker</h1>
-              <p>A Cryptocurrency Poker Platform </p>
+              <h1>Welcome To Poker</h1>
+              <p>A Poker Platform </p>
             </div>
           </div>
         </div>

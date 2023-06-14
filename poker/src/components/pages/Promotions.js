@@ -69,14 +69,21 @@ const handleRevealRiver = () => {
 
   return (
     <div>
-      <div>
-        {winner && (
-          <div>
-            <h2>Winner:</h2>
-            <p>Player {winner.winner}</p>
-            <p>Hand: {winner.hand}</p>
-          </div>
-        )}
+<div>
+{winner && winner.player && (
+    <div>
+      <h2>Winner:</h2>
+      <p>Player {winner.player}</p>
+      <p>Hand: {winner.hand}</p>
+      {winner.player.cards.map((card, cardIndex) => (
+        <img
+          key={cardIndex}
+          src={`/deck/${cardToFilename(card.rank, card.suit)}`}
+          alt={`${card.rank} of ${card.suit}`}
+        />
+      ))}
+    </div>
+  )}
         <h3>Community Cards:</h3>
         <div>
           {communityCards.map((card, cardIndex) => (
