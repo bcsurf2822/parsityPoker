@@ -95,30 +95,6 @@ export const dealCards = createAsyncThunk(
   }
 );
 
-//POKER API to determine winner
-export const getWinner = createAsyncThunk(
-  "deck/getWinner",
-  async ({ communityCards, playerCards }, thunkAPI) => {
-    console.log('communityCards', communityCards);  // Debug line
-    console.log('playerCards', playerCards);
-    try {
-      let cc = communityCards.map((card) => `${convertRank(card.rank)}${convertSuit(card.suit)}`).join(",");
-      let pc = playerCards
-        .map((player) => player.cards.map((card) => `${convertRank(card.rank)}${convertSuit(card.suit)}`).join(","))
-        .join("&pc[]=");
-
-        let url = `https://api.pokerapi.dev/v1/winner/texas_holdem?cc=${cc}&pc[]=${pc}`;
-
-      const response = await fetch(url);
-      const data = await response.json();
-
-      return data;
-    } catch (error) {
-      console.log(error.response);
-      return thunkAPI.rejectWithValue(error.response);
-    }
-  }
-);
 
 export const dealToPlayers = createAsyncThunk(
   "deck/dealToPlayers",
@@ -186,7 +162,33 @@ export const revealTurn = createAsyncThunk(
   }
 );
 
-// The thunk to reveal the river
+//POKER API to determine winner
+export const getWinner = createAsyncThunk(
+  "deck/getWinner",
+  async ({ communityCards, playerCards }, thunkAPI) => {
+    console.log('communityCards', communityCards);  // Debug line
+    console.log('playerCards', playerCards);
+    try {
+      let cc = communityCards.map((card) => `${convertRank(card.rank)}${convertSuit(card.suit)}`).join(",");
+      let pc = playerCards
+        .map((player) => player.cards.map((card) => `${convertRank(card.rank)}${convertSuit(card.suit)}`).join(","))
+        .join("&pc[]=");
+
+        let url = `https://api.pokerapi.dev/v1/winner/texas_holdem?cc=${cc}&pc[]=${pc}`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log("API", response);
+      console.log("API Data", data);
+
+      return data;
+    } catch (error) {
+      console.log(error.response);
+      return thunkAPI.rejectWithValue(error.response);
+    }
+  }
+);
+
 export const revealRiver = createAsyncThunk(
   "deck/revealRiver",
   async (_, thunkAPI) => {
@@ -203,7 +205,12 @@ export const revealRiver = createAsyncThunk(
     communityCards.push(deck[19]);
     dealtCardsIndexes.push(19);
 
-    return { communityCards, skippedCards, dealtCardsIndexes };
+    const result = { communityCards, skippedCards, dealtCardsIndexes };
+
+    // Dispatch getWinner
+    thunkAPI.dispatch(getWinner({ communityCards: result.communityCards, playerCards: state.players }));
+
+    return result;
   }
 );
 //--For support of Less Players **

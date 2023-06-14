@@ -31,29 +31,41 @@ const Promotions = () => {
     }
   }, [dispatch, deckId]);
 
-  const handleNewGame = () => {
-    dispatch(startNewGame()).then((response) => {
-      if (!response.error) {
-        dispatch(dealCards({ deckId: response.payload.deckId }));
+  const handleNewGame = async () => {
+    const response = await dispatch(startNewGame());
+    
+    if (!response.error) {
+      const deckResponse = await dispatch(getDeck({ deckId: response.payload.deckId }));
+      
+      if (!deckResponse.error) {
+        dispatch(dealToPlayers({ deckId: response.payload.deckId }));
       }
-    });
+    }
   };
 
-  const handleRevealFlop = () => {
-    dispatch(revealFlop());
-  };
+const handleDealCards = () => {
+    if (deckId) {
+      dispatch(dealToPlayers({ deckId }));
+    }
+};
 
-  const handleRevealTurn = () => {
-    dispatch(revealTurn());
-  };
+const handleRevealFlop = () => {
+    if (deckId) {
+      dispatch(revealFlop());
+    }
+};
 
-  const handleRevealRiver = () => {
-    dispatch(revealRiver())
-    .then(() => {
-      dispatch(getWinner({ communityCards: communityCards, playerCards: players }));
-      console.log('Dispatching getWinner with', { communityCards, playerCards });
-    });
-  };
+const handleRevealTurn = () => {
+    if (deckId) {
+      dispatch(revealTurn());
+    }
+};
+
+const handleRevealRiver = () => {
+  if (deckId) {
+    dispatch(revealRiver());
+  }
+};
 
   return (
     <div>
@@ -86,10 +98,11 @@ const Promotions = () => {
         ))}
       </div>
       <button onClick={handleNewGame}>Start New Game</button>
+      <button onClick={handleDealCards}>Deal Cards</button>
       <button onClick={handleRevealFlop}>Reveal Flop</button>
       <button onClick={handleRevealTurn}>Reveal Turn</button>
       <button onClick={handleRevealRiver}>Reveal River</button>
-      <button onClick={handleNewGame}>Start New Game</button>
+
       <div>
         {players.map((player, index) => (
           <div key={index}>
