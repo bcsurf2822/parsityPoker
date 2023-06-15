@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 
 const Profile = () => {
   const user = useSelector((state) => state.auth.user);
+  const { accountBalance, bankBalance } = useSelector((state) => state.banking);
 
   return (
    <Card style={{ width: '18rem' }}>
@@ -13,10 +14,10 @@ const Profile = () => {
           Email: {user.email}
         </Card.Text>
         <Card.Text>
-          Account Balance: ${user.balance}
+          Account Balance: ${accountBalance}
         </Card.Text>
         <Card.Text>
-          Bank Balance: ${user.bankBalance}
+          Bank Balance: ${bankBalance}
         </Card.Text>
         <Card.Text>
           Last Login: {user.lastLogin}
@@ -25,5 +26,5 @@ const Profile = () => {
     </Card>
   );
 };
- 
+
 export default Profile;

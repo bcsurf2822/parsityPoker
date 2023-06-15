@@ -23,7 +23,8 @@ export const withdraw = createAsyncThunk(
 const bankingSlice = createSlice({
   name: 'banking',
   initialState: { 
-    balance: 0,
+    accountBalance: 0,
+    bankBalance: 0,
     loading: false,
     error: null,
   },
@@ -35,7 +36,8 @@ const bankingSlice = createSlice({
       })
       .addCase(deposit.fulfilled, (state, action) => {
         state.loading = false;
-        state.balance += action.payload.accountBalance;
+        state.accountBalance += action.payload.accountBalance;
+        state.bankBalance = action.payload.bankBalance;
       })
       .addCase(deposit.rejected, (state, action) => {
         state.loading = false;
@@ -46,7 +48,8 @@ const bankingSlice = createSlice({
       })
       .addCase(withdraw.fulfilled, (state, action) => {
         state.loading = false;
-        state.balance = action.payload.accountBalance;
+        state.accountBalance = action.payload.accountBalance;
+        state.bankBalance = action.payload.bankBalance;
       })
       .addCase(withdraw.rejected, (state, action) => {
         state.loading = false;
