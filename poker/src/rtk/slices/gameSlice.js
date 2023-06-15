@@ -201,43 +201,17 @@ export const getWinner = createAsyncThunk(
       console.log("Players Cards6", data.players[5].cards)
 
 
-      let winnerCards = data.winners[0].cards;
+      let winnerCards = JSON.stringify(data.winners[0].cards);
 
-      let player1 = data.players[0].cards
-      let player2 = data.players[1].cards
-      let player3 = data.players[2].cards
-      let player4 = data.players[3].cards
-      let player5 = data.players[4].cards
-      let player6 = data.players[5].cards
-
-      if (winnerCards === player1) {
-        console.log("Player 1 wins");
+      // Iterate over each player
+      for(let i = 0; i < data.players.length; i++) {
+        let playerCards = JSON.stringify(data.players[i].cards);
+      
+        // If the player's cards are equal to the winner's cards, then print that this player is the winner
+        if (winnerCards === playerCards) {
+          console.log(`Player ${i + 1} wins`);
+        }
       }
-
-      if (winnerCards === player2) {
-        console.log("Player 2 wins");
-      }
-
-      if (winnerCards === player3) {
-        console.log("Player 3 wins");
-      }
-
-      if (winnerCards === player4) {
-        console.log("Player 4 wins");
-      }
-
-      if (winnerCards === player5) {
-        console.log("Player 5 wins");
-      }
-
-      if (winnerCards === player6) {
-        console.log("Player 6 wins");
-      }
-
-      if (winnerCards === player1) {
-        console.log("Player 1 wins");
-      }
-
       return data;
       
     } catch (error) {
