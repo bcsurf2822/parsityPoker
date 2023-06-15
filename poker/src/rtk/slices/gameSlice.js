@@ -272,6 +272,11 @@ const deckSlice = createSlice({
       .addCase(startNewGame.fulfilled, (state, action) => {
         state.deckId = action.payload.deckId;
         state.loading = false;
+        state.communityCards = [];
+        state.players = [];
+        state.dealtCardsIndexes = []; 
+        state.skippedCards = []; 
+        state.winner = null;
       })
       .addCase(startNewGame.rejected, (state, action) => {
         state.loading = false;
