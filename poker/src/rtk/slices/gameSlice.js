@@ -193,23 +193,53 @@ export const getWinner = createAsyncThunk(
       console.log("Player 5 Results", data.players[4].result)
       console.log("Player 6 Results", data.players[5].result)
 
-      console.log("Players Cards", data.players[0].cards)
+      console.log("Players Cards1", data.players[0].cards)
+      console.log("Players Cards2", data.players[1].cards)
+      console.log("Players Cards3", data.players[2].cards)
+      console.log("Players Cards4", data.players[3].cards)
+      console.log("Players Cards5", data.players[4].cards)
+      console.log("Players Cards6", data.players[5].cards)
+
 
       let winnerCards = data.winners[0].cards;
 
-      for (let i = 0; i < data.players.length; i++) {
-          let playerCards = data.players[i].cards;
-          
-          for (let j = 0; j < winnerCards.length; j++) {
-              for (let k = 0; k < playerCards.length; k++) {
-                  if (winnerCards[j] === playerCards[k]) {
-                      console.log(`Player ${i + 1} has a matching card: ${playerCards[k]}`);
-                  }
-              }
-          }
+      let player1 = data.players[0].cards
+      let player2 = data.players[1].cards
+      let player3 = data.players[2].cards
+      let player4 = data.players[3].cards
+      let player5 = data.players[4].cards
+      let player6 = data.players[5].cards
+
+      if (winnerCards === player1) {
+        console.log("Player 1 wins");
+      }
+
+      if (winnerCards === player2) {
+        console.log("Player 2 wins");
+      }
+
+      if (winnerCards === player3) {
+        console.log("Player 3 wins");
+      }
+
+      if (winnerCards === player4) {
+        console.log("Player 4 wins");
+      }
+
+      if (winnerCards === player5) {
+        console.log("Player 5 wins");
+      }
+
+      if (winnerCards === player6) {
+        console.log("Player 6 wins");
+      }
+
+      if (winnerCards === player1) {
+        console.log("Player 1 wins");
       }
 
       return data;
+      
     } catch (error) {
       console.log(error.response);
       return thunkAPI.rejectWithValue(error.response);
@@ -237,6 +267,8 @@ export const revealRiver = createAsyncThunk(
 
     // Dispatch getWinner
     thunkAPI.dispatch(getWinner({ communityCards: result.communityCards, playerCards: state.players }));
+
+    
 
     return result;
   }
@@ -322,7 +354,7 @@ const deckSlice = createSlice({
         state.dealtCardsIndexes = action.payload.dealtCardsIndexes;
       })
       .addCase(getWinner.fulfilled, (state, action) => {
-        state.winner = action.payload.winners[0]; 
+        state.winner = action.payload; 
       });
   },
 });
