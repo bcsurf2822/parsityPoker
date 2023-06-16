@@ -1,24 +1,33 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import axios from 'axios';
+
+export const depositSuccess = createAction('banking/depositSuccess');
+export const withdrawSuccess = createAction('banking/withdrawSuccess');
 
 export const deposit = createAsyncThunk(
   "banking/deposit",
-  async ({ userId, amount }) => {
+  async ({ userId, amount }, { dispatch }) => {
     console.log('userId', userId);
     const response = await axios.post("http://localhost:4000/deposit", { userId, amount });
     console.log(response.data);
+    dispatch(depositSuccess(response.data));
     return response.data;
   }
 );
+
 
 // Create the withdraw thunk
 export const withdraw = createAsyncThunk(
   "banking/withdraw",
-  async ({ userId, amount }) => {
+  async ({ userId, amount }, { dispatch }) => {
     const response = await axios.post("http://localhost:4000/withdraw", { userId, amount });
+    console.log(response.data);
+    dispatch(withdrawSuccess(response.data));
     return response.data;
   }
 );
+
+
 
 const bankingSlice = createSlice({
   name: 'banking',
@@ -36,8 +45,10 @@ const bankingSlice = createSlice({
       })
       .addCase(deposit.fulfilled, (state, action) => {
         state.loading = false;
-        state.accountBalance += action.payload.accountBalance;
+        state.accountBalance = action.payload.accountBalance;
         state.bankBalance = action.payload.bankBalance;
+
+        depositSuccess(action.payload);
       })
       .addCase(deposit.rejected, (state, action) => {
         state.loading = false;
@@ -48,8 +59,10 @@ const bankingSlice = createSlice({
       })
       .addCase(withdraw.fulfilled, (state, action) => {
         state.loading = false;
-        state.accountBalance = action.payload.accountBalance;
         state.bankBalance = action.payload.bankBalance;
+        state.accountBalance = action.payload.accountBalance;
+
+        withdrawSuccess(action.payload);
       })
       .addCase(withdraw.rejected, (state, action) => {
         state.loading = false;

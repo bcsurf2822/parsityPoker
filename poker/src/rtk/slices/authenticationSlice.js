@@ -1,12 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+import { depositSuccess, withdrawSuccess } from './bankingSlice';
+
 export const login = createAsyncThunk(
   "authentication/login",
   async ({ username, password }) => {
     const response = await axios.post("http://localhost:4000/login", { username, password });
     console.log(response.data)
-    return response.data; // This should return the user data if login was successful
+    return response.data;
   }
 );
 
@@ -44,6 +46,18 @@ const authenticationSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state) => {
         state.isAuthenticated = false;
+      })
+      .addCase(depositSuccess, (state, action) => {
+        if (state.user && state.user.userId === action.payload.userId) {
+          state.user.accountBalance = action.payload.accountBalance;
+          state.user.bankBalance = action.payload.bankBalance;
+        }
+      })
+      .addCase(withdrawSuccess, (state, action) => {
+        if (state.user && state.user.userId === action.payload.userId) {
+          state.user.accountBalance = action.payload.accountBalance;
+          state.user.bankBalance = action.payload.bankBalance;
+        }
       });
   },
 });
