@@ -1,13 +1,20 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-
+import jwt_decode from "jwt-decode";
 import { depositSuccess, withdrawSuccess } from './bankingSlice';
+
+
 
 export const login = createAsyncThunk(
   "authentication/login",
   async ({ username, password }) => {
     const response = await axios.post("http://localhost:4000/login", { username, password });
-    console.log(response.data)
+
+    // save JWT to localStorage
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+    }
+    
     return response.data;
   }
 );
@@ -16,7 +23,23 @@ export const logout = createAsyncThunk(
   'authentication/logout',
   async () => {
     const response = await axios.post("http://localhost:4000/logout");
-    return response.data; // This should return something if logout was successful
+    // clear JWT from localStorage
+    localStorage.removeItem('token');
+
+    return response.data;
+  }
+);
+
+export const initializeAuth = createAsyncThunk(
+  'authentication/initializeAuth',
+  async () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const user = jwt_decode(token);
+      console.log("TOKEN", token)
+      return { user, token };
+    }
+    return null;
   }
 );
 
@@ -58,7 +81,13 @@ const authenticationSlice = createSlice({
           state.user.accountBalance = action.payload.accountBalance;
           state.user.bankBalance = action.payload.bankBalance;
         }
-      });
+      })
+      .addCase(initializeAuth.fulfilled, (state, action) => {
+        if (action.payload) {
+          state.isAuthenticated = true;
+          state.user = action.payload.user;
+        }
+      })
   },
 });
 

@@ -16,30 +16,45 @@ import Room from "./components/tables/Room";
 import Withdrawl from "./components/settings/Withdrawl";
 import Deposit from "./components/settings/Deposit";
 
-
-
+import ProtectedRoute from "./components/Protected";
 
 function App() {
   return (
     <div className="App">
       <Router>
-      <MyNav/>
+        <MyNav />
         <Routes>
-          <Route path="/" element={<Home/>}/>
-          <Route path="/about" element={<About/>}/>
-          <Route path="/registration" element={<RegistrationPage/>}/>
-          <Route path="/promotions" element={<Promotions/>}/>
-          <Route path="/tables" element={<Tables/>}/>
-          <Route path="/profile" element={<Profile/>}/>
-          <Route path="/handhistory" element={<Hands/>}/>
-          <Route path="/accounthistory" element={<History/>}/>
-          <Route path="/advancedsettings" element={<Advanced/>}/>
-          <Route path="/deposit" element={<Deposit/>}/>
-          <Route path="/withdrawl" element={<Withdrawl/>}/>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/registration" element={<RegistrationPage />} />
+          <Route path="/promotions" element={<Promotions />} />
+          <Route path="/tables" element={<Tables />} />
+          <Route
+            path="/profile"
+            element={<ProtectedRoute element={<Profile />} />}
+          />{" "}
+          <Route
+            path="/handhistory"
+            element={<ProtectedRoute element={<Hands />} />}
+          />
+          <Route
+            path="/accounthistory"
+            element={<ProtectedRoute element={<History />} />}
+          />
+          <Route
+            path="/advancedsettings"
+            element={<ProtectedRoute element={<Advanced />} />}
+          />
+          <Route
+            path="/deposit"
+            element={<ProtectedRoute element={<Deposit />} />}
+          />
+          <Route
+            path="/withdrawl"
+            element={<ProtectedRoute element={<Withdrawl />} />}
+          />
           <Route path="/cards" element={Cards} />
           <Route path="/room" element={Room} />
-
-
         </Routes>
       </Router>
     </div>
@@ -47,4 +62,3 @@ function App() {
 }
 
 export default App;
-

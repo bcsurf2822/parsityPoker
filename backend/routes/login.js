@@ -1,6 +1,8 @@
+require('dotenv').config()
 const bcrypt = require("bcrypt");
 const router = require("express").Router();
 const User = require("../models/userSchema");
+const jwt = require('jsonwebtoken');
 
 router.post("/login", async (req, res) => {
   try {
@@ -16,6 +18,7 @@ router.post("/login", async (req, res) => {
 
     // Compare the provided password with the stored hashed password
     const isPasswordValid = await bcrypt.compare(password, user.password);
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     if (!isPasswordValid) {
       // Invalid password
@@ -27,6 +30,7 @@ router.post("/login", async (req, res) => {
       .status(200)
       .json({
         message: "Authentication successful",
+        token: token,
         id: user._id,
         username: user.username,
         email: user.email,
@@ -36,6 +40,7 @@ router.post("/login", async (req, res) => {
         lastLogin: user.lastLogin,
       });
   } catch (error) {
+    console.error(error); // Log the error
     res.status(500).json({ error: error.toString() });
   }
 });
