@@ -1,8 +1,13 @@
 require('dotenv').config()
 const bcrypt = require("bcrypt");
 const router = require("express").Router();
-const User = require("../models/userSchema");
+const expressJwt = require('express-jwt');
 const jwt = require('jsonwebtoken');
+
+console.log("expressJWT", expressJwt)
+
+const User = require("../models/userSchema");
+
 
 router.post("/login", async (req, res) => {
   try {
@@ -31,6 +36,35 @@ router.post("/login", async (req, res) => {
       .json({
         message: "Authentication successful",
         token: token,
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        accountBalance: user.accountBalance,
+        bankBalance: user.bankBalance,
+        avatar: user.avatar,
+        lastLogin: user.lastLogin,
+      });
+  } catch (error) {
+    console.error(error); // Log the error
+    res.status(500).json({ error: error.toString() });
+  }
+});
+
+const jwtMiddleware = expressJwt({ secret: process.env.JWT_SECRET, algorithms: ['HS256'] });
+
+router.get('/user',  jwtMiddleware, async (req, res) => {
+  try {
+    // Find the user by their id
+    const user = await User.findOne({ _id: req.user._id });
+
+    if (!user) {
+      // User not found
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res
+      .status(200)
+      .json({
         id: user._id,
         username: user.username,
         email: user.email,

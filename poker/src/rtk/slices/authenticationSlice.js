@@ -32,22 +32,35 @@ export const logout = createAsyncThunk(
 
 export const initializeAuth = createAsyncThunk(
   'authentication/initializeAuth',
-  async () => {
+  async (_, { dispatch }) => {
     const token = localStorage.getItem('token');
     if (token) {
-      const user = jwt_decode(token);
-      console.log("TOKEN", token)
+      let user = jwt_decode(token);
+
+      const response = await axios.get("http://localhost:4000/user", {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      console.log("USER API RES", response);
+
+      if (response.data) {
+        user = response.data;
+      }
+
       return { user, token };
     }
+
     return null;
   }
 );
+
 
 const authenticationSlice = createSlice({
   name: "authentication",
   initialState: { 
     isAuthenticated: false,
     loading: false,
+    initializing: true,
     error: null,
     user: null,
   },
@@ -82,11 +95,18 @@ const authenticationSlice = createSlice({
           state.user.bankBalance = action.payload.bankBalance;
         }
       })
+      .addCase(initializeAuth.pending, (state) => {
+        state.initializing = true;
+      })
       .addCase(initializeAuth.fulfilled, (state, action) => {
+        state.initializing = false;
         if (action.payload) {
           state.isAuthenticated = true;
           state.user = action.payload.user;
         }
+      })
+      .addCase(initializeAuth.rejected, (state) => {
+        state.initializing = false;
       })
   },
 });
