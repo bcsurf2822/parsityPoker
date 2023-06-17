@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import "./App.css";
 
 import Home from "./components/Home";
@@ -18,7 +20,15 @@ import Deposit from "./components/settings/Deposit";
 
 import ProtectedRoute from "./components/Protected";
 
+import { initializeAuth } from "./rtk/slices/authenticationSlice";
+
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(initializeAuth());
+  }, [dispatch]);
+  
   return (
     <div className="App">
       <Router>
