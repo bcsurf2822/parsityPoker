@@ -12,6 +12,7 @@ const Profile = () => {
   const user = useSelector((state) => state.auth.user);
 
   const [newUsername, setNewUsername] = useState(''); 
+  const [isEditingUsername, setIsEditingUsername] = useState(false);
   const formatDate = new Date(user.lastLogin).toLocaleString();
 
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ const Profile = () => {
     e.preventDefault();
     const token = localStorage.getItem('token');
     dispatch(updateUsername({ token: token, username: newUsername }));
+    setIsEditingUsername(false); // reset the isEditingUsername state after a successful change
   };
 
   const fontStyle = {
@@ -40,24 +42,27 @@ const Profile = () => {
     className="d-flex justify-content-center align-items-center"
     style={{ minHeight: '100vh', ...fontStyle }}
   >
-      <Card className="p-4">
-        <Row className="align-items-center mb-4">
-          <Col className="text-center">
-            <div className="d-flex flex-column align-items-center">
-              <img src={user.avatar} alt="Avatar" style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
-              <h4 className="mt-2">{user.username}</h4>
-              <Form onSubmit={handleUsernameChange}>
+    <Card className="p-4">
+      <Row className="align-items-center mb-4">
+        <Col className="text-center">
+          <div className="d-flex flex-column align-items-center">
+            <img src={user.avatar} alt="Avatar" style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
+            <h4 className="mt-2">{user.username}</h4>
+            {isEditingUsername ?
+              <Form onSubmit={handleUsernameChange} className="mb-2">
                 <Form.Group>
                   <Form.Control type="text" placeholder="New username" value={newUsername} onChange={e => setNewUsername(e.target.value)} required />
                 </Form.Group>
-                <Button type="submit">Change Username</Button>
-              </Form>
-              <label className="btn btn-secondary btn-sm">
-                Change Avatar
-                <input type="file" style={{ display: 'none' }}  />
-              </label>
-            </div>
-          </Col>
+                <Button type="submit" className="btn-sm">Change Username</Button>
+              </Form> :
+              <Button onClick={() => setIsEditingUsername(true)} className="btn-sm mb-2">Edit Username</Button>
+            }
+            <label className="btn btn-secondary btn-sm">
+              Change Avatar
+              <input type="file" style={{ display: 'none' }}  />
+            </label>
+          </div>
+        </Col>
           <Col>
             <Card.Text className="border-bottom pb-3">
               <strong>Email:</strong> {user.email}
