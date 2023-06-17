@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 
 const Profile = () => {
   const user = useSelector((state) => state.auth.user);
-  const { accountBalance, bankBalance } = useSelector((state) => state.banking);
 
   return (
    <Card style={{ width: '18rem' }}>
