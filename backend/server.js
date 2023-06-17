@@ -33,6 +33,9 @@ app.use(deckRoute);
 const fundingRoute = require("./routes/funding")
 app.use(fundingRoute);
 
+const updateUserRoute = require("./routes/userInfo");
+app.use(updateUserRoute);
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

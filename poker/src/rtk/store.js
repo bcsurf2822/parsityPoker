@@ -5,6 +5,7 @@ import registrationReducer from "./slices/registrationSlice";
 import deckReducer from "./slices/gameSlice";
 import tableReducer from "./slices/tableSlice";
 import bankingReducer from "./slices/bankingSlice";
+import profileReducer from "./slices/profileSlice";
 
 export default configureStore({
   reducer: {
@@ -13,5 +14,6 @@ export default configureStore({
     deck: deckReducer,
     table: tableReducer,
     banking: bankingReducer,
+    profile: profileReducer,
   }
 });

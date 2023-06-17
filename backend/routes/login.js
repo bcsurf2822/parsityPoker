@@ -4,8 +4,6 @@ const router = require("express").Router();
 const expressJwt = require('express-jwt');
 const jwt = require('jsonwebtoken');
 
-console.log("expressJWT", expressJwt)
-
 const User = require("../models/userSchema");
 
 
