@@ -9,10 +9,10 @@ const User = require("../models/userSchema");
 
 router.post("/login", async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    // Find the user by their username
-    const user = await User.findOne({ username });
+    // Find the user by their email
+    const user = await User.findOne({ email });
 
     if (!user) {
       // User not found
@@ -47,6 +47,7 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ error: error.toString() });
   }
 });
+
 
 const jwtMiddleware = expressJwt({ secret: process.env.JWT_SECRET, algorithms: ['HS256'] });
 

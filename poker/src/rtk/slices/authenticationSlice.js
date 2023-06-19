@@ -4,11 +4,10 @@ import jwt_decode from "jwt-decode";
 import { depositSuccess, withdrawSuccess } from './bankingSlice';
 
 
-
 export const login = createAsyncThunk(
   "authentication/login",
-  async ({ username, password }) => {
-    const response = await axios.post("http://localhost:4000/login", { username, password });
+  async ({ email, password }) => {
+    const response = await axios.post("http://localhost:4000/login", { email, password });
 
     // save JWT to localStorage
     if (response.data.token) {

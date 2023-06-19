@@ -14,6 +14,7 @@ function Login() {
   };
 
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showModal, setShowModal] = useState(false);
   const handleClose = () => setShowModal(false);
@@ -23,6 +24,11 @@ function Login() {
     setUsername(e.target.value);
   };
 
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
@@ -30,7 +36,7 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await dispatch(login({ username, password }));
+      await dispatch(login({ email, password }));
     } catch (err) {
       setShowModal(true);
     }
@@ -50,8 +56,8 @@ function Login() {
           <Card.Title>Login</Card.Title>
           <Form onSubmit={handleLogin}>
             <Form.Group className="mb-3">
-              <Form.Label>Username:</Form.Label>
-              <Form.Control type="text" value={username} onChange={handleUsernameChange} />
+              <Form.Label>Email:</Form.Label>
+              <Form.Control type="email" value={email} onChange={handleEmailChange} />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Password:</Form.Label>
@@ -65,18 +71,7 @@ function Login() {
           </Form>
         </Card.Body>
       </Card>
-
-      <Modal show={showModal} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Error</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{error}</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {/* Rest of the code... */}
     </div>
   );
 }

@@ -10,6 +10,7 @@ export const register = createAsyncThunk(
         email,
         password,
       });
+      console.log("Register Response", response)
       return response.data;
     } catch (error) {
       console.log(error.response); // Log the entire error object
