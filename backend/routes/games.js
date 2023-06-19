@@ -12,13 +12,39 @@ const tableNames = [
   "Cicada", "Cricket", "Mantis", "Silverfish", "Tick", "Aphid", "Louse"
 ];
 
-const randomAnimalName = animalNames[Math.floor(Math.random() * animalNames.length)];
+
+function generateTableName() {
+  const randomName = tableNames[Math.floor(Math.random() * tableNames.length)];
+  return randomName;
+}
 
 router.post("/games/initialize", async (req, res) => {
   try {
     const games = [
       { name: generateTableName(), game: 'Hold Em', blinds: '.05/.10', players: 0, min: 5, max: 10, handsHr: 0 },
       { name: generateTableName(), game: 'Hold Em', blinds: '.1/.2', players: 0, min: 10, max: 20, handsHr: 0 },
+      { name: generateTableName(), game: 'Hold Em', blinds: '.25/.5', players: 0, min: 25, max: 50, handsHr: 0 },
+      { name: generateTableName(), game: 'Hold Em', blinds: '1/2', players: 0, min: 100, max: 200, handsHr: 0 },
+      { name: generateTableName(), game: 'Hold Em', blinds: '2.5/5', players: 0, min: 250, max: 500, handsHr: 0 },
+      { name: generateTableName(), game: 'Hold Em', blinds: '5/10', players: 0, min: 500, max: 1000, handsHr: 0 },
+      { name: generateTableName(), game: 'Hold Em', blinds: '10/20', players: 0, min: 1000, max: 2000, handsHr: 0 },
+      { name: generateTableName(), game: 'Hold Em', blinds: '25/50', players: 0, min: 2500, max: 5000, handsHr: 0 },
+      { name: generateTableName(), game: 'Omaha Hi', blinds: '.05/.10', players: 0, min: 5, max: 10, handsHr: 0 },
+      { name: generateTableName(), game: 'Omaha Hi', blinds: '.1/.2', players: 0, min: 10, max: 20, handsHr: 0 },
+      { name: generateTableName(), game: 'Omaha Hi', blinds: '.25/.5', players: 0, min: 25, max: 50, handsHr: 0 },
+      { name: generateTableName(), game: 'Omaha Hi', blinds: '1/2', players: 0, min: 100, max: 200, handsHr: 0 },
+      { name: generateTableName(), game: 'Omaha Hi', blinds: '2.5/5', players: 0, min: 250, max: 500, handsHr: 0 },
+      { name: generateTableName(), game: 'Omaha Hi', blinds: '5/10', players: 0, min: 500, max: 1000, handsHr: 0 },
+      { name: generateTableName(), game: 'Omaha Hi', blinds: '10/20', players: 0, min: 1000, max: 2000, handsHr: 0 },
+      { name: generateTableName(), game: 'Omaha Hi', blinds: '25/50', players: 0, min: 2500, max: 5000, handsHr: 0 },
+      { name: generateTableName(), game: 'Omaha Hi Lo', blinds: '.05/.10', players: 0, min: 5, max: 10, handsHr: 0 },
+      { name: generateTableName(), game: 'Omaha Hi Lo', blinds: '.1/.2', players: 0, min: 10, max: 20, handsHr: 0 },
+      { name: generateTableName(), game: 'Omaha Hi Lo', blinds: '.25/.5', players: 0, min: 25, max: 50, handsHr: 0 },
+      { name: generateTableName(), game: 'Omaha Hi Lo', blinds: '1/2', players: 0, min: 100, max: 200, handsHr: 0 },
+      { name: generateTableName(), game: 'Omaha Hi Lo', blinds: '2.5/5', players: 0, min: 250, max: 500, handsHr: 0 },
+      { name: generateTableName(), game: 'Omaha Hi Lo', blinds: '5/10', players: 0, min: 500, max: 1000, handsHr: 0 },
+      { name: generateTableName(), game: 'Omaha Hi Lo', blinds: '10/20', players: 0, min: 1000, max: 2000, handsHr: 0 },
+      { name: generateTableName(), game: 'Omaha Hi Lo', blinds: '25/50', players: 0, min: 2500, max: 5000, handsHr: 0 },
     ];
 
     // Create two of each type of game
