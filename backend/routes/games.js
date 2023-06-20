@@ -1,7 +1,7 @@
-const express = require("express");
-const router = express.Router();
 
-const Games = require("../models/gameSchema");
+const router = require("express").Router();
+
+const Games = require("../models/gamesSchema")
 
 const tableNames = [
   "Eagle",

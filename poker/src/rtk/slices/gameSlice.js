@@ -192,7 +192,7 @@ export const getWinner = createAsyncThunk(
       console.log("Player 4 Results", data.players[3].result)
       console.log("Player 5 Results", data.players[4].result)
       console.log("Player 6 Results", data.players[5].result)
-
+      
       console.log("Players Cards1", data.players[0].cards)
       console.log("Players Cards2", data.players[1].cards)
       console.log("Players Cards3", data.players[2].cards)

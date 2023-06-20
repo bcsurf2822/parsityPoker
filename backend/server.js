@@ -36,6 +36,9 @@ app.use(fundingRoute);
 const updateUserRoute = require("./routes/userInfo");
 app.use(updateUserRoute);
 
+const gamesRoute = require("./routes/games");
+app.use(gamesRoute);
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
