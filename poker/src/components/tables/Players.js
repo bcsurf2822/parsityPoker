@@ -1,9 +1,11 @@
 import { Card, Dropdown, Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import cardToFilename from "../../actions/cardImages"; // Import this function
 
-const Player = ({ name, avatar, chips, bet, isDealer }) => {
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  
+const Player = ({ id, name, avatar, chips, bet, isDealer }) => {
+  const players = useSelector((state) => state.deck.players);
+  const player = players.find((p) => p.id === id); // Find the player based on the id
+
   return (
     <Card style={{ width: '18rem' }}>
       <Card.Img variant="top" src={avatar} />
@@ -15,6 +17,13 @@ const Player = ({ name, avatar, chips, bet, isDealer }) => {
         <Card.Text>
           Current Bet: {bet}
         </Card.Text>
+        {player && player.cards.map((card, cardIndex) => (
+          <img
+            key={cardIndex}
+            src={`/deck/${cardToFilename(card.rank, card.suit)}`}
+            alt={`${card.rank} of ${card.suit}`}
+          />
+        ))}
       </Card.Body>
     </Card>
   );
