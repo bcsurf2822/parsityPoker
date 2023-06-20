@@ -6,6 +6,7 @@ export const fetchGames = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get("http://localhost:4000/games");
+      console.log('Server response:', response.data);
       return response.data.games;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -18,13 +19,13 @@ export const joinGame = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await axios.post(`http://localhost:4000/games/join/${id}`);
+      console.log('Server response:', response.data);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
     }
   }
 );
-
 const serverSlice = createSlice({
   name: 'games',
   initialState: {

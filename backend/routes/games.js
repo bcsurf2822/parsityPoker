@@ -281,6 +281,8 @@ router.post("/games/initialize", async (req, res) => {
   }
 });
 
+
+
 router.post("/games/join/:id", async (req, res) => {
   try {
     const game = await Games.findById(req.params.id);

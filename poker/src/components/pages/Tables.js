@@ -1,16 +1,24 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGames, joinGame } from '../../rtk/slices/serverSlice';
 import { useEffect } from 'react';
+import { Table, Button, Container } from 'react-bootstrap';
 
 const Tables = () => {
   const dispatch = useDispatch();
-
+  
   // This will select the 'games' state from your Redux store
   const { games, loading, error } = useSelector(state => state.server);
 
   // This will fetch the games when the component mounts
   useEffect(() => {
-    dispatch(fetchGames());
+    dispatch(fetchGames())
+      .then((action) => {
+        if (fetchGames.fulfilled.match(action)) {
+          console.log('Fetched games:', action.payload);
+        } else {
+          console.log('Failed to fetch games:', action.error.message);
+        }
+      });
   }, [dispatch]);
 
   // This will be called when a player clicks on a "join" button
@@ -21,19 +29,32 @@ const Tables = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  return (  
-    <div>
+  return (
+    <Container style={{ maxHeight: '80vh', overflowY: 'scroll' }}>
       <h1>Available Tables</h1>
-      {games.map(game => (
-        <div key={game._id}>
-          <h2>{game.name}</h2>
-          <p>Game: {game.game}</p>
-          <p>Blinds: {game.blinds}</p>
-          <p>Players: {game.players}</p>
-          <button onClick={() => handleJoin(game._id)}>Join</button>
-        </div>
-      ))}
-    </div>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Game</th>
+            <th>Blinds</th>
+            <th>Players</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {games.map(game => (
+            <tr key={game._id}>
+              <td>{game.name}</td>
+              <td>{game.game}</td>
+              <td>{game.blinds}</td>
+              <td>{game.players}</td>
+              <td><Button onClick={() => handleJoin(game._id)}>Join</Button></td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </Container>
   );
 }
  
