@@ -58,3 +58,7 @@ code {
   margin-top: auto;
   margin-bottom: auto;
 }
+
+.login-container {
+  padding: 10px;
+}

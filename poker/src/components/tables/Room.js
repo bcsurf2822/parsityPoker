@@ -1,40 +1,12 @@
 import { Container, Row, Col } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import Player from "./Players";
 import PlayerOptions from "./PlayerOptions";
-import {
-  startNewGame,
-  dealToPlayers,
-  revealFlop,
-  revealTurn,
-  revealRiver,
-} from "../../rtk/slices/gameSlice";
 
 const Room = () => {
   const userInfo = useSelector((state) => state.auth.user);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
-  const dispatch = useDispatch();
 
-  const handleNewGame = () => {
-    dispatch(startNewGame());
-    dispatch(dealToPlayers());
-  };
-
-  const handleDealCards = () => {
-    dispatch(dealToPlayers());
-  };
-
-  const handleRevealFlop = () => {
-    dispatch(revealFlop());
-  };
-
-  const handleRevealTurn = () => {
-    dispatch(revealTurn());
-  };
-
-  const handleRevealRiver = () => {
-    dispatch(revealRiver());
-  };
 
   return (
     <Container fluid className="h-100 bg">
@@ -80,12 +52,6 @@ const Room = () => {
 </Col>
         <Col></Col>
       </Row>
-
-      <button onClick={handleNewGame}>Start New Game</button>
-      <button onClick={handleDealCards}>Deal Cards</button>
-      <button onClick={handleRevealFlop}>Reveal Flop</button>
-      <button onClick={handleRevealTurn}>Reveal Turn</button>
-      <button onClick={handleRevealRiver}>Reveal River</button>
     </Container>
   );
 };
