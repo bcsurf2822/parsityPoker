@@ -1,42 +1,44 @@
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGames, joinGame } from '../../rtk/slices/serverSlice';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Table, Button, Container, Form } from 'react-bootstrap';
 
 const Tables = () => {
   const dispatch = useDispatch();
-  const [gameType, setGameType] = useState('all');  // <--- New state for game type
+  const [gameType, setGameType] = useState('all');
   
-  // This will select the 'games' state from your Redux store
-  const { games, loading, error } = useSelector(state => state.server);
+  const { games, loading, error, currentGame } = useSelector(state => state.server);
 
-  // This will fetch the games when the component mounts
   useEffect(() => {
-    dispatch(fetchGames())
-      .then((action) => {
-        if (fetchGames.fulfilled.match(action)) {
-          console.log('Fetched games:', action.payload);
-        } else {
-          console.log('Failed to fetch games:', action.error.message);
-        }
-      });
+    dispatch(fetchGames());
   }, [dispatch]);
 
-  // This will be called when a player clicks on a "join" button
-  const handleJoin = (id) => {
-    dispatch(joinGame(id));
+  const handleJoin = async (id) => {
+    await dispatch(joinGame(id));
   }
 
   const handleGameTypeChange = (event) => {
-    setGameType(event.target.value);  // Update the game type state when the select value changes
+    setGameType(event.target.value);
   }
 
   const filteredGames = games.filter(game => {
-    return gameType === 'all' || game.game === gameType;  // Only include games that match the selected type
+    return gameType === 'all' || game.game === gameType;
   });
 
+  useEffect(() => {
+    if (currentGame) {
+      window.open(`/game/${currentGame._id}`, '_blank');
+    }
+  }, [currentGame]);
+
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+
+
+  if (error) {
+    console.log(error);
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <Container style={{ maxHeight: '80vh', overflowY: 'scroll' }}>

@@ -22,6 +22,11 @@ function arrayLimit(val) {
 };
 
 const TableSchema = new Schema({
+  game: {
+    type: ObjectId,
+    ref: 'Games',
+    required: true,
+  },
   playersInGame: [PlayerSchema],
   communityCards: [Number],
   pot: Number,

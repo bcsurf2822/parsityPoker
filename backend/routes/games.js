@@ -1,7 +1,9 @@
 
 const router = require("express").Router();
 
-const Games = require("../models/gamesSchema")
+const Games = require("../models/gamesSchema");
+const Table = require("../models/tableSchema");
+const User = require("../models/userSchema");
 
 const tableNames = [
   "Eagle",
@@ -282,8 +284,7 @@ router.post("/games/initialize", async (req, res) => {
 });
 
 
-
-router.post("/games/join/:id", async (req, res) => {
+router.get("/games/view/:id", async (req, res) => {
   try {
     const game = await Games.findById(req.params.id);
 
@@ -291,34 +292,19 @@ router.post("/games/join/:id", async (req, res) => {
       return res.status(404).json({ message: "Game not found" });
     }
 
-    if (game.players >= 6) {
-      const newGame = await Games.create({
-        ...game.toObject(),
-        _id: mongoose.Types.ObjectId(),
-        name: generateTableName(),
-        players: 0,
-      });
-
-      res
-        .status(200)
-        .json({
-          message: "Game is full. A new game was created.",
-          game: newGame,
-        });
-    } else {
-      game.players += 1;
-      await game.save();
-
-      res
-        .status(200)
-        .json({ message: "Joined game successfully.", game: game });
+    // Find a table that's associated with this game
+    let table = await Table.findOne({ game: game._id });
+    if (!table) {
+      // If no table exists, send a message indicating that there's no table associated with this game
+      return res.status(404).json({ message: "Table not found for this game" });
     }
+
+    res.status(200).json({ message: "Viewed game successfully.", game: game, tableId: table._id });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.toString() });
   }
 });
-
 router.get("/games", async (req, res) => {
   try {
     const games = await Games.find({});

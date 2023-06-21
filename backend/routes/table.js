@@ -12,7 +12,7 @@ router.post("/joingame", req, res) => {
     return;
   }
 
-  const table = await Table.findOne(); // Replace with your logic to find a table
+  const table = await Table.findOne(); 
   if (!table) {
     res.status(404).json({ error: 'No available tables' });
     return;
