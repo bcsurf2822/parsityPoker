@@ -36,6 +36,9 @@ app.use(fundingRoute);
 const updateUserRoute = require("./routes/userInfo");
 app.use(updateUserRoute);
 
+const createGamesRoute = require("./routes/createGames");
+app.use(createGamesRoute);
+
 const gamesRoute = require("./routes/games");
 app.use(gamesRoute);
 

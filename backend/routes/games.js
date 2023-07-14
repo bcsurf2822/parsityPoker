@@ -2,7 +2,7 @@
 const router = require("express").Router();
 
 const Game = require("../models/gamesSchema");
-const Deck = require("../models/cardSchema");
+
 
 const additionalTableNames = [
   // Bird names
@@ -306,10 +306,6 @@ router.post("/games/initialize", async (req, res) => {
     }
 
     for (const game of games) {
-      // Create a new shuffled deck for each game
-      const newDeck = new Deck();
-      newDeck.cards = shuffledDeck();
-      await newDeck.save();
 
       // Create two of each type of game
       await Game.create({ ...game, name: generateTableName(), deckId: newDeck._id });
