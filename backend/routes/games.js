@@ -2,8 +2,18 @@
 const router = require("express").Router();
 
 const Games = require("../models/gamesSchema");
-const Table = require("../models/tableSchema");
-const User = require("../models/userSchema");
+
+const additionalTableNames = [
+  // Bird names
+  "Cardinal", "Cuckoo", "Falcon", "Heron", "Jay", "Kestrel", "Lark", "Magpie", "Nightingale", "Oriole",
+  "Plover", "Quail", "Raven", "Starling", "Toucan", "Vulture", "Waxwing", "Xenops", "Yellowthroat",
+  "Zebrafinch", "Bluejay", "Chaffinch", "Goldfinch", "Ibis", "Junco",
+
+  // Insect names
+  "Weevil", "Earwig", "Flea", "Gnat", "Hornet", "Ichneumon", "Junebug", "Katydid", "Lanternfly", "Mayfly",
+  "Nematode", "Orchid Mantis", "Planthopper", "Queen Bee", "Roach", "Silverfish", "Thrip", "Uloboridae",
+  "Vinegaroon", "Webspinner", "Xylocopa", "Yellowjacket", "Zoraptera", "Atlas Moth", "Bombus"
+];
 
 const tableNames = [
   "Eagle",
@@ -42,12 +52,30 @@ const tableNames = [
   "Tick",
   "Aphid",
   "Louse",
+  ...additionalTableNames
 ];
 
+let usedTableNames = new Set();
+
 function generateTableName() {
-  const randomName = tableNames[Math.floor(Math.random() * tableNames.length)];
+  if(usedTableNames.size === tableNames.length){
+    throw new Error('All names have been used.');
+  }
+
+  let randomName = tableNames[Math.floor(Math.random() * tableNames.length)];
+
+  // Ensure the generated name has not been used
+  while (usedTableNames.has(randomName)) {
+    randomName = tableNames[Math.floor(Math.random() * tableNames.length)];
+  }
+
+  // Add the chosen name to the set of used names
+  usedTableNames.add(randomName);
+
   return randomName;
 }
+
+usedTableNames.clear();
 
 router.post("/games/initialize", async (req, res) => {
   try {
@@ -270,11 +298,18 @@ router.post("/games/initialize", async (req, res) => {
       },
     ];
 
+    if (games.length * 2 > tableNames.length) {
+      return res.status(400).json({ message: 'Not enough unique table names for all the games.' });
+    }
+
     // Create two of each type of game
     for (const game of games) {
       await Games.create({ ...game });
       await Games.create({ ...game, name: generateTableName() });
     }
+
+    // You may want to clear used names after all games are created
+    usedTableNames.clear();
 
     res.status(200).json({ message: "Games initialized successfully." });
   } catch (error) {

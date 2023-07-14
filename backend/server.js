@@ -39,6 +39,9 @@ app.use(updateUserRoute);
 const gamesRoute = require("./routes/games");
 app.use(gamesRoute);
 
+const joinGameRoute = require("./routes/joinGame");
+app.use(joinGameRoute);
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

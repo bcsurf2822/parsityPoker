@@ -3,8 +3,8 @@ import axios from "axios";
 
 export const joinTable = createAsyncThunk(
   "table/join",
-  async ({userId}) => {
-    const response = await axios.post("http://localhost:4000/api/table/join", { userId })
+  async ({userId, gameId, chips}) => {
+    const response = await axios.post(`http://localhost:4000/games/join/${gameId}`, { userId, chips });
     console.log(response.data)
     return response.data;
   }
@@ -17,6 +17,7 @@ const tableSlice = createSlice({
     loading: false,
     error: null,
     table: null,
+    gameId: null,  // Add this field to store the gameId
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -28,6 +29,7 @@ const tableSlice = createSlice({
         state.isJoined = true;
         state.loading = false;
         state.table = action.payload
+        state.gameId = action.meta.arg.gameId;  // Store the gameId in the state
       })
       .addCase(joinTable.rejected, (state, action) => {
         state.isJoined = false;

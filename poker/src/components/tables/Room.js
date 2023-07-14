@@ -1,11 +1,26 @@
 import { Container, Row, Col } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 import Player from "./Players";
 import PlayerOptions from "./PlayerOptions";
 
 const Room = () => {
+  const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.auth.user);
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
+  const { gameId, table } = useSelector((state) => state.table);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+  useEffect(() => {
+    if (gameId) {
+      const fetchTableInfo = async () => {
+        const response = await axios.get(`http://localhost:4000/games/${gameId}`);
+        dispatch({ type: 'table/setTableInfo', payload: response.data });
+      };
+
+      fetchTableInfo();
+    }
+  }, [gameId, dispatch]);
 
 
   return (
