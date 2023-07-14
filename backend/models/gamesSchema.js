@@ -48,11 +48,7 @@ const GameSchema = new Schema({
   playersInGame: [PlayerSchema],
   communityCards: [Number],
   pot: Number,
-  deck: {
-    type: ObjectId,
-    ref: 'Deck',
-    required: true,
-  },
+  deckId: {type: ObjectId, required: true},
   timestamp: {
     type: Date,
     default: Date.now,

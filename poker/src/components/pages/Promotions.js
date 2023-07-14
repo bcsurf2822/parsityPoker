@@ -2,14 +2,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import {
   startNewGame,
-  drawCard,
   getDeck,
-  dealCards,
   dealToPlayers,
   revealFlop,
   revealTurn,
-  revealRiver,
-  getWinner,
+  revealRiver
 } from "../../rtk/slices/gameSlice";
 import cardToFilename from "../../actions/cardImages";
 
@@ -43,11 +40,6 @@ const Promotions = () => {
     }
   };
 
-const handleDealCards = () => {
-    if (deckId) {
-      dispatch(dealToPlayers({ deckId }));
-    }
-};
 
 const handleRevealFlop = () => {
     if (deckId) {
@@ -105,7 +97,7 @@ const handleRevealRiver = () => {
         ))}
       </div>
       <button onClick={handleNewGame}>Start New Game</button>
-      <button onClick={handleDealCards}>Deal Cards</button>
+
       <button onClick={handleRevealFlop}>Reveal Flop</button>
       <button onClick={handleRevealTurn}>Reveal Turn</button>
       <button onClick={handleRevealRiver}>Reveal River</button>

@@ -1,7 +1,8 @@
 
 const router = require("express").Router();
 
-const Games = require("../models/gamesSchema");
+const Game = require("../models/gamesSchema");
+const Deck = require("../models/cardSchema");
 
 const additionalTableNames = [
   // Bird names
@@ -79,6 +80,8 @@ usedTableNames.clear();
 
 router.post("/games/initialize", async (req, res) => {
   try {
+    usedTableNames.clear();
+
     const games = [
       {
         name: generateTableName(),
@@ -302,14 +305,16 @@ router.post("/games/initialize", async (req, res) => {
       return res.status(400).json({ message: 'Not enough unique table names for all the games.' });
     }
 
-    // Create two of each type of game
     for (const game of games) {
-      await Games.create({ ...game });
-      await Games.create({ ...game, name: generateTableName() });
-    }
+      // Create a new shuffled deck for each game
+      const newDeck = new Deck();
+      newDeck.cards = shuffledDeck();
+      await newDeck.save();
 
-    // You may want to clear used names after all games are created
-    usedTableNames.clear();
+      // Create two of each type of game
+      await Game.create({ ...game, name: generateTableName(), deckId: newDeck._id });
+      await Game.create({ ...game, name: generateTableName(), deckId: newDeck._id });
+    }
 
     res.status(200).json({ message: "Games initialized successfully." });
   } catch (error) {
@@ -318,31 +323,25 @@ router.post("/games/initialize", async (req, res) => {
   }
 });
 
-
 router.get("/games/view/:id", async (req, res) => {
   try {
-    const game = await Games.findById(req.params.id);
+    const game = await Game.findById(req.params.id);
 
     if (!game) {
       return res.status(404).json({ message: "Game not found" });
     }
 
-    // Find a table that's associated with this game
-    let table = await Table.findOne({ game: game._id });
-    if (!table) {
-      // If no table exists, send a message indicating that there's no table associated with this game
-      return res.status(404).json({ message: "Table not found for this game" });
-    }
-
-    res.status(200).json({ message: "Viewed game successfully.", game: game, tableId: table._id });
+    // Now, instead of finding a table, we directly return the game information
+    res.status(200).json({ message: "Viewed game successfully.", game: game });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.toString() });
   }
 });
+
 router.get("/games", async (req, res) => {
   try {
-    const games = await Games.find({});
+    const games = await Game.find({});
     res.status(200).json({ games });
   } catch (error) {
     console.error(error);
