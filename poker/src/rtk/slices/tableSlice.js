@@ -10,31 +10,35 @@ export const joinTable = createAsyncThunk(
   }
 );
 
+export const viewTable = createAsyncThunk(
+  "table/view",
+  async (gameId) => {
+    const response = await axios.get(`http://localhost:4000/games/view/${gameId}`);
+    console.log(response.data)
+    return response.data;
+  }
+);
+
 const tableSlice = createSlice({
   name: "table",
   initialState: { 
-    isJoined: false,
     loading: false,
     error: null,
     table: null,
-    gameId: null,  // Add this field to store the gameId
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(joinTable.pending, (state) => {
+      .addCase(viewTable.pending, (state) => {
         state.loading = true;
       })
-      .addCase(joinTable.fulfilled, (state, action) => {
-        state.isJoined = true;
+      .addCase(viewTable.fulfilled, (state, action) => {
         state.loading = false;
-        state.table = action.payload
-        state.gameId = action.meta.arg.gameId;  // Store the gameId in the state
+        state.table = action.payload;
       })
-      .addCase(joinTable.rejected, (state, action) => {
-        state.isJoined = false;
+      .addCase(viewTable.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed to join table';
+        state.error = action.error.message || 'Failed to view table';
       });
   },
 });
