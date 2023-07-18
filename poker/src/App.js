@@ -64,7 +64,7 @@ function App() {
             element={<ProtectedRoute element={<Withdrawl />} />}
           />
           <Route path="/cards" element={Cards} />
-          <Route path="/room" element={Room} />
+          <Route path="/room/:id" element={Room} />
         </Routes>
       </Router>
     </div>

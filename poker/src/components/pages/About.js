@@ -1,11 +1,8 @@
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import Room from "../tables/Room";
 
 const About = () => {
   return (
     <div className="About">
-      <Room />
+      <h1>About</h1>
     </div>
   );
 };

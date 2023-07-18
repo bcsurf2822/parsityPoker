@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchGames } from "../../rtk/slices/serverSlice";
 import { viewTable } from "../../rtk/slices/tableSlice";
 import { Table, Button, Container, Form } from "react-bootstrap";
-import Room from "../tables/Room";
+
 
 const Tables = () => {
   const dispatch = useDispatch();
@@ -18,8 +18,8 @@ const Tables = () => {
     dispatch(fetchGames());
   }, [dispatch]);
 
-  const handleView = async (id) => {
-    await dispatch(viewTable(id));
+  const handleView = (id) => {
+    window.open(`http://localhost:3000/room?roomId=${id}`, "_blank");
   };
 
   const handleGameTypeChange = (event) => {

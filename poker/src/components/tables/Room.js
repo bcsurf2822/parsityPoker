@@ -1,26 +1,27 @@
 import { Container, Row, Col } from "react-bootstrap";
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Player from "./Players";
 import PlayerOptions from "./PlayerOptions";
 
 const Room = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.auth.user);
   const { gameId, table } = useSelector((state) => state.table);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-
+  const urlParams = new URLSearchParams(window.location.search);
+  const roomId = urlParams.get('roomId');
   useEffect(() => {
-    if (gameId) {
-      const fetchTableInfo = async () => {
-        const response = await axios.get(`http://localhost:4000/games/${gameId}`);
-        dispatch({ type: 'table/setTableInfo', payload: response.data });
-      };
+    const fetchTableInfo = async () => {
+      const response = await axios.get(`http://localhost:4000/games/${id}`);
+      dispatch({ type: 'table/setTableInfo', payload: response.data });
+    };
 
-      fetchTableInfo();
-    }
-  }, [gameId, dispatch]);
+    fetchTableInfo();
+  }, [id, dispatch]);
 
 
   return (
@@ -41,8 +42,8 @@ const Room = () => {
           <Player id={3} name="Player 3" chips={500} bet={20} isDealer={true} />      
         </Col>
         <Col></Col>
-        <Col className="d-flex justify-content-center">
-          <div className="table">Table</div>
+      <Col className="d-flex justify-content-center">
+          <div className="table">{table ? table.name : 'Loading...'}</div>
         </Col>
         <Col></Col>
         <Col className="d-flex justify-content-center">
