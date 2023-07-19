@@ -27,44 +27,43 @@ const Room = () => {
       <Row className="h-50">
         <Col></Col>
         <Col className="d-flex justify-content-center">
-          <Player id={1} name="Player 1"  chips={500} bet={20} isDealer={true} />      
+          <Player id={1} name="Seat 1"   isDealer={false} />      
         </Col>
         <Col></Col>
         <Col className="d-flex justify-content-center">
-          <Player id={2} name="Player 2"  chips={500} bet={20} isDealer={true} />            
+          <Player id={2} name="Seat 2"  isDealer={false} />            
         </Col>
         <Col></Col>
       </Row>
       <Row className="h-50">
         <Col className="d-flex justify-content-center">
-          <Player id={3} name="Player 3" chips={500} bet={20} isDealer={true} />      
+          <Player id={3} name="Seat 3"  isDealer={false} />      
         </Col>
         <Col></Col>
         <Col className="d-flex justify-content-center">
   <div className="table">
-    <h1>table name</h1>
     {viewedGame && viewedGame.game ? viewedGame.game.name : 'Loading...'}
   </div>
 </Col>
         <Col></Col>
         <Col className="d-flex justify-content-center">
-          <Player id={4} name="Player 4"  chips={500} bet={20} isDealer={true} />            
+          <Player id={4} name="Seat 4"  isDealer={false} />            
         </Col>
       </Row>
       <Row className="h-50">
         <Col></Col>
         <Col className="d-flex justify-content-center">
-          <Player id={5} name="Player 5"  chips={500} bet={20} isDealer={true} />            
+          <Player id={5} name="Seat 5"  isDealer={false} />            
         </Col>
         <Col></Col>
         <Col className="d-flex justify-content-center">
   {isAuthenticated ? (
     <div>
-      <Player id={userInfo.id} name={userInfo.username}  chips={userInfo.balance} bet={20} isDealer={true} />
+      <Player id={userInfo.id} name={userInfo.username}  chips={userInfo.balance} bet={20} isDealer={false} />
       <PlayerOptions />
     </div>
   ) : (
-    <Player id={6} name="Player 6"  chips={500} bet={20} isDealer={true} />
+    <Player id={6} name="Seat 6" isDealer={false} />
   )}
 </Col>
         <Col></Col>
