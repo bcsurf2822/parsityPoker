@@ -1,5 +1,6 @@
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Button  } from "react-bootstrap";
 import { useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchGames, viewTable } from "../../rtk/slices/serverSlice";
@@ -9,6 +10,7 @@ import PlayerOptions from "./PlayerOptions";
 const Room = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const userInfo = useSelector((state) => state.auth.user);
   const { games, viewedGame } = useSelector((state) => state.server);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -18,6 +20,11 @@ const Room = () => {
       dispatch(viewTable(id));
     });
   }, [id, dispatch]);
+
+  const closeTable = () => {
+    navigate("/Tables");
+    console.log("Table closed");
+  };
 
   console.log(viewedGame, "gamename");
   console.log(games)
@@ -63,10 +70,15 @@ const Room = () => {
       <PlayerOptions />
     </div>
   ) : (
-    <Player id={6} name="Seat 6" isDealer={false} />
+    <Player id={6} name="Seat 6" isDealer={false}  />
   )}
 </Col>
         <Col></Col>
+      </Row>
+      <Row className="mt-2"> {/* Add some margin on the top */}
+        <Col className="d-flex justify-content-center">
+          <Button variant="danger" onClick={closeTable}>X</Button>
+        </Col>
       </Row>
     </Container>
   );

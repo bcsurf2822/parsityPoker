@@ -1,4 +1,4 @@
-import { Card} from "react-bootstrap";
+import { Button, Card} from "react-bootstrap";
 import { useSelector } from "react-redux";
 import cardToFilename from "../../actions/cardImages"; // Import this function
 
@@ -11,6 +11,9 @@ const Player = ({ id, name, avatar, chips, bet, isDealer }) => {
       <Card.Img variant="top" src={avatar} />
       <Card.Body>
         <Card.Title>{name} {isDealer ? "(Dealer)" : ""}</Card.Title>
+        <div>
+          <Button variant="success">Sit Here</Button>
+        </div>
         <Card.Text>
           Chips: {chips}
         </Card.Text>
