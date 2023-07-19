@@ -14,7 +14,7 @@ const Tables = () => {
 
   const [gameType, setGameType] = useState("all");
 
-  const { games } = useSelector((state) => state.server);
+  const { games, loading, error, viewedGame } = useSelector((state) => state.server);
 
 
   useEffect(() => {

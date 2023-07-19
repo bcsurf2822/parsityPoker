@@ -19,13 +19,8 @@ const Room = () => {
     });
   }, [id, dispatch]);
 
-  useEffect(() => {
-    const game = games.find(game => game._id === id); // make sure 'id' corresponds to '_id' in your 'games' objects
-    
-    if (game) {
-      console.log(game.name);
-    }
-  }, [games, id]);
+  console.log(viewedGame, "gamename");
+  console.log(games)
   
   return (
     <Container fluid className="h-100 bg">
@@ -45,9 +40,10 @@ const Room = () => {
           <Player id={3} name="Player 3" chips={500} bet={20} isDealer={true} />      
         </Col>
         <Col></Col>
-<Col className="d-flex justify-content-center">
+        <Col className="d-flex justify-content-center">
   <div className="table">
- {viewedGame.game.name}
+    <h1>table name</h1>
+    {viewedGame && viewedGame.game ? viewedGame.game.name : 'Loading...'}
   </div>
 </Col>
         <Col></Col>
