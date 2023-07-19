@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Table, Button, Container, Form } from "react-bootstrap";
 
-import { fetchGames } from "../../rtk/slices/serverSlice";
+import { fetchGames, viewTable } from "../../rtk/slices/serverSlice";
 
 const Tables = () => {
   const dispatch = useDispatch();
@@ -19,6 +19,7 @@ const Tables = () => {
 
   const handleView = (id) => {
     console.log(`Viewing game with ID: ${id}`);
+    dispatch(viewTable(id));
     navigate(`/Room/${id}`);
   };
 

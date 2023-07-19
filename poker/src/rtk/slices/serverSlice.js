@@ -31,6 +31,7 @@ const serverSlice = createSlice({
     viewedGame: null,
     loading: false,
     error: null,
+    currentTableName: null,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -52,6 +53,7 @@ const serverSlice = createSlice({
       .addCase(viewTable.fulfilled, (state, action) => {
         state.loading = false;
         state.viewedGame = action.payload;
+        state.currentTableName = action.payload.name;
       })
       .addCase(viewTable.rejected, (state, action) => {
         state.loading = false;
