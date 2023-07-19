@@ -14,12 +14,21 @@ export const fetchGames = createAsyncThunk(
   }
 );
 
+export const viewTable = createAsyncThunk(
+  "games/viewTable",
+  async (gameId) => {
+    const response = await axios.get(`http://localhost:4000/games/view/${gameId}`);
+    console.log(response.data)
+    return response.data;
+  }
+);
 
 const serverSlice = createSlice({
   name: 'games',
   initialState: {
     games: [],
     currentGame: null,
+    viewedGame: null,
     loading: false,
     error: null,
   },
@@ -37,6 +46,17 @@ const serverSlice = createSlice({
         state.loading = false;
         state.error = action.payload || 'Failed to fetch games';
       })
+      .addCase(viewTable.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(viewTable.fulfilled, (state, action) => {
+        state.loading = false;
+        state.viewedGame = action.payload;
+      })
+      .addCase(viewTable.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to view table';
+      });
   },
 });
 

@@ -1,25 +1,29 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchGames } from "../../rtk/slices/serverSlice";
-import { viewTable } from "../../rtk/slices/tableSlice";
+import { useNavigate } from "react-router-dom";
 import { Table, Button, Container, Form } from "react-bootstrap";
+
+import { fetchGames, viewTable } from "../../rtk/slices/serverSlice";
+
+import Room from "../tables/Room";
 
 
 const Tables = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [gameType, setGameType] = useState("all");
 
-  const { games, loading, error, table } = useSelector((state) => ({
-    ...state.server,
-    table: state.table.table,
-  }));
+  const { games } = useSelector((state) => state.server);
+
 
   useEffect(() => {
     dispatch(fetchGames());
   }, [dispatch]);
 
   const handleView = (id) => {
-    window.open(`http://localhost:3000/room?roomId=${id}`, "_blank");
+    console.log(`Viewing game with ID: ${id}`);
+    navigate(`/Room/${id}`);
   };
 
   const handleGameTypeChange = (event) => {
@@ -29,16 +33,6 @@ const Tables = () => {
   const filteredGames = games.filter((game) => {
     return gameType === "all" || game.game === gameType;
   });
-
-  useEffect(() => {
-    if (table) {
-      window.open(`/game/${table._id}`, "_blank");
-      dispatch({ type: 'table/view/pending' }); // Reset the table state after use
-    }
-  }, [table]);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <Container style={{ maxHeight: "80vh", overflowY: "scroll" }}>

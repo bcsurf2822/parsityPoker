@@ -2,7 +2,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import { fetchGames, viewTable } from "../../rtk/slices/serverSlice";
 import Player from "./Players";
 import PlayerOptions from "./PlayerOptions";
 
@@ -10,20 +10,23 @@ const Room = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.auth.user);
-  const { gameId, table } = useSelector((state) => state.table);
+  const { games, viewedGame } = useSelector((state) => state.server); // changed state.games to state.server
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const urlParams = new URLSearchParams(window.location.search);
-  const roomId = urlParams.get('roomId');
+  
   useEffect(() => {
-    const fetchTableInfo = async () => {
-      const response = await axios.get(`http://localhost:4000/games/${id}`);
-      dispatch({ type: 'table/setTableInfo', payload: response.data });
-    };
-
-    fetchTableInfo();
+    dispatch(fetchGames()).then(() => {
+      dispatch(viewTable(id));
+    });
   }, [id, dispatch]);
 
-
+  useEffect(() => {
+    const game = games.find(game => game._id === id); // make sure 'id' corresponds to '_id' in your 'games' objects
+    
+    if (game) {
+      console.log(game.name);
+    }
+  }, [games, id]);
+  
   return (
     <Container fluid className="h-100 bg">
       <Row className="h-50">
@@ -42,9 +45,11 @@ const Room = () => {
           <Player id={3} name="Player 3" chips={500} bet={20} isDealer={true} />      
         </Col>
         <Col></Col>
-      <Col className="d-flex justify-content-center">
-          <div className="table">{table ? table.name : 'Loading...'}</div>
-        </Col>
+<Col className="d-flex justify-content-center">
+  <div className="table">
+ {viewedGame.game.name}
+  </div>
+</Col>
         <Col></Col>
         <Col className="d-flex justify-content-center">
           <Player id={4} name="Player 4"  chips={500} bet={20} isDealer={true} />            
