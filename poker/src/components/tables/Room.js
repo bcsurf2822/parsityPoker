@@ -10,7 +10,7 @@ const Room = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.auth.user);
-  const { games, viewedGame } = useSelector((state) => state.server); // changed state.games to state.server
+  const { games, viewedGame } = useSelector((state) => state.server);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   
   useEffect(() => {

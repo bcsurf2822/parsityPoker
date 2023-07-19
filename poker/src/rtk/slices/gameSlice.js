@@ -21,7 +21,7 @@ export const getDeck = createAsyncThunk(
   "deck/getDeck",
   async ({ deckId }, thunkAPI) => {
     try {
-      console.log(deckId); // log deckId
+      console.log(deckId);
       const response = await axios.get(`http://localhost:4000/deck/${deckId}`);
       return response.data;
     } catch (error) {
@@ -34,7 +34,6 @@ export const getDeck = createAsyncThunk(
 export const dealToPlayers = createAsyncThunk(
   "deck/dealToPlayers",
   async ({ deckId }, thunkAPI) => {
-    // Get current state
     const state = thunkAPI.getState().deck;
     const deck = state.deck;
 
@@ -137,12 +136,9 @@ export const getWinner = createAsyncThunk(
 
 
       let winnerCards = JSON.stringify(data.winners[0].cards);
-
-      // Iterate over each player
       for(let i = 0; i < data.players.length; i++) {
         let playerCards = JSON.stringify(data.players[i].cards);
-      
-        // If the player's cards are equal to the winner's cards, then print that this player is the winner
+
         if (winnerCards === playerCards) {
           console.log(`Player ${i + 1} wins`);
         }

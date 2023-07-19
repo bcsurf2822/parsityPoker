@@ -15,8 +15,6 @@ export const deposit = createAsyncThunk(
   }
 );
 
-
-// Create the withdraw thunk
 export const withdraw = createAsyncThunk(
   "banking/withdraw",
   async ({ userId, amount }, { dispatch }) => {

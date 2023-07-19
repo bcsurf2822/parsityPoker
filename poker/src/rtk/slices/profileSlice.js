@@ -8,14 +8,13 @@ export const updateUsername = createAsyncThunk(
       const config = {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`  // Set the JWT token here
+          'Authorization': `Bearer ${token}`  
         }
       };
 
       const response = await axios.put(`http://localhost:4000/username`, { username }, config);
       return response.data;
     } catch (error) {
-      // Return the error message from the server, or a default message if there is no server message
       return thunkAPI.rejectWithValue(error.response?.data?.message || 'Unexpected error');
     }
   }
@@ -26,7 +25,7 @@ const profileSlice = createSlice({
   initialState: {
     updating: false,
     error: null,
-    username: null, // Add this to your state
+    username: null,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -37,12 +36,11 @@ const profileSlice = createSlice({
       })
       .addCase(updateUsername.fulfilled, (state, action) => {
         state.updating = false;
-        state.username = action.payload.username; // Update the username when the request is successful
-        state.error = null;
+        state.username = action.payload.username;
       })
       .addCase(updateUsername.rejected, (state, action) => {
         state.updating = false;
-        state.error = action.error.message; // Update the error state when the request fails
+        state.error = action.error.message;
       });
   },
 });

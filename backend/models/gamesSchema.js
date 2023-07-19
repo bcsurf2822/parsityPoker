@@ -20,6 +20,14 @@ function arrayLimit(val) {
   return val.length <= 2;
 };
 
+const SeatSchema = new Schema({
+  id: { type: Number, required: true },
+  player: {
+    type: PlayerSchema,
+    default: null
+  },
+});
+
 const GameSchema = new Schema({
   name: {
     type: String,
@@ -50,7 +58,11 @@ const GameSchema = new Schema({
   timestamp: {
     type: Date,
     default: Date.now,
-  }
+  },
+  seats: {
+    type: [SeatSchema],
+    default: Array(6).fill().map((_, i) => ({ id: i + 1, player: null })),
+  },
 });
 
 const Game = mongoose.model("Game", GameSchema);

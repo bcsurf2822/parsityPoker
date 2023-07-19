@@ -3,10 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Table, Button, Container, Form } from "react-bootstrap";
 
-import { fetchGames, viewTable } from "../../rtk/slices/serverSlice";
-
-import Room from "../tables/Room";
-
+import { fetchGames } from "../../rtk/slices/serverSlice";
 
 const Tables = () => {
   const dispatch = useDispatch();
@@ -14,8 +11,7 @@ const Tables = () => {
 
   const [gameType, setGameType] = useState("all");
 
-  const { games, loading, error, viewedGame } = useSelector((state) => state.server);
-
+  const { games } = useSelector((state) => state.server);
 
   useEffect(() => {
     dispatch(fetchGames());

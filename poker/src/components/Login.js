@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../rtk/slices/authenticationSlice";
 import { useNavigate } from "react-router-dom";
 
-import { Form, Button, Card, Modal } from "react-bootstrap";
+import { Form, Button, Card } from "react-bootstrap";
 
 function Login() {
   const dispatch = useDispatch();
@@ -44,7 +44,6 @@ function Login() {
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const loading = useSelector((state) => state.auth.loading);
-  const error = useSelector((state) => state.auth.error);
 
   if (isAuthenticated) {
     return <p>Welcome Back1</p>;
@@ -71,7 +70,6 @@ function Login() {
           </Form>
         </Card.Body>
       </Card>
-      {/* Rest of the code... */}
     </div>
   );
 }

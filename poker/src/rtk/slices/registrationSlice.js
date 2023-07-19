@@ -13,7 +13,7 @@ export const register = createAsyncThunk(
       console.log("Register Response", response)
       return response.data;
     } catch (error) {
-      console.log(error.response); // Log the entire error object
+      console.log(error.response);
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }

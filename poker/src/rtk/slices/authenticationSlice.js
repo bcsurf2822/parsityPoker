@@ -9,7 +9,6 @@ export const login = createAsyncThunk(
   async ({ email, password }) => {
     const response = await axios.post("http://localhost:4000/login", { email, password });
 
-    // save JWT to localStorage
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
     }
@@ -22,7 +21,6 @@ export const logout = createAsyncThunk(
   'authentication/logout',
   async () => {
     const response = await axios.post("http://localhost:4000/logout");
-    // clear JWT from localStorage
     localStorage.removeItem('token');
 
     return response.data;
