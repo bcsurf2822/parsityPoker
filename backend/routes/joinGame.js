@@ -24,11 +24,15 @@ router.post('/join/:gameId/:seatId', async (req, res) => {    try {
       }
   
       const { seatId } = req.params;
-  
-      const seatIdNum = Number(seatId);
-      const availableSeat = game.seats.find(seat => seat.id === seatIdNum && seat.player === null);
+      console.log('seatId:', seatId);
+      
+      // Convert seatId and seat._id to strings for comparison
+      const availableSeat = game.seats.find(seat => seat._id.toString() === seatId && seat.player === null);
+      console.log('availableSeat:', availableSeat);
       
       user.accountBalance -= buyIn;
+
+      
   
       const player = { user: user._id, chips: buyIn, handCards: [], bet: 0 };
       game.playersInGame.push(player);
@@ -39,8 +43,9 @@ router.post('/join/:gameId/:seatId', async (req, res) => {    try {
   
       res.status(200).json({ message: "Successfully joined the game!", game });
     } catch (err) {
-      res.status(500).json({ message: err.message });
-    }
+        console.error(err); // Log the whole error object, not just the message.
+        res.status(500).json({ message: err.message });
+      }
   });
 
 module.exports = router;

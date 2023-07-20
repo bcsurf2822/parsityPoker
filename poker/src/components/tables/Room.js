@@ -6,6 +6,45 @@ import { useParams } from 'react-router-dom';
 import { fetchGames, viewTable, joinGame } from "../../rtk/slices/serverSlice";
 import cardToFilename from "../../actions/cardImages";
 
+const Player = ({ gameId, name, avatar, chips, bet, isDealer, seat = {}, userInfo, dispatch }) => {
+  const sitHere = () => {
+    console.log('sitHere was called');
+    console.log('seat:', seat);
+    console.log('user:', userInfo);
+    console.log("Param gameId", gameId)
+    if (seat && !seat.player && userInfo) {
+      dispatch(joinGame({ userId: userInfo.id, gameId: gameId, buyIn: 500, seatId: seat._id }));
+    }
+  };
+
+  if (seat && seat.player) {
+    name = seat.player.user.username;
+    avatar = seat.player.user.avatar;
+    chips = seat.player.chips;
+    bet = seat.player.bet;
+  }
+
+  return (
+    <Card style={{ width: '18rem' }}>
+      <Card.Img variant="top" src={avatar} />
+      <Card.Body>
+        <Card.Title>{name} {isDealer ? "(Dealer)" : ""}</Card.Title>
+        <div>
+          {userInfo && (
+            <Button variant="success" onClick={sitHere}>Sit Here</Button>
+          )}
+        </div>
+        <Card.Text>
+          Chips: {chips}
+        </Card.Text>
+        <Card.Text>
+          Current Bet: {bet}
+        </Card.Text>
+      </Card.Body>
+    </Card>
+  );
+};
+
 const Room = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -15,7 +54,7 @@ const Room = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   console.log("RoomID", id)
-
+  console.log("userInfo", userInfo)
   const findSeat = (index) => {
     const seat = viewedGame && viewedGame.game.seats ? viewedGame.game.seats[index] : null;
     console.log("seatID:", seat?._id);
@@ -32,46 +71,7 @@ const Room = () => {
     navigate("/Tables");
     console.log("Table closed");
   };
-  const Player = ({ gameId, name, avatar, chips, bet, isDealer, seat = {} }) => {
-    const sitHere = () => {
-      console.log('sitHere was called');
-      console.log('seat:', seat);
-      console.log('user:', userInfo);
-      console.log("Param gameId", gameId)
-      if (seat && !seat.player && userInfo) {
-        dispatch(joinGame({ userId: userInfo._id, gameId: gameId, buyIn: 500, seatId: seat._id }));
-      }
-    };
   
-    if (seat && seat.player) {
-      name = seat.player.user.username;
-      avatar = seat.player.user.avatar;
-      chips = seat.player.chips;
-      bet = seat.player.bet;
-    }
-  
-    return (
-      <Card style={{ width: '18rem' }}>
-        <Card.Img variant="top" src={avatar} />
-        <Card.Body>
-          <Card.Title>{name} {isDealer ? "(Dealer)" : ""}</Card.Title>
-          <div>
-          {isAuthenticated && (
-            <Button variant="success" onClick={sitHere}>Sit Here</Button>
-          )}
-          </div>
-          <Card.Text>
-            Chips: {chips}
-          </Card.Text>
-          <Card.Text>
-            Current Bet: {bet}
-          </Card.Text>
-        </Card.Body>
-      </Card>
-    );
-};
-  
-  console.log(games)
   
   return (
     <Container fluid className="h-100 bg">
@@ -80,17 +80,17 @@ const Room = () => {
           <Row className="h-50">
             <Col></Col>
             <Col className="d-flex justify-content-center">
-            <Player gameId={id} name={`Seat ${viewedGame.game.seats[0].id}`} seat={findSeat(0)}  isDealer={false} /> 
+            <Player gameId={id} name={`Seat ${viewedGame.game.seats[0].id}`} seat={findSeat(0)}  isDealer={false} userInfo={userInfo} dispatch={dispatch} /> 
             </Col>
             <Col></Col>
             <Col className="d-flex justify-content-center">
-            <Player gameId={id} name={`Seat ${viewedGame.game.seats[1].id}`} seat={findSeat(1)}  isDealer={false} />        
+            <Player gameId={id} name={`Seat ${viewedGame.game.seats[1].id}`} seat={findSeat(1)}  isDealer={false} userInfo={userInfo} dispatch={dispatch} />        
             </Col>
             <Col></Col>
           </Row>
           <Row className="h-50">
             <Col className="d-flex justify-content-center">
-            <Player gameId={id} name={`Seat ${viewedGame.game.seats[2].id}`} seat={findSeat(2)}  isDealer={false} />     
+            <Player gameId={id} name={`Seat ${viewedGame.game.seats[2].id}`} seat={findSeat(2)}  isDealer={false} userInfo={userInfo} dispatch={dispatch} />     
             </Col>
             <Col></Col>
             <Col className="d-flex justify-content-center">
@@ -100,17 +100,17 @@ const Room = () => {
             </Col>
             <Col></Col>
             <Col className="d-flex justify-content-center">
-            <Player gameId={id} name={`Seat ${viewedGame.game.seats[3].id}`} seat={findSeat(3)}  isDealer={false} />       
+            <Player gameId={id} name={`Seat ${viewedGame.game.seats[3].id}`} seat={findSeat(3)}  isDealer={false} userInfo={userInfo} dispatch={dispatch}  />       
             </Col>
           </Row>
           <Row className="h-50">
             <Col></Col>
             <Col className="d-flex justify-content-center">
-            <Player gameId={id} name={`Seat ${viewedGame.game.seats[4].id}`} seat={findSeat(4)}  isDealer={false} />          
+            <Player gameId={id} name={`Seat ${viewedGame.game.seats[4].id}`} seat={findSeat(4)}  isDealer={false} userInfo={userInfo} dispatch={dispatch} />          
             </Col>
             <Col></Col>
             <Col className="d-flex justify-content-center">
-            <Player gameId={id} name={`Seat ${viewedGame.game.seats[5].id}`} seat={findSeat(5)}  isDealer={false} /> 
+            <Player gameId={id} name={`Seat ${viewedGame.game.seats[5].id}`} seat={findSeat(5)}  isDealer={false} userInfo={userInfo} dispatch={dispatch} /> 
             </Col>
             <Col></Col>
           </Row>
