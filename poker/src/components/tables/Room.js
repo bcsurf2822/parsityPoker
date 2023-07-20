@@ -1,11 +1,10 @@
-import { Container, Row, Col, Button  } from "react-bootstrap";
+import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchGames, viewTable } from "../../rtk/slices/serverSlice";
-import Player from "./Players";
-import PlayerOptions from "./PlayerOptions";
+import { fetchGames, viewTable, joinGame } from "../../rtk/slices/serverSlice";
+import cardToFilename from "../../actions/cardImages";
 
 const Room = () => {
   const { id } = useParams();
@@ -14,6 +13,12 @@ const Room = () => {
   const userInfo = useSelector((state) => state.auth.user);
   const { games, viewedGame } = useSelector((state) => state.server);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+  const findSeat = (id) => {
+    const seat = viewedGame && viewedGame.game.seats ? viewedGame.game.seats.find(seat => seat.id === id) : null;
+    console.log("findSeat:", id, seat);
+    return seat;
+  }
   
   useEffect(() => {
     dispatch(fetchGames()).then(() => {
@@ -26,60 +31,96 @@ const Room = () => {
     console.log("Table closed");
   };
 
-  console.log(viewedGame, "gamename");
+  const Player = ({ id, name, avatar, chips, bet, isDealer, seat = {} }) => {
+    const sitHere = () => {
+      console.log('sitHere was called');
+      console.log('seat:', seat);
+      console.log('user:', userInfo);
+      if (seat && !seat.player && userInfo) {
+        dispatch(joinGame({ userId: userInfo._id, gameId: seat.game, buyIn: 500, seatId: seat.id }));
+      }
+    };
+  
+    if (seat && seat.player) {
+      name = seat.player.user.username;
+      avatar = seat.player.user.avatar;
+      chips = seat.player.chips;
+      bet = seat.player.bet;
+    }
+  
+    return (
+      <Card style={{ width: '18rem' }}>
+        <Card.Img variant="top" src={avatar} />
+        <Card.Body>
+          <Card.Title>{name} {isDealer ? "(Dealer)" : ""}</Card.Title>
+          <div>
+          {isAuthenticated && (
+        <Button variant="success" onClick={sitHere}>Sit Here</Button>
+            )}
+          </div>
+          <Card.Text>
+            Chips: {chips}
+          </Card.Text>
+          <Card.Text>
+            Current Bet: {bet}
+          </Card.Text>
+        </Card.Body>
+      </Card>
+    );
+  };
+  
   console.log(games)
   
   return (
     <Container fluid className="h-100 bg">
-      <Row className="h-50">
-        <Col></Col>
-        <Col className="d-flex justify-content-center">
-          <Player id={1} name="Seat 1"   isDealer={false} />      
-        </Col>
-        <Col></Col>
-        <Col className="d-flex justify-content-center">
-          <Player id={2} name="Seat 2"  isDealer={false} />            
-        </Col>
-        <Col></Col>
-      </Row>
-      <Row className="h-50">
-        <Col className="d-flex justify-content-center">
-          <Player id={3} name="Seat 3"  isDealer={false} />      
-        </Col>
-        <Col></Col>
-        <Col className="d-flex justify-content-center">
-  <div className="table">
-    {viewedGame && viewedGame.game ? viewedGame.game.name : 'Loading...'}
-  </div>
-</Col>
-        <Col></Col>
-        <Col className="d-flex justify-content-center">
-          <Player id={4} name="Seat 4"  isDealer={false} />            
-        </Col>
-      </Row>
-      <Row className="h-50">
-        <Col></Col>
-        <Col className="d-flex justify-content-center">
-          <Player id={5} name="Seat 5"  isDealer={false} />            
-        </Col>
-        <Col></Col>
-        <Col className="d-flex justify-content-center">
-  {isAuthenticated ? (
-    <div>
-      <Player id={userInfo.id} name={userInfo.username}  chips={userInfo.balance} bet={20} isDealer={false} />
-      <PlayerOptions />
-    </div>
-  ) : (
-    <Player id={6} name="Seat 6" isDealer={false}  />
-  )}
-</Col>
-        <Col></Col>
-      </Row>
-      <Row className="mt-2"> {/* Add some margin on the top */}
-        <Col className="d-flex justify-content-center">
-          <Button variant="danger" onClick={closeTable}>X</Button>
-        </Col>
-      </Row>
+      {viewedGame && viewedGame.game ? (
+        <>
+          <Row className="h-50">
+            <Col></Col>
+            <Col className="d-flex justify-content-center">
+              <Player id={1} name={`Seat ${viewedGame.game.seats[0].id}`} seat={findSeat(1)}  isDealer={false} />      
+            </Col>
+            <Col></Col>
+            <Col className="d-flex justify-content-center">
+              <Player id={2} name={`Seat ${viewedGame.game.seats[1].id}`}seat={findSeat(2)} isDealer={false} />            
+            </Col>
+            <Col></Col>
+          </Row>
+          <Row className="h-50">
+            <Col className="d-flex justify-content-center">
+              <Player id={3} name={`Seat ${viewedGame.game.seats[2].id}`} seat={findSeat(3)}  isDealer={false} />      
+            </Col>
+            <Col></Col>
+            <Col className="d-flex justify-content-center">
+            <div className="table">
+              {viewedGame.game.name}
+            </div>
+            </Col>
+            <Col></Col>
+            <Col className="d-flex justify-content-center">
+              <Player id={4} name={`Seat ${viewedGame.game.seats[3].id}`} seat={findSeat(4)} isDealer={false} />            
+            </Col>
+          </Row>
+          <Row className="h-50">
+            <Col></Col>
+            <Col className="d-flex justify-content-center">
+              <Player id={5} name={`Seat ${viewedGame.game.seats[4].id}`} seat={findSeat(5)} isDealer={false} />             
+            </Col>
+            <Col></Col>
+            <Col className="d-flex justify-content-center">
+              <Player id={6} name={`Seat ${viewedGame.game.seats[5].id}`}seat={findSeat(6)} isDealer={false}  />
+            </Col>
+            <Col></Col>
+          </Row>
+          <Row className="mt-2">
+            <Col className="d-flex justify-content-center">
+              <Button variant="danger" onClick={closeTable}>X</Button>
+            </Col>
+          </Row>
+        </>
+      ) : (
+        'Loading...'
+      )}
     </Container>
   );
 };

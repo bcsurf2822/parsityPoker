@@ -2,41 +2,45 @@ const router = require('express').Router();
 const Game = require("../models/gamesSchema");
 const User = require("../models/userSchema");
 
-router.post('/joingame', async (req, res) => {
-  const gameId = req.body.gameId;
-  const userId = req.body.userId;
-
-  try {
-      const game = await Game.findById(gameId);
-      if (!game) {
-          return res.status(404).json({message: 'Game not found'});
+router.post('/join/:gameId/:seatId', async (req, res) => {    try {
+    console.log("Request params: ", req.params);
+    console.log("Request body: ", req.body);
+      const { userId, buyIn } = req.body;
+      console.log("userId: ", userId);
+      const game = await Game.findById(req.params.gameId);
+      
+      if(!game) {
+        return res.status(404).json({ message: "Game not found!" });
       }
-
+  
       const user = await User.findById(userId);
-      if (!user) {
-          return res.status(404).json({message: 'User not found'});
+      
+      if(!user) {
+        return res.status(404).json({ message: "User not found!" });
       }
-
-      const player = game.playersInGame.find(player => player.user.toString() === userId);
-      if (player) {
-          return res.status(400).json({message: 'User already in the game'});
+      
+      if(user.accountBalance < buyIn) {
+        return res.status(400).json({ message: "Insufficient funds!" });
       }
-
-      const newPlayer = {
-          user: userId,
-          chips: 0, // You will need to adjust this based on your business logic
-          handCards: [], // The cards will be assigned when the game starts
-          bet: 0 // Initially the bet will be zero
-      };
-
-      game.playersInGame.push(newPlayer);
+  
+      const { seatId } = req.params;
+  
+      const seatIdNum = Number(seatId);
+      const availableSeat = game.seats.find(seat => seat.id === seatIdNum && seat.player === null);
+      
+      user.accountBalance -= buyIn;
+  
+      const player = { user: user._id, chips: buyIn, handCards: [], bet: 0 };
+      game.playersInGame.push(player);
+      availableSeat.player = player;
+      
       await game.save();
-
-      res.status(200).json({message: 'User has joined the game successfully', game});
-  } catch (err) {
-      console.log(err);
-      res.status(500).json({message: 'Server error'});
-  }
-});
+      await user.save();
+  
+      res.status(200).json({ message: "Successfully joined the game!", game });
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  });
 
 module.exports = router;

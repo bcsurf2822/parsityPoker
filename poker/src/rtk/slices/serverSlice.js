@@ -23,6 +23,19 @@ export const viewTable = createAsyncThunk(
   }
 );
 
+export const joinGame = createAsyncThunk(
+  "games/joinGame",
+  async ({ userId, gameId, buyIn, seatId }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`http://localhost:4000/join/${gameId}/${seatId}`, { userId, buyIn });
+      console.log("join response:", response)
+      return response.data.game;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 const serverSlice = createSlice({
   name: 'games',
   initialState: {
@@ -58,6 +71,17 @@ const serverSlice = createSlice({
       .addCase(viewTable.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to view table';
+      })
+      .addCase(joinGame.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(joinGame.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentGame = action.payload;
+      })
+      .addCase(joinGame.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to join game';
       });
   },
 });
