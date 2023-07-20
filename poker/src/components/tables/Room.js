@@ -14,11 +14,13 @@ const Room = () => {
   const { games, viewedGame } = useSelector((state) => state.server);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-  const findSeat = (id) => {
-    const seat = viewedGame && viewedGame.game.seats ? viewedGame.game.seats.find(seat => seat.id === id) : null;
-    console.log("findSeat:", id, seat);
+  console.log("RoomID", id)
+
+  const findSeat = (index) => {
+    const seat = viewedGame && viewedGame.game.seats ? viewedGame.game.seats[index] : null;
+    console.log("seatID:", seat?._id);
     return seat;
-  }
+}
   
   useEffect(() => {
     dispatch(fetchGames()).then(() => {
@@ -30,14 +32,14 @@ const Room = () => {
     navigate("/Tables");
     console.log("Table closed");
   };
-
-  const Player = ({ id, name, avatar, chips, bet, isDealer, seat = {} }) => {
+  const Player = ({ gameId, name, avatar, chips, bet, isDealer, seat = {} }) => {
     const sitHere = () => {
       console.log('sitHere was called');
       console.log('seat:', seat);
       console.log('user:', userInfo);
+      console.log("Param gameId", gameId)
       if (seat && !seat.player && userInfo) {
-        dispatch(joinGame({ userId: userInfo._id, gameId: seat.game, buyIn: 500, seatId: seat.id }));
+        dispatch(joinGame({ userId: userInfo._id, gameId: gameId, buyIn: 500, seatId: seat._id }));
       }
     };
   
@@ -55,8 +57,8 @@ const Room = () => {
           <Card.Title>{name} {isDealer ? "(Dealer)" : ""}</Card.Title>
           <div>
           {isAuthenticated && (
-        <Button variant="success" onClick={sitHere}>Sit Here</Button>
-            )}
+            <Button variant="success" onClick={sitHere}>Sit Here</Button>
+          )}
           </div>
           <Card.Text>
             Chips: {chips}
@@ -67,7 +69,7 @@ const Room = () => {
         </Card.Body>
       </Card>
     );
-  };
+};
   
   console.log(games)
   
@@ -78,17 +80,17 @@ const Room = () => {
           <Row className="h-50">
             <Col></Col>
             <Col className="d-flex justify-content-center">
-              <Player id={1} name={`Seat ${viewedGame.game.seats[0].id}`} seat={findSeat(1)}  isDealer={false} />      
+            <Player gameId={id} name={`Seat ${viewedGame.game.seats[0].id}`} seat={findSeat(0)}  isDealer={false} /> 
             </Col>
             <Col></Col>
             <Col className="d-flex justify-content-center">
-              <Player id={2} name={`Seat ${viewedGame.game.seats[1].id}`}seat={findSeat(2)} isDealer={false} />            
+            <Player gameId={id} name={`Seat ${viewedGame.game.seats[1].id}`} seat={findSeat(1)}  isDealer={false} />        
             </Col>
             <Col></Col>
           </Row>
           <Row className="h-50">
             <Col className="d-flex justify-content-center">
-              <Player id={3} name={`Seat ${viewedGame.game.seats[2].id}`} seat={findSeat(3)}  isDealer={false} />      
+            <Player gameId={id} name={`Seat ${viewedGame.game.seats[2].id}`} seat={findSeat(2)}  isDealer={false} />     
             </Col>
             <Col></Col>
             <Col className="d-flex justify-content-center">
@@ -98,17 +100,17 @@ const Room = () => {
             </Col>
             <Col></Col>
             <Col className="d-flex justify-content-center">
-              <Player id={4} name={`Seat ${viewedGame.game.seats[3].id}`} seat={findSeat(4)} isDealer={false} />            
+            <Player gameId={id} name={`Seat ${viewedGame.game.seats[3].id}`} seat={findSeat(3)}  isDealer={false} />       
             </Col>
           </Row>
           <Row className="h-50">
             <Col></Col>
             <Col className="d-flex justify-content-center">
-              <Player id={5} name={`Seat ${viewedGame.game.seats[4].id}`} seat={findSeat(5)} isDealer={false} />             
+            <Player gameId={id} name={`Seat ${viewedGame.game.seats[4].id}`} seat={findSeat(4)}  isDealer={false} />          
             </Col>
             <Col></Col>
             <Col className="d-flex justify-content-center">
-              <Player id={6} name={`Seat ${viewedGame.game.seats[5].id}`}seat={findSeat(6)} isDealer={false}  />
+            <Player gameId={id} name={`Seat ${viewedGame.game.seats[5].id}`} seat={findSeat(5)}  isDealer={false} /> 
             </Col>
             <Col></Col>
           </Row>
