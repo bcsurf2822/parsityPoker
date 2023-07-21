@@ -36,6 +36,19 @@ export const joinGame = createAsyncThunk(
   }
 );
 
+export const leaveGame = createAsyncThunk(
+  "games/leaveGame",
+  async ({ gameId, userId }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`http://localhost:4000/leave/${gameId}/${userId}`);
+      console.log("leave response:", response);
+      return response.data.game;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 const serverSlice = createSlice({
   name: 'games',
   initialState: {
@@ -82,6 +95,17 @@ const serverSlice = createSlice({
       .addCase(joinGame.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || 'Failed to join game';
+      })
+      .addCase(leaveGame.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(leaveGame.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentGame = action.payload;
+      })
+      .addCase(leaveGame.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to leave game';
       });
   },
 });
