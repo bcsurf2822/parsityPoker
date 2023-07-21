@@ -4,12 +4,12 @@ const Game = require("../models/gamesSchema");
 router.post('/createHoldem', async (req, res) => {
   try {
     const gameStakes = [
-      { blinds: '0.05/0.10', min: 2, max: 10 },
-      { blinds: '0.25/0.50', min: 10, max: 50 },
-      { blinds: '1/2', min: 40, max: 200 },
-      { blinds: '2.5/5', min: 100, max: 500 },
-      { blinds: '5/10', min: 200, max: 1000 },
-      { blinds: '25/50', min: 1000, max: 5000 }
+      { blinds: '0.05/0.10', min: 5, max: 10 },
+      { blinds: '0.25/0.50', min: 25, max: 50 },
+      { blinds: '1/2', min: 100, max: 200 },
+      { blinds: '2.5/5', min: 250, max: 500 },
+      { blinds: '5/10', min: 500, max: 1000 },
+      { blinds: '25/50', min: 2500, max: 5000 }
     ];
 
     for (let i = 0; i < gameStakes.length; i++) {

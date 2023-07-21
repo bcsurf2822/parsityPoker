@@ -15,6 +15,11 @@ router.post('/join/:gameId/:seatId', async (req, res) => {
       return res.status(404).json({ message: "Game not found!" });
     }
 
+    // check if the buy-in is between the min and max buy-ins for the game
+    if (buyIn < game.min || buyIn > game.max) {
+      return res.status(400).json({ message: "Invalid buy-in. Buy-in should be between " + game.min + " and " + game.max + "." });
+    }
+
     const user = await User.findById(userId);
     
     if(!user) {
