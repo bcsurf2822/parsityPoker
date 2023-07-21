@@ -6,83 +6,17 @@ import { useParams } from "react-router-dom";
 import {
   fetchGames,
   viewTable,
-  joinGame,
   leaveGame,
 } from "../../rtk/slices/serverSlice";
+import Player from "./Player";
 import cardToFilename from "../../actions/cardImages";
-const Player = ({
-  gameId,
-  name,
-  avatar,
-  chips,
-  bet,
-  isDealer,
-  seat = {},
-  userInfo,
-  dispatch,
-  isPlayerSitting,
-  setIsPlayerSitting,
-}) => {
-  const [isSitting, setIsSitting] = useState(false);
 
-  const sitHere = () => {
-    console.log("seat:", seat);
-    console.log("user:", userInfo);
-    console.log("Param gameId", gameId);
-    if (seat && !seat.player && userInfo) {
-      dispatch(
-        joinGame({
-          userId: userInfo.id,
-          gameId: gameId,
-          buyIn: 500,
-          seatId: seat._id,
-        })
-      );
-      // Update the state once the user sits
-      setIsSitting(true);
-      setIsPlayerSitting(true); // Set the table level state to indicate the user is sitting at the table
-    }
-  };
-
-  useEffect(() => {
-    // Update the isSitting state when seat.player changes
-    setIsSitting(seat && seat.player && seat.player.userId === userInfo.id);
-  }, [seat, userInfo]);
-
-  if (seat && seat.player) {
-    name = userInfo.username;
-    chips = seat.player.chips;
-    bet = seat.player.bet;
-  }
-
-  return (
-    <Card style={{ width: "18rem" }}>
-      <Card.Img variant="top" src={avatar} />
-      <Card.Body>
-        <Card.Title>
-          {isSitting ? userInfo.username : name} {isDealer ? "(Dealer)" : ""}
-        </Card.Title>
-        <div>
-          {/* Check if isSitting is false and isPlayerSitting is false to show the button */}
-          {userInfo && !isSitting && !isPlayerSitting && (
-            <Button variant="success" onClick={sitHere}>
-              Sit Here
-            </Button>
-          )}
-        </div>
-        <Card.Text>Chips: {chips}</Card.Text>
-        <Card.Text>Current Bet: {bet}</Card.Text>
-      </Card.Body>
-    </Card>
-  );
-};
 const Room = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userInfo = useSelector((state) => state.auth.user);
-  const { games, viewedGame } = useSelector((state) => state.server);
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const { viewedGame } = useSelector((state) => state.server);
 
   const [isPlayerSitting, setIsPlayerSitting] = useState(false);
 
@@ -120,7 +54,6 @@ const Room = () => {
   const handleLeaveGame = async () => {
     try {
       await dispatch(leaveGame({ gameId: id, userId: userInfo.id }));
-      // After the user leaves the table, refetch the game data to update the viewedGame state
       dispatch(viewTable(id));
     } catch (error) {
       console.log("Error leaving the game:", error);
@@ -149,7 +82,7 @@ const Room = () => {
                 userInfo={userInfo}
                 dispatch={dispatch}
                 isPlayerSitting={isPlayerSitting}
-                setIsPlayerSitting={setIsPlayerSitting} // Pass the state setter function to the Player component
+                setIsPlayerSitting={setIsPlayerSitting} 
                 isSitting={
                   isPlayerSitting &&
                   viewedGame.game.seats[0].player?.userId === userInfo.id
@@ -166,7 +99,7 @@ const Room = () => {
                 userInfo={userInfo}
                 dispatch={dispatch}
                 isPlayerSitting={isPlayerSitting}
-                setIsPlayerSitting={setIsPlayerSitting} // Pass the state setter function to the Player component
+                setIsPlayerSitting={setIsPlayerSitting} 
                 isSitting={
                   isPlayerSitting &&
                   viewedGame.game.seats[1].player?.userId === userInfo.id
@@ -185,7 +118,7 @@ const Room = () => {
                 userInfo={userInfo}
                 dispatch={dispatch}
                 isPlayerSitting={isPlayerSitting}
-                setIsPlayerSitting={setIsPlayerSitting} // Pass the state setter function to the Player component
+                setIsPlayerSitting={setIsPlayerSitting} 
                 isSitting={
                   isPlayerSitting &&
                   viewedGame.game.seats[2].player?.userId === userInfo.id
@@ -207,7 +140,7 @@ const Room = () => {
                 userInfo={userInfo}
                 dispatch={dispatch}
                 isPlayerSitting={isPlayerSitting}
-                setIsPlayerSitting={setIsPlayerSitting} // Pass the state setter function to the Player component
+                setIsPlayerSitting={setIsPlayerSitting} 
                 isSitting={
                   isPlayerSitting &&
                   viewedGame.game.seats[3].player?.userId === userInfo.id
@@ -226,7 +159,7 @@ const Room = () => {
                 userInfo={userInfo}
                 dispatch={dispatch}
                 isPlayerSitting={isPlayerSitting}
-                setIsPlayerSitting={setIsPlayerSitting} // Pass the state setter function to the Player component
+                setIsPlayerSitting={setIsPlayerSitting}
                 isSitting={
                   isPlayerSitting &&
                   viewedGame.game.seats[4].player?.userId === userInfo.id

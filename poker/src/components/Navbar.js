@@ -11,7 +11,6 @@ const MyNav = () => {
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.auth.user);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  // const tableName = useSelector((state) => state.games.currentTableName);
 
   const toHome = function () {
     navigate("/");

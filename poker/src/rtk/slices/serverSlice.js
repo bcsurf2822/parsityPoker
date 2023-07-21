@@ -57,7 +57,6 @@ const serverSlice = createSlice({
     viewedGame: null,
     loading: false,
     error: null,
-    currentTableName: null,
   },
   reducers: {},
   extraReducers: (builder) => {

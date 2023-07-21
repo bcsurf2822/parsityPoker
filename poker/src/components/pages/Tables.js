@@ -60,7 +60,7 @@ const Tables = () => {
               <td>{game.name}</td>
               <td>{game.gameType}</td>
               <td>{game.blinds}</td>
-              <td>{game.playersInGame.length}</td>
+              <td>{game.playersInGame.length} / {game.seats.length} </td>
               <td>
                 <Button onClick={() => handleView(game._id)}>View</Button>
               </td>
