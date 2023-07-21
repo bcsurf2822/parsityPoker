@@ -1,9 +1,8 @@
 import { Button, Card } from "react-bootstrap";
+import Slider from "react-input-slider";
 import { useEffect, useState } from "react";
-import {
-
-  joinGame
-} from "../../rtk/slices/serverSlice";
+import { joinGame } from "../../rtk/slices/serverSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Player = ({
   gameId,
@@ -17,30 +16,37 @@ const Player = ({
   dispatch,
   isPlayerSitting,
   setIsPlayerSitting,
+  gameMin,
+  gameMax,
 }) => {
   const [isSitting, setIsSitting] = useState(false);
+  const [buyIn, setBuyIn] = useState(gameMin);
+  const [showBuyIn, setShowBuyIn] = useState(false);
 
   const sitHere = () => {
-    console.log("seat:", seat);
-    console.log("user:", userInfo);
-    console.log("Param gameId", gameId);
+    setShowBuyIn(true);
+  };
+
+  const currentGame = useSelector((state) => state.server.currentGame);
+
+  const joinGameHandler = () => {
     if (seat && !seat.player && userInfo) {
+      console.log('buyIn:', buyIn);
       dispatch(
         joinGame({
           userId: userInfo.id,
           gameId: gameId,
-          buyIn: 500,
+          buyIn: buyIn,
           seatId: seat._id,
         })
       );
-
+      setShowBuyIn(false);
       setIsSitting(true);
       setIsPlayerSitting(true);
     }
   };
 
   useEffect(() => {
-
     setIsSitting(seat && seat.player && seat.player.userId === userInfo.id);
   }, [seat, userInfo]);
 
@@ -59,9 +65,26 @@ const Player = ({
         </Card.Title>
         <div>
           {userInfo && !isSitting && !isPlayerSitting && (
-            <Button variant="success" onClick={sitHere}>
-              Sit Here
-            </Button>
+            <>
+              <Button variant="success" onClick={sitHere}>
+                Sit Here
+              </Button>
+              {showBuyIn && (
+                <div>
+                  <Slider
+                    axis="x"
+                    xstep={1}
+                    xmin={gameMin}
+                    xmax={gameMax}
+                    x={buyIn}
+                    onChange={({ x }) => setBuyIn(x)}
+                  />
+                  <Button variant="success" onClick={joinGameHandler}>
+                    Confirm Buy-in
+                  </Button>
+                </div>
+              )}
+            </>
           )}
         </div>
         <Card.Text>Chips: {chips}</Card.Text>

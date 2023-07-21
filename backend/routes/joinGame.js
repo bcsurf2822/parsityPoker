@@ -5,10 +5,10 @@ const User = require("../models/userSchema");
 router.post('/join/:gameId/:seatId', async (req, res) => {    
   try {
     console.log("Request params: ", req.params);
-    console.log("Request body: ", req.body);
     const { userId, buyIn } = req.body;
     console.log("userId: ", userId);
-
+    console.log('req.body:', req.body);
+    console.log('buy In:', buyIn);
     const game = await Game.findById(req.params.gameId);
     
     if(!game) {
