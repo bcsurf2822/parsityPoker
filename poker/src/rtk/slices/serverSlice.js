@@ -55,9 +55,11 @@ const serverSlice = createSlice({
     games: [],
     currentGame: null,
     viewedGame: null,
+    joinedGame: null,
     loading: false,
     error: null,
   },
+  
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -89,7 +91,7 @@ const serverSlice = createSlice({
       })
       .addCase(joinGame.fulfilled, (state, action) => {
         state.loading = false;
-        state.currentGame = action.payload;
+        state.joinedGame = action.payload;
       })
       .addCase(joinGame.rejected, (state, action) => {
         state.loading = false;
@@ -101,6 +103,7 @@ const serverSlice = createSlice({
       .addCase(leaveGame.fulfilled, (state, action) => {
         state.loading = false;
         state.currentGame = action.payload;
+        state.joinedGame = null;
       })
       .addCase(leaveGame.rejected, (state, action) => {
         state.loading = false;

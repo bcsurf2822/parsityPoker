@@ -42,7 +42,9 @@ const Room = () => {
 
   useEffect(() => {
     dispatch(fetchGames()).then(() => {
-      dispatch(viewTable(id));
+      dispatch(viewTable(id)).then(() => {
+        console.log("new view game", viewedGame); // Try logging here
+      });
     });
   }, [id, dispatch]);
 
@@ -59,6 +61,9 @@ const Room = () => {
       console.log("Error leaving the game:", error);
     }
   };
+
+//   console.log("gameMin:", viewedGame.game.min);
+// console.log("gameMax:", viewedGame.game.max);
 
   return (
     <Container fluid className="h-100 bg">
@@ -87,6 +92,9 @@ const Room = () => {
                   isPlayerSitting &&
                   viewedGame.game.seats[0].player?.userId === userInfo.id
                 }
+                gameMin={viewedGame.game.min} 
+                gameMax={viewedGame.game.max} 
+                chips={findSeat(0).player ? findSeat(0).player.chips : 0}
               />
             </Col>
             <Col></Col>
@@ -104,6 +112,9 @@ const Room = () => {
                   isPlayerSitting &&
                   viewedGame.game.seats[1].player?.userId === userInfo.id
                 }
+                gameMin={viewedGame.game.min} 
+                gameMax={viewedGame.game.max}
+                chips={findSeat(1).player ? findSeat(1).player.chips : 0}
               />
             </Col>
             <Col></Col>
@@ -123,6 +134,9 @@ const Room = () => {
                   isPlayerSitting &&
                   viewedGame.game.seats[2].player?.userId === userInfo.id
                 }
+                gameMin={viewedGame.game.min} 
+                gameMax={viewedGame.game.max}
+                chips={findSeat(2).player ? findSeat(2).player.chips : 0}
                 
               />
             </Col>
@@ -145,6 +159,9 @@ const Room = () => {
                   isPlayerSitting &&
                   viewedGame.game.seats[3].player?.userId === userInfo.id
                 }
+                gameMin={viewedGame.game.min} 
+                gameMax={viewedGame.game.max}
+                chips={findSeat(3).player ? findSeat(3).player.chips : 0}
               />
             </Col>
           </Row>
@@ -164,6 +181,9 @@ const Room = () => {
                   isPlayerSitting &&
                   viewedGame.game.seats[4].player?.userId === userInfo.id
                 }
+                gameMin={viewedGame.game.min} 
+                gameMax={viewedGame.game.max}
+                chips={findSeat(4).player ? findSeat(4).player.chips : 0}
               />
             </Col>
             <Col></Col>
@@ -181,6 +201,9 @@ const Room = () => {
                   isPlayerSitting &&
                   viewedGame.game.seats[5].player?.userId === userInfo.id
                 }
+                gameMin={viewedGame.game.min} 
+                gameMax={viewedGame.game.max}
+                chips={findSeat(5).player ? findSeat(5).player.chips : 0}
               />
             </Col>
             <Col></Col>

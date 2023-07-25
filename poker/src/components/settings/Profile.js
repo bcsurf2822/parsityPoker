@@ -1,6 +1,6 @@
 import { Card, Button, Container, Row, Col, Form } from 'react-bootstrap';import { useSelector, useDispatch  } from 'react-redux';
 import { useNavigate } from "react-router-dom";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import {updateUsername} from '../../rtk/slices/profileSlice';
 
@@ -10,6 +10,7 @@ import { FcMoneyTransfer } from 'react-icons/fc';
 
 const Profile = () => {
   const user = useSelector((state) => state.auth.user);
+  const gameStatus = useSelector((state) => state.server);  // Replace with actual path to game status in Redux store
 
   const [newUsername, setNewUsername] = useState(''); 
   const [isEditingUsername, setIsEditingUsername] = useState(false);

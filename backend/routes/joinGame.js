@@ -4,6 +4,7 @@ const User = require("../models/userSchema");
 
 router.post('/join/:gameId/:seatId', async (req, res) => {    
   try {
+    console.log("Request: ", req); // Add this line
     console.log("Request params: ", req.params);
     const { userId, buyIn } = req.body;
     console.log("userId: ", userId);
@@ -28,6 +29,10 @@ router.post('/join/:gameId/:seatId', async (req, res) => {
     
     if(user.accountBalance < buyIn) {
       return res.status(400).json({ message: "Insufficient funds!" });
+    }
+
+    if (!buyIn || typeof buyIn !== 'number') {
+      return res.status(400).json({ message: "Invalid buy-in amount." });
     }
 
     const alreadySitting = game.seats.some(seat => seat.player && seat.player.user.toString() === userId);

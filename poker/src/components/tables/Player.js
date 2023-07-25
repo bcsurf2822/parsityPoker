@@ -1,7 +1,7 @@
 import { Button, Card } from "react-bootstrap";
 import Slider from "react-input-slider";
 import { useEffect, useState } from "react";
-import { joinGame } from "../../rtk/slices/serverSlice";
+import { joinGame, fetchGames } from "../../rtk/slices/serverSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const Player = ({
@@ -23,15 +23,19 @@ const Player = ({
   const [buyIn, setBuyIn] = useState(gameMin);
   const [showBuyIn, setShowBuyIn] = useState(false);
 
+
   const sitHere = () => {
     setShowBuyIn(true);
   };
 
-  const currentGame = useSelector((state) => state.server.currentGame);
+  const joinedGame = useSelector((state) => state.server.joinedGame);
+  // console.log("Joined Game", joinedGame
+  // )
+  
 
   const joinGameHandler = () => {
     if (seat && !seat.player && userInfo) {
-      console.log('buyIn:', buyIn);
+      console.log("buyIn:", buyIn);
       dispatch(
         joinGame({
           userId: userInfo.id,
@@ -48,11 +52,19 @@ const Player = ({
 
   useEffect(() => {
     setIsSitting(seat && seat.player && seat.player.userId === userInfo.id);
+    console.log("Seat to see chip", seat)
   }, [seat, userInfo]);
+
+  useEffect(() => {
+    if (gameMin !== undefined) {
+      setBuyIn(gameMin);
+    }
+  }, [gameMin]);
+  
 
   if (seat && seat.player) {
     name = userInfo.username;
-    chips = seat.player.chips;
+    chips = seat.chips;
     bet = seat.player.bet;
   }
 
@@ -71,13 +83,14 @@ const Player = ({
               </Button>
               {showBuyIn && (
                 <div>
+                  <h4>Buy In: {buyIn}</h4>
                   <Slider
                     axis="x"
                     xstep={1}
                     xmin={gameMin}
                     xmax={gameMax}
                     x={buyIn}
-                    onChange={({ x }) => setBuyIn(x)}
+                    onChange={({ x }) => setBuyIn(Math.min(Math.max(x, gameMin), gameMax))}
                   />
                   <Button variant="success" onClick={joinGameHandler}>
                     Confirm Buy-in
@@ -87,7 +100,7 @@ const Player = ({
             </>
           )}
         </div>
-        <Card.Text>Chips: {chips}</Card.Text>
+        <Card.Text>Chips: {joinedGame.name}</Card.Text>
         <Card.Text>Current Bet: {bet}</Card.Text>
       </Card.Body>
     </Card>
