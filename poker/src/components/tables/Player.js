@@ -23,14 +23,16 @@ const Player = ({
   const [buyIn, setBuyIn] = useState(gameMin);
   const [showBuyIn, setShowBuyIn] = useState(false);
 
+  const { games } = useSelector((state) => state.server);
+  console.log("Games from Players", games)
+
 
   const sitHere = () => {
     setShowBuyIn(true);
   };
 
   const joinedGame = useSelector((state) => state.server.joinedGame);
-  // console.log("Joined Game", joinedGame
-  // )
+
   
 
   const joinGameHandler = () => {
@@ -52,7 +54,6 @@ const Player = ({
 
   useEffect(() => {
     setIsSitting(seat && seat.player && seat.player.userId === userInfo.id);
-    console.log("Seat to see chip", seat)
   }, [seat, userInfo]);
 
   useEffect(() => {
@@ -100,7 +101,7 @@ const Player = ({
             </>
           )}
         </div>
-        <Card.Text>Chips: {joinedGame.name}</Card.Text>
+        <Card.Text>Chips:</Card.Text>
         <Card.Text>Current Bet: {bet}</Card.Text>
       </Card.Body>
     </Card>

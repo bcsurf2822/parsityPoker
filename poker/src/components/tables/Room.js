@@ -20,7 +20,9 @@ const Room = () => {
 
   const [isPlayerSitting, setIsPlayerSitting] = useState(false);
 
-  // This will update isPlayerSitting state once a user sits down
+  const { games } = useSelector((state) => state.server);
+  console.log("Games from Rooms", games)
+  
   useEffect(() => {
     if (viewedGame && viewedGame.game) {
       setIsPlayerSitting(
@@ -31,26 +33,20 @@ const Room = () => {
     }
   }, [viewedGame, userInfo]);
 
-  console.log("RoomID", id);
-  console.log("userInfo", userInfo);
   const findSeat = (index) => {
     const seat =
       viewedGame && viewedGame.game.seats ? viewedGame.game.seats[index] : null;
-    console.log("seatID:", seat?._id);
     return seat;
   };
 
   useEffect(() => {
     dispatch(fetchGames()).then(() => {
-      dispatch(viewTable(id)).then(() => {
-        console.log("new view game", viewedGame); // Try logging here
-      });
+      dispatch(viewTable(id)).then(() => {      });
     });
   }, [id, dispatch]);
 
   const closeTable = () => {
     navigate("/Tables");
-    console.log("Table closed");
   };
 
   const handleLeaveGame = async () => {
@@ -62,8 +58,6 @@ const Room = () => {
     }
   };
 
-//   console.log("gameMin:", viewedGame.game.min);
-// console.log("gameMax:", viewedGame.game.max);
 
   return (
     <Container fluid className="h-100 bg">

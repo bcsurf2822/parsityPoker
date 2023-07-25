@@ -12,6 +12,7 @@ const Tables = () => {
   const [gameType, setGameType] = useState("all");
 
   const { games } = useSelector((state) => state.server);
+  console.log("Games from tables", games)
 
   useEffect(() => {
     dispatch(fetchGames());

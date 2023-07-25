@@ -1,16 +1,11 @@
 import { Card, Button, Container, Row, Col, Form } from 'react-bootstrap';import { useSelector, useDispatch  } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
-
-import {updateUsername} from '../../rtk/slices/profileSlice';
-
-
 import { TfiMoney } from 'react-icons/tfi';
 import { FcMoneyTransfer } from 'react-icons/fc';
 
 const Profile = () => {
   const user = useSelector((state) => state.auth.user);
-  const gameStatus = useSelector((state) => state.server);  // Replace with actual path to game status in Redux store
 
   const [newUsername, setNewUsername] = useState(''); 
   const [isEditingUsername, setIsEditingUsername] = useState(false);
@@ -25,13 +20,6 @@ const Profile = () => {
 
   const toWithdraw = function () {
     navigate("/withdrawl");
-  };
-
-  const handleUsernameChange = async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem('token');
-    dispatch(updateUsername({ token: token, username: newUsername }));
-    setIsEditingUsername(false); // reset the isEditingUsername state after a successful change
   };
 
   const fontStyle = {
@@ -50,7 +38,7 @@ const Profile = () => {
             <img src={user.avatar} alt="Avatar" style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
             <h4 className="mt-2">{user.username}</h4>
             {isEditingUsername ?
-              <Form onSubmit={handleUsernameChange} className="mb-2">
+              <Form className="mb-2">
                 <Form.Group>
                   <Form.Control type="text" placeholder="New username" value={newUsername} onChange={e => setNewUsername(e.target.value)} required />
                 </Form.Group>

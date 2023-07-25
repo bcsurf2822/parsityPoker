@@ -4,8 +4,6 @@ const User = require("../models/userSchema");
 
 router.post('/join/:gameId/:seatId', async (req, res) => {    
   try {
-    console.log("Request: ", req); // Add this line
-    console.log("Request params: ", req.params);
     const { userId, buyIn } = req.body;
     console.log("userId: ", userId);
     console.log('req.body:', req.body);
@@ -16,7 +14,6 @@ router.post('/join/:gameId/:seatId', async (req, res) => {
       return res.status(404).json({ message: "Game not found!" });
     }
 
-    // check if the buy-in is between the min and max buy-ins for the game
     if (buyIn < game.min || buyIn > game.max) {
       return res.status(400).json({ message: "Invalid buy-in. Buy-in should be between " + game.min + " and " + game.max + "." });
     }
