@@ -24,7 +24,7 @@ const Player = ({
   const [showBuyIn, setShowBuyIn] = useState(false);
 
   const { games } = useSelector((state) => state.server);
-  console.log("Games from Players", games)
+  // console.log("Games from Players", games)
 
 
   const sitHere = () => {

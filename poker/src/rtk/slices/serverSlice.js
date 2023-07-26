@@ -6,7 +6,7 @@ export const fetchGames = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get("http://localhost:4000/games");
-      console.log('Server response:', response.data);
+      console.log('Fetch Games Called & Response.Data:', response.data);
       return response.data.games;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -18,7 +18,7 @@ export const viewTable = createAsyncThunk(
   "games/viewTable",
   async (gameId) => {
     const response = await axios.get(`http://localhost:4000/games/view/${gameId}`);
-    console.log(response.data)
+    console.log("view table called and Data",response.data)
     return response.data;
   }
 );
@@ -28,7 +28,7 @@ export const joinGame = createAsyncThunk(
   async ({ userId, gameId, buyIn, seatId }, { rejectWithValue }) => {
     try {
       const response = await axios.post(`http://localhost:4000/join/${gameId}/${seatId}`, { userId, buyIn });
-      console.log("join response:", response)
+      console.log("Join Called & response:", response)
       return response.data.game;
     } catch (err) {
       return rejectWithValue(err.response.data);

@@ -4,7 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
+import { fetchGames, viewTable, leaveGame } from "../../rtk/slices/serverSlice";
+
 const NewRoom = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const seatInfo = useSelector((state) => state.server);
   console.log("seatInfo from NewRoom", seatInfo)
 
@@ -13,6 +19,12 @@ const NewRoom = () => {
 
   const gameName = viewedGame.game.name;
   console.log("gameName from New", gameName)
+
+  useEffect(() => {
+    dispatch(fetchGames()).then(() => {
+      dispatch(viewTable(id)).then(() => {      });
+    });
+  }, [id, dispatch]);
 
   return (  
     <Container fluid className="h-100 bg">
