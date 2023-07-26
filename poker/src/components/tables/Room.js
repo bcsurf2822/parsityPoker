@@ -17,6 +17,7 @@ const Room = () => {
   const navigate = useNavigate();
   const userInfo = useSelector((state) => state.auth.user);
   const { viewedGame } = useSelector((state) => state.server);
+  console.log("viewedGame from Room", viewedGame)
 
   const [isPlayerSitting, setIsPlayerSitting] = useState(false);
 
