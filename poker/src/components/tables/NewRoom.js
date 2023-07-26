@@ -13,6 +13,8 @@ const NewRoom = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const user = useSelector((state) => state.auth.user);
+
 
   const { viewedGame } = useSelector((state) => state.server);
   console.log("viewedGame from New", viewedGame)
@@ -36,12 +38,21 @@ const NewRoom = () => {
     navigate("/Tables");
   };
 
+  const leaveTable = async () => {
+    try {
+      await dispatch(leaveGame({ gameId: id, userId: user.id }));
+      dispatch(viewTable(id));
+    } catch (error) {
+      console.log("Error leaving the game:", error);
+    }
+  };
+
 
   return (  
     <Container fluid className="h-100 bg">
         <Row className="mt-2">
           <Col className="d-flex justify-content-center">
-            <Button variant="warning">
+            <Button variant="warning" onClick={leaveTable}>
               Leave Table
             </Button>
           </Col>
