@@ -13,7 +13,6 @@ const NewRoom = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [openSeat, setOpenSeat] = useState(false);
 
   const { viewedGame } = useSelector((state) => state.server);
   console.log("viewedGame from New", viewedGame)
@@ -29,10 +28,14 @@ const NewRoom = () => {
   }
 
   const gameName = viewedGame.game.name;
-  console.log("gameName from New", gameName)
 
   const seatInfo = viewedGame.game.seats;
   console.log("seatInfo from New", seatInfo[0].player)
+
+  const closeTable = () => {
+    navigate("/Tables");
+  };
+
 
   return (  
     <Container fluid className="h-100 bg">
@@ -80,7 +83,7 @@ const NewRoom = () => {
         </Row>
         <Row className="mt-2">
           <Col className="d-flex justify-content-center">
-            <Button variant="danger">
+            <Button variant="danger" onClick={closeTable}>
               X
             </Button>
           </Col>
