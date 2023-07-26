@@ -17,6 +17,7 @@ import Cards from "./components/tables/Cards";
 import Room from "./components/tables/Room";
 import Withdrawl from "./components/settings/Withdrawl";
 import Deposit from "./components/settings/Deposit";
+import NewRoom from "./components/tables/NewRoom";
 
 import ProtectedRoute from "./components/Protected";
 
@@ -65,6 +66,7 @@ function App() {
           />
           <Route path="/cards" element={Cards} />
           <Route path="/room/:id" element={<Room />} />
+          <Route path="/newroom/:id" element={<NewRoom />} />
         </Routes>
       </Router>
     </div>

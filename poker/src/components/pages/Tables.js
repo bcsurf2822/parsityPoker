@@ -15,10 +15,18 @@ const Tables = () => {
     dispatch(fetchGames());
   }, [dispatch]);
 
+  //OLD ROOM VIEW
+  // const handleView = (id) => {
+  //   console.log(`Viewing game with ID: ${id}`);
+  //   dispatch(viewTable(id));
+  //   navigate(`/Room/${id}`);
+  // };
+
+  //NEW ROOM VIEW
   const handleView = (id) => {
     console.log(`Viewing game with ID: ${id}`);
     dispatch(viewTable(id));
-    navigate(`/Room/${id}`);
+    navigate(`/NewRoom/${id}`);
   };
 
   return (
@@ -39,7 +47,7 @@ const Tables = () => {
             <tr key={game._id}>
               <td>{game.name}</td>
               <td>{game.gameType}</td>
-              <td>{game.blinds}</td>
+              <td>${game.blinds}</td>
               <td>{game.playersInGame.length} / {game.seats.length} </td>
               <td>
                 <Button onClick={() => handleView(game._id)}>View</Button>
