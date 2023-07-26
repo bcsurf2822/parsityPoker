@@ -62,3 +62,15 @@ code {
 .login-container {
   padding: 10px;
 }
+
+.seat {
+  border: 1px solid #000;
+  padding: 10px;
+}
+
+.sit-here {
+  display: block;
+  margin: 10px auto;
+  width: 80px; /* Adjust as needed */
+  font-size: 0.8em; /* Adjust as needed */
+}

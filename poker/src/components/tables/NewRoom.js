@@ -6,25 +6,33 @@ import { useParams } from "react-router-dom";
 
 import { fetchGames, viewTable, leaveGame } from "../../rtk/slices/serverSlice";
 
+import Seat from "./Seats";
+
 const NewRoom = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const seatInfo = useSelector((state) => state.server);
-  console.log("seatInfo from NewRoom", seatInfo)
+  const [openSeat, setOpenSeat] = useState(false);
 
   const { viewedGame } = useSelector((state) => state.server);
   console.log("viewedGame from New", viewedGame)
-
-  const gameName = viewedGame.game.name;
-  console.log("gameName from New", gameName)
 
   useEffect(() => {
     dispatch(fetchGames()).then(() => {
       dispatch(viewTable(id)).then(() => {      });
     });
   }, [id, dispatch]);
+
+  if (!viewedGame) {
+    return null;
+  }
+
+  const gameName = viewedGame.game.name;
+  console.log("gameName from New", gameName)
+
+  const seatInfo = viewedGame.game.seats;
+  console.log("seatInfo from New", seatInfo[0].player)
 
   return (  
     <Container fluid className="h-100 bg">
@@ -38,35 +46,35 @@ const NewRoom = () => {
         <Row className="h-50">
           <Col></Col>
           <Col className="d-flex justify-content-center">
-<p>seat1</p>
+          <Seat seat={seatInfo[0]} />
           </Col>
           <Col></Col>
           <Col className="d-flex justify-content-center">
-          <p>seat2</p>
+          <Seat seat={seatInfo[1]} />
           </Col>
           <Col></Col>
         </Row>
         <Row className="h-50">
           <Col className="d-flex justify-content-center">
-          <p>seat3</p>
+          <Seat seat={seatInfo[2]} />
+          </Col>
+          <Col></Col>
+          <Col className="d-flex justify-content-center ">
+            <div className="table">{gameName}</div>
           </Col>
           <Col></Col>
           <Col className="d-flex justify-content-center">
-            <div className="table">Table Name</div>
-          </Col>
-          <Col></Col>
-          <Col className="d-flex justify-content-center">
-          <p>seat4</p>
+          <Seat seat={seatInfo[3]} />
           </Col>
         </Row>
         <Row className="h-50">
           <Col></Col>
           <Col className="d-flex justify-content-center">
-          <p>seat5</p>
+          <Seat seat={seatInfo[4]} />
           </Col>
           <Col></Col>
           <Col className="d-flex justify-content-center">
-          <p>seat6</p>
+          <Seat seat={seatInfo[5]} />
           </Col>
           <Col></Col>
         </Row>
