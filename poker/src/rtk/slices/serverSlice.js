@@ -1,6 +1,8 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { buyInSuccess, leaveGameSuccess } from './authenticationSlice';
+
+export const buyInSuccess = createAction('authentication/buyInSuccess');
+export const leaveGameSuccess = createAction('authentication/leaveGameSuccess');
 
 export const fetchGames = createAsyncThunk(
   "games/fetchGames",
@@ -8,7 +10,6 @@ export const fetchGames = createAsyncThunk(
     try {
       const response = await axios.get("http://localhost:4000/games");
       console.log('Fetch Games Called & Response.Data:', response.data);
-      
       return response.data.games;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -27,11 +28,11 @@ export const viewTable = createAsyncThunk(
 
 export const joinGame = createAsyncThunk(
   "games/joinGame",
-  async ({ userId, gameId, buyIn, seatId }, { rejectWithValue, dispatch }) => {
+  async ({ userId, gameId, buyIn, seatId }, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.post(`http://localhost:4000/join/${gameId}/${seatId}`, { userId, buyIn });
       console.log("Join Called & response:", response)
-      dispatch(buyInSuccess({userId: userId, accountBalance: response.data.accountBalance}));
+      dispatch(buyInSuccess({ userId, buyIn })); // Dispatch action here
       return response.data.game;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -41,11 +42,11 @@ export const joinGame = createAsyncThunk(
 
 export const leaveGame = createAsyncThunk(
   "games/leaveGame",
-  async ({ gameId, userId }, { rejectWithValue, dispatch }) => {
+  async ({ gameId, userId, amountWon },{ dispatch, rejectWithValue }) => { // Assuming amountWon is provided
     try {
       const response = await axios.post(`http://localhost:4000/leave/${gameId}/${userId}`);
       console.log("leave response:", response);
-      dispatch(leaveGameSuccess({userId: userId, accountBalance: response.data.accountBalance}));
+      dispatch(leaveGameSuccess({ userId, amountWon })); // Dispatch action here
       return response.data.game;
     } catch (err) {
       return rejectWithValue(err.response.data);

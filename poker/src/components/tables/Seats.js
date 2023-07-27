@@ -3,6 +3,7 @@ import Slider from "react-input-slider";
 import { joinGame, viewTable } from "../../rtk/slices/serverSlice";
 import { Button } from "react-bootstrap";
 import { useState } from "react";
+import { useEffect } from "react";
 
 const Seat = ({ seat }) => {
   const user = useSelector((state) => state.auth.user);
@@ -23,6 +24,11 @@ const Seat = ({ seat }) => {
   const handleClick = () => {
     setSeatChoice(true);
   };
+
+  useEffect(() => {
+    console.log("Account balance updated:", user.accountBalance);
+    // You can run some logic here when the user's balance updates
+  }, [user.accountBalance]);
 
   const handleConfirm = () => {
     console.log("Seat ID:", seatId);

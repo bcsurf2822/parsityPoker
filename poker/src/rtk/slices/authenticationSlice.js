@@ -1,41 +1,41 @@
-import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
+import axios from "axios";
 import jwt_decode from "jwt-decode";
-import {depositSuccess, withdrawSuccess}  from '../actions/depositWithdraw';
-
+import { depositSuccess, withdrawSuccess } from "../actions/depositWithdraw";
+import { buyInSuccess, leaveGameSuccess } from "./serverSlice";
 
 export const login = createAsyncThunk(
   "authentication/login",
   async ({ email, password }) => {
-    const response = await axios.post("http://localhost:4000/login", { email, password });
+    const response = await axios.post("http://localhost:4000/login", {
+      email,
+      password,
+    });
 
     if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
+      localStorage.setItem("token", response.data.token);
     }
-    
-    return response.data;
-  }
-);
-
-export const logout = createAsyncThunk(
-  'authentication/logout',
-  async () => {
-    const response = await axios.post("http://localhost:4000/logout");
-    localStorage.removeItem('token');
 
     return response.data;
   }
 );
+
+export const logout = createAsyncThunk("authentication/logout", async () => {
+  const response = await axios.post("http://localhost:4000/logout");
+  localStorage.removeItem("token");
+
+  return response.data;
+});
 
 export const initializeAuth = createAsyncThunk(
-  'authentication/initializeAuth',
+  "authentication/initializeAuth",
   async (_, { dispatch }) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
       let user = jwt_decode(token);
 
       const response = await axios.get("http://localhost:4000/user", {
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       console.log("USER API RES", response);
@@ -51,13 +51,10 @@ export const initializeAuth = createAsyncThunk(
   }
 );
 
-export const buyInSuccess = createAction('authentication/buyInSuccess');
-export const leaveGameSuccess = createAction('authentication/leaveGameSuccess');
-
 
 const authenticationSlice = createSlice({
   name: "authentication",
-  initialState: { 
+  initialState: {
     isAuthenticated: false,
     loading: false,
     initializing: true,
@@ -73,12 +70,12 @@ const authenticationSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isAuthenticated = true;
         state.loading = false;
-        state.user = action.payload
+        state.user = action.payload;
       })
       .addCase(login.rejected, (state, action) => {
         state.isAuthenticated = false;
         state.loading = false;
-        state.error = action.error.message || 'Login failed';
+        state.error = action.error.message || "Login failed";
       })
       .addCase(logout.fulfilled, (state) => {
         state.isAuthenticated = false;
@@ -95,6 +92,16 @@ const authenticationSlice = createSlice({
           state.user.bankBalance = action.payload.bankBalance;
         }
       })
+      .addCase(buyInSuccess, (state, action) => {
+        if (state.user && state.user.userId === action.payload.userId) {
+          state.user.accountBalance -= action.payload.buyIn
+        }
+    })
+    .addCase(leaveGameSuccess, (state, action) => {
+        if (state.user && state.user.userId === action.payload.userId) {
+          state.user.accountBalance += action.payload.playersInGame[0].chips;
+        }
+    })
       .addCase(initializeAuth.pending, (state) => {
         state.initializing = true;
       })
@@ -107,17 +114,7 @@ const authenticationSlice = createSlice({
       })
       .addCase(initializeAuth.rejected, (state) => {
         state.initializing = false;
-      })
-      .addCase(buyInSuccess, (state, action) => {
-        if (state.user && state.user.userId === action.payload.userId) {
-          state.user.accountBalance = action.payload.accountBalance;
-        }
-      })
-      .addCase(leaveGameSuccess, (state, action) => {
-        if (state.user && state.user.userId === action.payload.userId) {
-          state.user.accountBalance = action.payload.accountBalance;
-        }
-      })
+      });
   },
 });
 
