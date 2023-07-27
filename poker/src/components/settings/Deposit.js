@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { deposit } from '../../rtk/slices/bankingSlice';
+import { deposit } from '../../rtk/actions/depositWithdraw';
 import { Form, Button, Card } from 'react-bootstrap';
 
 const Deposit = () => {

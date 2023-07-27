@@ -6,6 +6,7 @@ import { FcMoneyTransfer } from 'react-icons/fc';
 
 const Profile = () => {
   const user = useSelector((state) => state.auth.user);
+  console.log("user from Profile", user)
 
   const [newUsername, setNewUsername] = useState(''); 
   const [isEditingUsername, setIsEditingUsername] = useState(false);
@@ -13,6 +14,11 @@ const Profile = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log("Account balance updated:", user.accountBalance);
+    // You can run some logic here when the user's balance updates
+  }, [user.accountBalance]);
 
   const toDeposit = function () {
     navigate("/deposit");

@@ -1,18 +1,30 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { joinGame, leaveGame, viewTable } from "../../rtk/slices/serverSlice";
+import Slider from "react-input-slider";
+import { joinGame, viewTable } from "../../rtk/slices/serverSlice";
 import { Button } from "react-bootstrap";
+import { useState } from "react";
 
 const Seat = ({ seat }) => {
   const user = useSelector((state) => state.auth.user);
   const seatId = seat._id;
   const { viewedGame } = useSelector((state) => state.server);
   const maxBuyIn = viewedGame.game.max;
+  const minBuyIn = viewedGame.game.min;
+
+  const [sliderValue, setSliderValue] = useState(minBuyIn);
+  const [seatChoice, setSeatChoice] = useState(false);
+
   const dispatch = useDispatch();
 
   const tableId = viewedGame.game._id;
 
+  console.log("user from Seats", user)
+
   const handleClick = () => {
+    setSeatChoice(true);
+  };
+
+  const handleConfirm = () => {
     console.log("Seat ID:", seatId);
     console.log("User ID:", user.id);
     console.log("Table ID:", tableId);
@@ -22,28 +34,47 @@ const Seat = ({ seat }) => {
       joinGame({
         userId: user.id,
         gameId: tableId,
-        buyIn: maxBuyIn,
+        buyIn: sliderValue,
         seatId: seatId,
       })
-    ).then(() => dispatch(viewTable(tableId)));  
-  };
-
-  const leaveTable = async () => {
-    try {
-      await dispatch(leaveGame({ gameId: tableId, userId: user.id }));
-      dispatch(viewTable(tableId));
-    } catch (error) {
-      console.log("Error leaving the game:", error);
-    }
+    ).then(() => dispatch(viewTable(tableId)));
   };
 
   return (
     <div className="d-flex justify-content-center seat">
-      <p>{seat && `Seat ${seat.id}`}</p>
-      {seat && !seat.player && (
-        <Button className="sit-here" onClick={handleClick}>
-          Sit here
-        </Button>
+      {seat && (
+        <>
+          <p>{`Seat ${seat.id}`}</p>
+          {seat.player ? (
+            <>
+              <p>{`Username: ${user.username}`}</p>
+              <p>{`Chips: ${seat.player.chips}`}</p>
+            </>
+          ) : (
+            <>
+              {seatChoice ? (
+                <>
+                  <Slider 
+                    axis="x"
+                    xstep={1}
+                    xmin={minBuyIn}
+                    xmax={maxBuyIn}
+                    x={sliderValue}
+                    onChange={({x}) => setSliderValue(x)}
+                  />
+                  <p>{`Buy In: ${sliderValue}`}</p>
+                  <Button className="confirm-seat" onClick={handleConfirm}>
+                    Confirm
+                  </Button>
+                </>
+              ) : (
+                <Button className="sit-here" onClick={handleClick}>
+                  Sit here
+                </Button>
+              )}
+            </>
+          )}
+        </>
       )}
     </div>
   );

@@ -1,7 +1,7 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import jwt_decode from "jwt-decode";
-import { depositSuccess, withdrawSuccess } from './bankingSlice';
+import {depositSuccess, withdrawSuccess}  from '../actions/depositWithdraw';
 
 
 export const login = createAsyncThunk(
@@ -50,6 +50,9 @@ export const initializeAuth = createAsyncThunk(
     return null;
   }
 );
+
+export const buyInSuccess = createAction('authentication/buyInSuccess');
+export const leaveGameSuccess = createAction('authentication/leaveGameSuccess');
 
 
 const authenticationSlice = createSlice({
@@ -104,6 +107,16 @@ const authenticationSlice = createSlice({
       })
       .addCase(initializeAuth.rejected, (state) => {
         state.initializing = false;
+      })
+      .addCase(buyInSuccess, (state, action) => {
+        if (state.user && state.user.userId === action.payload.userId) {
+          state.user.accountBalance = action.payload.accountBalance;
+        }
+      })
+      .addCase(leaveGameSuccess, (state, action) => {
+        if (state.user && state.user.userId === action.payload.userId) {
+          state.user.accountBalance = action.payload.accountBalance;
+        }
       })
   },
 });

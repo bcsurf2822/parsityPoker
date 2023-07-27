@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withdraw } from '../../rtk/slices/bankingSlice';
+import { withdraw } from '../../rtk/actions/depositWithdraw';
 import { Form, Button, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 

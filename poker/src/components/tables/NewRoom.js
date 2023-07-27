@@ -15,6 +15,7 @@ const NewRoom = () => {
 
   const user = useSelector((state) => state.auth.user);
 
+  
 
   const { viewedGame } = useSelector((state) => state.server);
   console.log("viewedGame from New", viewedGame)
