@@ -51,6 +51,12 @@ export const initializeAuth = createAsyncThunk(
   }
 );
 
+export const updateUser = (user) => {
+  return {
+    type: 'user/update',
+    payload: user,
+  };
+};
 
 const authenticationSlice = createSlice({
   name: "authentication",
@@ -61,7 +67,11 @@ const authenticationSlice = createSlice({
     error: null,
     user: null,
   },
-  reducers: {},
+  reducers: {
+    updateUser: (state, action) => {
+      state.user = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(login.pending, (state) => {
@@ -92,16 +102,6 @@ const authenticationSlice = createSlice({
           state.user.bankBalance = action.payload.bankBalance;
         }
       })
-      .addCase(buyInSuccess, (state, action) => {
-        if (state.user && state.user.userId === action.payload.userId) {
-          state.user.accountBalance -= action.payload.buyIn
-        }
-    })
-    .addCase(leaveGameSuccess, (state, action) => {
-        if (state.user && state.user.userId === action.payload.userId) {
-          state.user.accountBalance += action.payload.playersInGame[0].chips;
-        }
-    })
       .addCase(initializeAuth.pending, (state) => {
         state.initializing = true;
       })
