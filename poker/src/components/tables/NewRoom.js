@@ -13,17 +13,16 @@ const NewRoom = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const user = useSelector((state) => state.auth.user);
+
 
   
-
+  const user = useSelector((state) => state.auth.user);
   const { viewedGame } = useSelector((state) => state.server);
   console.log("viewedGame from New", viewedGame)
 
   useEffect(() => {
     dispatch(fetchGames()).then(() => {
       dispatch(viewTable(id)).then(() => {
-        dispatch(fetchUpdatedUser());
       });
     });
   }, [id, dispatch]);
