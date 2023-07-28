@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchGames, viewTable, leaveGame } from "../../rtk/slices/serverSlice";
+import { fetchUpdatedUser } from "../../rtk/slices/authenticationSlice";
 
 import Seat from "./Seats";
 
@@ -21,7 +22,9 @@ const NewRoom = () => {
 
   useEffect(() => {
     dispatch(fetchGames()).then(() => {
-      dispatch(viewTable(id)).then(() => {      });
+      dispatch(viewTable(id)).then(() => {
+        dispatch(fetchUpdatedUser());
+      });
     });
   }, [id, dispatch]);
 
