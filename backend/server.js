@@ -33,8 +33,8 @@ app.use(deckRoute);
 const fundingRoute = require("./routes/funding")
 app.use(fundingRoute);
 
-const updateUserRoute = require("./routes/userInfo");
-app.use(updateUserRoute);
+const userInfoRoute = require("./routes/userInfo");
+app.use(userInfoRoute);
 
 const createGamesRoute = require("./routes/createGames");
 app.use(createGamesRoute);
@@ -47,6 +47,9 @@ app.use(joinGameRoute);
 
 const viewGameRoute = require("./routes/viewGame");
 app.use(viewGameRoute);
+
+const updateUserRoute = require("./routes/updateUser");
+app.use(updateUserRoute);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

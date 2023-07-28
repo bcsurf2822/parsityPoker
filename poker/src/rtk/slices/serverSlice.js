@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { updateUser } from './authenticationSlice';
+import { fetchUpdatedUser } from './authenticationSlice';
 
 export const buyInSuccess = createAction('authentication/buyInSuccess');
 export const leaveGameSuccess = createAction('authentication/leaveGameSuccess');
@@ -30,20 +30,11 @@ export const viewTable = createAsyncThunk(
 
 export const joinGame = createAsyncThunk(
   "games/joinGame",
-  async ({ userId, gameId, buyIn, seatId }, { getState, dispatch, rejectWithValue }) => {
+  async ({ userId, gameId, buyIn, seatId }, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.post(`http://localhost:4000/join/${gameId}/${seatId}`, { userId, buyIn });
       console.log("Join Called & response:", response)
-      
-      const updatedUser = response.data.user; // Assuming your API returns the updated user in the response
-      dispatch(updateUser(updatedUser)); // Dispatch action to update user in your Redux store
-
-      // Update user's account balance in the client side
-      const { user } = getState().authentication; // Get current user from Redux store
-      if (user) {
-        user.accountBalance -= buyIn; // Subtract the buyIn from the user's account balance
-        dispatch(updateUser(user)); // Dispatch action to update user in your Redux store
-      }
+      dispatch(fetchUpdatedUser(userId));
 
       return response.data.game;
     } catch (err) {
@@ -54,13 +45,11 @@ export const joinGame = createAsyncThunk(
 
 export const leaveGame = createAsyncThunk(
   "games/leaveGame",
-  async ({ gameId, userId, amountWon },{ dispatch, rejectWithValue }) => { // Assuming amountWon is provided
+  async ({ gameId, userId },{ dispatch, rejectWithValue }) => { 
     try {
       const response = await axios.post(`http://localhost:4000/leave/${gameId}/${userId}`);
-      console.log("leave response:", response);
-      
-      const updatedUser = response.data.user; // Assuming your API returns the updated user in the response
-      dispatch(updateUser(updatedUser)); // Dispatch action to update user in your Redux store
+      console.log("leave response:", response.data);
+      dispatch(fetchUpdatedUser(userId));
 
       return response.data.game;
     } catch (err) {

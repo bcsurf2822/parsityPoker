@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-input-slider";
 import { joinGame, viewTable } from "../../rtk/slices/serverSlice";
+import { fetchUpdatedUser } from "../../rtk/slices/authenticationSlice";
 import { Button } from "react-bootstrap";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -19,16 +20,11 @@ const Seat = ({ seat }) => {
 
   const tableId = viewedGame.game._id;
 
-  console.log("user from Seats", user)
+
 
   const handleClick = () => {
     setSeatChoice(true);
   };
-
-  useEffect(() => {
-    console.log("Account balance updated:", user.accountBalance);
-    // You can run some logic here when the user's balance updates
-  }, [user.accountBalance]);
 
   const handleConfirm = () => {
     console.log("Seat ID:", seatId);
@@ -43,7 +39,9 @@ const Seat = ({ seat }) => {
         buyIn: sliderValue,
         seatId: seatId,
       })
-    ).then(() => dispatch(viewTable(tableId)));
+    )
+      .then(() => dispatch(viewTable(tableId)))
+      console.log("user after join", user)
   };
 
   return (

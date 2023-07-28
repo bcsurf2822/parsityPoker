@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-
 import { fetchGames, viewTable, leaveGame } from "../../rtk/slices/serverSlice";
 
 import Seat from "./Seats";
@@ -40,14 +39,18 @@ const NewRoom = () => {
   };
 
   const leaveTable = async () => {
+    if (!user) {
+      console.log('User is undefined');
+      return;
+    }
+  
     try {
       await dispatch(leaveGame({ gameId: id, userId: user.id }));
-      dispatch(viewTable(id));
+      await dispatch(viewTable(id));
     } catch (error) {
       console.log("Error leaving the game:", error);
     }
   };
-
 
   return (  
     <Container fluid className="h-100 bg">

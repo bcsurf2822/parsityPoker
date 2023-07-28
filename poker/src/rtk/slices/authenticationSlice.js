@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { depositSuccess, withdrawSuccess } from "../actions/depositWithdraw";
-import { buyInSuccess, leaveGameSuccess } from "./serverSlice";
 
 export const login = createAsyncThunk(
   "authentication/login",
@@ -48,6 +47,19 @@ export const initializeAuth = createAsyncThunk(
     }
 
     return null;
+  }
+);
+
+export const fetchUpdatedUser = createAsyncThunk(
+  "authentication/fetchUpdatedUser",
+  async (userId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`http://localhost:4000/user/${userId}`);
+      console.log("Fetch Updated User Called & Response.Data:", response.data)
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
   }
 );
 
@@ -114,6 +126,9 @@ const authenticationSlice = createSlice({
       })
       .addCase(initializeAuth.rejected, (state) => {
         state.initializing = false;
+      })
+      .addCase(fetchUpdatedUser.fulfilled, (state, action) => {
+        state.user = action.payload;
       });
   },
 });

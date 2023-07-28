@@ -45,6 +45,8 @@ router.post('/join/:gameId/:seatId', async (req, res) => {
     console.log('availableSeat:', availableSeat);
     
     user.accountBalance -= buyIn;
+
+    console.log("user after buy in", user)
   
     const player = { user: user._id, chips: buyIn, handCards: [], bet: 0 };
     game.playersInGame.push(player);
