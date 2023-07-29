@@ -1,14 +1,13 @@
-import { Container, Row, Col, Button, Card } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { Container, Row, Col, Button } from "react-bootstrap";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchGames, viewTable, leaveGame } from "../../rtk/slices/serverSlice";
-import { fetchUpdatedUser } from "../../rtk/slices/authenticationSlice";
 
 import Seat from "./Seats";
 
-const NewRoom = () => {
+const Room = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -107,4 +106,5 @@ const NewRoom = () => {
 );
 }
  
-export default NewRoom;
+export default Room;
+

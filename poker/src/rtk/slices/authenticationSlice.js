@@ -19,12 +19,14 @@ export const login = createAsyncThunk(
   }
 );
 
-export const logout = createAsyncThunk("authentication/logout", async () => {
-  const response = await axios.post("http://localhost:4000/logout");
-  localStorage.removeItem("token");
-
-  return response.data;
-});
+export const logout = createAsyncThunk(
+  "authentication/logout",
+  async (userId, thunkAPI) => {
+    const response = await axios.post(`http://localhost:4000/logout/${userId}`);
+    localStorage.removeItem("token");
+    return response.data;
+  }
+);
 
 export const initializeAuth = createAsyncThunk(
   "authentication/initializeAuth",
@@ -56,7 +58,6 @@ export const fetchUpdatedUser = createAsyncThunk(
     try {
       const response = await axios.get(`http://localhost:4000/user/${userId}`);
       console.log("Fetch Updated User Called & Response.Data:", response.data);
-      // Transform response
       if (response.data && response.data._id) {
         response.data.id = response.data._id;
         delete response.data._id;

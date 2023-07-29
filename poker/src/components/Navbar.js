@@ -43,7 +43,7 @@ const MyNav = () => {
     navigate("/accounthistory");
   };
   const toLogout = function () {
-    dispatch(logout());
+    dispatch(logout(userInfo.id));
     navigate("/");
   };
 

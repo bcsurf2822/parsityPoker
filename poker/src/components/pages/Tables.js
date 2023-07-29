@@ -26,7 +26,7 @@ const Tables = () => {
   const handleView = (id) => {
     console.log(`Viewing game with ID: ${id}`);
     dispatch(viewTable(id));
-    navigate(`/NewRoom/${id}`);
+    navigate(`/Room/${id}`);
   };
 
   return (

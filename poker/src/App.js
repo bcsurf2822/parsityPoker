@@ -14,10 +14,9 @@ import Hands from "./components/settings/Hands";
 import Advanced from "./components/settings/Advanced";
 import History from "./components/settings/History";
 import Cards from "./components/tables/Cards";
-// import Room from "./components/tables/Room";
 import Withdrawl from "./components/settings/Withdrawl";
 import Deposit from "./components/settings/Deposit";
-import NewRoom from "./components/tables/NewRoom";
+import Room from "./components/tables/Room";
 
 import ProtectedRoute from "./components/Protected";
 
@@ -65,8 +64,7 @@ function App() {
             element={<ProtectedRoute element={<Withdrawl />} />}
           />
           <Route path="/cards" element={Cards} />
-          {/* <Route path="/room/:id" element={<Room />} /> */}
-          <Route path="/newroom/:id" element={<NewRoom />} />
+          <Route path="/room/:id" element={<Room />} />
         </Routes>
       </Router>
     </div>
