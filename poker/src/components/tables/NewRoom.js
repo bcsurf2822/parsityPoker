@@ -47,6 +47,7 @@ const NewRoom = () => {
     }
   
     try {
+      console.log('Dispatching leaveGame with user:', user);
       await dispatch(leaveGame({ gameId: id, userId: user.id }));
       await dispatch(viewTable(id));
     } catch (error) {

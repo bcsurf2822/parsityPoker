@@ -27,6 +27,11 @@ const Seat = ({ seat }) => {
   };
 
   const handleConfirm = () => {
+    if (!user) {
+      console.log('User is undefined');
+      return;
+    }
+  
     console.log("Seat ID:", seatId);
     console.log("User ID:", user.id);
     console.log("Table ID:", tableId);
@@ -43,6 +48,7 @@ const Seat = ({ seat }) => {
       .then(() => dispatch(viewTable(tableId)))
       console.log("user after join", user)
   };
+  
 
   return (
     <div className="d-flex justify-content-center seat">
