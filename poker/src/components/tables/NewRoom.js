@@ -40,19 +40,16 @@ const NewRoom = () => {
     navigate("/Tables");
   };
 
-  const leaveTable = async () => {
+  const leaveTable = () => {
     if (!user) {
       console.log('User is undefined');
       return;
     }
   
-    try {
-      console.log('Dispatching leaveGame with user:', user);
-      await dispatch(leaveGame({ gameId: id, userId: user.id }));
-      await dispatch(viewTable(id));
-    } catch (error) {
-      console.log("Error leaving the game:", error);
-    }
+    console.log('Dispatching leaveGame with user:', user);
+    dispatch(leaveGame({ gameId: id, userId: user.id }))
+      .then(() => dispatch(viewTable(id)))
+      .catch(error => console.log("Error leaving the game:", error));
   };
 
   return (  

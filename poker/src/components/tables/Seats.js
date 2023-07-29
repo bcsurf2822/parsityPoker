@@ -31,6 +31,8 @@ const Seat = ({ seat }) => {
       console.log('User is undefined');
       return;
     }
+
+    console.log("user before join", user)
   
     console.log("Seat ID:", seatId);
     console.log("User ID:", user.id);
@@ -45,8 +47,10 @@ const Seat = ({ seat }) => {
         seatId: seatId,
       })
     )
-      .then(() => dispatch(viewTable(tableId)))
-      console.log("user after join", user)
+      .then(() => {
+        console.log("user after join", user);
+        dispatch(viewTable(tableId));
+      });
   };
   
 

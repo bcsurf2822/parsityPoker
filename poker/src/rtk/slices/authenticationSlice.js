@@ -55,7 +55,12 @@ export const fetchUpdatedUser = createAsyncThunk(
   async (userId, { rejectWithValue }) => {
     try {
       const response = await axios.get(`http://localhost:4000/user/${userId}`);
-      console.log("Fetch Updated User Called & Response.Data:", response.data)
+      console.log("Fetch Updated User Called & Response.Data:", response.data);
+      // Transform response
+      if (response.data && response.data._id) {
+        response.data.id = response.data._id;
+        delete response.data._id;
+      }
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
