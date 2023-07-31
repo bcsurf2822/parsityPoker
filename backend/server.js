@@ -3,8 +3,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const http = require('http'); // New import
+const socketIo = require('socket.io'); // New import
 
 const app = express();
+const server = http.createServer(app); // New line
+const io = socketIo(server); // New line
+
 const PORT = 4000;
 
 app.use(express.static('public'))
@@ -51,6 +56,18 @@ app.use(viewGameRoute);
 const updateUserRoute = require("./routes/updateUser");
 app.use(updateUserRoute);
 
-app.listen(PORT, () => {
+// Socket.IO connection
+io.on('connection', (socket) => {
+    console.log('A user connected');
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+
+    // Add your additional socket event listeners here
+
+});
+
+server.listen(PORT, () => { // Changed from app.listen to server.listen
     console.log(`Server is running on port ${PORT}`);
 });
