@@ -20,39 +20,33 @@ const Seat = ({ seat }) => {
 
   const tableId = viewedGame.game._id;
 
-
-
   const handleClick = () => {
     setSeatChoice(true);
   };
 
   const handleConfirm = () => {
     if (!user) {
-      console.log('User is undefined');
+      console.log("User is undefined");
       return;
     }
 
-    console.log("user before join", user)
-  
+    console.log("user before join", user);
+
     console.log("Seat ID:", seatId);
     console.log("User ID:", user.id);
     console.log("Table ID:", tableId);
     console.log("Max Buy In:", maxBuyIn);
+
+    dispatch(joinGame({ userId: user.id, gameId: tableId, buyIn: sliderValue, seatId: seatId }))
+    .then(() => {
+      dispatch(fetchUpdatedUser(user.id))
+        .then(updatedUser => {
+          console.log("user after join", updatedUser);
+        });
+      dispatch(viewTable(tableId));
+    });
   
-    dispatch(
-      joinGame({
-        userId: user.id,
-        gameId: tableId,
-        buyIn: sliderValue,
-        seatId: seatId,
-      })
-    )
-      .then(() => {
-        console.log("user after join", user);
-        dispatch(viewTable(tableId));
-      });
   };
-  
 
   return (
     <div className="d-flex justify-content-center seat">
@@ -68,13 +62,13 @@ const Seat = ({ seat }) => {
             <>
               {seatChoice ? (
                 <>
-                  <Slider 
+                  <Slider
                     axis="x"
                     xstep={1}
                     xmin={minBuyIn}
                     xmax={maxBuyIn}
                     x={sliderValue}
-                    onChange={({x}) => setSliderValue(x)}
+                    onChange={({ x }) => setSliderValue(x)}
                   />
                   <p>{`Buy In: ${sliderValue}`}</p>
                   <Button className="confirm-seat" onClick={handleConfirm}>
