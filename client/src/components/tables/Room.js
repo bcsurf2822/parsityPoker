@@ -34,7 +34,7 @@ const Room = () => {
   const gameName = viewedGame.game.name;
 
   const seatInfo = viewedGame.game.seats;
-  console.log("seatInfo from New", seatInfo[0].player)
+  console.log("seatInfo from New", seatInfo)
 
   const closeTable = () => {
     navigate("/Tables");
@@ -116,4 +116,3 @@ const Room = () => {
 }
  
 export default Room;
-

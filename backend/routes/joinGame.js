@@ -1,4 +1,5 @@
-const router = require('express').Router();
+module.exports = (io) => {
+  const router = require('express').Router();
 const Game = require("../models/gamesSchema");
 const User = require("../models/userSchema");
 
@@ -54,13 +55,15 @@ router.post('/join/:gameId/:seatId', async (req, res) => {
     
     await game.save();
     await user.save();
-
+    
+    // Emit the seatChange event after successful join
+    io.emit('seatChange', game.seats); // Replace with actual seats object or seatId which has changed
     res.status(200).json({ message: "Successfully joined the game!", game });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: err.message });
   }
-});
+}); 
 
 router.post('/leave/:gameId/:userId', async (req, res) => {
   try {
@@ -104,4 +107,5 @@ router.post('/leave/:gameId/:userId', async (req, res) => {
   }
 });
 
-module.exports = router;
+return router;
+};

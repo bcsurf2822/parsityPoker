@@ -5,6 +5,7 @@ import { fetchUpdatedUser } from "../../rtk/slices/authenticationSlice";
 import { Button } from "react-bootstrap";
 import { useState } from "react";
 import { useEffect } from "react";
+import { fetchUsernameById } from "../../rtk/slices/usersSlice";
 
 const Seat = ({ seat }) => {
   const user = useSelector((state) => state.auth.user);
@@ -12,13 +13,29 @@ const Seat = ({ seat }) => {
   const { viewedGame } = useSelector((state) => state.server);
   const maxBuyIn = viewedGame.game.max;
   const minBuyIn = viewedGame.game.min;
+  
 
   const [sliderValue, setSliderValue] = useState(minBuyIn);
   const [seatChoice, setSeatChoice] = useState(false);
 
+  const [username, setUsername] = useState(''); // we only need one username state
+
   const dispatch = useDispatch();
 
   const tableId = viewedGame.game._id;
+
+  useEffect(() => {
+    const fetchUsername = async (player) => {
+      if (player) {
+        const result = await dispatch(fetchUsernameById(player.user));
+        console.log("result", result)
+        setUsername(result.payload);
+      }
+    };
+
+    if(seat.player) fetchUsername(seat.player); // if there is a player on the seat, fetch its username
+  }, [seat, dispatch]); // depend on seat, not seatInfo
+
 
   const handleClick = () => {
     setSeatChoice(true);
@@ -55,12 +72,12 @@ const Seat = ({ seat }) => {
           <p>{`Seat ${seat.id}`}</p>
           {seat.player ? (
             <>
-              <p>{`Username: ${user.username}`}</p>
+              <p>{`Username: ${username}`}</p>
               <p>{`Chips: ${seat.player.chips}`}</p>
             </>
           ) : (
             <>
-              {seatChoice ? (
+             {seatChoice ? (
                 <>
                   <Slider
                     axis="x"
