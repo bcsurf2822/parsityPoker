@@ -3,12 +3,19 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const http = require('http'); // New import
-const socketIo = require('socket.io'); // New import
+const http = require('http');
+const socketIo = require('socket.io');
 
 const app = express();
-const server = http.createServer(app); // New line
-const io = socketIo(server); // New line
+const server = http.createServer(app); 
+const io = (socketIo)(server, {
+    cors: {
+      origin: "http://localhost:3000",
+      methods: ["GET", "POST"],
+      allowedHeaders: ["my-custom-header"],
+      credentials: true
+    }
+  });
 
 const PORT = 4000;
 
@@ -64,8 +71,14 @@ io.on('connection', (socket) => {
         console.log('User disconnected');
     });
 
-    // Add your additional socket event listeners here
+    // Listen for 'chat message' event
+    socket.on('chat message', (msg) => {
+        console.log(`Received message: ${msg.message}`);  // <-- add this line
+        // Broadcast 'chat message' event to all clients
+        io.emit('chat message', msg);
+      });
 
+    // Add your additional socket event listeners here
 });
 
 server.listen(PORT, () => { // Changed from app.listen to server.listen

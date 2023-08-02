@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+.chatArea {
+  border: 1px solid #cccccc;
+  padding: 10px;
+  background-color: #f8f8f8;
+  height: 400px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}

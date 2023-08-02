@@ -5,6 +5,7 @@ import registrationReducer from "./slices/registrationSlice";
 import deckReducer from "./slices/gameSlice";
 import profileReducer from "./slices/profileSlice";
 import serverReducer from "./slices/serverSlice";
+import chatReducer from "./slices/chatSlice";
 
 export default configureStore({
   reducer: {
@@ -13,5 +14,6 @@ export default configureStore({
     deck: deckReducer,
     profile: profileReducer,
     server: serverReducer,
+    chat: chatReducer,
   }
 });

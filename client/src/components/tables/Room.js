@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchGames, viewTable, leaveGame } from "../../rtk/slices/serverSlice";
+import Chatbox from "./Chatbox";
 
 import Seat from "./Seats";
 
@@ -102,7 +103,15 @@ const Room = () => {
             </Button>
           </Col>
         </Row>
+          <Row>
+  <Col className="d-flex justify-content-center">
+    <Chatbox gameId={id} />
+  </Col>
+</Row>
   </Container>
+
+
+
 );
 }
  
