@@ -14,20 +14,25 @@ export const fetchGames = createAsyncThunk(
       console.log('Fetch Games Called & Response.Data:', response.data);
       return response.data.games;
     } catch (err) {
-      return rejectWithValue(err.response.data);
+      console.error('Error in fetchGames:', err);
+      return rejectWithValue(err.message ? err.message : 'Unknown error in fetchGames');
     }
   }
 );
 
 export const viewTable = createAsyncThunk(
   "games/viewTable",
-  async (gameId) => {
-    const response = await axios.get(`http://localhost:4000/games/view/${gameId}`);
-    console.log("view table called and Data",response.data)
-    return response.data;
+  async (gameId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`http://localhost:4000/games/view/${gameId}`);
+      console.log("viewTable Called & Response.Data", response.data);
+      return response.data;
+    } catch (err) {
+      console.error('Error in viewTable:', err);
+      return rejectWithValue(err.message ? err.message : 'Unknown error in viewTable');
+    }
   }
 );
-
 export const joinGame = createAsyncThunk(
   "games/joinGame",
   async ({ userId, gameId, buyIn, seatId }, { dispatch, rejectWithValue }) => {

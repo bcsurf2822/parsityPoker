@@ -7,11 +7,8 @@ const http = require('http');
 const socketIo = require('socket.io');
 
 const app = express();
-app.use(cors());
-
 const server = http.createServer(app); 
-
-const io = (socketIo)(server, {
+const io = require('socket.io')(server, {
   cors: {
     origin: "http://localhost:3000",
     methods: ["GET", "POST"],
@@ -19,8 +16,6 @@ const io = (socketIo)(server, {
     credentials: true
   }
 });
-
-  app.io = io;
 
 const PORT = 4000;
 
@@ -67,9 +62,6 @@ app.use(viewGameRoute);
 
 const updateUserRoute = require("./routes/updateUser");
 app.use(updateUserRoute);
-
-const getUsernameRoute = require("./routes/userNames");
-app.use(getUsernameRoute);
 
 // Socket.IO connection
 io.on('connection', (socket) => {
