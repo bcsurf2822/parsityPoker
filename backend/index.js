@@ -17,6 +17,13 @@ const io = require('socket.io')(server, {
   }
 });
 
+app.io = io; // Attach io to your app
+
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
+
 const PORT = 4000;
 
 app.use(express.static('public'))
