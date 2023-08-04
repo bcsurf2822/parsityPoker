@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const http = require('http');
-const socketIo = require('socket.io');
+// const socketIo = require('socket.io');
 
 const app = express();
 const server = http.createServer(app); 
