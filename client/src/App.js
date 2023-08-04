@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import "./App.css";
 
@@ -17,13 +17,6 @@ import Cards from "./components/tables/Cards";
 import Withdrawl from "./components/settings/Withdrawl";
 import Deposit from "./components/settings/Deposit";
 import Room from "./components/tables/Room";
-//Socket.io stuff
-import { Events } from "./components/Events";
-import { ConnectionState } from "./components/ConnectionState";
-import { ConnectionManager } from "./components/ConnectionManager";
-import {MyForm} from "./components/MyForm";
-
-import { socket } from "./socket";
 
 import ProtectedRoute from "./components/Protected";
 
@@ -32,40 +25,13 @@ import { initializeAuth } from "./rtk/slices/authenticationSlice";
 function App() {
   const dispatch = useDispatch();
 
-  const [isConnected, setIsConnected] = useState(socket.connected);
-  const [fooEvents, setFooEvents] = useState([]);
-
   useEffect(() => {
     dispatch(initializeAuth());
   }, [dispatch]);
-
-  useEffect(() => {
-    function onConnect() {
-      setIsConnected(true);
-    }
-
-    function onDisconnect() {
-      setIsConnected(false);
-    }
-
-    function onFooEvent(value) {
-      setFooEvents(previous => [...previous, value]);
-    }
-
-    socket.on('connect', onConnect);
-    socket.on('disconnect', onDisconnect);
-    socket.on('foo', onFooEvent);
-
-    return () => {
-      socket.off('connect', onConnect);
-      socket.off('disconnect', onDisconnect);
-      socket.off('foo', onFooEvent);
-    };
-  }, []);
   
   return (
     <div className="App">
-      {/* <Router>
+      <Router>
         <MyNav />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -100,12 +66,7 @@ function App() {
           <Route path="/cards" element={Cards} />
           <Route path="/room/:id" element={<Room />} />
         </Routes>
-      </Router> */}
-
-<ConnectionState isConnected={ isConnected } />
-      <Events events={ fooEvents } />
-      <ConnectionManager />
-      <MyForm />
+      </Router>
     </div>
   );
 }
