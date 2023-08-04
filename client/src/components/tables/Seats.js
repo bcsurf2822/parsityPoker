@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-input-slider";
-import { joinGame, viewTable } from "../../rtk/slices/serverSlice";
-import { fetchUpdatedUser } from "../../rtk/slices/authenticationSlice";
+import { joinGame } from "../../rtk/slices/serverSlice";
+
 import { Button } from "react-bootstrap";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -13,7 +13,6 @@ const Seat = ({ seat, viewedGame}) => {
   const seatId = seat._id;
   const maxBuyIn = viewedGame.max;
   const minBuyIn = viewedGame.min;
-  
 
   const [sliderValue, setSliderValue] = useState(minBuyIn);
   const [seatChoice, setSeatChoice] = useState(false);
@@ -24,17 +23,20 @@ const Seat = ({ seat, viewedGame}) => {
 
   const tableId = viewedGame._id;
 
+
   useEffect(() => {
     const fetchUsername = async (player) => {
       if (player) {
+        console.log("player", player)
         const result = await dispatch(fetchUsernameById(player.user));
-        console.log("result", result)
+        console.log("result", result);
         setUsername(result.payload);
       }
     };
-
-    if(seat.player) fetchUsername(seat.player); // if there is a player on the seat, fetch its username
-  }, [seat, dispatch]); // depend on seat, not seatInfo
+  
+    if(seat.player) fetchUsername(seat.player); // pass the seat.player object here
+  }, [seat, dispatch]);
+  
 
 
   const handleClick = () => {
@@ -46,22 +48,17 @@ const Seat = ({ seat, viewedGame}) => {
       console.log("User is undefined");
       return;
     }
-
+  
     console.log("user before join", user);
-
+  
     console.log("Seat ID:", seatId);
     console.log("User ID:", user.id);
     console.log("Table ID:", tableId);
     console.log("Max Buy In:", maxBuyIn);
-
-    dispatch(joinGame({ userId: user.id, gameId: tableId, buyIn: sliderValue, seatId: seatId }))
-    .then(() => {
-      dispatch(fetchUpdatedUser(user.id))
-        .then(updatedUser => {
-          console.log("user after join", updatedUser);
-        });
-      dispatch(viewTable(tableId));
-    });
+  
+    dispatch(joinGame({ userId: user.id, gameId: tableId, buyIn: sliderValue, seatId: seatId }));
+    console.log(joinGame)
+  
   
   };
 

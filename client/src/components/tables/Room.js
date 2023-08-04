@@ -46,6 +46,10 @@ const Room = () => {
       .catch(error => console.log("Error leaving the game:", error));
   };
 
+  const closeTable = () => {
+    navigate("/Tables");
+  };
+
   return (
     <Container fluid className="h-100 bg">
       <Row className="mt-2">
@@ -72,7 +76,7 @@ const Room = () => {
         </Col>
         <Col></Col>
         <Col className="d-flex justify-content-center">
-          {/* <div className="table">{gameName}</div> */}
+          <div className="table">{viewedGame.name}</div>
         </Col>
         <Col></Col>
         <Col className="d-flex justify-content-center">
@@ -92,7 +96,7 @@ const Room = () => {
       </Row>
       <Row className="mt-2">
         <Col className="d-flex justify-content-center">
-          <Button variant="danger" onClick={console.log("CloseTable")}>
+          <Button variant="danger" onClick={closeTable}>
             X
           </Button>
         </Col>

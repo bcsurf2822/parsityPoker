@@ -63,6 +63,9 @@ app.use(viewGameRoute);
 const updateUserRoute = require("./routes/updateUser");
 app.use(updateUserRoute);
 
+const userNameRoute = require("./routes/userNames");
+app.use(userNameRoute);
+
 // Socket.IO connection
 io.on('connection', (socket) => {
     console.log('A user connected');
