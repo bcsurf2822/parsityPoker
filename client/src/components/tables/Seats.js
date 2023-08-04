@@ -34,7 +34,7 @@ const Seat = ({ seat, viewedGame}) => {
       }
     };
   
-    if(seat.player) fetchUsername(seat.player); // pass the seat.player object here
+    if(seat.player) fetchUsername(seat.player); 
   }, [seat, dispatch]);
   
 
