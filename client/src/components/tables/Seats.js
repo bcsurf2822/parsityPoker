@@ -10,6 +10,8 @@ import { fetchUsernameById } from "../../rtk/slices/usersSlice";
 
 const Seat = ({ seat, viewedGame}) => {
 
+  console.log("SEAT GAME", viewedGame)
+
   const user = useSelector((state) => state.auth.user);
   const seatId = seat._id;
   const maxBuyIn = viewedGame.max;
@@ -18,8 +20,7 @@ const Seat = ({ seat, viewedGame}) => {
   const [sliderValue, setSliderValue] = useState(minBuyIn);
   const [seatChoice, setSeatChoice] = useState(false);
 
-  const [username, setUsername] = useState(''); // we only need one username state
-
+  const [username, setUsername] = useState(''); 
   const dispatch = useDispatch();
 
   const tableId = viewedGame._id;
@@ -85,6 +86,8 @@ const Seat = ({ seat, viewedGame}) => {
             <>
               <p>{`Username: ${username}`}</p>
               <p>{`Chips: ${seat.player.chips}`}</p>
+              <p>{`Bet: ${seat.player.bet}`}</p>
+              <p>{'Dealer:'}</p>
             </>
           ) : (
             <>

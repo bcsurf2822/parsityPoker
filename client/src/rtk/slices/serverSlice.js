@@ -42,13 +42,6 @@ export const playerJoined = createAsyncThunk(
   }
 );
 
-export const playerLeft = createAsyncThunk(
-  "games/playerJoined",
-  async (updatedGame) => {
-    return updatedGame;
-  }
-);
-
 export const leaveGame = createAsyncThunk(
   "games/leaveGame",
   async ({ gameId, userId },{ dispatch, rejectWithValue }) => { 
@@ -61,6 +54,13 @@ export const leaveGame = createAsyncThunk(
     } catch (err) {
       return rejectWithValue(err.response.data);
     }
+  }
+);
+
+export const playerLeft = createAsyncThunk(
+  "games/playerJoined",
+  async (updatedGame) => {
+    return updatedGame;
   }
 );
 
