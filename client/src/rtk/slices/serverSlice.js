@@ -35,6 +35,13 @@ export const joinGame = createAsyncThunk(
   }
 );
 
+export const playerJoined = createAsyncThunk(
+  "games/playerJoined",
+  async (updatedGame) => {
+    return updatedGame;
+  }
+);
+
 export const leaveGame = createAsyncThunk(
   "games/leaveGame",
   async ({ gameId, userId },{ dispatch, rejectWithValue }) => { 
@@ -84,6 +91,15 @@ const serverSlice = createSlice({
       .addCase(joinGame.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || 'Failed to join game';
+      })
+      .addCase(playerJoined.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedGameIndex = state.games.findIndex(
+          (game) => game._id === action.payload._id
+        );
+        if (updatedGameIndex > -1) {
+          state.games[updatedGameIndex] = action.payload;
+        }
       })
       .addCase(leaveGame.pending, (state) => {
         state.loading = true;

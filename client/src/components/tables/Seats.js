@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-input-slider";
 import {socket} from '../../socket';
-import { joinGame } from "../../rtk/slices/serverSlice";
+import { joinGame, playerJoined } from "../../rtk/slices/serverSlice";
 
 import { Button } from "react-bootstrap";
 import { useState } from "react";
@@ -38,6 +38,18 @@ const Seat = ({ seat, viewedGame}) => {
   
     if(seat.player) fetchUsername(seat.player); 
   }, [seat, dispatch]);
+
+  
+  useEffect(() => {
+    socket.on('playerJoined', (updatedGame) => {
+      dispatch(playerJoined(updatedGame));
+    });
+
+    // Remember to clean up the event listener when the component unmounts:
+    return () => {
+      socket.off('playerJoined');
+    };
+  }, [dispatch]);
   
 
 
