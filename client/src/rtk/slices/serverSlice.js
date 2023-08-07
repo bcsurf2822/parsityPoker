@@ -42,6 +42,13 @@ export const playerJoined = createAsyncThunk(
   }
 );
 
+export const playerLeft = createAsyncThunk(
+  "games/playerJoined",
+  async (updatedGame) => {
+    return updatedGame;
+  }
+);
+
 export const leaveGame = createAsyncThunk(
   "games/leaveGame",
   async ({ gameId, userId },{ dispatch, rejectWithValue }) => { 
@@ -108,7 +115,7 @@ const serverSlice = createSlice({
         state.loading = false;
         state.currentGame = action.payload;
         state.joinedGame = null;
-        
+
         const leftGameIndex = state.games.findIndex(
           (game) => game._id === action.payload._id
         );

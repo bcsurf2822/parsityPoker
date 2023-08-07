@@ -3,8 +3,9 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { fetchGames, leaveGame } from "../../rtk/slices/serverSlice";
+import { fetchGames, leaveGame, playerLeft } from "../../rtk/slices/serverSlice";
 import Chatbox from "./Chatbox";
+import {socket} from '../../socket';
 
 import Seat from "./Seats";
 
@@ -20,8 +21,17 @@ const Room = () => {
     dispatch(fetchGames());
   }, [dispatch]);
 
-  const viewedGame = games.find(game => game._id === id); 
-  console.log("viewedGame", viewedGame);
+  useEffect(() => {
+    socket.on('playerLeft', (updatedGame) => {
+      dispatch(playerLeft(updatedGame));
+    });
+
+    return () => {
+      socket.off('playerLeft');
+    };
+  }, [dispatch]); 
+
+  const viewedGame = games.find(game => game._id === id);
 
   if (!viewedGame) {
     return null;
