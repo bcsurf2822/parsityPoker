@@ -3,7 +3,7 @@ const Game = require("../models/gamesSchema");
 
 
 
-router.post('/:gameId/updatePositionsAndDeductBlinds', async (req, res) => {
+router.post('/:gameId/updatePostionsAndBlinds', async (req, res) => {
   try {
     const gameId = req.params.gameId;
     const game = await Game.findById(gameId);
@@ -38,11 +38,11 @@ router.post('/:gameId/updatePositionsAndDeductBlinds', async (req, res) => {
     seats[game.bigBlindPosition].player.chips -= bigBlindAmount;
 
     console.log(`Small Blind Deduction: ${smallBlindAmount}\nBig Blind Deduction: ${bigBlindAmount}`);
-    socket.to(gameId).emit('gameUpdated', game);
 
     await game.save();
-    
-    res.status(200).send('Blinds and positions updated successfully');
+
+    req.io.to(gameId).emit('gameUpdated', game);
+
     res.status(200).send('Blinds and positions updated successfully');
   } catch (error) {
     console.error(error);

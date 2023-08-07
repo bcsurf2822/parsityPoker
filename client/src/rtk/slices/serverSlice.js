@@ -64,6 +64,29 @@ export const playerLeft = createAsyncThunk(
   }
 );
 
+export const updatePositionsAndBlinds = createAsyncThunk(
+  "games/updatePositionsAndBlinds",
+  async (gameId, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`http://localhost:4000/${gameId}/updatePostionsAndBlinds`);
+      console.log("Positions and blinds updated:", response);
+      
+      return gameId;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const gameUpdated = createAsyncThunk(
+  "games/gameUpdated",
+  async (updatedGame) => {
+    return updatedGame;
+  }
+);
+
+export const updateGame = createAction('games/updateGame');
+
 const serverSlice = createSlice({
   name: 'games',
   initialState: {
@@ -121,6 +144,26 @@ const serverSlice = createSlice({
         );
         if (leftGameIndex > -1) {
           state.games[leftGameIndex] = action.payload;
+        }
+      })
+      .addCase(gameUpdated.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedGameIndex = state.games.findIndex(
+          (game) => game._id === action.payload._id
+        );
+        if (updatedGameIndex > -1) {
+          state.games[updatedGameIndex] = action.payload;
+        }
+      })
+      .addCase(updateGame, (state, action) => {
+        const updatedGameIndex = state.games.findIndex(
+          (game) => game._id === action.payload._id
+        );
+        if (updatedGameIndex > -1) {
+          state.games[updatedGameIndex] = action.payload;
+          if (state.viewedGame && state.viewedGame._id === action.payload._id) {
+            state.viewedGame = action.payload;
+          }
         }
       })
       .addCase(leaveGame.rejected, (state, action) => {
