@@ -4,8 +4,6 @@ import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { logout } from "../rtk/slices/authenticationSlice";
 import { TbPokerChip } from 'react-icons/tb';
 
-
-
 const MyNav = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();

@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-input-slider";
+import {socket} from '../../socket';
 import { joinGame } from "../../rtk/slices/serverSlice";
 
 import { Button } from "react-bootstrap";
@@ -22,6 +23,7 @@ const Seat = ({ seat, viewedGame}) => {
   const dispatch = useDispatch();
 
   const tableId = viewedGame._id;
+
 
 
   useEffect(() => {

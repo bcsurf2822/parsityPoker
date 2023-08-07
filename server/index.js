@@ -73,7 +73,7 @@ app.use(updateUserRoute);
 const userNameRoute = require("./routes/userNames");
 app.use(userNameRoute);
 
-// Socket.IO connection
+
 io.on('connection', (socket) => {
     console.log('A user connected');
 
@@ -81,14 +81,11 @@ io.on('connection', (socket) => {
         console.log('User disconnected');
     });
 
-    // Listen for 'chat message' event
+
     socket.on('chat message', (msg) => {
-        console.log(`Received message: ${msg.message}`);  // <-- add this line
-        // Broadcast 'chat message' event to all clients
+        console.log(`Received message: ${msg.message}`); 
         io.emit('chat message', msg);
       });
-
-    // Add your additional socket event listeners here
 });
 
 server.listen(PORT, () => { // Changed from app.listen to server.listen

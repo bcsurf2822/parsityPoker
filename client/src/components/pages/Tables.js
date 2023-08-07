@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import {  useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Table, Button, Container } from "react-bootstrap";
 
-import { fetchGames, viewTable } from "../../rtk/slices/serverSlice";
+import { fetchGames} from "../../rtk/slices/serverSlice";
 
 const Tables = () => {
   const dispatch = useDispatch();
@@ -14,20 +14,6 @@ const Tables = () => {
   useEffect(() => {
     dispatch(fetchGames());
   }, [dispatch]);
-
-  //OLD ROOM VIEW
-  // const handleView = (id) => {
-  //   console.log(`Viewing game with ID: ${id}`);
-  //   dispatch(viewTable(id));
-  //   navigate(`/Room/${id}`);
-  // };
-
-  //NEW ROOM VIEW
-  const handleView = (id) => {
-    console.log(`Viewing game with ID: ${id}`);
-    dispatch(viewTable(id));
-    navigate(`/Room/${id}`);
-  };
 
   return (
     <Container style={{ maxHeight: "80vh", overflowY: "scroll" }}>
@@ -50,7 +36,7 @@ const Tables = () => {
               <td>${game.blinds}</td>
               <td>{game.playersInGame.length} / {game.seats.length} </td>
               <td>
-                <Button onClick={() => handleView(game._id)}>View</Button>
+              <Button onClick={() => navigate(`/Room/${game._id}`)}>View</Button>
               </td>
             </tr>
           ))}
