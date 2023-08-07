@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const http = require('http');
-// const socketIo = require('socket.io');
 
 const app = express();
 const server = http.createServer(app); 
@@ -17,8 +16,7 @@ const io = require('socket.io')(server, {
   }
 });
 
-app.io = io; // Attach io to your app
-
+app.io = io;
 app.use((req, res, next) => {
   req.io = io;
   next();
@@ -27,10 +25,7 @@ app.use((req, res, next) => {
 const PORT = 4000;
 
 app.use(express.static('public'))
-
-// Middleware for parsing the request body
 app.use(bodyParser.json());
-
 app.use(cors());
 
 mongoose.connect('mongodb://localhost:27017/pokerDB', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -64,9 +59,6 @@ app.use(gamesListRoute);
 const joinGameRoute = require("./routes/joinGame");
 app.use(joinGameRoute);
 
-const viewGameRoute = require("./routes/viewGame");
-app.use(viewGameRoute);
-
 const updateUserRoute = require("./routes/updateUser");
 app.use(updateUserRoute);
 
@@ -88,6 +80,6 @@ io.on('connection', (socket) => {
       });
 });
 
-server.listen(PORT, () => { // Changed from app.listen to server.listen
+server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

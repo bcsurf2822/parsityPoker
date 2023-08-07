@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { fetchUpdatedUser } from './authenticationSlice';
 
+import { fetchUpdatedUser } from './authenticationSlice';
 export const buyInSuccess = createAction('authentication/buyInSuccess');
 export const leaveGameSuccess = createAction('authentication/leaveGameSuccess');
 
@@ -20,19 +20,6 @@ export const fetchGames = createAsyncThunk(
   }
 );
 
-export const viewTable = createAsyncThunk(
-  "games/viewTable",
-  async (gameId, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`http://localhost:4000/games/view/${gameId}`);
-      console.log("viewTable Called & Response.Data", response.data);
-      return response.data;
-    } catch (err) {
-      console.error('Error in viewTable:', err);
-      return rejectWithValue(err.message ? err.message : 'Unknown error in viewTable');
-    }
-  }
-);
 export const joinGame = createAsyncThunk(
   "games/joinGame",
   async ({ userId, gameId, buyIn, seatId }, { dispatch, rejectWithValue }) => {
@@ -86,18 +73,6 @@ const serverSlice = createSlice({
       .addCase(fetchGames.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || 'Failed to fetch games';
-      })
-      .addCase(viewTable.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(viewTable.fulfilled, (state, action) => {
-        state.loading = false;
-        state.viewedGame = action.payload;
-        state.currentTableName = action.payload.name;
-      })
-      .addCase(viewTable.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || 'Failed to view table';
       })
       .addCase(joinGame.pending, (state) => {
         state.loading = true;
