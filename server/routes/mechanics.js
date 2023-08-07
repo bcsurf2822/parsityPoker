@@ -38,9 +38,11 @@ router.post('/:gameId/updatePositionsAndDeductBlinds', async (req, res) => {
     seats[game.bigBlindPosition].player.chips -= bigBlindAmount;
 
     console.log(`Small Blind Deduction: ${smallBlindAmount}\nBig Blind Deduction: ${bigBlindAmount}`);
+    socket.to(gameId).emit('gameUpdated', game);
 
     await game.save();
-
+    
+    res.status(200).send('Blinds and positions updated successfully');
     res.status(200).send('Blinds and positions updated successfully');
   } catch (error) {
     console.error(error);
