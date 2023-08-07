@@ -59,6 +59,18 @@ const GameSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  dealerPosition: {
+    type: Number,
+    default: 0,
+  },
+  smallBlindPosition: {
+    type: Number,
+    default: 1,
+  },
+  bigBlindPosition: {
+    type: Number,
+    default: 2,
+  },
   seats: {
     type: [SeatSchema],
     default: Array(6).fill().map((_, i) => ({ id: i + 1, player: null })),
