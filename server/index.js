@@ -59,6 +59,9 @@ app.use(gamesListRoute);
 const joinGameRoute = require("./routes/joinGame");
 app.use(joinGameRoute);
 
+const leaveGameRoute = require("./routes/leaveGame");
+app.use(leaveGameRoute);
+
 const updateUserRoute = require("./routes/updateUser");
 app.use(updateUserRoute);
 

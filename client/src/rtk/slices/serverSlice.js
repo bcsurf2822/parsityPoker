@@ -108,6 +108,13 @@ const serverSlice = createSlice({
         state.loading = false;
         state.currentGame = action.payload;
         state.joinedGame = null;
+        
+        const leftGameIndex = state.games.findIndex(
+          (game) => game._id === action.payload._id
+        );
+        if (leftGameIndex > -1) {
+          state.games[leftGameIndex] = action.payload;
+        }
       })
       .addCase(leaveGame.rejected, (state, action) => {
         state.loading = false;
