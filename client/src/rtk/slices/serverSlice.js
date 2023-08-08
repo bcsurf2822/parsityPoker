@@ -64,29 +64,13 @@ export const playerLeft = createAsyncThunk(
   }
 );
 
-export const updatePositionsAndBlinds = createAsyncThunk(
-  "games/updatePositionsAndBlinds",
-  async (gameId, { rejectWithValue }) => {
-    try {
-      const response = await axios.post(`http://localhost:4000/${gameId}/updatePostionsAndBlinds`);
-      console.log("Positions and blinds updated:", response);
-      
-      return gameId;
-    } catch (err) {
-      return rejectWithValue(err.response.data);
-    }
-  }
-);
 
-
-export const updateGame = createAction('games/updateGame');
 
 const serverSlice = createSlice({
   name: 'games',
   initialState: {
     games: [],
     currentGame: null,
-    viewedGame: null,
     loading: false,
     error: null,
   },
