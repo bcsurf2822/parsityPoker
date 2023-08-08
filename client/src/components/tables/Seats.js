@@ -24,6 +24,7 @@ const Seat = ({ seat, currentGame }) => {
   const [sliderValue, setSliderValue] = useState(minBuyIn);
   const [seatChoice, setSeatChoice] = useState(false);
 
+
   const [username, setUsername] = useState("");
   const dispatch = useDispatch();
 
@@ -98,6 +99,12 @@ const Seat = ({ seat, currentGame }) => {
   };
 
   console.log("currentGame", currentGame.seats);
+  const isDealer = currentGame.dealerPosition + 1;
+
+  console.log("Dealer", isDealer)
+  console.log("CurrentGameSeats", currentGame.seats)
+
+  
 
 
   return (
@@ -108,13 +115,12 @@ const Seat = ({ seat, currentGame }) => {
           {seat.player ? (
             <>
                 <Button
-                onClick={handleTestUpdate} // Added this line to handle the click event
-              ></Button>
+                onClick={handleTestUpdate} 
+              >TEST  BLINDS</Button>
               <p>{`Username: ${username}`}</p>
               <p>{`Chips: ${seat.player.chips}`}</p>
               <p>{`Bet: ${seat.player.bet}`}</p>
-              <p>{"Dealer:"}</p>
-            </>
+              <p>{`Dealer: ${isDealer === seat.id ? 'true' : 'false'}`}</p>  </>
           ) : (
             <>
               {seatChoice ? (
