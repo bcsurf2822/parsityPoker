@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-input-slider";
 import {socket} from '../../socket';
-import { joinGame, playerJoined, gameUpdated, updateGame } from "../../rtk/slices/serverSlice";
+import { joinGame, playerJoined } from "../../rtk/slices/serverSlice";
 
 import { Button } from "react-bootstrap";
 import { useState } from "react";
@@ -40,16 +40,7 @@ const Seat = ({ seat, viewedGame}) => {
     if(seat.player) fetchUsername(seat.player); 
   }, [seat, dispatch]);
 
-  useEffect(() => {
-    socket.on('gameUpdated', (updatedGame) => {
-      console.log("gameUpdated", updatedGame)
-      dispatch(updateGame(updatedGame));
-    });
-  
-    return () => {
-      socket.off('gameUpdated');
-    };
-  }, [dispatch]);
+
 
   
   useEffect(() => {
@@ -63,13 +54,6 @@ const Seat = ({ seat, viewedGame}) => {
     };
   }, [dispatch]);
 
-  const handleTestUpdate = () => {
-
-    const updatedGame = { ...viewedGame };
-    updatedGame.someField = 'new value';
-    dispatch(updateGame(updatedGame));
-  };
-  
 
 
   const handleClick = () => {
@@ -95,6 +79,10 @@ const Seat = ({ seat, viewedGame}) => {
   
   };
 
+  console.log("viewedGame", viewedGame)
+  console.log("seat", seat)
+
+
   return (
     <div className="d-flex justify-content-center seat">
       {seat && (
@@ -102,7 +90,7 @@ const Seat = ({ seat, viewedGame}) => {
           <p>{`Seat ${seat.id}`}</p>
           {seat.player ? (
             <>
-                    <Button onClick={handleTestUpdate}>Test Update</Button>
+                    <Button onClick={console.log("test")}>Test Update</Button>
               <p>{`Username: ${username}`}</p>
               <p>{`Chips: ${seat.player.chips}`}</p>
               <p>{`Bet: ${seat.player.bet}`}</p>
