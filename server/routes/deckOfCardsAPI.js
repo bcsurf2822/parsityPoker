@@ -3,20 +3,27 @@ const axios = require("axios");
 
 //https://www.deckofcardsapi.com/
 
-//Deck and Number of Decks
+router.get('/api/new-deck/:playerCount', async (req, res) => {
+  const { playerCount } = req.params;
+  try {
 
-// Draw a card
+    const response = await axios.get('https://www.deckofcardsapi.com/api/deck/new/draw/?count=52');
+    const cards = response.data.cards;
 
-//Shuffle the deck
+    const players = [];
+    for (let i = 0; i < playerCount; i++) {
+      players[i] = cards.slice(i * Math.floor(52 / playerCount), (i + 1) * Math.floor(52 / playerCount));
+    }
 
-//NewDeck in order and jokers          jokers_enabled=true
+    // Any remaining cards can be handled as you see fit (e.g., a common draw pile)
 
-//Partial Deck
+    res.json({ players });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create new deck and draw cards' });
+  }
+});
 
-//Adding to Piles (not with multiple decks)
+//Back of Card Image to be referenced in frontend
+// https://www.deckofcardsapi.com/static/img/back.png
 
-//shuffle the pile
-
-//List Cards In Piles
-
-//Back of Card Image
+module.exports = router;

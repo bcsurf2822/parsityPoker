@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Modal } from 'react-bootstrap';
 import Login from "./Login";
 import Footer from "./Footer";
 
@@ -14,12 +14,12 @@ const Home = () => {
         <Col md="auto">
           <Card className="mb-4 shadow-sm">
             <Card.Body>
-              <Card.Title>Welcome To Poker</Card.Title>
+              <Card.Title>Welcome To All World!<p><strong>Casino - Poker - Blackjack - TableGames </strong></p> </Card.Title>
             </Card.Body>
           </Card>
           <Card className="mb-4 shadow-sm">
             <Card.Body>
-              <Card.Text>A Poker Platform</Card.Text>
+              <Card.Text>A Decentralized Casino</Card.Text>
             </Card.Body>
           </Card>
           <Card className="login-container mb-4 shadow-sm">

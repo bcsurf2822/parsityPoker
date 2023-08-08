@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { logout } from "./authenticationSlice";
 
 export const register = createAsyncThunk(
   "registration/register",
@@ -27,7 +28,14 @@ const registrationSlice = createSlice({
     error: null,
     isRegistered: false,
   },
-  reducers: {},
+  reducers: {
+    resetRegistration: (state) => {
+      state.isRegistered = false;
+      state.user = null;
+      state.loading = false;
+      state.error = null;
+    },
+  },
   extraReducers : (builder) =>  {
     builder
     .addCase(register.pending, (state) => {
@@ -44,6 +52,12 @@ const registrationSlice = createSlice({
       state.error = action.error.message;
       console.log(action.error);
     })
+    .addCase(logout.fulfilled, (state) => {
+      state.isRegistered = false;
+      state.user = null;
+      state.loading = false;
+      state.error = null;
+    });
   }
 });
 
