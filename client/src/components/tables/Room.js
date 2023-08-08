@@ -31,13 +31,13 @@ const Room = () => {
     };
   }, [dispatch]); 
 
-  const viewedGame = games.find(game => game._id === id);
+  const currentGame = games.find(game => game._id === id);
 
-  if (!viewedGame) {
+  if (!currentGame) {
     return null;
   }
 
-  const seatArray = viewedGame.seats;
+  const seatArray = currentGame.seats;
   console.log("seatArray", seatArray);
 
   const leaveTable = () => {
@@ -72,35 +72,35 @@ const Room = () => {
       <Row className="h-50">
         <Col></Col>
         <Col className="d-flex justify-content-center">
-          <Seat seat={seatArray[0]} viewedGame={viewedGame} />
+          <Seat seat={seatArray[0]} currentGame={currentGame} />
         </Col>
         <Col></Col>
         <Col className="d-flex justify-content-center">
-          <Seat seat={seatArray[1]} viewedGame={viewedGame} />
+          <Seat seat={seatArray[1]} currentGame={currentGame} />
         </Col>
         <Col></Col>
       </Row>
       <Row className="h-50">
         <Col className="d-flex justify-content-center">
-          <Seat seat={seatArray[2]} viewedGame={viewedGame} />
+          <Seat seat={seatArray[2]} currentGame={currentGame} />
         </Col>
         <Col></Col>
         <Col className="d-flex justify-content-center">
-          <div className="table">{viewedGame.name}</div>
+          <div className="table">{currentGame.name}</div>
         </Col>
         <Col></Col>
         <Col className="d-flex justify-content-center">
-          <Seat seat={seatArray[3]} viewedGame={viewedGame} />
+          <Seat seat={seatArray[3]} currentGame={currentGame} />
         </Col>
       </Row>
       <Row className="h-50">
         <Col></Col>
         <Col className="d-flex justify-content-center">
-          <Seat seat={seatArray[4]} viewedGame={viewedGame} />
+          <Seat seat={seatArray[4]} currentGame={currentGame} />
         </Col>
         <Col></Col>
         <Col className="d-flex justify-content-center">
-          <Seat seat={seatArray[5]} viewedGame={viewedGame} />
+          <Seat seat={seatArray[5]} currentGame={currentGame} />
         </Col>
         <Col></Col>
       </Row>

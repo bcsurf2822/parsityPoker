@@ -11,13 +11,13 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { fetchUsernameById } from "../../rtk/slices/usersSlice";
 
-const Seat = ({ seat, viewedGame }) => {
-  console.log("SEAT GAME", viewedGame);
+const Seat = ({ seat, currentGame }) => {
+  console.log("SEAT GAME", currentGame);
 
   const user = useSelector((state) => state.auth.user);
   const seatId = seat._id;
-  const maxBuyIn = viewedGame.max;
-  const minBuyIn = viewedGame.min;
+  const maxBuyIn = currentGame.max;
+  const minBuyIn = currentGame.min;
 
   const [sliderValue, setSliderValue] = useState(minBuyIn);
   const [seatChoice, setSeatChoice] = useState(false);
@@ -25,7 +25,7 @@ const Seat = ({ seat, viewedGame }) => {
   const [username, setUsername] = useState("");
   const dispatch = useDispatch();
 
-  const tableId = viewedGame._id;
+  const tableId = currentGame._id;
 
 
   useEffect(() => {
@@ -79,7 +79,7 @@ const Seat = ({ seat, viewedGame }) => {
     console.log(joinGame);
   };
 
-  console.log("viewedGame", viewedGame.seats);
+  console.log("currentGame", currentGame.seats);
 
 
   return (
