@@ -64,6 +64,26 @@ export const playerLeft = createAsyncThunk(
   }
 );
 
+export const updatePositionsAndBlinds = createAsyncThunk(
+  "games/updatePositionsAndBlinds",
+  async (gameId, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`http://localhost:4000/${gameId}/updatePostionsAndBlinds`);
+      console.log("Update positions and blinds response:", response.data);
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const gameUpdated = createAsyncThunk(
+  "games/gameUpdated",
+  async (updatedGame) => {
+    return updatedGame;
+  }
+);
+
 
 
 const serverSlice = createSlice({
@@ -127,6 +147,22 @@ const serverSlice = createSlice({
       .addCase(leaveGame.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || 'Failed to leave game';
+      })
+      .addCase(updatePositionsAndBlinds.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updatePositionsAndBlinds.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedGameIndex = state.games.findIndex(
+          (game) => game._id === action.payload._id
+        );
+        if (updatedGameIndex > -1) {
+          state.games[updatedGameIndex] = action.payload;
+        }
+      })
+      .addCase(updatePositionsAndBlinds.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to update positions and blinds';
       });
   },
 });

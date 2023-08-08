@@ -4,6 +4,8 @@ import { socket } from "../../socket";
 import {
   joinGame,
   playerJoined,
+  updatePositionsAndBlinds,
+  gameUpdated
 } from "../../rtk/slices/serverSlice";
 
 import { Button } from "react-bootstrap";
@@ -26,6 +28,18 @@ const Seat = ({ seat, currentGame }) => {
   const dispatch = useDispatch();
 
   const tableId = currentGame._id;
+
+  useEffect(() => {
+    
+    socket.on("gameUpdated", (updatedGame) => {
+      dispatch(gameUpdated(updatedGame));
+    });
+
+    return () => {
+      socket.off("gameUpdated");
+    };
+  }, [dispatch]);
+
 
 
   useEffect(() => {
@@ -79,6 +93,10 @@ const Seat = ({ seat, currentGame }) => {
     console.log(joinGame);
   };
 
+  const handleTestUpdate = () => {
+    dispatch(updatePositionsAndBlinds(currentGame._id));
+  };
+
   console.log("currentGame", currentGame.seats);
 
 
@@ -89,10 +107,9 @@ const Seat = ({ seat, currentGame }) => {
           <p>{`Seat ${seat.id}`}</p>
           {seat.player ? (
             <>
-              <Button
-              >
-                Test Update
-              </Button>
+                <Button
+                onClick={handleTestUpdate} // Added this line to handle the click event
+              ></Button>
               <p>{`Username: ${username}`}</p>
               <p>{`Chips: ${seat.player.chips}`}</p>
               <p>{`Bet: ${seat.player.bet}`}</p>
