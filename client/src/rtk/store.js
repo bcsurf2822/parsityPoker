@@ -7,6 +7,7 @@ import profileReducer from "./slices/profileSlice";
 import serverReducer from "./slices/serverSlice";
 import chatReducer from "./slices/chatSlice";
 import usersReducer from "./slices/usersSlice";
+import deckOfCardsReducer from "./slices/deckOfCardsSlice";
 
 export default configureStore({
   reducer: {
@@ -17,5 +18,6 @@ export default configureStore({
     server: serverReducer,
     chat: chatReducer,
     users: usersReducer,
+    cards: deckOfCardsReducer,
   }
 });

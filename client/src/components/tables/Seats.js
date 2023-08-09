@@ -14,7 +14,6 @@ import { useEffect } from "react";
 import { fetchUsernameById } from "../../rtk/slices/usersSlice";
 
 const Seat = ({ seat, currentGame }) => {
-  console.log("SEAT GAME", currentGame);
 
   const user = useSelector((state) => state.auth.user);
   const seatId = seat._id;
@@ -45,10 +44,8 @@ const Seat = ({ seat, currentGame }) => {
 
   useEffect(() => {
     const fetchUsername = async (player) => {
-      if (player) {
-        console.log("player", player);
+      if (player) {;
         const result = await dispatch(fetchUsernameById(player.user));
-        console.log("result", result);
         setUsername(result.payload);
       }
     };
@@ -76,13 +73,6 @@ const Seat = ({ seat, currentGame }) => {
       return;
     }
 
-    console.log("user before join", user);
-
-    console.log("Seat ID:", seatId);
-    console.log("User ID:", user.id);
-    console.log("Table ID:", tableId);
-    console.log("Max Buy In:", maxBuyIn);
-
     dispatch(
       joinGame({
         userId: user.id,
@@ -98,11 +88,11 @@ const Seat = ({ seat, currentGame }) => {
     dispatch(updatePositionsAndBlinds(currentGame._id));
   };
 
-  console.log("currentGame", currentGame.seats);
   const isDealer = currentGame.dealerPosition + 1;
 
-  console.log("Dealer", isDealer)
-  console.log("CurrentGameSeats", currentGame.seats)
+
+
+
 
   
 

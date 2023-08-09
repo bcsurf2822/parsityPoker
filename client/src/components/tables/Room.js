@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { fetchGames, leaveGame, playerLeft } from "../../rtk/slices/serverSlice";
 import Chatbox from "./Chatbox";
 import {socket} from '../../socket';
+import { newDeckAndGame } from "../../rtk/slices/deckOfCardsSlice";
 
 import Seat from "./Seats";
 
@@ -16,6 +17,8 @@ const Room = () => {
   
   const user = useSelector((state) => state.auth.user);
   const games = useSelector((state) => state.server.games);
+  const currentGame = games.find(game => game._id === id);
+  console.log("Current Game:", currentGame )
 
   useEffect(() => {
     dispatch(fetchGames());
@@ -29,16 +32,19 @@ const Room = () => {
     return () => {
       socket.off('playerLeft');
     };
-  }, [dispatch]); 
+  }, [dispatch]);
 
-  const currentGame = games.find(game => game._id === id);
+  const seatArray = currentGame ? currentGame.seats : [];
+  const occupiedSeats = currentGame ? currentGame.seats.filter((seat) => seat.player !== null).length : 0;
 
-  if (!currentGame) {
-    return null;
-  }
 
-  const seatArray = currentGame.seats;
-  console.log("seatArray", seatArray);
+  console.log(`Number of occupied seats: ${occupiedSeats}`);
+
+  useEffect(() => {
+    if (occupiedSeats >= 2 && currentGame) {
+      dispatch(newDeckAndGame(occupiedSeats));
+    }
+  }, [occupiedSeats, currentGame?._id, dispatch]);
 
   const leaveTable = () => {
     if (!user) {
@@ -59,6 +65,11 @@ const Room = () => {
   const closeTable = () => {
     navigate("/Tables");
   };
+
+  if (!currentGame) {
+    return null;
+  }
+
 
   return (
     <Container fluid className="h-100 bg">

@@ -6,7 +6,6 @@ export const fetchUsernameById = createAsyncThunk(
   async (userId, thunkAPI) => {
     try {
       const response = await axios.get(`http://localhost:4000/${userId}/username`);
-      console.log("fetchusernameResponse", response.data)
       return response.data.username;
     } catch (error) {
       return thunkAPI.rejectWithValue({ error: error.message });

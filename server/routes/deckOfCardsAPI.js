@@ -1,25 +1,32 @@
 const router = require("express").Router();
 const axios = require("axios");
+const Game = require("../models/gamesSchema");
 
 //https://www.deckofcardsapi.com/
 
-router.get('/api/new-deck/:playerCount', async (req, res) => {
+router.get('/new-deck/:playerCount', async (req, res) => {
   const { playerCount } = req.params;
   try {
-
     const response = await axios.get('https://www.deckofcardsapi.com/api/deck/new/draw/?count=52');
-    const cards = response.data.cards;
+    const currentGameCards = response.data.cards;
 
-    const players = [];
+    const playersInGame = [];
     for (let i = 0; i < playerCount; i++) {
-      players[i] = cards.slice(i * Math.floor(52 / playerCount), (i + 1) * Math.floor(52 / playerCount));
+      playersInGame[i] = {
+        handCards: currentGameCards.splice(0, 2),
+      };
     }
 
-    res.json({ playersInGame });
+    const game = new Game({
+      currentGameCards,
+      playersInGame,
+    });
+    await game.save();
+
+    res.json(game);
   } catch (error) {
     res.status(500).json({ error: 'Failed to create new deck and draw cards' });
   }
 });
-
 
 module.exports = router;
