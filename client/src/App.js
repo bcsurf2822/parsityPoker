@@ -12,7 +12,6 @@ import Profile from "./components/settings/Profile";
 import Hands from "./components/settings/Hands";
 import Advanced from "./components/settings/Advanced";
 import History from "./components/settings/History";
-import Cards from "./components/tables/Cards";
 import Withdrawl from "./components/settings/Withdrawl";
 import Deposit from "./components/settings/Deposit";
 import Room from "./components/tables/Room";
@@ -61,7 +60,6 @@ function App() {
             path="/withdrawl"
             element={<ProtectedRoute element={<Withdrawl />} />}
           />
-          <Route path="/cards" element={Cards} />
           <Route path="/room/:id" element={<Room />} />
         </Routes>
       </Router>
