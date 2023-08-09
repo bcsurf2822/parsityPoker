@@ -1,14 +1,14 @@
-### All World! Poker by [Benjamin Corbett]
+## All World! Poker by [Benjamin Corbett]
 
-## Description
+# Description
 
 ## APIs
 
-# Deck of Cards API
+### Deck of Cards API
 
 - https://www.deckofcardsapi.com/
 
-# Poker API
+### Poker API
 
 - https://www.pokerapi.dev/
 
