@@ -1,6 +1,6 @@
-## All World! Poker by [Benjamin Corbett]
+# All World! Poker by [Benjamin Corbett]
 
-# Description
+## Description
 
 ## APIs
 
