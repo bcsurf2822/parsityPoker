@@ -1,10 +1,8 @@
-
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const newDeckAndGame = createAsyncThunk('game/initialize', async (playerCount) => {
-  const response = await axios.get(`http://localhost:4000/new-deck/${playerCount}`);
-  console.log("DECK API DATA", response.data)
+export const newDeckAndGame = createAsyncThunk('game/initialize', async ({ gameId, playerCount }) => {
+  const response = await axios.get(`http://localhost:4000/new-deck/${gameId}/${playerCount}`);
   return response.data;
 });
 
@@ -17,7 +15,6 @@ const deckOfCardsSlice = createSlice({
     status: 'idle',
   },
   reducers: {
-
   },
   extraReducers: (builder) => {
     builder
@@ -28,7 +25,6 @@ const deckOfCardsSlice = createSlice({
         state.status = 'idle';
         state.playersInGame = action.payload.playersInGame;
         state.currentGameCards = action.payload.currentGameCards;
-     
       });
   },
 });

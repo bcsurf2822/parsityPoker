@@ -2,6 +2,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
+const CardApiSchema = new Schema({
+  value: String,
+  suit: String,
+  code: String
+});
+
 const PlayerSchema = new Schema({
   user: {
     type: ObjectId,
@@ -10,15 +16,11 @@ const PlayerSchema = new Schema({
   },
   chips: {type: Number, required: true},
   handCards: {
-    type: [Number],
-    validate: [arrayLimit, "{PATH} exceeds the limit of 2 cards"],
+    type: [String],
+    default: [],
   },
   bet: {type: Number, required: true},
 });
-
-function arrayLimit(val) {
-  return val.length <= 2;
-};
 
 const SeatSchema = new Schema({
   id: { type: Number, required: true },
@@ -72,7 +74,7 @@ const GameSchema = new Schema({
     default: 2,
   },
   currentGameCards: {
-    type: [String],
+    type: [CardApiSchema],
     default: [],
   },
   seats: {

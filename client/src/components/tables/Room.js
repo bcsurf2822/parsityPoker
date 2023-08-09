@@ -42,9 +42,9 @@ const Room = () => {
 
   useEffect(() => {
     if (occupiedSeats >= 2 && currentGame) {
-      dispatch(newDeckAndGame(occupiedSeats));
+      dispatch(newDeckAndGame({ gameId: id, playerCount: occupiedSeats }));
     }
-  }, [occupiedSeats, currentGame?._id, dispatch]);
+  }, [occupiedSeats, currentGame?._id, dispatch, id]);
 
   const leaveTable = () => {
     if (!user) {
