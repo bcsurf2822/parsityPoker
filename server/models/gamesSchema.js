@@ -71,6 +71,10 @@ const GameSchema = new Schema({
     type: Number,
     default: 2,
   },
+  currentGameCards: {
+    type: [String],
+    default: [],
+  },
   seats: {
     type: [SeatSchema],
     default: Array(6).fill().map((_, i) => ({ id: i + 1, player: null })),
