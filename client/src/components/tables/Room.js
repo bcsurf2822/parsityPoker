@@ -3,9 +3,13 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { fetchGames, leaveGame, playerLeft } from "../../rtk/slices/serverSlice";
+import {
+  fetchGames,
+  leaveGame,
+  playerLeft,
+} from "../../rtk/slices/serverSlice";
 import Chatbox from "./Chatbox";
-import {socket} from '../../socket';
+import { socket } from "../../socket";
 import { newDeckAndGame } from "../../rtk/slices/deckOfCardsSlice";
 
 import Seat from "./Seats";
@@ -14,29 +18,30 @@ const Room = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+
   const user = useSelector((state) => state.auth.user);
   const games = useSelector((state) => state.server.games);
-  const currentGame = games.find(game => game._id === id);
-  console.log("Current Game:", currentGame )
+  const currentGame = games.find((game) => game._id === id);
+  console.log("Current Game:", currentGame);
 
   useEffect(() => {
     dispatch(fetchGames());
   }, [dispatch]);
 
   useEffect(() => {
-    socket.on('playerLeft', (updatedGame) => {
+    socket.on("playerLeft", (updatedGame) => {
       dispatch(playerLeft(updatedGame));
     });
 
     return () => {
-      socket.off('playerLeft');
+      socket.off("playerLeft");
     };
   }, [dispatch]);
 
   const seatArray = currentGame ? currentGame.seats : [];
-  const occupiedSeats = currentGame ? currentGame.seats.filter((seat) => seat.player !== null).length : 0;
-
+  const occupiedSeats = currentGame
+    ? currentGame.seats.filter((seat) => seat.player !== null).length
+    : 0;
 
   console.log(`Number of occupied seats: ${occupiedSeats}`);
 
@@ -48,18 +53,18 @@ const Room = () => {
 
   const leaveTable = () => {
     if (!user) {
-      console.log('User is undefined');
+      console.log("User is undefined");
       return;
     }
 
     dispatch(leaveGame({ gameId: id, userId: user.id }))
       .then(() => {
-        const updatedGame = games.find(game => game._id === id);
+        const updatedGame = games.find((game) => game._id === id);
         if (!updatedGame) {
           navigate("/Tables");
         }
       })
-      .catch(error => console.log("Error leaving the game:", error));
+      .catch((error) => console.log("Error leaving the game:", error));
   };
 
   const closeTable = () => {
@@ -69,7 +74,6 @@ const Room = () => {
   if (!currentGame) {
     return null;
   }
-
 
   return (
     <Container fluid className="h-100 bg">
@@ -129,7 +133,6 @@ const Room = () => {
       </Row>
     </Container>
   );
-  
-}
- 
+};
+
 export default Room;

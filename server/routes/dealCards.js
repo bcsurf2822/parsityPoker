@@ -2,28 +2,28 @@ const router = require("express").Router();
 const Game = require("../models/gamesSchema");
 
 //Deal to Players
-router.post('/deal-cards/:gameId', async (req, res) => {
+router.post("/deal-cards/:gameId", async (req, res) => {
   const { gameId } = req.params;
 
   try {
     const game = await Game.findById(gameId);
 
     if (!game) {
-      return res.status(404).json({ message: 'Game not found!' });
+      return res.status(404).json({ message: "Game not found!" });
     }
 
     const numberOfPlayers = game.playersInGame.length;
     const cardsToDeal = numberOfPlayers * 2;
 
     if (cardsToDeal > game.currentGameCards.length) {
-      return res.status(400).json({ message: 'Not enough cards to deal!' });
+      return res.status(400).json({ message: "Not enough cards to deal!" });
     }
 
     for (let i = 0; i < numberOfPlayers; i++) {
       const player = game.playersInGame[i];
       const cardsForPlayer = game.currentGameCards.splice(0, 2);
 
-      player.handCards = cardsForPlayer.map(card => card.code);
+      player.handCards = cardsForPlayer.map((card) => card.code);
       game.dealtCards.push(...player.handCards);
     }
 
@@ -32,19 +32,19 @@ router.post('/deal-cards/:gameId', async (req, res) => {
     res.json(game);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to deal cards' });
+    res.status(500).json({ error: "Failed to deal cards" });
   }
 });
 
 //Deal Flop
-router.put('/flop/:gameId', async (req, res) => {
+router.put("/flop/:gameId", async (req, res) => {
   const { gameId } = req.params;
 
   try {
     const game = await Game.findById(gameId);
 
     if (!game) {
-      return res.status(404).json({ message: 'Game not found!' });
+      return res.status(404).json({ message: "Game not found!" });
     }
 
     const burnCard = game.currentGameCards.splice(0, 1);
@@ -54,30 +54,32 @@ router.put('/flop/:gameId', async (req, res) => {
 
     game.communityCards = flopCards;
 
-    game.dealtCards.push(...flopCards.map(card => card.code));
+    game.dealtCards.push(...flopCards.map((card) => card.code));
 
     await game.save();
 
     res.json(game);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to deal the flop' });
+    res.status(500).json({ error: "Failed to deal the flop" });
   }
 });
 
 //Deal Turn
-router.post('/turn/:gameId', async (req, res) => {
+router.post("/turn/:gameId", async (req, res) => {
   const { gameId } = req.params;
 
   try {
     const game = await Game.findById(gameId);
 
     if (!game) {
-      return res.status(404).json({ message: 'Game not found!' });
+      return res.status(404).json({ message: "Game not found!" });
     }
 
     if (game.currentGameCards.length < 2) {
-      return res.status(400).json({ message: 'Not enough cards to deal the turn!' });
+      return res
+        .status(400)
+        .json({ message: "Not enough cards to deal the turn!" });
     }
 
     const burntCard = game.currentGameCards.shift();
@@ -92,23 +94,25 @@ router.post('/turn/:gameId', async (req, res) => {
     res.json(game);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to deal the turn' });
+    res.status(500).json({ error: "Failed to deal the turn" });
   }
 });
 
 //Deal River
-router.post('/deal-river/:gameId', async (req, res) => {
+router.post("/deal-river/:gameId", async (req, res) => {
   const { gameId } = req.params;
 
   try {
     const game = await Game.findById(gameId);
 
     if (!game) {
-      return res.status(404).json({ message: 'Game not found!' });
+      return res.status(404).json({ message: "Game not found!" });
     }
 
     if (game.currentGameCards.length < 2) {
-      return res.status(400).json({ message: 'Not enough cards to deal the river!' });
+      return res
+        .status(400)
+        .json({ message: "Not enough cards to deal the river!" });
     }
 
     const burntCard = game.currentGameCards.shift();
@@ -123,7 +127,7 @@ router.post('/deal-river/:gameId', async (req, res) => {
     res.json(game);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to deal the river' });
+    res.status(500).json({ error: "Failed to deal the river" });
   }
 });
 

@@ -2,7 +2,6 @@ const router = require("express").Router();
 const Game = require("../models/gamesSchema");
 const User = require("../models/userSchema");
 
-
 router.post("/join/:gameId/:seatId", async (req, res) => {
   try {
     const { userId, buyIn } = req.body;
@@ -16,16 +15,14 @@ router.post("/join/:gameId/:seatId", async (req, res) => {
     }
 
     if (buyIn < game.min || buyIn > game.max) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "Invalid buy-in. Buy-in should be between " +
-            game.min +
-            " and " +
-            game.max +
-            ".",
-        });
+      return res.status(400).json({
+        message:
+          "Invalid buy-in. Buy-in should be between " +
+          game.min +
+          " and " +
+          game.max +
+          ".",
+      });
     }
 
     const user = await User.findById(userId);
@@ -71,10 +68,8 @@ router.post("/join/:gameId/:seatId", async (req, res) => {
     await game.save();
     await user.save();
 
-
-    req.io.emit('playerJoined', { gameId: game._id, userId: user._id });
-    req.io.emit('playerJoined', game);
-
+    req.io.emit("playerJoined", { gameId: game._id, userId: user._id });
+    req.io.emit("playerJoined", game);
 
     res.status(200).json({ message: "Successfully joined the game!", game });
   } catch (err) {

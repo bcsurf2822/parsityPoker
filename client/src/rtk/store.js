@@ -19,5 +19,5 @@ export default configureStore({
     chat: chatReducer,
     users: usersReducer,
     cards: deckOfCardsReducer,
-  }
+  },
 });

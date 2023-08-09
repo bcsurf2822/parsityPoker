@@ -1,32 +1,32 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
 const CardApiSchema = new Schema({
   value: String,
   suit: String,
-  code: String
+  code: String,
 });
 
 const PlayerSchema = new Schema({
   user: {
     type: ObjectId,
-    ref: 'User',
+    ref: "User",
     required: true,
   },
-  chips: {type: Number, required: true},
+  chips: { type: Number, required: true },
   handCards: {
     type: [String],
     default: [],
   },
-  bet: {type: Number, required: true},
+  bet: { type: Number, required: true },
 });
 
 const SeatSchema = new Schema({
   id: { type: Number, required: true },
   player: {
     type: PlayerSchema,
-    default: null
+    default: null,
   },
 });
 
@@ -87,7 +87,9 @@ const GameSchema = new Schema({
   },
   seats: {
     type: [SeatSchema],
-    default: Array(6).fill().map((_, i) => ({ id: i + 1, player: null })),
+    default: Array(6)
+      .fill()
+      .map((_, i) => ({ id: i + 1, player: null })),
   },
 });
 

@@ -1,8 +1,8 @@
-const router = require('express').Router();
+const router = require("express").Router();
 const Game = require("../models/gamesSchema");
 const User = require("../models/userSchema");
 
-router.post('/logout/:userId', async (req, res) => {
+router.post("/logout/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
 
@@ -15,13 +15,17 @@ router.post('/logout/:userId', async (req, res) => {
     const games = await Game.find();
 
     for (let game of games) {
-      const seatIndex = game.seats.findIndex(seat => seat.player && seat.player.user.toString() === userId);
+      const seatIndex = game.seats.findIndex(
+        (seat) => seat.player && seat.player.user.toString() === userId
+      );
 
       if (seatIndex !== -1) {
         const chips = game.seats[seatIndex].player.chips;
         user.accountBalance += chips;
 
-        const playerIndex = game.playersInGame.findIndex(player => player.user.toString() === userId);
+        const playerIndex = game.playersInGame.findIndex(
+          (player) => player.user.toString() === userId
+        );
         if (playerIndex !== -1) {
           game.playersInGame.splice(playerIndex, 1);
         }
@@ -34,8 +38,8 @@ router.post('/logout/:userId', async (req, res) => {
 
     await user.save();
 
-    res.clearCookie('authToken'); 
-    res.status(200).json({ message: 'Logout successful' });
+    res.clearCookie("authToken");
+    res.status(200).json({ message: "Logout successful" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: err.message });

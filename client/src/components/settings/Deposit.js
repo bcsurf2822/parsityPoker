@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { deposit } from '../../rtk/actions/depositWithdraw';
-import { Form, Button, Card } from 'react-bootstrap';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { deposit } from "../../rtk/actions/depositWithdraw";
+import { Form, Button, Card } from "react-bootstrap";
 
 const Deposit = () => {
-  const [amount, setAmount] = useState('');
+  const [amount, setAmount] = useState("");
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
@@ -13,15 +13,18 @@ const Deposit = () => {
 
   const handleDeposit = async (e) => {
     e.preventDefault();
-    if (amount !== '') {
+    if (amount !== "") {
       dispatch(deposit({ userId: user.id, amount: Number(amount) }));
     }
-    setAmount('');
-    navigate("/profile")
+    setAmount("");
+    navigate("/profile");
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+    <div
+      className="d-flex justify-content-center align-items-center"
+      style={{ minHeight: "100vh" }}
+    >
       <Card className="p-4">
         <h2 className="mb-4">Deposit Funds</h2>
         <Form onSubmit={handleDeposit}>

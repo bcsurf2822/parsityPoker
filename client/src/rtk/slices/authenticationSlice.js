@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { depositSuccess, withdrawSuccess } from "../actions/depositWithdraw";
@@ -71,7 +71,7 @@ export const fetchUpdatedUser = createAsyncThunk(
 
 export const updateUser = (user) => {
   return {
-    type: 'user/update',
+    type: "user/update",
     payload: user,
   };
 };

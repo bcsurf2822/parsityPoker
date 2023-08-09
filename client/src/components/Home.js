@@ -1,12 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Container, Row, Col, Card, Button, Modal } from 'react-bootstrap';
+import { Container, Row, Col, Card } from "react-bootstrap";
 import Login from "./Login";
 import Footer from "./Footer";
 
 const Home = () => {
-  const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
-  const userInfo = useSelector(state => state.auth.user);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const userInfo = useSelector((state) => state.auth.user);
 
   return (
     <Container className="App">
@@ -14,7 +14,12 @@ const Home = () => {
         <Col md="auto">
           <Card className="mb-4 shadow-sm">
             <Card.Body>
-              <Card.Title>Welcome To All World!<p><strong>Casino - Poker - Blackjack - TableGames </strong></p> </Card.Title>
+              <Card.Title>
+                Welcome To All World!
+                <p>
+                  <strong>Casino - Poker - Blackjack - TableGames </strong>
+                </p>{" "}
+              </Card.Title>
             </Card.Body>
           </Card>
           <Card className="mb-4 shadow-sm">
@@ -24,8 +29,10 @@ const Home = () => {
           </Card>
           <Card className="login-container mb-4 shadow-sm">
             <Card.Body>
-              {!isAuthenticated && <Login /> }
-              {isAuthenticated && <Card.Text>Welcome back, {userInfo.username}!</Card.Text>}
+              {!isAuthenticated && <Login />}
+              {isAuthenticated && (
+                <Card.Text>Welcome back, {userInfo.username}!</Card.Text>
+              )}
             </Card.Body>
           </Card>
         </Col>

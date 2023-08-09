@@ -1,19 +1,19 @@
-require('dotenv').config()
-const express = require('express');
-const mongoose = require('mongoose');
+require("dotenv").config();
+const express = require("express");
+const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const http = require('http');
+const http = require("http");
 
 const app = express();
-const server = http.createServer(app); 
-const io = require('socket.io')(server, {
+const server = http.createServer(app);
+const io = require("socket.io")(server, {
   cors: {
     origin: "http://localhost:3000",
     methods: ["GET", "POST"],
     allowedHeaders: ["my-custom-header"],
-    credentials: true
-  }
+    credentials: true,
+  },
 });
 
 app.io = io;
@@ -24,21 +24,25 @@ app.use((req, res, next) => {
 
 const PORT = 4000;
 
-app.use(express.static('public'))
+app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(cors());
 
-mongoose.connect('mongodb://localhost:27017/pokerDB', { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('Successfully connected to MongoDB'))
-    .catch(error => console.error('Connection error', error));
+mongoose
+  .connect("mongodb://localhost:27017/pokerDB", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("Successfully connected to MongoDB"))
+  .catch((error) => console.error("Connection error", error));
 
-const registerRoute = require('./routes/register');
+const registerRoute = require("./routes/register");
 app.use(registerRoute);
 
-const loginRoute = require('./routes/login');
+const loginRoute = require("./routes/login");
 app.use(loginRoute);
 
-const logoutRoute = require('./routes/logout');
+const logoutRoute = require("./routes/logout");
 app.use(logoutRoute);
 
 const deckRoute = require("./routes/cards");
@@ -47,7 +51,7 @@ app.use(deckRoute);
 const deckofcardsapiRoute = require("./routes/deckOfCardsAPI");
 app.use(deckofcardsapiRoute);
 
-const fundingRoute = require("./routes/funding")
+const fundingRoute = require("./routes/funding");
 app.use(fundingRoute);
 
 const userInfoRoute = require("./routes/userInfo");
@@ -77,21 +81,19 @@ app.use(updateUserRoute);
 const userNameRoute = require("./routes/userNames");
 app.use(userNameRoute);
 
+io.on("connection", (socket) => {
+  console.log("A user connected");
 
-io.on('connection', (socket) => {
-    console.log('A user connected');
+  socket.on("disconnect", () => {
+    console.log("User disconnected");
+  });
 
-    socket.on('disconnect', () => {
-        console.log('User disconnected');
-    });
-
-
-    socket.on('chat message', (msg) => {
-        console.log(`Received message: ${msg.message}`); 
-        io.emit('chat message', msg);
-      });
+  socket.on("chat message", (msg) => {
+    console.log(`Received message: ${msg.message}`);
+    io.emit("chat message", msg);
+  });
 });
 
 server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });

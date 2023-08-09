@@ -1,7 +1,7 @@
-const router = require('express').Router();
+const router = require("express").Router();
 const User = require("../models/userSchema");
 
-router.get('/user/:userId', async (req, res) => {    
+router.get("/user/:userId", async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
 

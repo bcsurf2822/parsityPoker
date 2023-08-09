@@ -5,7 +5,7 @@ import {
   joinGame,
   playerJoined,
   updatePositionsAndBlinds,
-  gameUpdated
+  gameUpdated,
 } from "../../rtk/slices/serverSlice";
 
 import { Button } from "react-bootstrap";
@@ -14,7 +14,6 @@ import { useEffect } from "react";
 import { fetchUsernameById } from "../../rtk/slices/usersSlice";
 
 const Seat = ({ seat, currentGame }) => {
-
   const user = useSelector((state) => state.auth.user);
   const seatId = seat._id;
   const maxBuyIn = currentGame.max;
@@ -23,14 +22,12 @@ const Seat = ({ seat, currentGame }) => {
   const [sliderValue, setSliderValue] = useState(minBuyIn);
   const [seatChoice, setSeatChoice] = useState(false);
 
-
   const [username, setUsername] = useState("");
   const dispatch = useDispatch();
 
   const tableId = currentGame._id;
 
   useEffect(() => {
-    
     socket.on("gameUpdated", (updatedGame) => {
       dispatch(gameUpdated(updatedGame));
     });
@@ -40,11 +37,9 @@ const Seat = ({ seat, currentGame }) => {
     };
   }, [dispatch]);
 
-
-
   useEffect(() => {
     const fetchUsername = async (player) => {
-      if (player) {;
+      if (player) {
         const result = await dispatch(fetchUsernameById(player.user));
         setUsername(result.payload);
       }
@@ -90,13 +85,6 @@ const Seat = ({ seat, currentGame }) => {
 
   const isDealer = currentGame.dealerPosition + 1;
 
-
-
-
-
-  
-
-
   return (
     <div className="d-flex justify-content-center seat">
       {seat && (
@@ -104,13 +92,12 @@ const Seat = ({ seat, currentGame }) => {
           <p>{`Seat ${seat.id}`}</p>
           {seat.player ? (
             <>
-                <Button
-                onClick={handleTestUpdate} 
-              >TEST  BLINDS</Button>
+              <Button onClick={handleTestUpdate}>TEST BLINDS</Button>
               <p>{`Username: ${username}`}</p>
               <p>{`Chips: ${seat.player.chips}`}</p>
               <p>{`Bet: ${seat.player.bet}`}</p>
-              <p>{`Dealer: ${isDealer === seat.id ? 'true' : 'false'}`}</p>  </>
+              <p>{`Dealer: ${isDealer === seat.id ? "true" : "false"}`}</p>{" "}
+            </>
           ) : (
             <>
               {seatChoice ? (

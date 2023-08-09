@@ -100,15 +100,21 @@ export const revealTurn = createAsyncThunk(
 export const getWinner = createAsyncThunk(
   "deck/getWinner",
   async ({ communityCards, playerCards }, thunkAPI) => {
-    console.log('communityCards', communityCards);  // Debug line
-    console.log('playerCards', playerCards);
+    console.log("communityCards", communityCards); // Debug line
+    console.log("playerCards", playerCards);
     try {
-      let cc = communityCards.map((card) => `${convertRank(card.rank)}${convertSuit(card.suit)}`).join(",");
+      let cc = communityCards
+        .map((card) => `${convertRank(card.rank)}${convertSuit(card.suit)}`)
+        .join(",");
       let pc = playerCards
-        .map((player) => player.cards.map((card) => `${convertRank(card.rank)}${convertSuit(card.suit)}`).join(","))
+        .map((player) =>
+          player.cards
+            .map((card) => `${convertRank(card.rank)}${convertSuit(card.suit)}`)
+            .join(",")
+        )
         .join("&pc[]=");
 
-        let url = `https://api.pokerapi.dev/v1/winner/texas_holdem?cc=${cc}&pc[]=${pc}`;
+      let url = `https://api.pokerapi.dev/v1/winner/texas_holdem?cc=${cc}&pc[]=${pc}`;
 
       const response = await fetch(url);
       const data = await response.json();
@@ -120,23 +126,22 @@ export const getWinner = createAsyncThunk(
       console.log("Winner Hand", data.winners[0].hand);
       console.log("Winner Results", data.winners[0].result);
 
-      console.log("Player 1 Results", data.players[0].result)
-      console.log("Player 2 Results", data.players[1].result)
-      console.log("Player 3 Results", data.players[2].result)
-      console.log("Player 4 Results", data.players[3].result)
-      console.log("Player 5 Results", data.players[4].result)
-      console.log("Player 6 Results", data.players[5].result)
-      
-      console.log("Players Cards1", data.players[0].cards)
-      console.log("Players Cards2", data.players[1].cards)
-      console.log("Players Cards3", data.players[2].cards)
-      console.log("Players Cards4", data.players[3].cards)
-      console.log("Players Cards5", data.players[4].cards)
-      console.log("Players Cards6", data.players[5].cards)
+      console.log("Player 1 Results", data.players[0].result);
+      console.log("Player 2 Results", data.players[1].result);
+      console.log("Player 3 Results", data.players[2].result);
+      console.log("Player 4 Results", data.players[3].result);
+      console.log("Player 5 Results", data.players[4].result);
+      console.log("Player 6 Results", data.players[5].result);
 
+      console.log("Players Cards1", data.players[0].cards);
+      console.log("Players Cards2", data.players[1].cards);
+      console.log("Players Cards3", data.players[2].cards);
+      console.log("Players Cards4", data.players[3].cards);
+      console.log("Players Cards5", data.players[4].cards);
+      console.log("Players Cards6", data.players[5].cards);
 
       let winnerCards = JSON.stringify(data.winners[0].cards);
-      for(let i = 0; i < data.players.length; i++) {
+      for (let i = 0; i < data.players.length; i++) {
         let playerCards = JSON.stringify(data.players[i].cards);
 
         if (winnerCards === playerCards) {
@@ -144,7 +149,6 @@ export const getWinner = createAsyncThunk(
         }
       }
       return data;
-      
     } catch (error) {
       console.log(error.response);
       return thunkAPI.rejectWithValue(error.response);
@@ -171,9 +175,12 @@ export const revealRiver = createAsyncThunk(
     const result = { communityCards, skippedCards, dealtCardsIndexes };
 
     // Dispatch getWinner
-    thunkAPI.dispatch(getWinner({ communityCards: result.communityCards, playerCards: state.players }));
-
-    
+    thunkAPI.dispatch(
+      getWinner({
+        communityCards: result.communityCards,
+        playerCards: state.players,
+      })
+    );
 
     return result;
   }
@@ -205,8 +212,8 @@ const deckSlice = createSlice({
         state.loading = false;
         state.communityCards = [];
         state.players = [];
-        state.dealtCardsIndexes = []; 
-        state.skippedCards = []; 
+        state.dealtCardsIndexes = [];
+        state.skippedCards = [];
         state.winner = null;
       })
       .addCase(startNewGame.rejected, (state, action) => {
@@ -245,7 +252,7 @@ const deckSlice = createSlice({
         state.dealtCardsIndexes = action.payload.dealtCardsIndexes;
       })
       .addCase(getWinner.fulfilled, (state, action) => {
-        state.winner = action.payload; 
+        state.winner = action.payload;
       });
   },
 });

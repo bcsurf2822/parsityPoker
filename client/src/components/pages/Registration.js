@@ -1,21 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import { register } from "../../rtk/slices/registrationSlice";
 
 import { Card, Form, Button, Modal } from "react-bootstrap";
 
-const Registration = ({show, onHide}) => {
+const Registration = ({ show, onHide }) => {
   const dispatch = useDispatch();
 
   const emailRef = useRef();
   const passwordRef = useRef();
   const usernameRef = useRef();
 
-  // const [username, setUsername] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [email, setEmail] = useState("");
-
-  const registrationState = useSelector((state) => state.register)
+  const registrationState = useSelector((state) => state.register);
 
   const handleRegistration = async (e) => {
     e.preventDefault();
@@ -24,9 +20,7 @@ const Registration = ({show, onHide}) => {
     const username = usernameRef.current.value;
     try {
       await dispatch(register({ email, password, username }));
-    } catch (err) {
-      // Handle error or show a modal
-    }
+    } catch (err) {}
   };
 
   return (
@@ -41,33 +35,35 @@ const Registration = ({show, onHide}) => {
           <Card>
             <Card.Body>
               <Card.Text>
-                This is a decentralized platform to create your account; please enter
-                a valid email and password that will be used to login. Your username
-                will be displayed in the game.
+                Please enter a valid email and password that will be used to
+                login. Your username will be displayed in the game.
               </Card.Text>
 
               <Form onSubmit={handleRegistration}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control
-                type="email"
-           ref={emailRef}
-              />
-            </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control type="email" ref={emailRef} />
+                </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicUsername">
-              <Form.Label>Username</Form.Label>
-              <Form.Control type="text" placeholder="Enter username"
-           ref={usernameRef} />
-            </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicUsername">
+                  <Form.Label>Username</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter username"
+                    ref={usernameRef}
+                  />
+                </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Enter password"
-         ref={passwordRef} />
-            </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Enter password"
+                    ref={passwordRef}
+                  />
+                </Form.Group>
 
-            <Button variant="primary" type="submit">
+                <Button variant="primary" type="submit">
                   Submit
                 </Button>
               </Form>

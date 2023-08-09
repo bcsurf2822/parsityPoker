@@ -1,27 +1,33 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
 export const updateUsername = createAsyncThunk(
-  'profile/updateUsername',
-  async ({ token, username }, thunkAPI) => {   
+  "profile/updateUsername",
+  async ({ token, username }, thunkAPI) => {
     try {
       const config = {
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`  
-        }
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       };
 
-      const response = await axios.put(`http://localhost:4000/username`, { username }, config);
+      const response = await axios.put(
+        `http://localhost:4000/username`,
+        { username },
+        config
+      );
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Unexpected error');
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Unexpected error"
+      );
     }
   }
 );
 
 const profileSlice = createSlice({
-  name: 'profile',
+  name: "profile",
   initialState: {
     updating: false,
     error: null,

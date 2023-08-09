@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { logout } from "../rtk/slices/authenticationSlice";
-import { TbPokerChip } from 'react-icons/tb';
+import { TbPokerChip } from "react-icons/tb";
 
 const MyNav = () => {
   const navigate = useNavigate();
@@ -46,12 +46,15 @@ const MyNav = () => {
   };
 
   const navStyle = {
-    fontFamily: 'Lobster, cursive',
+    fontFamily: "Lobster, cursive",
   };
 
   return (
     <Navbar style={navStyle} bg="light" expand="lg" sticky="top">
-      <Navbar.Brand href="#"> <TbPokerChip /> </Navbar.Brand>
+      <Navbar.Brand href="#">
+        {" "}
+        <TbPokerChip />{" "}
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
@@ -85,17 +88,22 @@ const MyNav = () => {
         </Nav>
       </Navbar.Collapse>
       {isAuthenticated && (
-        <Navbar.Text style={{marginRight: '20px'}}>
-  Signed in as: 
-  <a 
-    onClick={toProfile} 
-    href="#" 
-    style={{fontWeight: 'bold', fontSize: '18px', cursor: 'pointer', color: 'blue'}}>
-      {userInfo?.username}
-  </a>
-</Navbar.Text>
+        <Navbar.Text style={{ marginRight: "20px" }}>
+          Signed in as:
+          <a
+            onClick={toProfile}
+            href="#"
+            style={{
+              fontWeight: "bold",
+              fontSize: "18px",
+              cursor: "pointer",
+              color: "blue",
+            }}
+          >
+            {userInfo?.username}
+          </a>
+        </Navbar.Text>
       )}
-      
     </Navbar>
   );
 };

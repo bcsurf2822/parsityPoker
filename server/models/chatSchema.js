@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const MessageSchema = new Schema({
   sender: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User",
     required: true,
   },
   content: {
@@ -18,10 +18,12 @@ const MessageSchema = new Schema({
 });
 
 const ChatSchema = new Schema({
-  participants: [{
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-  }],
+  participants: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
   messages: [MessageSchema],
 });
 
@@ -30,5 +32,5 @@ const Chat = mongoose.model("Chat", ChatSchema);
 
 module.exports = {
   Message,
-  Chat
+  Chat,
 };

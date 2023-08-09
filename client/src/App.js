@@ -5,7 +5,6 @@ import "./App.css";
 
 import Home from "./components/Home";
 import About from "./components/pages/About";
-import RegistrationPage from "./components/pages/Registration";
 import Promotions from "./components/pages/Promotions";
 import MyNav from "./components/Navbar";
 import Tables from "./components/pages/Tables";
@@ -28,7 +27,7 @@ function App() {
   useEffect(() => {
     dispatch(initializeAuth());
   }, [dispatch]);
-  
+
   return (
     <div className="App">
       <Router>
@@ -36,7 +35,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/registration" element={<RegistrationPage />} />
           <Route path="/promotions" element={<Promotions />} />
           <Route path="/tables" element={<Tables />} />
           <Route

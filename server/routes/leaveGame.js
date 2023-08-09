@@ -6,7 +6,7 @@ router.post("/leave/:gameId/:userId", async (req, res) => {
   try {
     const gameId = req.params.gameId;
     const userId = req.params.userId;
-    
+
     const game = await Game.findById(gameId);
 
     if (!game) {
@@ -25,7 +25,9 @@ router.post("/leave/:gameId/:userId", async (req, res) => {
     );
 
     if (!playerSeat) {
-      return res.status(400).json({ message: "You are not sitting in this game!" });
+      return res
+        .status(400)
+        .json({ message: "You are not sitting in this game!" });
     }
 
     // Update the user's account balance with chips remaining
@@ -33,13 +35,15 @@ router.post("/leave/:gameId/:userId", async (req, res) => {
 
     // Remove the player from the seat and the game
     playerSeat.player = null;
-    game.playersInGame = game.playersInGame.filter(player => player.user.toString() !== userId);
+    game.playersInGame = game.playersInGame.filter(
+      (player) => player.user.toString() !== userId
+    );
 
     await game.save();
     await user.save();
 
     // Emit the updated game object to notify the clients
-    req.io.emit('playerLeft', game);
+    req.io.emit("playerLeft", game);
 
     res.status(200).json({ message: "Successfully left the game!", game });
   } catch (err) {

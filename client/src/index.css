@@ -15,19 +15,18 @@ code {
 .app {
   overflow: hidden;
   position: relative;
-  height: 100vh; /* Fill the viewport */
+  height: 100vh;
 }
 
 .background {
-  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAguXNanVeFTURVXWFMPQOjmXEallNAJMHkxXBFl-t-A&usqp=CAU&ec=48665699"); /* Replace with your background image URL */
-  height: 200vh; /* Double the height of the viewport for scrolling */
-  width: 100%;
+  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAguXNanVeFTURVXWFMPQOjmXEallNAJMHkxXBFl-t-A&usqp=CAU&ec=48665699");
+  height: 200vh;
   position: absolute;
   top: 0;
   background-attachment: scroll;
   background-size: cover;
   background-repeat: no-repeat;
-  will-change: transform; /* Optimizes animations */
+  will-change: transform;
   z-index: -1;
   animation: scroll 20s linear infinite;
 }
@@ -71,6 +70,6 @@ code {
 .sit-here {
   display: block;
   margin: 10px auto;
-  width: 80px; /* Adjust as needed */
-  font-size: 0.8em; /* Adjust as needed */
+  width: 80px;
+  font-size: 0.8em;
 }

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Button, Form, ListGroup } from 'react-bootstrap';
-import {socket} from '../../socket';
-import {addMessage} from '../../rtk/slices/chatSlice';
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Button, Form, ListGroup } from "react-bootstrap";
+import { socket } from "../../socket";
+import { addMessage } from "../../rtk/slices/chatSlice";
 
-export default function Chatbox({ gameId}) {
-  const [message, setMessage] = useState('');
+export default function Chatbox({ gameId }) {
+  const [message, setMessage] = useState("");
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const chatMessages = useSelector((state) => state.chat.messages);
@@ -18,10 +18,10 @@ export default function Chatbox({ gameId}) {
       }
     }
 
-    socket.on('chat message', onChatMessage);
-    
+    socket.on("chat message", onChatMessage);
+
     return () => {
-      socket.off('chat message', onChatMessage);
+      socket.off("chat message", onChatMessage);
     };
   }, [gameId, dispatch]);
 
@@ -30,10 +30,10 @@ export default function Chatbox({ gameId}) {
   };
 
   const handleMessageSend = () => {
-    if (message !== '') {
+    if (message !== "") {
       console.log(`Sending message: ${message}`);
-      socket.emit('chat message', { user: user.username, message, gameId });
-      setMessage('');
+      socket.emit("chat message", { user: user.username, message, gameId });
+      setMessage("");
     }
   };
 
@@ -41,13 +41,22 @@ export default function Chatbox({ gameId}) {
     <div>
       <div className="chatArea">
         <ListGroup variant="flush">
-          {chatMessages.filter(msg => msg.gameId === gameId).map((msg, index) => 
-            <ListGroup.Item key={index}><strong>{msg.user}</strong>: {msg.message}</ListGroup.Item>
-          )}
+          {chatMessages
+            .filter((msg) => msg.gameId === gameId)
+            .map((msg, index) => (
+              <ListGroup.Item key={index}>
+                <strong>{msg.user}</strong>: {msg.message}
+              </ListGroup.Item>
+            ))}
         </ListGroup>
       </div>
-      <Form.Control type="text" placeholder="Type your message" value={message} onChange={handleMessageChange} />
+      <Form.Control
+        type="text"
+        placeholder="Type your message"
+        value={message}
+        onChange={handleMessageChange}
+      />
       <Button onClick={handleMessageSend}>Send</Button>
     </div>
   );
-};
+}
