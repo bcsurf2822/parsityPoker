@@ -77,6 +77,14 @@ const GameSchema = new Schema({
     type: [CardApiSchema],
     default: [],
   },
+  communityCards: {
+    type: [CardApiSchema],
+    default: [],
+  },
+  dealtCards: {
+    type: [String],
+    default: [],
+  },
   seats: {
     type: [SeatSchema],
     default: Array(6).fill().map((_, i) => ({ id: i + 1, player: null })),

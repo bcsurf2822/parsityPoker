@@ -18,8 +18,6 @@ router.get('/new-deck/:gameId/:playerCount', async (req, res) => {
       code: card.code
     }));
 
-    console.log("ResponseDECK", response)
-
     const game = await Game.findById(gameId);
 
     if (!game) {
