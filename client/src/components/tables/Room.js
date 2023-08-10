@@ -7,11 +7,10 @@ import {
   fetchGames,
   leaveGame,
   playerLeft,
-  newDeck
 } from "../../rtk/slices/serverSlice";
+import { newDeck, dealCards, endGame } from "../../rtk/slices/deckOfCardsSlice";
 import Chatbox from "./Chatbox";
 import { socket } from "../../socket";
-
 
 import Seat from "./Seats";
 
@@ -24,7 +23,6 @@ const Room = () => {
   const games = useSelector((state) => state.server.games);
   const currentGame = games.find((game) => game._id === id);
   console.log("Current Game:", currentGame);
-
 
   useEffect(() => {
     dispatch(fetchGames());
@@ -47,7 +45,23 @@ const Room = () => {
 
   console.log(`Number of occupied seats: ${occupiedSeats}`);
 
- 
+  useEffect(() => {
+    if (currentGame) {
+      if (occupiedSeats >= 2 && currentGame.currentGameCards.length === 0) {
+        dispatch(endGame(id))
+          .then(() => dispatch(newDeck({ gameId: id })))
+          .then(() => dispatch(dealCards(id)))
+          .catch((error) => console.log("Error starting the game:", error));
+        console.log("After DEALING", currentGame);
+      } else if (occupiedSeats <= 1) {
+        dispatch(endGame(id)).catch((error) =>
+          console.log("Error ending the game:", error)
+        );
+        console.log("Game with Less than 2", currentGame);
+      }
+    }
+  }, [occupiedSeats, currentGame, dispatch, id]);
+
   const leaveTable = () => {
     if (!user) {
       console.log("User is undefined");

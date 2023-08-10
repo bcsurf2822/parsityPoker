@@ -47,11 +47,37 @@ const deckOfCardsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(newDeck.pending, (state) => {
-        state.status = "loading";
+        state.status = 'loading';
       })
       .addCase(newDeck.fulfilled, (state, action) => {
-        state.status = "idle";
-        state.currentGameCards = action.payload.currentGameCards;
+        state.status = 'succeeded';
+        state.currentGameCards = action.payload;
+      })
+      .addCase(newDeck.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(dealCards.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(dealCards.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.currentGameCards = action.payload;
+      })
+      .addCase(dealCards.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(endGame.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(endGame.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.currentGameCards = null;
+      })
+      .addCase(endGame.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
       });
   },
 });
