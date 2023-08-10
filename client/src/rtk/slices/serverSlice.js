@@ -84,6 +84,17 @@ export const gameUpdated = createAsyncThunk(
   }
 );
 
+export const newDeck = createAsyncThunk(
+  "game/initialize",
+  async ({ gameId }) => {
+    const response = await axios.get(
+      `http://localhost:4000/new-deck/${gameId}`
+    );
+    console.log("DECKresponse", response.data);
+    return response.data;
+  }
+);
+
 
 
 const serverSlice = createSlice({
@@ -163,6 +174,22 @@ const serverSlice = createSlice({
       .addCase(updatePositionsAndBlinds.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || 'Failed to update positions and blinds';
+      })
+      .addCase(newDeck.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(newDeck.fulfilled, (state, action) => {
+        state.loading = false;
+        const gameIndex = state.games.findIndex(
+          (game) => game._id === action.payload.gameId
+        );
+        if (gameIndex > -1) {
+          state.games[gameIndex].currentGameCards = action.payload.currentGameCards;
+        }
+      })
+      .addCase(newDeck.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to fetch new deck';
       });
   },
 });

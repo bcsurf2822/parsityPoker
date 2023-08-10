@@ -1,5 +1,5 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -7,10 +7,11 @@ import {
   fetchGames,
   leaveGame,
   playerLeft,
+  newDeck
 } from "../../rtk/slices/serverSlice";
 import Chatbox from "./Chatbox";
 import { socket } from "../../socket";
-import { newDeckAndGame } from "../../rtk/slices/deckOfCardsSlice";
+
 
 import Seat from "./Seats";
 
@@ -23,6 +24,7 @@ const Room = () => {
   const games = useSelector((state) => state.server.games);
   const currentGame = games.find((game) => game._id === id);
   console.log("Current Game:", currentGame);
+
 
   useEffect(() => {
     dispatch(fetchGames());
@@ -45,15 +47,7 @@ const Room = () => {
 
   console.log(`Number of occupied seats: ${occupiedSeats}`);
 
-  const [gameStarted, setGameStarted] = useState(false);
-
-  useEffect(() => {
-    if (occupiedSeats >= 2 && currentGame && !gameStarted) {
-      dispatch(newDeckAndGame({ gameId: id, playerCount: occupiedSeats }));
-      setGameStarted(true);
-    }
-  }, [occupiedSeats, currentGame?._id, dispatch, id, gameStarted]);
-
+ 
   const leaveTable = () => {
     if (!user) {
       console.log("User is undefined");

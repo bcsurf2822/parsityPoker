@@ -3,14 +3,8 @@ const axios = require("axios");
 
 const Game = require("../models/gamesSchema");
 
-router.get("/new-deck/:gameId/:playerCount", async (req, res) => {
-  const { gameId, playerCount } = req.params;
-
-  if (playerCount < 2) {
-    return res
-      .status(400)
-      .json({ error: "At least 2 players are required to create a new game" });
-  }
+router.get("/new-deck/:gameId", async (req, res) => {
+  const { gameId } = req.params;
 
   try {
     const response = await axios.get(
