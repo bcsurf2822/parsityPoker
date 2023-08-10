@@ -46,21 +46,21 @@ const Room = () => {
   console.log(`Number of occupied seats: ${occupiedSeats}`);
 
   useEffect(() => {
-    if (currentGame) {
-      if (occupiedSeats >= 2 && currentGame.currentGameCards.length === 0) {
-        dispatch(endGame(id))
-          .then(() => dispatch(newDeck({ gameId: id })))
-          .then(() => dispatch(dealCards(id)))
-          .catch((error) => console.log("Error starting the game:", error));
-        console.log("After DEALING", currentGame);
-      } else if (occupiedSeats <= 1) {
-        dispatch(endGame(id)).catch((error) =>
-          console.log("Error ending the game:", error)
-        );
-        console.log("Game with Less than 2", currentGame);
-      }
+    if (currentGame && occupiedSeats < 2) {
+      dispatch(endGame(id))
+        .then(() => console.log("Game with Less than 2", currentGame))
+        .catch((error) => console.log("Error ending the game:", error));
     }
   }, [occupiedSeats, currentGame, dispatch, id]);
+
+  useEffect(() => {
+  if (currentGame && occupiedSeats >= 2 && currentGame.currentGameCards.length === 0) {
+    dispatch(newDeck({ gameId: id }))
+      .then(() => dispatch(dealCards(id)))
+      .then(() => console.log("After DEALING", currentGame))
+      .catch((error) => console.log("Error starting the game:", error));
+  }
+}, [occupiedSeats, currentGame?.currentGameCards.length, dispatch, id]);
 
   const leaveTable = () => {
     if (!user) {
