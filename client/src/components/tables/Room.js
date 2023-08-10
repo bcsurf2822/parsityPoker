@@ -1,5 +1,5 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -45,11 +45,14 @@ const Room = () => {
 
   console.log(`Number of occupied seats: ${occupiedSeats}`);
 
+  const [gameStarted, setGameStarted] = useState(false);
+
   useEffect(() => {
-    if (occupiedSeats >= 2 && currentGame) {
+    if (occupiedSeats >= 2 && currentGame && !gameStarted) {
       dispatch(newDeckAndGame({ gameId: id, playerCount: occupiedSeats }));
+      setGameStarted(true);
     }
-  }, [occupiedSeats, currentGame?._id, dispatch, id]);
+  }, [occupiedSeats, currentGame?._id, dispatch, id, gameStarted]);
 
   const leaveTable = () => {
     if (!user) {
