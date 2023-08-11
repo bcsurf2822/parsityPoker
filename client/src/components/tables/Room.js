@@ -28,7 +28,7 @@ const Room = () => {
     socket.on("cards_dealt", (updatedGame) => {
       dispatch(dealCards(updatedGame)); // The action that updates the game state with dealt cards
     });
-  
+
     return () => {
       socket.off("cards_dealt");
     };
@@ -55,16 +55,6 @@ const Room = () => {
 
   console.log(`Number of occupied seats: ${occupiedSeats}`);
 
-  useEffect(() => {
-    if (currentGame && occupiedSeats < 2) {
-      dispatch(endGame(id))
-        .then(() => console.log("Game with Less than 2", currentGame))
-        .catch((error) => console.log("Error ending the game:", error));
-    }
-  }, [occupiedSeats, currentGame, dispatch, id]);
-
-
-
   const leaveTable = () => {
     if (!user) {
       console.log("User is undefined");
@@ -90,7 +80,7 @@ const Room = () => {
       console.log("Current game is undefined");
       return;
     }
-  
+
     dispatch(endGame(id))
       .then(() => console.log("Game ended manually"))
       .catch((error) => console.log("Error ending the game:", error));
@@ -152,12 +142,12 @@ const Room = () => {
         </Col>
       </Row>
       <Row className="mt-2">
-  <Col className="d-flex justify-content-center">
-    <Button variant="danger" onClick={handleEndGame}>
-      End Game
-    </Button>
-  </Col>
-</Row>
+        <Col className="d-flex justify-content-center">
+          <Button variant="danger" onClick={handleEndGame}>
+            End Game
+          </Button>
+        </Col>
+      </Row>
       <Row>
         <Col className="d-flex justify-content-center">
           <Chatbox gameId={id} />

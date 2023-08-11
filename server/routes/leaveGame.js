@@ -36,7 +36,6 @@ router.post("/leave/:gameId/:userId", async (req, res) => {
     await game.save();
     await user.save();
 
-    // Emit the updated game object to notify the clients
     req.io.emit("playerLeft", game);
 
     res.status(200).json({ message: "Successfully left the game!", game });
