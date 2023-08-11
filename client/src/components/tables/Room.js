@@ -25,16 +25,6 @@ const Room = () => {
   console.log("Current Game:", currentGame);
 
   useEffect(() => {
-    socket.on("cards_dealt", (updatedGame) => {
-      dispatch(dealCards(updatedGame)); // The action that updates the game state with dealt cards
-    });
-
-    return () => {
-      socket.off("cards_dealt");
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch(fetchGames());
   }, [dispatch]);
 
@@ -76,14 +66,15 @@ const Room = () => {
   };
 
   const handleEndGame = () => {
-    if (!currentGame) {
-      console.log("Current game is undefined");
-      return;
-    }
 
-    dispatch(endGame(id))
-      .then(() => console.log("Game ended manually"))
-      .catch((error) => console.log("Error ending the game:", error));
+  };
+  
+  const handleNewDeck = () => {
+
+  };
+  
+  const handleDealCards = () => {
+
   };
 
   if (!currentGame) {
@@ -135,6 +126,14 @@ const Room = () => {
         <Col></Col>
       </Row>
       <Row className="mt-2">
+        <Col className="d-flex justify-content-center">
+          <Button variant="success" onClick={handleNewDeck}>
+            New Deck
+          </Button>
+          <Button variant="info" onClick={handleDealCards}>
+      Deal Cards
+    </Button>
+        </Col>
         <Col className="d-flex justify-content-center">
           <Button variant="danger" onClick={closeTable}>
             X

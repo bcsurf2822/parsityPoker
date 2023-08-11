@@ -30,7 +30,7 @@ export const endGame = createAsyncThunk(
   async (gameId, thunkAPI) => {
     try {
       const response = await axios.post(`http://localhost:4000/endgame/${gameId}`);
-      console.log("END GAME-----", response.data);
+      console.log("END GAME-----", response);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
@@ -38,50 +38,3 @@ export const endGame = createAsyncThunk(
   }
 );
 
-const deckOfCardsSlice = createSlice({
-  name: "game",
-  initialState: {
-    currentGameCards: [],
-    pot: 0,
-    status: "idle",
-  },
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(newDeck.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(newDeck.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.currentGameCards = action.payload;
-      })
-      .addCase(newDeck.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      })
-      .addCase(dealCards.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(dealCards.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.currentGameCards = action.payload; 
-      })
-      .addCase(dealCards.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      })
-      .addCase(endGame.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(endGame.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.currentGameCards = null;
-      })
-      .addCase(endGame.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      });
-  },
-});
-
-export default deckOfCardsSlice.reducer;

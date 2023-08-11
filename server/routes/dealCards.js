@@ -144,32 +144,34 @@ router.post("/deal-river/:gameId", async (req, res) => {
   }
 });
 
-    // Clear Out Hand, Community, and Dealt Cards (WORKS)
-    router.post("/endgame/:gameId", async (req, res) => {
-      const { gameId } = req.params;
-    
-      try {
-        const game = await Game.findById(gameId);
-    
-        if (!game) {
-          return res.status(404).json({ message: "Game not found!" });
-        }
-    
-        game.currentGameCards = [];
-        game.communityCards = [];
-        game.dealtCards = [];
-        // Iterate through the playersInGame array and clear handCards
-        game.playersInGame = game.playersInGame.map(player => {
-          player.handCards = [];
-          return player;
-        });
-    
-        await game.save();
-    
-        res.json({ message: "Game ended, cards cleared" });
-      } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Failed to end the game" });
+router.post("/endgame/:gameId", async (req, res) => {
+  const { gameId } = req.params;
+
+  try {
+    const game = await Game.findById(gameId);
+
+    if (!game) {
+      return res.status(404).json({ message: "Game not found!" });
+    }
+
+    game.currentGameCards = [];
+    game.communityCards = [];
+    game.dealtCards = [];
+
+    // If you need to clear handCards from seats, you can do something like this:
+    game.seats.forEach(seat => {
+      if (seat.player) {
+        seat.player.handCards = [];
       }
     });
+
+    await game.save();
+
+    res.json({ message: "Game ended, cards cleared" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to end the game" });
+  }
+});
+
 module.exports = router;

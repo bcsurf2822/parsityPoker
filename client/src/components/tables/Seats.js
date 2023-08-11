@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-input-slider";
-import Hands from "./Hands";
 import { socket } from "../../socket";
 import {
   joinGame,
