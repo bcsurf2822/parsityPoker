@@ -7,8 +7,9 @@ import {
   fetchGames,
   leaveGame,
   playerLeft,
+  gameUpdated
 } from "../../rtk/slices/serverSlice";
-import { newDeck, dealCards, endGame } from "../../rtk/slices/deckOfCardsSlice";
+import Deck from "./Deck";
 import Chatbox from "./Chatbox";
 import { socket } from "../../socket";
 
@@ -38,6 +39,7 @@ const Room = () => {
     };
   }, [dispatch]);
 
+
   const seatArray = currentGame ? currentGame.seats : [];
   const occupiedSeats = currentGame
     ? currentGame.seats.filter((seat) => seat.player !== null).length
@@ -65,17 +67,11 @@ const Room = () => {
     navigate("/Tables");
   };
 
-  const handleEndGame = () => {
+  const handleEndGame = () => {};
 
-  };
-  
-  const handleNewDeck = () => {
+  const handleNewDeck = () => {};
 
-  };
-  
-  const handleDealCards = () => {
-
-  };
+  const handleDealCards = () => {};
 
   if (!currentGame) {
     return null;
@@ -126,30 +122,11 @@ const Room = () => {
         <Col></Col>
       </Row>
       <Row className="mt-2">
-        <Col className="d-flex justify-content-center">
-          <Button variant="success" onClick={handleNewDeck}>
-            New Deck
-          </Button>
-          <Button variant="info" onClick={handleDealCards}>
-      Deal Cards
-    </Button>
-        </Col>
-        <Col className="d-flex justify-content-center">
-          <Button variant="danger" onClick={closeTable}>
-            X
-          </Button>
-        </Col>
-      </Row>
-      <Row className="mt-2">
-        <Col className="d-flex justify-content-center">
-          <Button variant="danger" onClick={handleEndGame}>
-            End Game
-          </Button>
-        </Col>
+        <Deck gameId={id} currentGame={currentGame} />{" "}
       </Row>
       <Row>
         <Col className="d-flex justify-content-center">
-          <Chatbox gameId={id} />
+          <Chatbox gameId={id} currentGame={currentGame} />
         </Col>
       </Row>
     </Container>

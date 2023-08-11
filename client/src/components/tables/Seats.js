@@ -18,9 +18,8 @@ const Seat = ({ seat, currentGame }) => {
   const seatId = seat._id;
   const maxBuyIn = currentGame.max;
   const minBuyIn = currentGame.min;
-  console.log('Seat:', seat);
   const cards = seat.player ? seat.player.handCards : []; 
-  console.log('Cards:', cards);
+
 
   const [sliderValue, setSliderValue] = useState(minBuyIn);
   const [seatChoice, setSeatChoice] = useState(false);
