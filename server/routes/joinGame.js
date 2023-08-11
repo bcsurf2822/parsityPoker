@@ -55,14 +55,16 @@ router.post("/join/:gameId/:seatId", async (req, res) => {
     const availableSeat = game.seats.find(
       (seat) => seat._id.toString() === seatId && seat.player === null
     );
-    console.log("availableSeat:", availableSeat);
+    
+    if (!availableSeat) {
+      return res.status(400).json({ message: "Seat not available or does not exist!" });
+    }
 
     user.accountBalance -= buyIn;
 
     console.log("user after buy in", user);
 
     const player = { user: user._id, chips: buyIn, handCards: [], bet: 0 };
-    game.playersInGame.push(player);
     availableSeat.player = player;
 
     await game.save();

@@ -64,7 +64,7 @@ const deckOfCardsSlice = createSlice({
       })
       .addCase(dealCards.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.currentGameCards = action.payload;
+        state.currentGameCards = action.payload; 
       })
       .addCase(dealCards.rejected, (state, action) => {
         state.status = 'failed';

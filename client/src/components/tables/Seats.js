@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-input-slider";
+import Hands from "./Hands";
 import { socket } from "../../socket";
 import {
   joinGame,
@@ -18,6 +19,9 @@ const Seat = ({ seat, currentGame }) => {
   const seatId = seat._id;
   const maxBuyIn = currentGame.max;
   const minBuyIn = currentGame.min;
+  console.log('Seat:', seat);
+  const cards = seat.player ? seat.player.handCards : []; 
+  console.log('Cards:', cards);
 
   const [sliderValue, setSliderValue] = useState(minBuyIn);
   const [seatChoice, setSeatChoice] = useState(false);
@@ -96,7 +100,10 @@ const Seat = ({ seat, currentGame }) => {
               <p>{`Username: ${username}`}</p>
               <p>{`Chips: ${seat.player.chips}`}</p>
               <p>{`Bet: ${seat.player.bet}`}</p>
-              <p>{`Dealer: ${isDealer === seat.id ? "true" : "false"}`}</p>{" "}
+              <p>{`Dealer: ${isDealer === seat.id ? "true" : "false"}`}</p>
+              <p>{`Card 1 ${cards[0]}`}</p>
+              <p>{`Card 2 ${cards[1]}`}</p>
+              {" "}
             </>
           ) : (
             <>

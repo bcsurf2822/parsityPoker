@@ -55,7 +55,6 @@ const GameSchema = new Schema({
     type: Number,
     required: true,
   },
-  playersInGame: [PlayerSchema],
   pot: Number,
   timestamp: {
     type: Date,
@@ -87,9 +86,7 @@ const GameSchema = new Schema({
   },
   seats: {
     type: [SeatSchema],
-    default: Array(6)
-      .fill()
-      .map((_, i) => ({ id: i + 1, player: null })),
+    default: Array.from({ length: 6 }, (_, i) => ({ id: i + 1, player: null })),
   },
 });
 

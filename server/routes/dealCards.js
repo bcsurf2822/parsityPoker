@@ -39,7 +39,7 @@ router.post("/deal-cards/:gameId", async (req, res) => {
     }
 
     await game.save();
-
+    req.io.in(gameId).emit('cards_dealt', game);
     res.json(game);
   } catch (error) {
     console.error(error);
@@ -68,6 +68,7 @@ router.put("/flop/:gameId", async (req, res) => {
     game.dealtCards.push(...flopCards.map((card) => card.code));
 
     await game.save();
+    req.io.in(gameId).emit('cards_dealt', game);
 
     res.json(game);
   } catch (error) {
@@ -134,6 +135,7 @@ router.post("/deal-river/:gameId", async (req, res) => {
     game.communityCards.push(riverCard);
 
     await game.save();
+    req.io.in(gameId).emit('cards_dealt', game);
 
     res.json(game);
   } catch (error) {
@@ -143,30 +145,31 @@ router.post("/deal-river/:gameId", async (req, res) => {
 });
 
     // Clear Out Hand, Community, and Dealt Cards (WORKS)
-router.post("/endgame/:gameId", async (req, res) => {
-  const { gameId } = req.params;
-
-  try {
-    const game = await Game.findById(gameId);
-
-    if (!game) {
-      return res.status(404).json({ message: "Game not found!" });
-    }
-
-    game.currentGameCards = [];
-    game.communityCards = [];
-    game.dealtCards = [];
-    game.playersInGame.forEach(player => {
-      player.handCards = [];
+    router.post("/endgame/:gameId", async (req, res) => {
+      const { gameId } = req.params;
+    
+      try {
+        const game = await Game.findById(gameId);
+    
+        if (!game) {
+          return res.status(404).json({ message: "Game not found!" });
+        }
+    
+        game.currentGameCards = [];
+        game.communityCards = [];
+        game.dealtCards = [];
+        // Iterate through the playersInGame array and clear handCards
+        game.playersInGame = game.playersInGame.map(player => {
+          player.handCards = [];
+          return player;
+        });
+    
+        await game.save();
+    
+        res.json({ message: "Game ended, cards cleared" });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to end the game" });
+      }
     });
-
-    await game.save();
-
-    res.json({ message: "Game ended, cards cleared" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to end the game" });
-  }
-});
-
 module.exports = router;

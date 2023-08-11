@@ -19,7 +19,6 @@ router.post("/leave/:gameId/:userId", async (req, res) => {
       return res.status(404).json({ message: "User not found!" });
     }
 
-    // Find the seat that this player is occupying
     const playerSeat = game.seats.find(
       (seat) => seat.player && seat.player.user.toString() === userId
     );
@@ -30,14 +29,9 @@ router.post("/leave/:gameId/:userId", async (req, res) => {
         .json({ message: "You are not sitting in this game!" });
     }
 
-    // Update the user's account balance with chips remaining
     user.accountBalance += playerSeat.player.chips;
 
-    // Remove the player from the seat and the game
     playerSeat.player = null;
-    game.playersInGame = game.playersInGame.filter(
-      (player) => player.user.toString() !== userId
-    );
 
     await game.save();
     await user.save();

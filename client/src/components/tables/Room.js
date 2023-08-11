@@ -25,6 +25,16 @@ const Room = () => {
   console.log("Current Game:", currentGame);
 
   useEffect(() => {
+    socket.on("cards_dealt", (updatedGame) => {
+      dispatch(dealCards(updatedGame)); // The action that updates the game state with dealt cards
+    });
+  
+    return () => {
+      socket.off("cards_dealt");
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
     dispatch(fetchGames());
   }, [dispatch]);
 
@@ -53,14 +63,7 @@ const Room = () => {
     }
   }, [occupiedSeats, currentGame, dispatch, id]);
 
-  useEffect(() => {
-  if (currentGame && occupiedSeats >= 2 && currentGame.currentGameCards.length === 0) {
-    dispatch(newDeck({ gameId: id }))
-      .then(() => dispatch(dealCards(id)))
-      .then(() => console.log("After DEALING", currentGame))
-      .catch((error) => console.log("Error starting the game:", error));
-  }
-}, [occupiedSeats, currentGame?.currentGameCards.length, dispatch, id]);
+
 
   const leaveTable = () => {
     if (!user) {
@@ -80,6 +83,17 @@ const Room = () => {
 
   const closeTable = () => {
     navigate("/Tables");
+  };
+
+  const handleEndGame = () => {
+    if (!currentGame) {
+      console.log("Current game is undefined");
+      return;
+    }
+  
+    dispatch(endGame(id))
+      .then(() => console.log("Game ended manually"))
+      .catch((error) => console.log("Error ending the game:", error));
   };
 
   if (!currentGame) {
@@ -137,6 +151,13 @@ const Room = () => {
           </Button>
         </Col>
       </Row>
+      <Row className="mt-2">
+  <Col className="d-flex justify-content-center">
+    <Button variant="danger" onClick={handleEndGame}>
+      End Game
+    </Button>
+  </Col>
+</Row>
       <Row>
         <Col className="d-flex justify-content-center">
           <Chatbox gameId={id} />

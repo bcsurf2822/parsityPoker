@@ -34,7 +34,7 @@ const Tables = () => {
               <td>{game.name}</td>
               <td>{game.gameType}</td>
               <td>${game.blinds}</td>
-              <td>{game.playersInGame.length} / {game.seats.length} </td>
+              <td>{game.seats.filter((seat) => seat.player !== null).length}  / {game.seats.length} </td>
               <td>
               <Button onClick={() => navigate(`/Room/${game._id}`)}>View</Button>
               </td>
