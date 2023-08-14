@@ -34,12 +34,11 @@ router.post("/deal-cards/:gameId", async (req, res) => {
         const card = game.currentDeck.shift(); // Take the top card
 
         seat.player.handCards.push(card.code);
-        game.dealtCards.push(card.code);
       }
     }
 
     await game.save();
-    req.io.in(gameId).emit('cards_dealt', game);
+    req.io.emit('cards_dealt', game);
     res.json(game);
   } catch (error) {
     console.error(error);

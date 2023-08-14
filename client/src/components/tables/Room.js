@@ -7,13 +7,13 @@ import {
   fetchGames,
   leaveGame,
   playerLeft,
+  dealCards,
+  cardsDealt
 } from "../../rtk/slices/serverSlice";
 import Deck from "./Deck";
 import Chatbox from "./Chatbox";
 import { socket } from "../../socket";
 import { fetchNewDeck } from "../../rtk/slices/deckOfCardsSlice";
-import { dealToPlayers } from "../../rtk/slices/serverSlice";
-
 import Seat from "./Seats";
 
 const Room = () => {
@@ -36,7 +36,7 @@ const Room = () => {
     if (currentGame && currentGame.currentDeck.length === 0) {
       dispatch(fetchNewDeck(currentGame._id))
         .then(() => {
-          // Dispatch fetchGames again to update the client with the latest information
+
           dispatch(fetchGames());
         })
         .catch(error => {
@@ -55,26 +55,23 @@ const Room = () => {
     };
   }, [dispatch]);
 
+  useEffect(() => {
+    socket.on('cards_dealt', (updatedGame) => {
+      dispatch(cardsDealt(updatedGame));
+    });
+  
+    return () => {
+      socket.off('cards_dealt');
+    };
+  }, [dispatch]);
+
 
   const seatArray = currentGame ? currentGame.seats : [];
   const occupiedSeats = currentGame
     ? currentGame.seats.filter((seat) => seat.player !== null).length
     : 0;
 
-  console.log(`Number of occupied seats: ${occupiedSeats}`);
-
-  useEffect(() => {
-    // Check if there's more than one player in the seats
-    if (currentGame && occupiedSeats > 1) {
-      socket.on('cards_dealt', (updatedGame) => {
-        dispatch(dealToPlayers(updatedGame));
-      });
-  
-      return () => {
-        socket.off('cards_dealt');
-      };
-    }
-  }, [dispatch, currentGame, occupiedSeats]); 
+  console.log(`Number of occupied seats: ${occupiedSeats}`); 
 
   const leaveTable = () => {
     if (!user) {
@@ -99,8 +96,10 @@ const Room = () => {
   const handleEndGame = () => {};
 
   const handleNewDeck = () => {};
-
-  const handleDealCards = () => {};
+  
+  const handleDealCards = () => {
+    dispatch(dealCards(id));
+  };
 
   if (!currentGame) {
     return null;
@@ -115,6 +114,13 @@ const Room = () => {
           </Button>
         </Col>
       </Row>
+      <Row className="mt-2">
+  <Col className="d-flex justify-content-center">
+    <Button variant="warning" onClick={handleDealCards}>
+      Deal Cards
+    </Button>
+  </Col>
+</Row>
       <Row className="h-50">
         <Col></Col>
         <Col className="d-flex justify-content-center">
@@ -158,6 +164,7 @@ const Room = () => {
           <Chatbox gameId={id} currentGame={currentGame} />
         </Col>
       </Row>
+
     </Container>
   );
 };

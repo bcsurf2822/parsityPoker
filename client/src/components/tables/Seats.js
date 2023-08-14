@@ -6,6 +6,7 @@ import {
   playerJoined,
   updatePositionsAndBlinds,
   gameUpdated,
+  cardsDealt
 } from "../../rtk/slices/serverSlice";
 
 import { Button } from "react-bootstrap";
@@ -29,15 +30,27 @@ const Seat = ({ seat, currentGame }) => {
 
   const tableId = currentGame._id;
 
-  useEffect(() => {
-    socket.on("gameUpdated", (updatedGame) => {
-      dispatch(gameUpdated(updatedGame));
-    });
+  // useEffect(() => {
+  //   socket.on("gameUpdated", (updatedGame) => {
+  //     dispatch(gameUpdated(updatedGame));
+  //   });
 
+  //   return () => {
+  //     socket.off("gameUpdated");
+  //   };
+  // }, [dispatch]);
+
+  
+  useEffect(() => {
+    socket.on('cards_dealt', (updatedGame) => {
+      dispatch(cardsDealt(updatedGame));
+    });
+  
     return () => {
-      socket.off("gameUpdated");
+      socket.off('cards_dealt');
     };
   }, [dispatch]);
+
 
   useEffect(() => {
     const fetchUsername = async (player) => {
