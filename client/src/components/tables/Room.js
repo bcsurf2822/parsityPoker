@@ -8,7 +8,8 @@ import {
   leaveGame,
   playerLeft,
   dealCards,
-  cardsDealt
+  cardsDealt, 
+  playerJoined
 } from "../../rtk/slices/serverSlice";
 import Deck from "./Deck";
 import Chatbox from "./Chatbox";
@@ -44,6 +45,16 @@ const Room = () => {
         });
     }
   }, [dispatch, currentGame]);
+
+  // useEffect(() => {
+  //   socket.on("playerJoined", (updatedGame) => {
+  //     dispatch(playerJoined(updatedGame));
+  //   });
+
+  //   return () => {
+  //     socket.off("playerJoined");
+  //   };
+  // }, [dispatch]);
 
   useEffect(() => {
     socket.on("playerLeft", (updatedGame) => {

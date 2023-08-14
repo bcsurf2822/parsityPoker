@@ -64,7 +64,7 @@ export const leaveGame = createAsyncThunk(
 );
 
 export const playerLeft = createAsyncThunk(
-  "games/playerLeft",
+  "games/leaveGame",
   async (updatedGame) => {
     return updatedGame;
   }

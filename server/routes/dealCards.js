@@ -11,7 +11,6 @@ router.post("/deal-cards/:gameId", async (req, res) => {
       return res.status(404).json({ message: "Game not found!" });
     }
 
-    // Determine the number of players and validate
     const seatsWithPlayers = game.seats.filter(seat => seat.player !== null);
     const numberOfPlayers = seatsWithPlayers.length;
 
@@ -19,19 +18,17 @@ router.post("/deal-cards/:gameId", async (req, res) => {
       return res.status(400).json({ message: "Not enough cards to deal!" });
     }
 
-    // Initialize handCards for each player
     game.seats.forEach(seat => {
       if (seat.player) {
         seat.player.handCards = [];
       }
     });
 
-    // Deal one card to each player at a time
     for (let i = 0; i < 2; i++) {
       for (let j = 0; j < numberOfPlayers; j++) {
-        const playerIndex = (game.bigBlindPosition + 1 + j) % numberOfPlayers; // Start with the player after the big blind
+        const playerIndex = (game.bigBlindPosition + 1 + j) % numberOfPlayers;
         const seat = seatsWithPlayers[playerIndex];
-        const card = game.currentDeck.shift(); // Take the top card
+        const card = game.currentDeck.shift(); 
 
         seat.player.handCards.push(card.code);
       }

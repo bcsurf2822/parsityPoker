@@ -5,8 +5,6 @@ import {
   joinGame,
   playerJoined,
   updatePositionsAndBlinds,
-  gameUpdated,
-  cardsDealt
 } from "../../rtk/slices/serverSlice";
 
 import { Button } from "react-bootstrap";
@@ -40,16 +38,6 @@ const Seat = ({ seat, currentGame }) => {
   //   };
   // }, [dispatch]);
 
-  
-  useEffect(() => {
-    socket.on('cards_dealt', (updatedGame) => {
-      dispatch(cardsDealt(updatedGame));
-    });
-  
-    return () => {
-      socket.off('cards_dealt');
-    };
-  }, [dispatch]);
 
 
   useEffect(() => {
