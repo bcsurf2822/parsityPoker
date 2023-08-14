@@ -93,7 +93,7 @@ export const cardsDealt = createAsyncThunk(
 );
 
 export const dealFlop = createAsyncThunk(
-  'games/dealFlop',
+  "games/dealFlop",
   async (gameId, { rejectWithValue }) => {
     try {
       const response = await axios.put(`http://localhost:4000/flop/${gameId}`);
@@ -112,7 +112,7 @@ export const flopDealt = createAsyncThunk(
 );
 
 export const dealTurn = createAsyncThunk(
-  'games/dealTurn',
+  "games/dealTurn",
   async (gameId, { rejectWithValue }) => {
     try {
       const response = await axios.put(`http://localhost:4000/turn/${gameId}`);
@@ -131,7 +131,7 @@ export const turnDealt = createAsyncThunk(
 );
 
 export const dealRiver = createAsyncThunk(
-  'games/dealRiver',
+  "games/dealRiver",
   async (gameId, { rejectWithValue }) => {
     try {
       const response = await axios.put(`http://localhost:4000/river/${gameId}`);
@@ -169,7 +169,6 @@ export const updatedBlinds = createAsyncThunk(
     return updatedGame;
   }
 );
-
 
 export const gameUpdated = createAsyncThunk(
   "games/gameUpdated",
@@ -327,7 +326,7 @@ const serverSlice = createSlice({
       .addCase(dealRiver.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to deal river";
-      }); 
+      });
   },
 });
 
