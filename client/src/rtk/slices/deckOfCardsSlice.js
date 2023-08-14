@@ -7,6 +7,12 @@ export const fetchNewDeck = createAsyncThunk('deck/fetchNew', async (gameId) => 
   return response.data;
 });
 
+export const fetchedDeck = createAsyncThunk(
+  "deck/newDeck",
+  async(updatedGame) => {
+    return updatedGame;
+  }
+);
 
 const deckSlice = createSlice({
   name: 'deck',

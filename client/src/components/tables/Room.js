@@ -33,18 +33,6 @@ const Room = () => {
     dispatch(fetchGames());
   }, [dispatch]);
   
-  useEffect(() => {
-    if (currentGame && currentGame.currentDeck.length === 0) {
-      dispatch(fetchNewDeck(currentGame._id))
-        .then(() => {
-
-          dispatch(fetchGames());
-        })
-        .catch(error => {
-          console.error("Failed to fetch new deck:", error);
-        });
-    }
-  }, [dispatch, currentGame]);
 
   // useEffect(() => {
   //   socket.on("playerJoined", (updatedGame) => {
@@ -83,6 +71,19 @@ const Room = () => {
     : 0;
 
   console.log(`Number of occupied seats: ${occupiedSeats}`); 
+
+  useEffect(() => {
+    if (currentGame && currentGame.currentDeck.length === 0 && occupiedSeats > 1) {
+      dispatch(fetchNewDeck(currentGame._id))
+        .then(() => {
+          socket.emit('new_deck', currentGame._id);
+          dispatch(fetchGames());
+        })
+        .catch(error => {
+          console.error("Failed to fetch new deck:", error);
+        });
+    }
+  }, [dispatch, currentGame, occupiedSeats]);
 
   const leaveTable = () => {
     if (!user) {

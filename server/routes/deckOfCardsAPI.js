@@ -35,7 +35,7 @@ router.get("/new-deck/:gameId", async (req, res) => {
 
     await game.save();
 
-    req.io.emit("newDeck", game);
+    req.io.emit("new_deck", game);
 
     res.json(game);
   } catch (error) {

@@ -92,6 +92,62 @@ export const cardsDealt = createAsyncThunk(
   }
 );
 
+export const dealFlop = createAsyncThunk(
+  'games/dealFlop',
+  async (gameId, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`http://localhost:4000/flop/${gameId}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const flopDealt = createAsyncThunk(
+  "games/flopDealt",
+  async (updatedGame) => {
+    return updatedGame;
+  }
+);
+
+export const dealTurn = createAsyncThunk(
+  'games/dealTurn',
+  async (gameId, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`http://localhost:4000/turn/${gameId}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const turnDealt = createAsyncThunk(
+  "games/turnDealt",
+  async (updatedGame) => {
+    return updatedGame;
+  }
+);
+
+export const dealRiver = createAsyncThunk(
+  'games/dealRiver',
+  async (gameId, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`http://localhost:4000/river/${gameId}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const riverDealt = createAsyncThunk(
+  "games/riverDealt",
+  async (updatedGame) => {
+    return updatedGame;
+  }
+);
 export const updatePositionsAndBlinds = createAsyncThunk(
   "games/updatePositionsAndBlinds",
   async (gameId, { rejectWithValue }) => {
@@ -106,6 +162,14 @@ export const updatePositionsAndBlinds = createAsyncThunk(
     }
   }
 );
+
+export const updatedBlinds = createAsyncThunk(
+  "games/blindsUpdated",
+  async (updatedGame) => {
+    return updatedGame;
+  }
+);
+
 
 export const gameUpdated = createAsyncThunk(
   "games/gameUpdated",
@@ -215,7 +279,55 @@ const serverSlice = createSlice({
         if (updatedGameIndex > -1) {
           state.games[updatedGameIndex] = action.payload;
         }
-      });
+      })
+      .addCase(dealFlop.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(dealFlop.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedGameIndex = state.games.findIndex(
+          (game) => game._id === action.payload._id
+        );
+        if (updatedGameIndex > -1) {
+          state.games[updatedGameIndex] = action.payload;
+        }
+      })
+      .addCase(dealFlop.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to deal flop";
+      })
+      .addCase(dealTurn.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(dealTurn.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedGameIndex = state.games.findIndex(
+          (game) => game._id === action.payload._id
+        );
+        if (updatedGameIndex > -1) {
+          state.games[updatedGameIndex] = action.payload;
+        }
+      })
+      .addCase(dealTurn.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to deal turn";
+      })
+      .addCase(dealRiver.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(dealRiver.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedGameIndex = state.games.findIndex(
+          (game) => game._id === action.payload._id
+        );
+        if (updatedGameIndex > -1) {
+          state.games[updatedGameIndex] = action.payload;
+        }
+      })
+      .addCase(dealRiver.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to deal river";
+      }); 
   },
 });
 
