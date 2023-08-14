@@ -45,8 +45,7 @@ router.post("/:gameId/updatePostionsAndBlinds", async (req, res) => {
 
     await game.save();
 
-    req.io.to(gameId).emit("gameUpdated", game);
-
+    req.io.emit("positions_and_blinds", game);
     res.status(200).json(game);
   } catch (error) {
     console.error(error);

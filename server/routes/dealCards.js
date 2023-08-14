@@ -64,7 +64,7 @@ router.put("/flop/:gameId", async (req, res) => {
     game.dealtCards.push(...flopCards.map((card) => card.code));
 
     await game.save();
-    req.io.in(gameId).emit('cards_dealt', game);
+    req.io.emit('flop', game);
 
     res.json(game);
   } catch (error) {
@@ -98,7 +98,8 @@ router.post("/turn/:gameId", async (req, res) => {
     game.communityCards.push(turnCard);
 
     await game.save();
-
+    req.io.emit('turn', game);
+  
     res.json(game);
   } catch (error) {
     console.error(error);
@@ -131,8 +132,8 @@ router.post("/deal-river/:gameId", async (req, res) => {
     game.communityCards.push(riverCard);
 
     await game.save();
-    req.io.in(gameId).emit('cards_dealt', game);
-
+    req.io.emit('river', game);
+  
     res.json(game);
   } catch (error) {
     console.error(error);
@@ -160,7 +161,8 @@ router.post("/endgame/:gameId", async (req, res) => {
     });
 
     await game.save();
-
+    req.io.emit('game_ended', game);
+    
     res.json({ message: "Game ended, cards cleared" });
   } catch (error) {
     console.error(error);
