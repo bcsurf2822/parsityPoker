@@ -18,6 +18,6 @@ export default configureStore({
     server: serverReducer,
     chat: chatReducer,
     users: usersReducer,
-    // cards: deckOfCardsReducer,
+    cards: deckOfCardsReducer,
   },
 });

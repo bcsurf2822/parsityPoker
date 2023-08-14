@@ -7,11 +7,12 @@ import {
   fetchGames,
   leaveGame,
   playerLeft,
-  gameUpdated
 } from "../../rtk/slices/serverSlice";
 import Deck from "./Deck";
 import Chatbox from "./Chatbox";
 import { socket } from "../../socket";
+import { fetchNewDeck } from "../../rtk/slices/deckOfCardsSlice";
+import { dealToPlayers } from "../../rtk/slices/serverSlice";
 
 import Seat from "./Seats";
 
@@ -25,9 +26,24 @@ const Room = () => {
   const currentGame = games.find((game) => game._id === id);
   console.log("Current Game:", currentGame);
 
+
+
   useEffect(() => {
     dispatch(fetchGames());
   }, [dispatch]);
+  
+  useEffect(() => {
+    if (currentGame && currentGame.currentDeck.length === 0) {
+      dispatch(fetchNewDeck(currentGame._id))
+        .then(() => {
+          // Dispatch fetchGames again to update the client with the latest information
+          dispatch(fetchGames());
+        })
+        .catch(error => {
+          console.error("Failed to fetch new deck:", error);
+        });
+    }
+  }, [dispatch, currentGame]);
 
   useEffect(() => {
     socket.on("playerLeft", (updatedGame) => {
@@ -46,6 +62,19 @@ const Room = () => {
     : 0;
 
   console.log(`Number of occupied seats: ${occupiedSeats}`);
+
+  useEffect(() => {
+    // Check if there's more than one player in the seats
+    if (currentGame && occupiedSeats > 1) {
+      socket.on('cards_dealt', (updatedGame) => {
+        dispatch(dealToPlayers(updatedGame));
+      });
+  
+      return () => {
+        socket.off('cards_dealt');
+      };
+    }
+  }, [dispatch, currentGame, occupiedSeats]); 
 
   const leaveTable = () => {
     if (!user) {

@@ -77,23 +77,17 @@ export const updatePositionsAndBlinds = createAsyncThunk(
   }
 );
 
-export const gameUpdated = createAsyncThunk(
-  "games/gameUpdated",
+export const dealToPlayers = createAsyncThunk(
+  "games/cardsDealt",
   async (updatedGame) => {
     return updatedGame;
   }
 );
 
-export const fetchNewDeck = createAsyncThunk(
-  'deck/fetchNewDeck',
-  async (gameId, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`http://localhost:4000/new-deck/${gameId}`);
-      return response.data;
-    } catch (err) {
-      console.error('Error in fetchNewDeck:', err);
-      return rejectWithValue(err.message ? err.message : 'Unknown error in fetchNewDeck');
-    }
+export const gameUpdated = createAsyncThunk(
+  "games/gameUpdated",
+  async (updatedGame) => {
+    return updatedGame;
   }
 );
 
@@ -103,7 +97,6 @@ const serverSlice = createSlice({
   initialState: {
     games: [],
     currentGame: null,
-    currentDeck: null, 
     loading: false,
     error: null,
   },
@@ -177,19 +170,15 @@ const serverSlice = createSlice({
         state.loading = false;
         state.error = action.payload || 'Failed to update positions and blinds';
       })
-      .addCase(fetchNewDeck.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchNewDeck.fulfilled, (state, action) => {
+      .addCase(dealToPlayers.fulfilled, (state, action) => {
         state.loading = false;
-        state.currentDeck = action.payload;
-      })
-      .addCase(fetchNewDeck.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload || 'Failed to fetch new deck';
-      })
-      .addCase(gameUpdated.fulfilled, (state, action) => {
-        state.currentGame = action.payload;
+        const updatedGameIndex = state.games.findIndex(
+          (game) => game._id === action.payload._id
+        );
+        if (updatedGameIndex > -1) {
+          state.games[updatedGameIndex] = action.payload;
+        }
+        state.currentGame = action.payload; 
       })
   },
 });

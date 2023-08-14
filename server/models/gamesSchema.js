@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
-const CardApiSchema = new Schema({
+const CardSchema = new Schema({
   value: String,
   suit: String,
   code: String,
@@ -72,16 +72,12 @@ const GameSchema = new Schema({
     type: Number,
     default: 2,
   },
-  currentGameCards: {
-    type: [CardApiSchema],
+  currentDeck: {
+    type: [CardSchema],
     default: [],
   },
   communityCards: {
-    type: [CardApiSchema],
-    default: [],
-  },
-  dealtCards: {
-    type: [String],
+    type: [CardSchema],
     default: [],
   },
   seats: {
