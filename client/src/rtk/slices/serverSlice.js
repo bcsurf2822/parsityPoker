@@ -203,7 +203,7 @@ export const getWinner = createAsyncThunk(
   "games/fetchGameDetails",
   async (gameId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`http://localhost:4000/games/${gameId}`);
+      const response = await axios.get(`http://localhost:4000/winner/${gameId}`);
       console.log("Fetch Game Details Called & Response.Data:", response.data);
       return response.data;
     } catch (err) {
