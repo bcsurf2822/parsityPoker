@@ -148,6 +148,7 @@ export const riverDealt = createAsyncThunk(
     return updatedGame;
   }
 );
+
 export const updatePositionsAndBlinds = createAsyncThunk(
   "games/updatePositionsAndBlinds",
   async (gameId, { rejectWithValue }) => {
@@ -172,6 +173,25 @@ export const updatedBlinds = createAsyncThunk(
 
 export const gameUpdated = createAsyncThunk(
   "games/gameUpdated",
+  async (updatedGame) => {
+    return updatedGame;
+  }
+);
+
+export const endGame = createAsyncThunk(
+  "games/endGame",
+  async (gameId, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`http://localhost:4000/endgame/${gameId}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const gameEnded = createAsyncThunk(
+  "games/endedGame",
   async (updatedGame) => {
     return updatedGame;
   }

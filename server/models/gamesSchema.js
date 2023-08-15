@@ -80,6 +80,10 @@ const GameSchema = new Schema({
     type: [CardSchema],
     default: [],
   },
+  dealtCards: {
+    type: [CardSchema],
+    default: [],
+  },
   seats: {
     type: [SeatSchema],
     default: Array.from({ length: 6 }, (_, i) => ({ id: i + 1, player: null })),

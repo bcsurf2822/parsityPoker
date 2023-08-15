@@ -74,7 +74,7 @@ router.put("/flop/:gameId", async (req, res) => {
 });
 
 //Deal Turn
-router.post("/turn/:gameId", async (req, res) => {
+router.put("/turn/:gameId", async (req, res) => {
   const { gameId } = req.params;
 
   try {
@@ -108,7 +108,7 @@ router.post("/turn/:gameId", async (req, res) => {
 });
 
 //Deal River
-router.post("/deal-river/:gameId", async (req, res) => {
+router.put("/deal-river/:gameId", async (req, res) => {
   const { gameId } = req.params;
 
   try {

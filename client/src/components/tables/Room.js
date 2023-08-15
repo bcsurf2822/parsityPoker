@@ -9,7 +9,15 @@ import {
   playerLeft,
   dealCards,
   cardsDealt, 
-  playerJoined
+  playerJoined,
+  dealFlop,
+  flopDealt,
+  dealTurn,
+  turnDealt,
+  dealRiver,
+  riverDealt,
+  endGame,
+  gameEnded
 } from "../../rtk/slices/serverSlice";
 import Deck from "./Deck";
 import Chatbox from "./Chatbox";
@@ -64,6 +72,70 @@ const Room = () => {
     };
   }, [dispatch]);
 
+  
+  useEffect(() => {
+    socket.on('cards_dealt', (updatedGame) => {
+      dispatch(cardsDealt(updatedGame));
+    });
+  
+    return () => {
+      socket.off('cards_dealt');
+    };
+  }, [dispatch]);
+
+  
+  useEffect(() => {
+    socket.on('cards_dealt', (updatedGame) => {
+      dispatch(cardsDealt(updatedGame));
+    });
+  
+    return () => {
+      socket.off('cards_dealt');
+    };
+  }, [dispatch]);
+
+  
+  useEffect(() => {
+    socket.on('flop', (updatedGame) => {
+      dispatch(flopDealt(updatedGame));
+    });
+  
+    return () => {
+      socket.off('flop');
+    };
+  }, [dispatch]);
+
+  
+  useEffect(() => {
+    socket.on('turn', (updatedGame) => {
+      dispatch(turnDealt(updatedGame));
+    });
+  
+    return () => {
+      socket.off('turn');
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    socket.on('river', (updatedGame) => {
+      dispatch(riverDealt(updatedGame));
+    });
+  
+    return () => {
+      socket.off('river');
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    socket.on('game_ended', (updatedGame) => {
+      dispatch(gameEnded(updatedGame));
+    });
+  
+    return () => {
+      socket.off('game_ended');
+    };
+  }, [dispatch]);
+
 
   const seatArray = currentGame ? currentGame.seats : [];
   const occupiedSeats = currentGame
@@ -105,14 +177,29 @@ const Room = () => {
     navigate("/Tables");
   };
 
-  const handleEndGame = () => {};
+  const handleEndGame = () => {
+    dispatch(endGame(id))
+  };
 
   const handleNewDeck = () => {};
   
+
+
   const handleDealCards = () => {
     dispatch(dealCards(id));
   };
 
+  const handleDealFlop = () => {
+    dispatch(dealFlop(id));
+  };
+
+  const handleDealTurn = () => {
+    dispatch(dealTurn(id));
+  };
+
+  const handleDealRiver = () => {
+    dispatch(dealRiver(id));
+  };
   if (!currentGame) {
     return null;
   }
@@ -130,6 +217,18 @@ const Room = () => {
   <Col className="d-flex justify-content-center">
     <Button variant="warning" onClick={handleDealCards}>
       Deal Cards
+    </Button>
+    <Button variant="warning" onClick={handleDealFlop}>
+      Deal Flop
+    </Button>
+    <Button variant="warning" onClick={handleDealTurn}>
+      Deal Turn
+    </Button>
+    <Button variant="warning" onClick={handleDealRiver}>
+      Deal River
+    </Button>
+    <Button variant="primary" onClick={handleEndGame}>
+      EndGame
     </Button>
   </Col>
 </Row>
