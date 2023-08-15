@@ -62,18 +62,6 @@ const Room = () => {
       socket.off('cards_dealt');
     };
   }, [dispatch]);
-
-  
-  useEffect(() => {
-    socket.on('cards_dealt', (updatedGame) => {
-      dispatch(cardsDealt(updatedGame));
-    });
-  
-    return () => {
-      socket.off('cards_dealt');
-    };
-  }, [dispatch]);
-
   
   useEffect(() => {
     socket.on('cards_dealt', (updatedGame) => {

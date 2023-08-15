@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const axios = require("axios");
 const Game = require("../models/gamesSchema");
-
 router.get("/winner/:gameId", async (req, res) => {
   const { gameId } = req.params;
 
@@ -25,22 +24,16 @@ router.get("/winner/:gameId", async (req, res) => {
     const url = `https://api.pokerapi.dev/v1/winner/texas_holdem?cc=${communityCards}&${playerCards}`;
 
     const response = await axios.get(url);
-    const winnerData = response.data;
 
-    if (winnerData && winnerData.winner) {
-      const winningPlayerIndex = winnerData.winner;
-      game.winningPlayer = game.seats[winningPlayerIndex].player.user;
-      game.winningHand = winnerData.best_hand.cards;
+    if (response && response.data) {
+
+      game.winnerData = response.data;
 
       await game.save();
-
-      req.io.emit("winner", {
-        game: game,
-        winnerData: winnerData
-      });
+      req.io.emit("winner", game);
     }
 
-    res.json(winnerData);
+    res.json(response.data);
 
   } catch (error) {
     console.error(error);

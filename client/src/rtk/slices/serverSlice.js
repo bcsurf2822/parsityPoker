@@ -205,7 +205,9 @@ export const getWinner = createAsyncThunk(
     try {
       const response = await axios.get(`http://localhost:4000/winner/${gameId}`);
       console.log("Fetch Game Details Called & Response.Data:", response.data);
-      return response.data;
+      const { players, winners } = response.data;
+
+      return { players, winners };
     } catch (err) {
       console.error("Error in fetchGameDetails:", err);
       return rejectWithValue(
@@ -214,6 +216,7 @@ export const getWinner = createAsyncThunk(
     }
   }
 );
+
 
 export const winnerReceived = createAsyncThunk(
   "games/winnerReceived",
@@ -439,12 +442,12 @@ const serverSlice = createSlice({
       .addCase(winnerReceived.fulfilled, (state, action) => {
         state.loading = false;
         const updatedGameIndex = state.games.findIndex(
-          (game) => game._id === action.payload.gameId
+          (game) => game._id === action.payload._id
         );
         if (updatedGameIndex > -1) {
-          state.games[updatedGameIndex].winner = action.payload.winner;
+          state.games[updatedGameIndex] = action.payload;
         }
-      });
+      })
   },
 });
 

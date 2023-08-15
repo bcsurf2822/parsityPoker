@@ -84,14 +84,10 @@ const GameSchema = new Schema({
     type: [String],
     default: [],
   },
-  winningHand: {
-    type: [String],
-    default: [],
-  },
-  winningPlayer: {
-    type: [String],
-    default: [],
-  },
+  winnerData: {
+    type: Schema.Types.Mixed, 
+    default: {},
+},
   seats: {
     type: [SeatSchema],
     default: Array.from({ length: 6 }, (_, i) => ({ id: i + 1, player: null })),
