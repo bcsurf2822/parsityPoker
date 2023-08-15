@@ -199,6 +199,31 @@ export const gameEnded = createAsyncThunk(
   }
 );
 
+export const getWinner = createAsyncThunk(
+  "games/fetchGameDetails",
+  async (gameId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`http://localhost:4000/games/${gameId}`);
+      console.log("Fetch Game Details Called & Response.Data:", response.data);
+      return response.data;
+    } catch (err) {
+      console.error("Error in fetchGameDetails:", err);
+      return rejectWithValue(
+        err.message ? err.message : "Unknown error in fetchGameDetails"
+      );
+    }
+  }
+);
+
+export const winnerReceived = createAsyncThunk(
+  "games/winnerReceived",
+  async (updatedGame) => {
+    return updatedGame;
+  }
+);
+
+
+
 const serverSlice = createSlice({
   name: "games",
   initialState: {
@@ -397,6 +422,27 @@ const serverSlice = createSlice({
         );
         if (updatedGameIndex > -1) {
           state.games[updatedGameIndex] = action.payload;
+        }
+      })
+
+      .addCase(getWinner.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getWinner.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentGame = action.payload;
+      })
+      .addCase(getWinner.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to fetch game details";
+      })
+      .addCase(winnerReceived.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedGameIndex = state.games.findIndex(
+          (game) => game._id === action.payload.gameId
+        );
+        if (updatedGameIndex > -1) {
+          state.games[updatedGameIndex].winner = action.payload.winner;
         }
       });
   },

@@ -9,7 +9,7 @@ import {
   playerLeft,
   dealCards,
   cardsDealt, 
-  playerJoined,
+
   dealFlop,
   flopDealt,
   dealTurn,
@@ -17,9 +17,11 @@ import {
   dealRiver,
   riverDealt,
   endGame,
-  gameEnded
+  gameEnded,
+  getWinner,
+  winnerReceived
 } from "../../rtk/slices/serverSlice";
-import Deck from "./Deck";
+
 import Chatbox from "./Chatbox";
 import { socket } from "../../socket";
 import { fetchNewDeck } from "../../rtk/slices/deckOfCardsSlice";
@@ -40,17 +42,6 @@ const Room = () => {
   useEffect(() => {
     dispatch(fetchGames());
   }, [dispatch]);
-  
-
-  // useEffect(() => {
-  //   socket.on("playerJoined", (updatedGame) => {
-  //     dispatch(playerJoined(updatedGame));
-  //   });
-
-  //   return () => {
-  //     socket.off("playerJoined");
-  //   };
-  // }, [dispatch]);
 
   useEffect(() => {
     socket.on("playerLeft", (updatedGame) => {
@@ -127,6 +118,16 @@ const Room = () => {
   }, [dispatch]);
 
   useEffect(() => {
+    socket.on('winner', (updatedGame) => {
+      dispatch(winnerReceived(updatedGame));
+    });
+  
+    return () => {
+      socket.off('winner');
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
     socket.on('game_ended', (updatedGame) => {
       dispatch(gameEnded(updatedGame));
     });
@@ -181,10 +182,6 @@ const Room = () => {
     dispatch(endGame(id))
   };
 
-  const handleNewDeck = () => {};
-  
-
-
   const handleDealCards = () => {
     dispatch(dealCards(id));
   };
@@ -200,6 +197,11 @@ const Room = () => {
   const handleDealRiver = () => {
     dispatch(dealRiver(id));
   };
+
+  const handleGetWinner = () => {
+    dispatch(getWinner(id));
+  };
+
   if (!currentGame) {
     return null;
   }
@@ -214,23 +216,28 @@ const Room = () => {
         </Col>
       </Row>
       <Row className="mt-2">
+      <Row className="mt-2">
   <Col className="d-flex justify-content-center">
-    <Button variant="warning" onClick={handleDealCards}>
+    <Button variant="success" onClick={handleDealCards}> 
       Deal Cards
     </Button>
-    <Button variant="warning" onClick={handleDealFlop}>
+    <Button variant="primary" onClick={handleDealFlop}>
       Deal Flop
     </Button>
-    <Button variant="warning" onClick={handleDealTurn}>
+    <Button variant="primary" onClick={handleDealTurn}>
       Deal Turn
     </Button>
-    <Button variant="warning" onClick={handleDealRiver}>
+    <Button variant="primary" onClick={handleDealRiver}>
       Deal River
     </Button>
-    <Button variant="primary" onClick={handleEndGame}>
+    <Button variant="danger" onClick={handleEndGame}> 
       EndGame
     </Button>
+    <Button variant="success" onClick={handleGetWinner}>
+      Winner?
+    </Button>
   </Col>
+</Row>
 </Row>
       <Row className="h-50">
         <Col></Col>
@@ -275,9 +282,6 @@ const Room = () => {
           <Seat seat={seatArray[5]} currentGame={currentGame} />
         </Col>
         <Col></Col>
-      </Row>
-      <Row className="mt-2">
-        <Deck gameId={id} currentGame={currentGame} />{" "}
       </Row>
       <Row>
         <Col className="d-flex justify-content-center">

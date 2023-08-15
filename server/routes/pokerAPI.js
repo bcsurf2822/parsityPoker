@@ -1,10 +1,8 @@
 const router = require("express").Router();
 const axios = require("axios");
-
 const Game = require("../models/gamesSchema");
 
-
-router.get("/determine-winner/:gameId", async (req, res) => {
+router.get("/winner/:gameId", async (req, res) => {
   const { gameId } = req.params;
 
   try {
@@ -16,9 +14,7 @@ router.get("/determine-winner/:gameId", async (req, res) => {
       return res.status(404).json({ message: "Game not found!" });
     }
 
-
-    const communityCards = game.currentGame.communityCards.join(',');
-
+    const communityCards = game.communityCards.join(',');
 
     const playerCards = game.seats
       .filter(seat => seat.player && seat.player.handCards.length)
@@ -28,10 +24,21 @@ router.get("/determine-winner/:gameId", async (req, res) => {
 
     const url = `https://api.pokerapi.dev/v1/winner/texas_holdem?cc=${communityCards}&${playerCards}`;
 
-
     const response = await axios.get(url);
     const winnerData = response.data;
 
+    if (winnerData && winnerData.winner) {
+      const winningPlayerIndex = winnerData.winner;
+      game.winningPlayer = game.seats[winningPlayerIndex].player.user;
+      game.winningHand = winnerData.best_hand.cards;
+
+      await game.save();
+
+      req.io.emit("winner", {
+        game: game,
+        winnerData: winnerData
+      });
+    }
 
     res.json(winnerData);
 

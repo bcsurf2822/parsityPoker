@@ -51,6 +51,9 @@ app.use(deckRoute);
 const deckofcardsapiRoute = require("./routes/deckOfCardsAPI");
 app.use(deckofcardsapiRoute);
 
+const pokerApiRoute = require("./routes/pokerAPI");
+app.use(pokerApiRoute);
+
 const fundingRoute = require("./routes/funding");
 app.use(fundingRoute);
 
