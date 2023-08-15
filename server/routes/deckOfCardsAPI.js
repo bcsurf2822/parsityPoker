@@ -3,6 +3,12 @@ const axios = require("axios");
 
 const Game = require("../models/gamesSchema");
 
+function cardCode(code) {
+  return code.replace('0', '10');
+}
+
+
+
 router.get("/new-deck/:gameId", async (req, res) => {
   const { gameId } = req.params;
 
@@ -25,10 +31,12 @@ router.get("/new-deck/:gameId", async (req, res) => {
     const response = await axios.get(
       "https://www.deckofcardsapi.com/api/deck/new/draw/?count=52"
     );
+
+
     const currentGameCards = response.data.cards.map((card) => ({
       value: card.value,
       suit: card.suit,
-      code: card.code,
+      code: cardCode(card.code)
     }));
 
     game.currentDeck = currentGameCards;
