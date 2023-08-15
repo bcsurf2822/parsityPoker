@@ -248,10 +248,19 @@ const Room = () => {
           <Seat seat={seatArray[2]} currentGame={currentGame} />
         </Col>
         <Col></Col>
-        <Col className="d-flex justify-content-center">
-          <div className="table">{currentGame.name}</div>
+        <Col className="d-flex justify-content-center flex-column align-items-center">
+    <div className="table">{currentGame.name}</div>
+    {currentGame.communityCards && currentGame.communityCards.length > 0 && (
+        <div className="community-cards">
+            {currentGame.communityCards.map((card, index) => (
+                <span key={index} className="card">{card}</span>
+            ))}
+        </div>
+    )}
+</Col>
+
+        <Col>
         </Col>
-        <Col></Col>
         <Col className="d-flex justify-content-center">
           <Seat seat={seatArray[3]} currentGame={currentGame} />
         </Col>

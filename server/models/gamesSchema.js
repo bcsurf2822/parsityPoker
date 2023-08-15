@@ -77,11 +77,11 @@ const GameSchema = new Schema({
     default: [],
   },
   communityCards: {
-    type: [CardSchema],
+    type: [String],
     default: [],
   },
   dealtCards: {
-    type: [CardSchema],
+    type: [String],
     default: [],
   },
   seats: {

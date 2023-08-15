@@ -96,7 +96,7 @@ export const dealFlop = createAsyncThunk(
   "games/dealFlop",
   async (gameId, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`http://localhost:4000/flop/${gameId}`);
+      const response = await axios.post(`http://localhost:4000/flop/${gameId}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -182,7 +182,9 @@ export const endGame = createAsyncThunk(
   "games/endGame",
   async (gameId, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`http://localhost:4000/endgame/${gameId}`);
+      const response = await axios.post(
+        `http://localhost:4000/endgame/${gameId}`
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -315,6 +317,15 @@ const serverSlice = createSlice({
         state.loading = false;
         state.error = action.payload || "Failed to deal flop";
       })
+      .addCase(flopDealt.fulfilled, (state, action) => {
+        const updatedGameIndex = state.games.findIndex(
+          (game) => game._id === action.payload._id
+        );
+        if (updatedGameIndex > -1) {
+          state.games[updatedGameIndex] = action.payload;
+        }
+      })
+
       .addCase(dealTurn.pending, (state) => {
         state.loading = true;
       })
@@ -331,6 +342,15 @@ const serverSlice = createSlice({
         state.loading = false;
         state.error = action.payload || "Failed to deal turn";
       })
+      .addCase(turnDealt.fulfilled, (state, action) => {
+        const updatedGameIndex = state.games.findIndex(
+          (game) => game._id === action.payload._id
+        );
+        if (updatedGameIndex > -1) {
+          state.games[updatedGameIndex] = action.payload;
+        }
+      })
+
       .addCase(dealRiver.pending, (state) => {
         state.loading = true;
       })
@@ -346,6 +366,38 @@ const serverSlice = createSlice({
       .addCase(dealRiver.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to deal river";
+      })
+      .addCase(riverDealt.fulfilled, (state, action) => {
+        const updatedGameIndex = state.games.findIndex(
+          (game) => game._id === action.payload._id
+        );
+        if (updatedGameIndex > -1) {
+          state.games[updatedGameIndex] = action.payload;
+        }
+      })
+      .addCase(endGame.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(endGame.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedGameIndex = state.games.findIndex(
+          (game) => game._id === action.payload._id
+        );
+        if (updatedGameIndex > -1) {
+          state.games[updatedGameIndex] = action.payload;
+        }
+      })
+      .addCase(endGame.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to end game";
+      })
+      .addCase(gameEnded.fulfilled, (state, action) => {
+        const updatedGameIndex = state.games.findIndex(
+          (game) => game._id === action.payload._id
+        );
+        if (updatedGameIndex > -1) {
+          state.games[updatedGameIndex] = action.payload;
+        }
       });
   },
 });
