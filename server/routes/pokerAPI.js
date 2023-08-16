@@ -26,13 +26,11 @@ router.get("/winner/:gameId", async (req, res) => {
     if (response && response.data) {
       game.winnerData = response.data;
 
-      // Determine the winning seats based on API's response
       const winnerIndices = response.data.winners.map(winner => response.data.players.findIndex(player => player.cards === winner.cards));
       
-      // Number of winners
       const numberOfWinners = winnerIndices.length;
 
-      // Split pot amongst winners
+
       const chipsPerWinner = game.pot / numberOfWinners;
 
       for (const index of winnerIndices) {
@@ -40,7 +38,6 @@ router.get("/winner/:gameId", async (req, res) => {
         winningSeat.player.chips += chipsPerWinner;
       }
 
-      // Reset the pot
       game.pot = 0;
 
       await game.save();
