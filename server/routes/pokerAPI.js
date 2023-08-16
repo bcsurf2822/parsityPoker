@@ -16,7 +16,6 @@ router.get("/winner/:gameId", async (req, res) => {
 
     const communityCards = game.communityCards.join(',');
 
-    // Step 1: Build the playerCards array.
     const occupiedSeats = game.seats.filter(seat => seat.player && seat.player.handCards.length);
     const playerCards = occupiedSeats.map(seat => seat.player.handCards.join(',')).map(cards => `pc[]=${cards}`).join('&');
 
@@ -27,15 +26,22 @@ router.get("/winner/:gameId", async (req, res) => {
     if (response && response.data) {
       game.winnerData = response.data;
 
-      // Step 2: Use the returned players property to match the winner's cards.
-      const winningCards = response.data.winners[0].cards;
-      const winnerIndex = response.data.players.findIndex(player => player.cards === winningCards);
+      // Determine the winning seats based on API's response
+      const winnerIndices = response.data.winners.map(winner => response.data.players.findIndex(player => player.cards === winner.cards));
+      
+      // Number of winners
+      const numberOfWinners = winnerIndices.length;
 
-      // Step 3: Match the winner's index to the occupied seats' index.
-      if (winnerIndex !== -1) {
-        const winningSeat = occupiedSeats[winnerIndex];
-        game.winnerData.winningSeatId = winningSeat._id;
+      // Split pot amongst winners
+      const chipsPerWinner = game.pot / numberOfWinners;
+
+      for (const index of winnerIndices) {
+        const winningSeat = occupiedSeats[index];
+        winningSeat.player.chips += chipsPerWinner;
       }
+
+      // Reset the pot
+      game.pot = 0;
 
       await game.save();
       req.io.emit("winner", game);
