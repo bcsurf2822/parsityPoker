@@ -26,13 +26,10 @@ router.put("/game/:gameId/toPot", async (req, res) => {
       });
     
     if (!seat) {
-        console.log(`Seat ObjectIDs in game ${gameId}:`, game.seats.map(s => s._id.toString()));
-        console.log(`Seat with id ${seatId} not found in game ${gameId}`);
         return res.status(400).json({ message: "Seat not found!" });
     }
 
       if (!seat.player) {
-          console.log(`No player found at seat ${seatId} in game ${gameId}`);
           return res.status(400).json({ message: "No player at the seat!" });
       }
 
@@ -45,8 +42,6 @@ router.put("/game/:gameId/toPot", async (req, res) => {
 
       seat.player.chips -= betAmount;
       game.pot += betAmount;
-
-      console.log(`About to save game with id ${gameId} after updating chips and pot.`);
       await game.save();
 
       res.json(game);
@@ -64,7 +59,6 @@ router.put("/chips/:gameId/getPot", async (req, res) => {
   const { seatId } = req.body;
 
   try {
-      // Fetch the game from the database.
       const game = await Game.findById(gameId);
       if (!game) {
           return res.status(404).json({ message: "Game not found!" });

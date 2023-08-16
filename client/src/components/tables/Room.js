@@ -36,6 +36,7 @@ const Room = () => {
   const games = useSelector((state) => state.server.games);
   const currentGame = games.find((game) => game._id === id);
   console.log("Current Game:", currentGame);
+  // console.log("CURRENT WINNER DATA----", currentGame.winnerData.winners[0].cards)
 
 
 
