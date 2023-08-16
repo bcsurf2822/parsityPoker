@@ -69,6 +69,9 @@ app.use(gamesListRoute);
 const gameMechanicsRoute = require("./routes/mechanics");
 app.use(gameMechanicsRoute);
 
+const betsRoute = require("./routes/bets");
+app.use(betsRoute);
+
 const dealCardsRoute = require("./routes/dealCards");
 app.use(dealCardsRoute);
 

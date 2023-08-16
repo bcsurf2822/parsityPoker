@@ -225,6 +225,47 @@ export const winnerReceived = createAsyncThunk(
   }
 );
 
+export const chipsToPot = createAsyncThunk(
+  "games/transferToPot",
+  async (data, { rejectWithValue }) => { // Changed gameId to data to receive an object
+    const { gameId } = data; // Extract gameId from the data object
+    try {
+      const response = await axios.put(`http://localhost:4000/game/${gameId}/toPot`, data);
+      return response.data;
+    } catch (err) {
+      console.error("Error in transferToPot:", err);
+      return rejectWithValue(err.response.data ? err.response.data : "Unknown error in transferToPot");
+    }
+  }
+);
+
+export const chipsCollected = createAsyncThunk(
+  "games/chipsCollected",
+  async (updatedGame) => {
+    return updatedGame;
+  }
+);
+
+export const potToPlayer = createAsyncThunk(
+  "games/collectPot",
+  async ({ gameId, seatId }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`http://localhost:4000/game/${gameId}/getPot`, { seatId });
+      return response.data;
+    } catch (err) {
+      console.error("Error in collectPot:", err);
+      return rejectWithValue(err.response.data ? err.response.data : "Unknown error in collectPot");
+    }
+  }
+);
+
+export const potCollected = createAsyncThunk(
+  "games/potCollected",
+  async (updatedGame) => {
+    return updatedGame;
+  }
+);
+
 
 
 const serverSlice = createSlice({
@@ -448,6 +489,35 @@ const serverSlice = createSlice({
           state.games[updatedGameIndex] = action.payload;
         }
       })
+      .addCase(chipsToPot.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(chipsToPot.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedGameIndex = state.games.findIndex(game => game._id === action.payload._id);
+        if (updatedGameIndex > -1) {
+          state.games[updatedGameIndex] = action.payload;
+        }
+      })
+      .addCase(chipsToPot.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to transfer to pot";
+      })
+
+      .addCase(potToPlayer.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(potToPlayer.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedGameIndex = state.games.findIndex(game => game._id === action.payload._id);
+        if (updatedGameIndex > -1) {
+          state.games[updatedGameIndex] = action.payload;
+        }
+      })
+      .addCase(potToPlayer.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to collect pot";
+      });
   },
 });
 

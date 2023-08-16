@@ -5,6 +5,7 @@ import {
   joinGame,
   playerJoined,
   updatePositionsAndBlinds,
+  chipsToPot
 } from "../../rtk/slices/serverSlice";
 
 import { Button } from "react-bootstrap";
@@ -18,6 +19,8 @@ const Seat = ({ seat, currentGame }) => {
   const maxBuyIn = currentGame.max;
   const minBuyIn = currentGame.min;
   const cards = seat.player ? seat.player.handCards : []; 
+
+  // console.log("Seat", seat);
 
 
   const [sliderValue, setSliderValue] = useState(minBuyIn);
@@ -88,6 +91,23 @@ const Seat = ({ seat, currentGame }) => {
 
   const isDealer = currentGame.dealerPosition + 1;
 
+  const handleBet = (fraction) => {
+    const betValue = seat.player.chips * fraction;
+    dispatch(chipsToPot({
+      gameId: tableId,
+      seatId: seat._id,
+      bet: betValue
+    }));
+  };
+
+  const handleAllIn = () => {
+    dispatch(chipsToPot({
+      gameId: tableId,
+      seatId: seat._id,
+      bet: seat.player.chips
+    }));
+  };
+
   return (
     <div className="d-flex justify-content-center seat">
       {seat && (
@@ -102,6 +122,9 @@ const Seat = ({ seat, currentGame }) => {
               <p>{`Dealer: ${isDealer === seat.id ? "true" : "false"}`}</p>
               <p>{`Card 1 ${cards[0]}`}</p>
               <p>{`Card 2 ${cards[1]}`}</p>
+              <Button onClick={() => handleBet(1/3)}>Bet 1/3</Button>
+              <Button onClick={() => handleBet(1/2)}>Bet 1/2</Button>
+              <Button onClick={handleAllIn}>All In</Button>
               {" "}
             </>
           ) : (
