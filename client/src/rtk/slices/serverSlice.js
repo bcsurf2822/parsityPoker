@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
-import { fetchUpdatedUser } from "./authenticationSlice";
+import { fetchUpdatedUser } from "../actions/auth";
 export const buyInSuccess = createAction("authentication/buyInSuccess");
 export const leaveGameSuccess = createAction("authentication/leaveGameSuccess");
 

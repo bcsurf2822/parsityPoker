@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
-import { logout } from "../rtk/slices/authenticationSlice";
+import { logout } from "../rtk/actions/auth";
 import { TbPokerChip } from "react-icons/tb";
 
 const MyNav = () => {

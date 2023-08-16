@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../rtk/slices/authenticationSlice";
+import { login } from "../rtk/actions/auth";
 import Registration from "./pages/Registration";
 import { Form, Button, Card, Container } from "react-bootstrap";
 

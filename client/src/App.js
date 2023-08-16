@@ -18,7 +18,8 @@ import Room from "./components/tables/Room";
 
 import ProtectedRoute from "./components/Protected";
 
-import { initializeAuth } from "./rtk/slices/authenticationSlice";
+
+import { initializeAuth } from "./rtk/actions/auth";
 
 function App() {
   const dispatch = useDispatch();
