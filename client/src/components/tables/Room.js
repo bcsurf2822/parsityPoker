@@ -117,6 +117,16 @@ const Room = () => {
   }, [dispatch]);
 
   useEffect(() => {
+    socket.on('bet_placed', (updatedGame) => {
+      dispatch(winnerReceived(updatedGame));
+    });
+  
+    return () => {
+      socket.off('bet_placed');
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
     socket.on('game_ended', (updatedGame) => {
       dispatch(gameEnded(updatedGame));
     });
@@ -245,6 +255,7 @@ const Room = () => {
         </Col>
         <Col></Col>
         <Col className="d-flex justify-content-center flex-column align-items-center">
+          <div className="pot">{currentGame.pot}</div>
     <div className="table">{currentGame.name}</div>
     {currentGame.communityCards && currentGame.communityCards.length > 0 && (
         <div className="community-cards">

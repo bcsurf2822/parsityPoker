@@ -165,6 +165,7 @@ router.post("/endgame/:gameId", async (req, res) => {
     game.communityCards = [];
     game.dealtCards = [];
     game.winnerData = [];
+    game.pot = 0;
 
     game.seats.forEach((seat) => {
       if (seat.player) {
