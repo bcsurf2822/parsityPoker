@@ -72,6 +72,10 @@ const GameSchema = new Schema({
     type: Number,
     default: 2,
   },
+  currentPlayerTurn: {
+    type: Number,
+    default: 3,  
+  },
   currentDeck: {
     type: [CardSchema],
     default: [],
