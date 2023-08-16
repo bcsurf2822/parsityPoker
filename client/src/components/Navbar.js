@@ -1,7 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
-import { logout } from "../rtk/actions/auth";
+import Avatar from '@mui/material/Avatar';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+import BeachAccessIcon from '@mui/icons-material/BeachAccess';import { logout } from "../rtk/actions/auth";
 import { TbPokerChip } from "react-icons/tb";
 
 const MyNav = () => {
@@ -89,19 +92,14 @@ const MyNav = () => {
       </Navbar.Collapse>
       {isAuthenticated && (
         <Navbar.Text style={{ marginRight: "20px" }}>
-          Signed in as:
-          <a
-            onClick={toProfile}
-            href="#"
-            style={{
-              fontWeight: "bold",
-              fontSize: "18px",
-              cursor: "pointer",
-              color: "blue",
-            }}
-          >
-            {userInfo?.username}
-          </a>
+   <Stack direction="row" spacing={1}>
+      <Chip
+
+        label={userInfo.username}
+        icon={<BeachAccessIcon />} 
+        variant="outlined"
+      />
+    </Stack>
         </Navbar.Text>
       )}
     </Navbar>

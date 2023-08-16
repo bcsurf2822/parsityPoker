@@ -8,8 +8,7 @@ import {
   leaveGame,
   playerLeft,
   dealCards,
-  cardsDealt, 
-
+  cardsDealt,
   dealFlop,
   flopDealt,
   dealTurn,
@@ -19,7 +18,7 @@ import {
   endGame,
   gameEnded,
   getWinner,
-  winnerReceived
+  winnerReceived,
 } from "../../rtk/slices/serverSlice";
 
 import Chatbox from "./Chatbox";
@@ -38,8 +37,6 @@ const Room = () => {
   console.log("Current Game:", currentGame);
   // console.log("CURRENT WINNER DATA----", currentGame.winnerData.winners[0].cards)
 
-
-
   useEffect(() => {
     dispatch(fetchGames());
   }, [dispatch]);
@@ -55,103 +52,104 @@ const Room = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    socket.on('cards_dealt', (updatedGame) => {
+    socket.on("cards_dealt", (updatedGame) => {
       dispatch(cardsDealt(updatedGame));
     });
-  
+
     return () => {
-      socket.off('cards_dealt');
-    };
-  }, [dispatch]);
-  
-  useEffect(() => {
-    socket.on('cards_dealt', (updatedGame) => {
-      dispatch(cardsDealt(updatedGame));
-    });
-  
-    return () => {
-      socket.off('cards_dealt');
+      socket.off("cards_dealt");
     };
   }, [dispatch]);
 
-  
   useEffect(() => {
-    socket.on('flop', (updatedGame) => {
+    socket.on("cards_dealt", (updatedGame) => {
+      dispatch(cardsDealt(updatedGame));
+    });
+
+    return () => {
+      socket.off("cards_dealt");
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    socket.on("flop", (updatedGame) => {
       dispatch(flopDealt(updatedGame));
     });
-  
+
     return () => {
-      socket.off('flop');
+      socket.off("flop");
     };
   }, [dispatch]);
 
-  
   useEffect(() => {
-    socket.on('turn', (updatedGame) => {
+    socket.on("turn", (updatedGame) => {
       dispatch(turnDealt(updatedGame));
     });
-  
+
     return () => {
-      socket.off('turn');
+      socket.off("turn");
     };
   }, [dispatch]);
 
   useEffect(() => {
-    socket.on('river', (updatedGame) => {
+    socket.on("river", (updatedGame) => {
       dispatch(riverDealt(updatedGame));
     });
-  
+
     return () => {
-      socket.off('river');
+      socket.off("river");
     };
   }, [dispatch]);
 
   useEffect(() => {
-    socket.on('winner', (updatedGame) => {
+    socket.on("winner", (updatedGame) => {
       dispatch(winnerReceived(updatedGame));
     });
-  
+
     return () => {
-      socket.off('winner');
+      socket.off("winner");
     };
   }, [dispatch]);
 
   useEffect(() => {
-    socket.on('bet_placed', (updatedGame) => {
+    socket.on("bet_placed", (updatedGame) => {
       dispatch(winnerReceived(updatedGame));
     });
-  
+
     return () => {
-      socket.off('bet_placed');
+      socket.off("bet_placed");
     };
   }, [dispatch]);
 
   useEffect(() => {
-    socket.on('game_ended', (updatedGame) => {
+    socket.on("game_ended", (updatedGame) => {
       dispatch(gameEnded(updatedGame));
     });
-  
+
     return () => {
-      socket.off('game_ended');
+      socket.off("game_ended");
     };
   }, [dispatch]);
-
 
   const seatArray = currentGame ? currentGame.seats : [];
   const occupiedSeats = currentGame
     ? currentGame.seats.filter((seat) => seat.player !== null).length
     : 0;
 
-  console.log(`Number of occupied seats: ${occupiedSeats}`); 
+  console.log(`Number of occupied seats: ${occupiedSeats}`);
 
   useEffect(() => {
-    if (currentGame && currentGame.currentDeck.length === 0 && occupiedSeats > 1) {
+    if (
+      currentGame &&
+      currentGame.currentDeck.length === 0 &&
+      occupiedSeats > 1
+    ) {
       dispatch(fetchNewDeck(currentGame._id))
         .then(() => {
-          socket.emit('new_deck', currentGame._id);
+          socket.emit("new_deck", currentGame._id);
           dispatch(fetchGames());
         })
-        .catch(error => {
+        .catch((error) => {
           console.error("Failed to fetch new deck:", error);
         });
     }
@@ -178,7 +176,7 @@ const Room = () => {
   };
 
   const handleEndGame = () => {
-    dispatch(endGame(id))
+    dispatch(endGame(id));
   };
 
   const handleDealCards = () => {
@@ -215,29 +213,29 @@ const Room = () => {
         </Col>
       </Row>
       <Row className="mt-2">
-      <Row className="mt-2">
-  <Col className="d-flex justify-content-center">
-    <Button variant="success" onClick={handleDealCards}> 
-      Deal Cards
-    </Button>
-    <Button variant="primary" onClick={handleDealFlop}>
-      Deal Flop
-    </Button>
-    <Button variant="primary" onClick={handleDealTurn}>
-      Deal Turn
-    </Button>
-    <Button variant="primary" onClick={handleDealRiver}>
-      Deal River
-    </Button>
-    <Button variant="danger" onClick={handleEndGame}> 
-      EndGame
-    </Button>
-    <Button variant="success" onClick={handleGetWinner}>
-      Winner?
-    </Button>
-  </Col>
-</Row>
-</Row>
+        <Row className="mt-2">
+          <Col className="d-flex justify-content-center">
+            <Button variant="success" onClick={handleDealCards}>
+              Deal Cards
+            </Button>
+            <Button variant="primary" onClick={handleDealFlop}>
+              Deal Flop
+            </Button>
+            <Button variant="primary" onClick={handleDealTurn}>
+              Deal Turn
+            </Button>
+            <Button variant="primary" onClick={handleDealRiver}>
+              Deal River
+            </Button>
+            <Button variant="danger" onClick={handleEndGame}>
+              EndGame
+            </Button>
+            <Button variant="success" onClick={handleGetWinner}>
+              Winner?
+            </Button>
+          </Col>
+        </Row>
+      </Row>
       <Row className="h-50">
         <Col></Col>
         <Col className="d-flex justify-content-center">
@@ -256,18 +254,20 @@ const Room = () => {
         <Col></Col>
         <Col className="d-flex justify-content-center flex-column align-items-center">
           <div className="pot">{currentGame.pot}</div>
-    <div className="table">{currentGame.name}</div>
-    {currentGame.communityCards && currentGame.communityCards.length > 0 && (
-        <div className="community-cards">
-            {currentGame.communityCards.map((card, index) => (
-                <span key={index} className="card">{card}</span>
-            ))}
-        </div>
-    )}
-</Col>
-
-        <Col>
+          <div className="table">{currentGame.name}</div>
+          {currentGame.communityCards &&
+            currentGame.communityCards.length > 0 && (
+              <div className="community-cards">
+                {currentGame.communityCards.map((card, index) => (
+                  <span key={index} className="card">
+                    {card}
+                  </span>
+                ))}
+              </div>
+            )}
         </Col>
+
+        <Col></Col>
         <Col className="d-flex justify-content-center">
           <Seat seat={seatArray[3]} currentGame={currentGame} />
         </Col>
@@ -288,7 +288,6 @@ const Room = () => {
           <Chatbox gameId={id} currentGame={currentGame} />
         </Col>
       </Row>
-
     </Container>
   );
 };

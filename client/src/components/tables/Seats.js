@@ -5,23 +5,23 @@ import {
   joinGame,
   playerJoined,
   updatePositionsAndBlinds,
-  chipsToPot
+  chipsToPot,
 } from "../../rtk/slices/serverSlice";
 
 import { Button } from "react-bootstrap";
 import { useState } from "react";
 import { useEffect } from "react";
 import { fetchUsernameById } from "../../rtk/slices/usersSlice";
+import BetBox from "./betButtons";
 
 const Seat = ({ seat, currentGame }) => {
   const user = useSelector((state) => state.auth.user);
   const seatId = seat._id;
   const maxBuyIn = currentGame.max;
   const minBuyIn = currentGame.min;
-  const cards = seat.player ? seat.player.handCards : []; 
+  const cards = seat.player ? seat.player.handCards : [];
 
   // console.log("Seat", seat);
-
 
   const [sliderValue, setSliderValue] = useState(minBuyIn);
   const [seatChoice, setSeatChoice] = useState(false);
@@ -30,18 +30,6 @@ const Seat = ({ seat, currentGame }) => {
   const dispatch = useDispatch();
 
   const tableId = currentGame._id;
-
-  // useEffect(() => {
-  //   socket.on("gameUpdated", (updatedGame) => {
-  //     dispatch(gameUpdated(updatedGame));
-  //   });
-
-  //   return () => {
-  //     socket.off("gameUpdated");
-  //   };
-  // }, [dispatch]);
-
-
 
   useEffect(() => {
     const fetchUsername = async (player) => {
@@ -91,21 +79,31 @@ const Seat = ({ seat, currentGame }) => {
 
   const isDealer = currentGame.dealerPosition + 1;
 
-  const handleBet = (fraction) => {
-    const betValue = seat.player.chips * fraction;
-    dispatch(chipsToPot({
-      gameId: tableId,
-      seatId: seat._id,
-      bet: betValue
-    }));
-  };
+  // const handleBet = (fraction) => {
+  //   const betValue = seat.player.chips * fraction;
+  //   dispatch(chipsToPot({
+  //     gameId: tableId,
+  //     seatId: seat._id,
+  //     bet: betValue
+  //   }));
+  // };
 
-  const handleAllIn = () => {
-    dispatch(chipsToPot({
-      gameId: tableId,
-      seatId: seat._id,
-      bet: seat.player.chips
-    }));
+  // const handleAllIn = () => {
+  //   dispatch(chipsToPot({
+  //     gameId: tableId,
+  //     seatId: seat._id,
+  //     bet: seat.player.chips
+  //   }));
+  // };
+
+  const handleSliderBet = (betValue) => {
+    dispatch(
+      chipsToPot({
+        gameId: tableId,
+        seatId: seat._id,
+        bet: betValue,
+      })
+    );
   };
 
   return (
@@ -122,10 +120,13 @@ const Seat = ({ seat, currentGame }) => {
               <p>{`Dealer: ${isDealer === seat.id ? "true" : "false"}`}</p>
               <p>{`Card 1 ${cards[0]}`}</p>
               <p>{`Card 2 ${cards[1]}`}</p>
-              <Button onClick={() => handleBet(1/3)}>Bet 1/3</Button>
+              {/* <Button onClick={() => handleBet(1/3)}>Bet 1/3</Button>
               <Button onClick={() => handleBet(1/2)}>Bet 1/2</Button>
-              <Button onClick={handleAllIn}>All In</Button>
-              {" "}
+              <Button onClick={handleAllIn}>All In</Button> */}
+              <BetBox
+                playerChips={seat.player.chips}
+                onBetChange={handleSliderBet}
+              />{" "}
             </>
           ) : (
             <>
