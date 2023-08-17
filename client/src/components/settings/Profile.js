@@ -79,7 +79,7 @@ const Profile = () => {
             </Card.Text>
             <Card.Text className="border-bottom pb-3">
               <strong>Account Balance:</strong> <TfiMoney />{" "}
-              {user.accountBalance}
+              {parseFloat(user.accountBalance).toFixed(2)}
               <Button
                 onClick={toDeposit}
                 variant="outline-primary"
@@ -90,7 +90,8 @@ const Profile = () => {
               </Button>
             </Card.Text>
             <Card.Text className="border-bottom pb-3">
-              <strong>Bank Balance:</strong> <TfiMoney /> {user.bankBalance}
+              <strong>Bank Balance:</strong> <TfiMoney />{parseFloat(user.bankBalance).toFixed(2)}
+
               <Button
                 onClick={toWithdraw}
                 variant="outline-primary"

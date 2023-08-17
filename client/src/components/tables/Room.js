@@ -21,6 +21,8 @@ import {
   winnerReceived,
 } from "../../rtk/slices/serverSlice";
 
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+
 import Chatbox from "./Chatbox";
 import { socket } from "../../socket";
 import { fetchNewDeck } from "../../rtk/slices/deckOfCardsSlice";
@@ -35,7 +37,7 @@ const Room = () => {
   const games = useSelector((state) => state.server.games);
   const currentGame = games.find((game) => game._id === id);
   console.log("Current Game:", currentGame);
-  // console.log("CURRENT WINNER DATA----", currentGame.winnerData.winners[0].cards)
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   useEffect(() => {
     dispatch(fetchGames());
@@ -207,6 +209,7 @@ const Room = () => {
     <Container fluid className="h-100 bg">
       <Row className="mt-2">
         <Col className="d-flex justify-content-center">
+        <div className="table">{currentGame.name}</div>
           <Button variant="warning" onClick={leaveTable}>
             Leave Table
           </Button>
@@ -253,8 +256,9 @@ const Room = () => {
         </Col>
         <Col></Col>
         <Col className="d-flex justify-content-center flex-column align-items-center">
-          <div className="pot">{currentGame.pot}</div>
-          <div className="table">{currentGame.name}</div>
+          <div className="pot"><AttachMoneyIcon/>
+          {parseFloat(currentGame.pot).toFixed(2)}
+</div>
           {currentGame.communityCards &&
             currentGame.communityCards.length > 0 && (
               <div className="community-cards">
@@ -285,7 +289,9 @@ const Room = () => {
       </Row>
       <Row>
         <Col className="d-flex justify-content-center">
+        {isAuthenticated && (
           <Chatbox gameId={id} currentGame={currentGame} />
+      )}
         </Col>
       </Row>
     </Container>

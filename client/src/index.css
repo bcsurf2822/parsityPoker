@@ -73,3 +73,34 @@ code {
   width: 80px;
   font-size: 0.8em;
 }
+
+.bg {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Ensures that there's space between the top and bottom rows */
+  height: 100vh;
+}
+
+/* Container */
+.containerBox {
+  width: 200px; /* Adjust width as required */
+  height: 300px; /* Adjust height as required */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.chatArea {
+  flex: 1;
+  overflow-y: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.chatText {
+  resize: none;
+  height: 40px; /* Adjust as needed */
+}

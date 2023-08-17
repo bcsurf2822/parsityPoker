@@ -6,12 +6,17 @@ import {
   playerJoined,
   updatePositionsAndBlinds,
   chipsToPot,
+  updateCurrentPlayer,
+  playerUpdated
+  
 } from "../../rtk/slices/serverSlice";
 
-import { Button } from "react-bootstrap";
+import { Button as bootstrapBtn } from "react-bootstrap";
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
+import Button from '@mui/joy/Button';
+
 // import Slider from '@mui/joy/Slider';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal'
@@ -74,6 +79,16 @@ const Seat = ({ seat, currentGame }) => {
 
     return () => {
       socket.off("playerJoined");
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    socket.on("current_player", (updatedGame) => {
+      dispatch(playerUpdated(updatedGame));
+    });
+
+    return () => {
+      socket.off("current_player");
     };
   }, [dispatch]);
 
@@ -160,12 +175,13 @@ const Seat = ({ seat, currentGame }) => {
               <p>{`Dealer: ${isDealer === seat.id ? "true" : "false"}`}</p>
               <p>{`Card 1 ${cards[0]}`}</p>
               <p>{`Card 2 ${cards[1]}`}</p>
-              <Button onClick={handleAllIn}>All In</Button>
-            <Button onClick={handleCall}>Call</Button>
-              <BetBox
-                playerChips={seat.player.chips}
-                onBetChange={handleSliderBet}
-              />{" "}
+
+<BetBox
+    playerChips={seat.player.chips}
+    onBetChange={handleSliderBet}
+    onCall={handleCall}
+    onAllIn={handleAllIn}
+/>
             </>
           ) : (
             <>

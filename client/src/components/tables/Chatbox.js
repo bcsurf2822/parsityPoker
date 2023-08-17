@@ -38,7 +38,7 @@ export default function Chatbox({ gameId }) {
   };
 
   return (
-    <div>
+    <div className="containerBox">
       <div className="chatArea">
         <ListGroup variant="flush">
           {chatMessages
@@ -50,12 +50,15 @@ export default function Chatbox({ gameId }) {
             ))}
         </ListGroup>
       </div>
-      <Form.Control
+      <div className="chatText">
+         <Form.Control
         type="text"
         placeholder="Type your message"
         value={message}
         onChange={handleMessageChange}
       />
+      </div>
+     
       <Button onClick={handleMessageSend}>Send</Button>
     </div>
   );
