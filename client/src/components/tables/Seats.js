@@ -117,7 +117,7 @@ const Seat = ({ seat, currentGame }) => {
     dispatch(updatePositionsAndBlinds(currentGame._id));
   };
 
-  const isDealer = currentGame.dealerPosition + 1;
+  const isDealer = currentGame.dealerPosition
 
   // const handleSliderBet = (betValue) => {
   //   dispatch(

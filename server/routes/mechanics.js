@@ -29,10 +29,10 @@ router.post("/:gameId/updatePostionsAndBlinds", async (req, res) => {
     if (game.dealerPosition === 0 && !seats[0].player) {
       game.dealerPosition = findFirstOccupiedSeat();
     } else {
-      game.dealerPosition = findNextOccupiedSeat(game.dealerPosition);
+      game.dealerPosition = findFirstOccupiedSeat(game.dealerPosition);
     }
-    game.smallBlindPosition = findNextOccupiedSeat(game.dealerPosition);
-    game.bigBlindPosition = findNextOccupiedSeat(game.smallBlindPosition);
+    game.smallBlindPosition = findFirstOccupiedSeat(game.dealerPosition);
+    game.bigBlindPosition = findFirstOccupiedSeat(game.smallBlindPosition);
 
     console.log(
       `Game after update:\nDealer Position: ${game.dealerPosition}\nSmall Blind Position: ${game.smallBlindPosition}\nBig Blind Position: ${game.bigBlindPosition}`
