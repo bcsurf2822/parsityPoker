@@ -227,14 +227,17 @@ export const winnerReceived = createAsyncThunk(
 
 export const chipsToPot = createAsyncThunk(
   "games/transferToPot",
-  async (data, { rejectWithValue }) => { // Changed gameId to data to receive an object
-    const { gameId } = data; // Extract gameId from the data object
+  async (data, { rejectWithValue }) => {
+ 
     try {
-      const response = await axios.put(`http://localhost:4000/game/${gameId}/toPot`, data);
+      const response = await axios.put(`http://localhost:4000/game/${data.gameId}/toPot`, data);
       return response.data;
     } catch (err) {
       console.error("Error in transferToPot:", err);
-      return rejectWithValue(err.response.data ? err.response.data : "Unknown error in transferToPot");
+      let errorMessage = err.response && err.response.data && err.response.data.message 
+                        ? err.response.data.message 
+                        : "Unknown error in transferToPot";
+      return rejectWithValue(errorMessage);
     }
   }
 );
