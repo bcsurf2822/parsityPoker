@@ -10,6 +10,7 @@ import {
   playerUpdated
   
 } from "../../rtk/slices/serverSlice";
+import SeatUsername from "./SeatUsername";
 
 import { Button as bootstrapBtn } from "react-bootstrap";
 import IconButton from '@mui/material/IconButton';
@@ -169,7 +170,7 @@ const Seat = ({ seat, currentGame }) => {
           {seat.player ? (
             <>
               <Button onClick={handleTestUpdate}>TEST BLINDS</Button>
-              <p>{`Username: ${username}`}</p>
+<SeatUsername username={seat.username} />
               <p>{`Chips: ${seat.player.chips}`}</p>
               <p>{`Bet: ${seat.player.bet}`}</p>
               <p>{`Dealer: ${isDealer === seat.id ? "true" : "false"}`}</p>
@@ -217,9 +218,7 @@ const Seat = ({ seat, currentGame }) => {
 </Modal>
                 </>
               ) : (
-                // <Button className="sit-here" onClick={handleClick}>
-                //   Sit here
-                // </Button>
+
                 <IconButton aria-label="add" onClick={() => { handleClick(); handleOpen(); }}>
                 <AddIcon />
             </IconButton>
