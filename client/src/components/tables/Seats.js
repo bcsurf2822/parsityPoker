@@ -4,25 +4,20 @@ import { socket } from "../../socket";
 import {
   joinGame,
   playerJoined,
-  updatePositionsAndBlinds,
   chipsToPot,
   updateCurrentPlayer,
   playerUpdated,
 } from "../../rtk/slices/serverSlice";
 import DeactivatedBet from "./DeactivatedBet";
-
-import { Button as bootstrapBtn } from "react-bootstrap";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
 import Button from "@mui/joy/Button";
-import Chip from "@mui/material/Chip";
+
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-
-// import Slider from '@mui/joy/Slider';
 
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
@@ -48,7 +43,6 @@ const Seat = ({ seat, currentGame }) => {
   const maxBuyIn = currentGame.max;
   const minBuyIn = currentGame.min;
   const cards = seat.player ? seat.player.handCards : [];
-  // const { id } = useParams();
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -56,8 +50,6 @@ const Seat = ({ seat, currentGame }) => {
     setOpen(false);
     setSeatChoice(false);
   };
-
-  // console.log("Seat", seat);
 
   const [sliderValue, setSliderValue] = useState(minBuyIn);
   const [seatChoice, setSeatChoice] = useState(false);
