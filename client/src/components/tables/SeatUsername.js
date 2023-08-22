@@ -1,27 +1,19 @@
-import Box from '@mui/joy/Box';
+
 import Chip from '@mui/joy/Chip';
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { fetchUsernameById } from '../../rtk/slices/usersSlice';
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
 
-export default function SeatUsername({seat}) {
+import Stack from '@mui/material/Stack';
 
-  const [username, setUsername] = useState("");
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const fetchUsername = async (player) => {
-      if (player) {
-        const result = await dispatch(fetchUsernameById(player.user));
-        setUsername(result.payload);
-      }
-    };
-
-    if (seat.player) fetchUsername(seat.player);
-  }, [seat, dispatch]);
+export default function SeatUsername() {
   return (
-    <Box>
-      <Chip>{seat.username}</Chip>
-    </Box>
+    <Stack direction="row" spacing={1}>
+      <Chip avatar={<Avatar>M</Avatar>} label="Avatar" />
+      <Chip
+        avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />}
+        label="Avatar"
+        variant="outlined"
+      />
+    </Stack>
   );
 }

@@ -7,33 +7,37 @@ import {
   updatePositionsAndBlinds,
   chipsToPot,
   updateCurrentPlayer,
-  playerUpdated
-  
+  playerUpdated,
 } from "../../rtk/slices/serverSlice";
 import SeatUsername from "./SeatUsername";
 
 import { Button as bootstrapBtn } from "react-bootstrap";
-import IconButton from '@mui/material/IconButton';
-import AddIcon from '@mui/icons-material/Add';
-import Box from '@mui/material/Box';
-import Button from '@mui/joy/Button';
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
+import Box from "@mui/material/Box";
+import Button from "@mui/joy/Button";
+import Chip from "@mui/material/Chip";
+import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
+import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
 
 // import Slider from '@mui/joy/Slider';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal'
+
+import Modal from "@mui/material/Modal";
 import { useState } from "react";
 import { useEffect } from "react";
 import { fetchUsernameById } from "../../rtk/slices/usersSlice";
 import BetBox from "./betButtons";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  bgcolor: "background.paper",
+  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
@@ -51,7 +55,7 @@ const Seat = ({ seat, currentGame }) => {
     setOpen(false);
     setSeatChoice(false);
   };
-  
+
   // console.log("Seat", seat);
 
   const [sliderValue, setSliderValue] = useState(minBuyIn);
@@ -114,29 +118,14 @@ const Seat = ({ seat, currentGame }) => {
     console.log(joinGame);
   };
 
-  const handleTestUpdate = () => {
-    dispatch(updatePositionsAndBlinds(currentGame._id));
-  };
-
-  const isDealer = currentGame.dealerPosition
-
-  // const handleSliderBet = (betValue) => {
-  //   dispatch(
-  //     chipsToPot({
-  //       gameId: tableId,
-  //       seatId: seat._id,
-  //       action: 'bet',
-  //       bet: betValue
-  //     })
-  //   );
-  // };
+  const isDealer = currentGame.dealerPosition;
 
   const handleAllIn = () => {
     dispatch(
       chipsToPot({
         gameId: tableId,
         seatId: seat._id,
-        action: 'all-in'
+        action: "all-in",
       })
     );
   };
@@ -146,7 +135,7 @@ const Seat = ({ seat, currentGame }) => {
       chipsToPot({
         gameId: tableId,
         seatId: seat._id,
-        action: 'call'
+        action: "call",
       })
     );
   };
@@ -157,7 +146,7 @@ const Seat = ({ seat, currentGame }) => {
         gameId: tableId,
         seatId: seat._id,
         bet: betValue,
-        action: 'bet'
+        action: "bet",
       })
     );
   };
@@ -169,59 +158,96 @@ const Seat = ({ seat, currentGame }) => {
           <p>{`Seat ${seat.id}`}</p>
           {seat.player ? (
             <>
-              <Button onClick={handleTestUpdate}>TEST BLINDS</Button>
-<SeatUsername username={seat.username} />
-              <p>{`Chips: ${seat.player.chips}`}</p>
-              <p>{`Bet: ${seat.player.bet}`}</p>
-              <p>{`Dealer: ${isDealer === seat.id ? "true" : "false"}`}</p>
-              <p>{`Card 1 ${cards[0]}`}</p>
-              <p>{`Card 2 ${cards[1]}`}</p>
-
-<BetBox
-    playerChips={seat.player.chips}
-    onBetChange={handleSliderBet}
-    onCall={handleCall}
-    onAllIn={handleAllIn}
-/>
+              <Box
+                sx={{
+                  width: "100%",
+                  maxWidth: 360,
+                  bgcolor: "background.paper",
+                }}
+              >
+                <Box sx={{ my: 3, mx: 2 }}>
+                  <Grid container alignItems="center">
+                    <Grid item xs>
+                      <Typography gutterBottom variant="h4" component="div">
+                        {username}
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography gutterBottom variant="h6" component="div">
+                        $ {seat.player.chips}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Box>
+                <Divider variant="middle" />
+                <Box sx={{ m: 2 }}>
+                  <Stack direction="row" spacing={1}>
+                    <BetBox
+                      playerChips={seat.player.chips}
+                      onBetChange={handleSliderBet}
+                      onCall={handleCall}
+                      onAllIn={handleAllIn}
+                    />
+                  </Stack>
+                </Box>
+                <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
+                  <p>{`Card 1 ${cards[0]}`}</p>
+                  <p>{`Card 2 ${cards[1]}`}</p>
+                  <p>Dealer: </p>
+                </Box>
+              </Box>
             </>
           ) : (
             <>
               {seatChoice ? (
                 <>
-<Modal
-    open={open}
-    onClose={handleClose}
-    aria-labelledby="modal-modal-title"
-    aria-describedby="modal-modal-description"
->
-    <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-            Select Buy-In Amount
-        </Typography>
-        <Slider
-            xstep={1}
-            xmin={minBuyIn}
-            xmax={maxBuyIn}
-            x={sliderValue}
-            onChange={({ x }) => setSliderValue(x)}
-        />
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Do you wish to buy in with {sliderValue} chips and sit here?
-        </Typography>
-        <Button className="buyIn" onClick={() => {
-            handleConfirm();
-            handleClose();
-        }}>
-            Buy In for ${sliderValue}
-        </Button>
-    </Box>
-</Modal>
+                  <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                  >
+                    <Box sx={style}>
+                      <Typography
+                        id="modal-modal-title"
+                        variant="h6"
+                        component="h2"
+                      >
+                        Select Buy-In Amount
+                      </Typography>
+                      <Slider
+                        xstep={1}
+                        xmin={minBuyIn}
+                        xmax={maxBuyIn}
+                        x={sliderValue}
+                        onChange={({ x }) => setSliderValue(x)}
+                      />
+                      <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        Do you wish to buy in with {sliderValue} chips and sit
+                        here?
+                      </Typography>
+                      <Button
+                        className="buyIn"
+                        onClick={() => {
+                          handleConfirm();
+                          handleClose();
+                        }}
+                      >
+                        Buy In for ${sliderValue}
+                      </Button>
+                    </Box>
+                  </Modal>
                 </>
               ) : (
-
-                <IconButton aria-label="add" onClick={() => { handleClick(); handleOpen(); }}>
-                <AddIcon />
-            </IconButton>
+                <IconButton
+                  aria-label="add"
+                  onClick={() => {
+                    handleClick();
+                    handleOpen();
+                  }}
+                >
+                  <AddIcon />
+                </IconButton>
               )}
             </>
           )}
