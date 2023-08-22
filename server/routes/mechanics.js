@@ -1,6 +1,15 @@
 const router = require("express").Router();
 const Game = require("../models/gamesSchema");
 
+const findNextPosition = (startPosition, seats) => {
+  let seatCount = seats.length;
+  let nextPosition = (startPosition + 1) % seatCount;
+  while (!seats[nextPosition].player) {
+    nextPosition = (nextPosition + 1) % seatCount;
+  }
+  return nextPosition;
+};
+
 router.post("/:gameId/updatePostionsAndBlinds", async (req, res) => {
   try {
     const gameId = req.params.gameId;
@@ -10,46 +19,26 @@ router.post("/:gameId/updatePostionsAndBlinds", async (req, res) => {
       return res.status(404).send("Game not found!");
     }
 
-    console.log(
-      `Game before update:\nDealer Position: ${game.dealerPosition}\nSmall Blind Position: ${game.smallBlindPosition}\nBig Blind Position: ${game.bigBlindPosition}`
-    );
+    game.dealerPosition = findNextPosition(game.dealerPosition, game.seats);
+    game.smallBlindPosition = findNextPosition(game.dealerPosition, game.seats);
+    game.bigBlindPosition = findNextPosition(game.smallBlindPosition, game.seats);
 
-    const seats = game.seats;
-    const seatCount = seats.length;
-
-    const findFirstOccupiedSeat = (startPosition = 0) => {
-      let nextPosition = startPosition;
-      while (!seats[nextPosition].player) {
-        nextPosition = (nextPosition + 1) % seatCount;
-        if (nextPosition === startPosition) break;
-      }
-      return nextPosition;
-    };
-
-    if (game.dealerPosition === 0 && !seats[0].player) {
-      game.dealerPosition = findFirstOccupiedSeat();
-    } else {
-      game.dealerPosition = findFirstOccupiedSeat(game.dealerPosition);
-    }
-    game.smallBlindPosition = findFirstOccupiedSeat(game.dealerPosition);
-    game.bigBlindPosition = findFirstOccupiedSeat(game.smallBlindPosition);
-
-    console.log(
-      `Game after update:\nDealer Position: ${game.dealerPosition}\nSmall Blind Position: ${game.smallBlindPosition}\nBig Blind Position: ${game.bigBlindPosition}`
-    );
+    // Update currentPlayerTurn after big blind
+    game.currentPlayerTurn = findNextPosition(game.bigBlindPosition, game.seats);
 
     const [smallBlindAmount, bigBlindAmount] = game.blinds
       .split("/")
       .map(Number);
 
-    seats[game.smallBlindPosition].player.chips -= smallBlindAmount;
-    seats[game.bigBlindPosition].player.chips -= bigBlindAmount;
+    if (game.seats[game.smallBlindPosition].player) {
+      game.seats[game.smallBlindPosition].player.chips -= smallBlindAmount;
+      game.pot += smallBlindAmount;
+    }
 
-    game.pot += smallBlindAmount + bigBlindAmount;
-
-    console.log(
-      `Small Blind Deduction: ${smallBlindAmount}\nBig Blind Deduction: ${bigBlindAmount}`
-    );
+    if (game.seats[game.bigBlindPosition].player) {
+      game.seats[game.bigBlindPosition].player.chips -= bigBlindAmount;
+      game.pot += bigBlindAmount;
+    }
 
     await game.save();
 
@@ -61,13 +50,6 @@ router.post("/:gameId/updatePostionsAndBlinds", async (req, res) => {
   }
 });
 
-const findNextPosition = (currentTurn) => {
-  let nextPosition = (currentTurn + 1) % seatCount;
-  while (!seats[nextPosition].player) {
-    nextPosition = (nextPosition + 1) % seatCount;
-  }
-  return nextPosition;
-};
 
 router.post("/:gameId/updateCurrentPlayer", async (req, res) => {
   try {
@@ -77,7 +59,7 @@ router.post("/:gameId/updateCurrentPlayer", async (req, res) => {
       return res.status(404).send("Game not found!");
     }
 
-    game.currentPlayerTurn = findNextPosition(game.currentPlayerTurn);
+    game.currentPlayerTurn = findNextPosition(game.currentPlayerTurn, game.seats);
 
     await game.save();
 

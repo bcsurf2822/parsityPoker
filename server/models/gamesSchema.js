@@ -62,19 +62,19 @@ const GameSchema = new Schema({
   },
   dealerPosition: {
     type: Number,
-    default: 0,
+    default: -1,
   },
   smallBlindPosition: {
     type: Number,
-    default: 1,
+    default: -1,
   },
   bigBlindPosition: {
     type: Number,
-    default: 2,
+    default: -1,
   },
   currentPlayerTurn: {
     type: Number,
-    default: 3,  
+    default: -1,  
   },
   currentDeck: {
     type: [CardSchema],

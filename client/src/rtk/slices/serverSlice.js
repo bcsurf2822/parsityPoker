@@ -149,35 +149,6 @@ export const riverDealt = createAsyncThunk(
   }
 );
 
-export const updatePositionsAndBlinds = createAsyncThunk(
-  "games/updatePositionsAndBlinds",
-  async (gameId, { rejectWithValue }) => {
-    try {
-      const response = await axios.post(
-        `http://localhost:4000/${gameId}/updatePostionsAndBlinds`
-      );
-      console.log("Update positions and blinds response:", response.data);
-      return response.data;
-    } catch (err) {
-      return rejectWithValue(err.response.data);
-    }
-  }
-);
-
-export const updatedBlinds = createAsyncThunk(
-  "games/blindsUpdated",
-  async (updatedGame) => {
-    return updatedGame;
-  }
-);
-
-export const gameUpdated = createAsyncThunk(
-  "games/gameUpdated",
-  async (updatedGame) => {
-    return updatedGame;
-  }
-);
-
 export const endGame = createAsyncThunk(
   "games/endGame",
   async (gameId, { rejectWithValue }) => {
@@ -203,7 +174,9 @@ export const getWinner = createAsyncThunk(
   "games/fetchGameDetails",
   async (gameId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`http://localhost:4000/winner/${gameId}`);
+      const response = await axios.get(
+        `http://localhost:4000/winner/${gameId}`
+      );
       console.log("Fetch Game Details Called & Response.Data:", response.data);
       const { players, winners } = response.data;
 
@@ -217,7 +190,6 @@ export const getWinner = createAsyncThunk(
   }
 );
 
-
 export const winnerReceived = createAsyncThunk(
   "games/winnerReceived",
   async (updatedGame) => {
@@ -228,15 +200,18 @@ export const winnerReceived = createAsyncThunk(
 export const chipsToPot = createAsyncThunk(
   "games/transferToPot",
   async (data, { rejectWithValue }) => {
- 
     try {
-      const response = await axios.put(`http://localhost:4000/game/${data.gameId}/toPot`, data);
+      const response = await axios.put(
+        `http://localhost:4000/game/${data.gameId}/toPot`,
+        data
+      );
       return response.data;
     } catch (err) {
       console.error("Error in transferToPot:", err);
-      let errorMessage = err.response && err.response.data && err.response.data.message 
-                        ? err.response.data.message 
-                        : "Unknown error in transferToPot";
+      let errorMessage =
+        err.response && err.response.data && err.response.data.message
+          ? err.response.data.message
+          : "Unknown error in transferToPot";
       return rejectWithValue(errorMessage);
     }
   }
@@ -253,11 +228,16 @@ export const potToPlayer = createAsyncThunk(
   "games/collectPot",
   async ({ gameId, seatId }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`http://localhost:4000/game/${gameId}/getPot`, { seatId });
+      const response = await axios.put(
+        `http://localhost:4000/game/${gameId}/getPot`,
+        { seatId }
+      );
       return response.data;
     } catch (err) {
       console.error("Error in collectPot:", err);
-      return rejectWithValue(err.response.data ? err.response.data : "Unknown error in collectPot");
+      return rejectWithValue(
+        err.response.data ? err.response.data : "Unknown error in collectPot"
+      );
     }
   }
 );
@@ -269,11 +249,35 @@ export const potCollected = createAsyncThunk(
   }
 );
 
+export const updatePositionsAndBlinds = createAsyncThunk(
+  "games/updatePositionsAndBlinds",
+  async (gameId, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:4000/${gameId}/updatePostionsAndBlinds`
+      );
+      console.log("Update positions and blinds response:", response.data);
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const updatedBlinds = createAsyncThunk(
+  "games/blindsUpdated",
+  async (updatedGame) => {
+    return updatedGame;
+  }
+);
+
 export const updateCurrentPlayer = createAsyncThunk(
   "games/updateCurrentPlayer",
   async (gameId, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`http://localhost:4000/${gameId}/updateCurrentPlayer`);
+      const response = await axios.post(
+        `http://localhost:4000/${gameId}/updateCurrentPlayer`
+      );
       console.log("Update current player response:", response.data);
       return response.data;
     } catch (err) {
@@ -282,15 +286,12 @@ export const updateCurrentPlayer = createAsyncThunk(
   }
 );
 
-
 export const playerUpdated = createAsyncThunk(
   "games/playerUpdated",
   async (updatedGame) => {
     return updatedGame;
   }
 );
-
-
 
 const serverSlice = createSlice({
   name: "games",
@@ -354,22 +355,7 @@ const serverSlice = createSlice({
         state.loading = false;
         state.error = action.payload || "Failed to leave game";
       })
-      .addCase(updatePositionsAndBlinds.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(updatePositionsAndBlinds.fulfilled, (state, action) => {
-        state.loading = false;
-        const updatedGameIndex = state.games.findIndex(
-          (game) => game._id === action.payload._id
-        );
-        if (updatedGameIndex > -1) {
-          state.games[updatedGameIndex] = action.payload;
-        }
-      })
-      .addCase(updatePositionsAndBlinds.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload || "Failed to update positions and blinds";
-      })
+
       .addCase(dealCards.pending, (state) => {
         state.loading = true;
       })
@@ -518,7 +504,9 @@ const serverSlice = createSlice({
       })
       .addCase(chipsToPot.fulfilled, (state, action) => {
         state.loading = false;
-        const updatedGameIndex = state.games.findIndex(game => game._id === action.payload._id);
+        const updatedGameIndex = state.games.findIndex(
+          (game) => game._id === action.payload._id
+        );
         if (updatedGameIndex > -1) {
           state.games[updatedGameIndex] = action.payload;
         }
@@ -533,7 +521,9 @@ const serverSlice = createSlice({
       })
       .addCase(potToPlayer.fulfilled, (state, action) => {
         state.loading = false;
-        const updatedGameIndex = state.games.findIndex(game => game._id === action.payload._id);
+        const updatedGameIndex = state.games.findIndex(
+          (game) => game._id === action.payload._id
+        );
         if (updatedGameIndex > -1) {
           state.games[updatedGameIndex] = action.payload;
         }
@@ -542,8 +532,22 @@ const serverSlice = createSlice({
         state.loading = false;
         state.error = action.payload || "Failed to collect pot";
       })
-      .addCase(updateCurrentPlayer.pending, (state) => {
+
+      .addCase(updatePositionsAndBlinds.pending, (state) => {
         state.loading = true;
+      })
+      .addCase(updatePositionsAndBlinds.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedGameIndex = state.games.findIndex(
+          (game) => game._id === action.payload._id
+        );
+        if (updatedGameIndex > -1) {
+          state.games[updatedGameIndex] = action.payload;
+        }
+      })
+      .addCase(updatePositionsAndBlinds.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to update positions and blinds";
       })
       .addCase(updateCurrentPlayer.fulfilled, (state, action) => {
         state.loading = false;
@@ -553,6 +557,9 @@ const serverSlice = createSlice({
         if (updatedGameIndex > -1) {
           state.games[updatedGameIndex] = action.payload;
         }
+      })
+      .addCase(updateCurrentPlayer.pending, (state) => {
+        state.loading = true;
       })
       .addCase(updateCurrentPlayer.rejected, (state, action) => {
         state.loading = false;

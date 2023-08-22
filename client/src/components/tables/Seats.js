@@ -118,7 +118,8 @@ const Seat = ({ seat, currentGame }) => {
     console.log(joinGame);
   };
 
-  const isDealer = currentGame.dealerPosition;
+  const isDealer = currentGame.dealerPosition === seat.id - 1;
+  const isCurrentPlayer = currentGame.currentPlayerTurn === seat.id - 1;
 
   const handleAllIn = () => {
     dispatch(
@@ -193,7 +194,8 @@ const Seat = ({ seat, currentGame }) => {
                 <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
                   <p>{`Card 1 ${cards[0]}`}</p>
                   <p>{`Card 2 ${cards[1]}`}</p>
-                  <p>Dealer: </p>
+                  <p>Dealer: {isDealer ? "True" : "False"}</p>
+                  <p>Current Player: {isCurrentPlayer ? "True" : "False"}</p>
                 </Box>
               </Box>
             </>

@@ -19,6 +19,10 @@ import {
   gameEnded,
   getWinner,
   winnerReceived,
+  updateCurrentPlayer,
+  updatePositionsAndBlinds,
+  playerUpdated,
+  updatedBlinds
 } from "../../rtk/slices/serverSlice";
 
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
@@ -133,6 +137,26 @@ const Room = () => {
     };
   }, [dispatch]);
 
+  useEffect(() => {
+    socket.on("positions_and_blinds", (updatedGame) => {
+      dispatch(updatedBlinds(updatedGame));
+    });
+  
+    return () => {
+      socket.off("positions_and_blinds");
+    };
+  }, [dispatch]);
+  
+  useEffect(() => {
+    socket.on("current_player", (updatedGame) => {
+      dispatch(playerUpdated(updatedGame));
+    });
+  
+    return () => {
+      socket.off("current_player");
+    };
+  }, [dispatch]);
+
   const seatArray = currentGame ? currentGame.seats : [];
   const occupiedSeats = currentGame
     ? currentGame.seats.filter((seat) => seat.player !== null).length
@@ -177,6 +201,14 @@ const Room = () => {
     navigate("/Tables");
   };
 
+  const handleCurrentPlayer = () => {
+    dispatch(updateCurrentPlayer(id));
+  };
+
+  const handlePositionsAndBlinds = () => {
+    dispatch(updatePositionsAndBlinds(id));
+  };
+
   const handleEndGame = () => {
     dispatch(endGame(id));
   };
@@ -218,6 +250,12 @@ const Room = () => {
       <Row className="mt-2">
         <Row className="mt-2">
           <Col className="d-flex justify-content-center">
+          <Button variant="success" onClick={handleCurrentPlayer}>
+           Current Player
+            </Button>
+            <Button variant="success" onClick={handlePositionsAndBlinds}>
+              Dealer 
+            </Button>
             <Button variant="success" onClick={handleDealCards}>
               Deal Cards
             </Button>
