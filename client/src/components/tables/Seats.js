@@ -9,7 +9,7 @@ import {
   updateCurrentPlayer,
   playerUpdated,
 } from "../../rtk/slices/serverSlice";
-import SeatUsername from "./SeatUsername";
+import DeactivatedBet from "./DeactivatedBet";
 
 import { Button as bootstrapBtn } from "react-bootstrap";
 import IconButton from "@mui/material/IconButton";
@@ -183,12 +183,21 @@ const Seat = ({ seat, currentGame }) => {
                 <Divider variant="middle" />
                 <Box sx={{ m: 2 }}>
                   <Stack direction="row" spacing={1}>
-                    <BetBox
-                      playerChips={seat.player.chips}
-                      onBetChange={handleSliderBet}
-                      onCall={handleCall}
-                      onAllIn={handleAllIn}
-                    />
+                  {isCurrentPlayer ? (
+  <BetBox
+    playerChips={seat.player.chips}
+    onBetChange={handleSliderBet}
+    onCall={handleCall}
+    onAllIn={handleAllIn}
+  />
+) : (
+< DeactivatedBet 
+    playerChips={seat.player.chips}
+    onBetChange={handleSliderBet}
+    onCall={handleCall}
+    onAllIn={handleAllIn}
+/>
+)}
                   </Stack>
                 </Box>
                 <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
