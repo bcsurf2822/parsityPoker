@@ -48,6 +48,7 @@ const Seat = ({ seat, currentGame }) => {
   const maxBuyIn = currentGame.max;
   const minBuyIn = currentGame.min;
   const cards = seat.player ? seat.player.handCards : [];
+  // const { id } = useParams();
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -121,6 +122,13 @@ const Seat = ({ seat, currentGame }) => {
   const isDealer = currentGame.dealerPosition === seat.id - 1;
   const isCurrentPlayer = currentGame.currentPlayerTurn === seat.id - 1;
 
+  const handleUpdatePlayer = () => {
+    dispatch(
+      updateCurrentPlayer(tableId)
+    );
+  };
+
+
   const handleAllIn = () => {
     dispatch(
       chipsToPot({
@@ -139,6 +147,7 @@ const Seat = ({ seat, currentGame }) => {
         action: "call",
       })
     );
+
   };
 
   const handleSliderBet = (betValue) => {
@@ -189,6 +198,7 @@ const Seat = ({ seat, currentGame }) => {
     onBetChange={handleSliderBet}
     onCall={handleCall}
     onAllIn={handleAllIn}
+    onPlayer={handleUpdatePlayer}
   />
 ) : (
 < DeactivatedBet 

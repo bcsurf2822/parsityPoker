@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import Button from '@mui/material/Button';
 
+
 export default function BetBox({ playerChips, onBetChange, onCall, onAllIn }) {
     const [selectedBet, setSelectedBet] = useState(0);
     const marks = [

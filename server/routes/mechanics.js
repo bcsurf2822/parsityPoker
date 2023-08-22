@@ -23,7 +23,6 @@ router.post("/:gameId/updatePostionsAndBlinds", async (req, res) => {
     game.smallBlindPosition = findNextPosition(game.dealerPosition, game.seats);
     game.bigBlindPosition = findNextPosition(game.smallBlindPosition, game.seats);
 
-    // Update currentPlayerTurn after big blind
     game.currentPlayerTurn = findNextPosition(game.bigBlindPosition, game.seats);
 
     const [smallBlindAmount, bigBlindAmount] = game.blinds

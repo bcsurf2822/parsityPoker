@@ -35,6 +35,7 @@ export default function DeactivatedBet({ playerChips, onBetChange, onCall, onAll
               <Button disabled variant="contained" color="secondary">All In</Button>
           </Box>
           <Slider
+          disabled
               aria-label="Bet slider"
               defaultValue={0}
               step={1}
