@@ -5,7 +5,6 @@ import {
   joinGame,
   playerJoined,
   chipsToPot,
-  updateCurrentPlayer,
   playerUpdated,
   fold,
   check,

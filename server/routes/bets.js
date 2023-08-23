@@ -101,7 +101,7 @@ router.put("/game/:gameId/toPot", async (req, res) => {
     }
   });
 
-  router.put("game/:gameId/fold", async (req, res) => {
+  router.put("/game/:gameId/fold", async (req, res) => {
     const { gameId } = req.params;
     const { seatId } = req.body;
   
