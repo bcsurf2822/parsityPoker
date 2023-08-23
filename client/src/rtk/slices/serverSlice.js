@@ -269,7 +269,6 @@ export const playerUpdated = createAsyncThunk(
 export const chipsToPot = createAsyncThunk(
   "games/transferToPot",
   async (data, { dispatch, rejectWithValue }) => {
-    // note the use of dispatch
     try {
       const response = await axios.put(
         `http://localhost:4000/game/${data.gameId}/toPot`,
@@ -329,13 +328,14 @@ export const playerChecked = createAsyncThunk(
 
 export const fold = createAsyncThunk(
   "games/playerFold",
-  async (gameId, { dispatch, rejectWithValue }) => {
+  async (data, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `http://localhost:4000/game/${gameId}/fold`
+        `http://localhost:4000/game/${data.gameId}/fold`,
+        { seatId: data.seatId }
       );
 
-      dispatch(updateCurrentPlayer(gameId));
+      dispatch(updateCurrentPlayer(data.gameId));
 
       return response.data;
     } catch (err) {

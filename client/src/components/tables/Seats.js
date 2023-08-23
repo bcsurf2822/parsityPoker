@@ -20,7 +20,7 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
+import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
@@ -117,20 +117,12 @@ const Seat = ({ seat, currentGame }) => {
   const isDealer = currentGame.dealerPosition === seat.id - 1;
   const isCurrentPlayer = currentGame.currentPlayerTurn === seat.id - 1;
 
-  const handleUpdatePlayer = () => {
-    dispatch(
-      updateCurrentPlayer(tableId)
-    );
-  };
-
   const handleFold = () => {
-    dispatch(fold(tableId));
+    dispatch(fold({ gameId: tableId, seatId: seat._id }));
   };
 
   const handleCheck = () => {
-    dispatch(check({  gameId: tableId,
-      seatId: seat._id }));
-
+    dispatch(check({ gameId: tableId, seatId: seat._id }));
   };
 
   const handleAllIn = () => {
@@ -151,7 +143,6 @@ const Seat = ({ seat, currentGame }) => {
         action: "call",
       })
     );
-
   };
 
   const handleSliderBet = (betValue) => {
@@ -187,40 +178,40 @@ const Seat = ({ seat, currentGame }) => {
                       </Typography>
                     </Grid>
                     <Grid item>
-                    <Typography gutterBottom variant="h6" component="div">
-    $ {parseFloat(seat.player.chips).toFixed(2)}
-</Typography>
+                      <Typography gutterBottom variant="h6" component="div">
+                        $ {parseFloat(seat.player.chips).toFixed(2)}
+                      </Typography>
                     </Grid>
                   </Grid>
                 </Box>
                 <Divider variant="middle" />
                 <Box sx={{ m: 2 }}>
                   <Stack direction="row" spacing={1}>
-                  {isCurrentPlayer ? (
-  <BetBox
-    playerChips={parseFloat(seat.player.chips).toFixed(2)}
-    onBetChange={handleSliderBet}
-    onCall={handleCall}
-    onAllIn={handleAllIn}
-    onCheck={handleCheck}
-    onFold={handleFold}
-  />
-) : (
-< DeactivatedBet 
-    playerChips={parseFloat(seat.player.chips).toFixed(2)}
-    onBetChange={handleSliderBet}
-    onCall={handleCall}
-    onAllIn={handleAllIn}
-/>
-)}
+                    {isCurrentPlayer ? (
+                      <BetBox
+                        playerChips={parseFloat(seat.player.chips).toFixed(2)}
+                        onBetChange={handleSliderBet}
+                        onCall={handleCall}
+                        onAllIn={handleAllIn}
+                        onCheck={handleCheck}
+                        onFold={handleFold}
+                      />
+                    ) : (
+                      <DeactivatedBet
+                        playerChips={parseFloat(seat.player.chips).toFixed(2)}
+                        onBetChange={handleSliderBet}
+                        onCall={handleCall}
+                        onAllIn={handleAllIn}
+                      />
+                    )}
                   </Stack>
                 </Box>
                 <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
-  <p>{`Card 1 ${cards[0]}`}</p>
-  <p>{`Card 2 ${cards[1]}`}</p>
-  {isDealer && <RadioButtonCheckedIcon />}
-  <p>Current Player: {isCurrentPlayer ? "True" : "False"}</p>
-</Box>
+                  <p>{`Card 1 ${cards[0]}`}</p>
+                  <p>{`Card 2 ${cards[1]}`}</p>
+                  {isDealer && <RadioButtonCheckedIcon />}
+                  <p>Current Player: {isCurrentPlayer ? "True" : "False"}</p>
+                </Box>
               </Box>
             </>
           ) : (
