@@ -93,7 +93,7 @@ router.put("/game/:gameId/toPot", async (req, res) => {
       await game.save();
   
       res.json(game);
-      req.io.emit("player_checked", game);
+      req.io.emit("check", game);
   
     } catch (error) {
       console.error(`Error during check action for gameId: ${gameId}. Error: ${error.message}`);
@@ -126,7 +126,7 @@ router.put("/game/:gameId/toPot", async (req, res) => {
       seat.player.checkBetFold = true;
   
       await game.save();
-      req.io.emit("player_fold", game);
+      req.io.emit("fold", game);
   
       res.status(200).send({ message: "Folded successfully" });
     } catch (error) {

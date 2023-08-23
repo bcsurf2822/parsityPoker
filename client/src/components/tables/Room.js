@@ -22,7 +22,9 @@ import {
   updateCurrentPlayer,
   updatePositionsAndBlinds,
   playerUpdated,
-  updatedBlinds
+  updatedBlinds,
+  playerChecked,
+  playerFolded
 } from "../../rtk/slices/serverSlice";
 
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
@@ -154,6 +156,26 @@ const Room = () => {
   
     return () => {
       socket.off("current_player");
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    socket.on("check", (updatedGame) => {
+      dispatch(playerChecked(updatedGame));
+    });
+
+    return () => {
+      socket.off("check");
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    socket.on("fold", (updatedGame) => {
+      dispatch(playerFolded(updatedGame));
+    });
+
+    return () => {
+      socket.off("fold");
     };
   }, [dispatch]);
 

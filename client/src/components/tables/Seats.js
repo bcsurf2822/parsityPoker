@@ -7,6 +7,8 @@ import {
   chipsToPot,
   updateCurrentPlayer,
   playerUpdated,
+  fold,
+  check,
 } from "../../rtk/slices/serverSlice";
 import DeactivatedBet from "./DeactivatedBet";
 import IconButton from "@mui/material/IconButton";
@@ -121,6 +123,13 @@ const Seat = ({ seat, currentGame }) => {
     );
   };
 
+  const handleFold = () => {
+    dispatch(fold(tableId));
+  };
+
+  const handleCheck = () => {
+    dispatch(check(tableId));
+  };
 
   const handleAllIn = () => {
     dispatch(
@@ -191,7 +200,8 @@ const Seat = ({ seat, currentGame }) => {
     onBetChange={handleSliderBet}
     onCall={handleCall}
     onAllIn={handleAllIn}
-    onPlayer={handleUpdatePlayer}
+    onCheck={handleCheck}
+    onFold={handleFold}
   />
 ) : (
 < DeactivatedBet 

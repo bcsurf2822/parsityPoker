@@ -10,7 +10,7 @@ const Input = styled(MuiInput)`
   width: 42px;
 `;
 
-export default function BetBox({ playerChips, onBetChange, onCall, onAllIn }) {
+export default function BetBox({ playerChips, onBetChange, onCall, onAllIn, onCheck, onFold }) {
   const [selectedBet, setSelectedBet] = useState(0);
 
   const marks = [
