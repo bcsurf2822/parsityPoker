@@ -21,6 +21,7 @@ router.post("/deal-cards/:gameId", async (req, res) => {
     game.seats.forEach((seat) => {
       if (seat.player) {
         seat.player.handCards = [];
+        seat.player.checkBetFold = false;
       }
     });
 
@@ -56,6 +57,12 @@ router.post("/flop/:gameId", async (req, res) => {
       console.log(`Game with ID: ${gameId} not found.`);
       return res.status(404).json({ message: "Game not found!" });
     }
+
+    game.seats.forEach((seat) => {
+      if (seat.player) {
+        seat.player.checkBetFold = false;  
+      }
+    });
 
     const burnCard = game.currentDeck.splice(0, 1)[0].code;  // Extracting the code
     game.dealtCards.push(burnCard);
@@ -100,6 +107,12 @@ router.put("/turn/:gameId", async (req, res) => {
         .json({ message: "Not enough cards to deal the turn!" });
     }
 
+    game.seats.forEach((seat) => {
+      if (seat.player) {
+        seat.player.checkBetFold = false; 
+      }
+    });
+
     const burntCard = game.currentDeck.shift().code;
     game.dealtCards.push(burntCard);
 
@@ -133,6 +146,12 @@ router.put("/river/:gameId", async (req, res) => {
         .status(400)
         .json({ message: "Not enough cards to deal the river!" });
     }
+
+    game.seats.forEach((seat) => {
+      if (seat.player) {
+        seat.player.checkBetFold = false; 
+      }
+    });
 
     const burntCard = game.currentDeck.shift().code;
     game.dealtCards.push(burntCard);
@@ -170,6 +189,7 @@ router.post("/endgame/:gameId", async (req, res) => {
     game.seats.forEach((seat) => {
       if (seat.player) {
         seat.player.handCards = [];
+        seat.player.checkBetFold = false; 
       }
     });
 

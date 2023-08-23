@@ -549,6 +549,15 @@ const serverSlice = createSlice({
         state.loading = false;
         state.error = action.payload || "Failed to update positions and blinds";
       })
+      .addCase(updatedBlinds.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedGameIndex = state.games.findIndex(
+          (game) => game._id === action.payload._id
+        );
+        if (updatedGameIndex > -1) {
+          state.games[updatedGameIndex] = action.payload;
+        }
+      })
       .addCase(updateCurrentPlayer.fulfilled, (state, action) => {
         state.loading = false;
         const updatedGameIndex = state.games.findIndex(
