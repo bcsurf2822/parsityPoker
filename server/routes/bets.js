@@ -3,7 +3,7 @@ const Game = require("../models/gamesSchema");
 
 router.put("/game/:gameId/toPot", async (req, res) => {
     const { gameId } = req.params;
-    const { seatId, bet, action } = req.body; // "action" can be "call", "all-in", or "bet"
+    const { seatId, bet, action } = req.body;
     let betAmount;
   
     try {
@@ -53,7 +53,8 @@ router.put("/game/:gameId/toPot", async (req, res) => {
   
         seat.player.chips -= betAmount;
         game.pot += betAmount;
-        seat.player.bet += betAmount; // Increase the player's current bet amount
+        seat.player.bet += betAmount; 
+        seat.player.checkBetFold = true;
   
         await game.save();
   
@@ -66,36 +67,72 @@ router.put("/game/:gameId/toPot", async (req, res) => {
     }
   });
   
-
-router.post("/:gameId/fold", async (req, res) => {
-  const { gameId } = req.params;
-  const { userId } = req.body;
-
-  try {
-    const game = await Game.findById(gameId);
-
-    if (!game) {
-      return res.status(404).send({ message: "Game not found" });
+  router.put("/game/:gameId/check", async (req, res) => {
+    const { gameId } = req.params;
+    const { seatId } = req.body;
+  
+    try {
+      const game = await Game.findById(gameId);
+  
+      if (!game) {
+        return res.status(404).json({ message: "Game not found!" });
+      }
+  
+      const seat = game.seats.find(s => s._id.toString() === seatId);
+  
+      if (!seat) {
+        return res.status(400).json({ message: "Seat not found!" });
+      }
+  
+      if (!seat.player) {
+        return res.status(400).json({ message: "No player at the seat!" });
+      }
+  
+      seat.player.checkBetFold = true;
+  
+      await game.save();
+  
+      res.json(game);
+      req.io.emit("player_checked", game);
+  
+    } catch (error) {
+      console.error(`Error during check action for gameId: ${gameId}. Error: ${error.message}`);
+      res.status(500).json({ error: "Failed to handle the check" });
     }
+  });
 
-    const seat = game.seats.find(
-      (seat) => seat.player && seat.player.user.toString() === userId
-    );
-
-    if (!seat || !seat.player) {
-      return res.status(404).send({ message: "Player not found" });
+  router.put("game/:gameId/fold", async (req, res) => {
+    const { gameId } = req.params;
+    const { seatId } = req.body;
+  
+    try {
+      const game = await Game.findById(gameId);
+  
+      if (!game) {
+        return res.status(404).send({ message: "Game not found" });
+      }
+  
+      const seat = game.seats.find(s => s._id.toString() === seatId);
+  
+      if (!seat) {
+        return res.status(404).send({ message: "Seat not found" });
+      }
+  
+      if (!seat.player) {
+        return res.status(404).send({ message: "No player at the seat!" });
+      }
+  
+      seat.player.handCards = [];
+      seat.player.checkBetFold = true;
+  
+      await game.save();
+      req.io.emit("player_fold", game);
+  
+      res.status(200).send({ message: "Folded successfully" });
+    } catch (error) {
+      console.error("Error folding:", error);
+      res.status(500).send({ message: "Server error" });
     }
-
-    seat.player.handCards = [];
-
-    await game.save();
-    req.io.emit("player_fold", game);
-
-    res.status(200).send({ message: "Folded successfully" });
-  } catch (error) {
-    console.error("Error folding:", error);
-    res.status(500).send({ message: "Server error" });
-  }
-});
+  });
 
 module.exports = router;

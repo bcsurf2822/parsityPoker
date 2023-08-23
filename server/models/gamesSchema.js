@@ -20,6 +20,10 @@ const PlayerSchema = new Schema({
     default: [],
   },
   bet: { type: Number, required: true },
+  checkBetFold: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 const SeatSchema = new Schema({

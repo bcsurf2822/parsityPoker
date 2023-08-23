@@ -18,12 +18,13 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
+import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
 import { useEffect } from "react";
 import { fetchUsernameById } from "../../rtk/slices/usersSlice";
-import BetBox from "./betButtons";
+import BetBox from "./BetBox";
 
 const style = {
   position: "absolute",
@@ -175,9 +176,9 @@ const Seat = ({ seat, currentGame }) => {
                       </Typography>
                     </Grid>
                     <Grid item>
-                      <Typography gutterBottom variant="h6" component="div">
-                        $ {seat.player.chips}
-                      </Typography>
+                    <Typography gutterBottom variant="h6" component="div">
+    $ {parseFloat(seat.player.chips).toFixed(2)}
+</Typography>
                     </Grid>
                   </Grid>
                 </Box>
@@ -186,7 +187,7 @@ const Seat = ({ seat, currentGame }) => {
                   <Stack direction="row" spacing={1}>
                   {isCurrentPlayer ? (
   <BetBox
-    playerChips={seat.player.chips}
+    playerChips={parseFloat(seat.player.chips).toFixed(2)}
     onBetChange={handleSliderBet}
     onCall={handleCall}
     onAllIn={handleAllIn}
@@ -194,7 +195,7 @@ const Seat = ({ seat, currentGame }) => {
   />
 ) : (
 < DeactivatedBet 
-    playerChips={seat.player.chips}
+    playerChips={parseFloat(seat.player.chips).toFixed(2)}
     onBetChange={handleSliderBet}
     onCall={handleCall}
     onAllIn={handleAllIn}
@@ -203,11 +204,11 @@ const Seat = ({ seat, currentGame }) => {
                   </Stack>
                 </Box>
                 <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
-                  <p>{`Card 1 ${cards[0]}`}</p>
-                  <p>{`Card 2 ${cards[1]}`}</p>
-                  <p>Dealer: {isDealer ? "True" : "False"}</p>
-                  <p>Current Player: {isCurrentPlayer ? "True" : "False"}</p>
-                </Box>
+  <p>{`Card 1 ${cards[0]}`}</p>
+  <p>{`Card 2 ${cards[1]}`}</p>
+  {isDealer && <RadioButtonCheckedIcon />}
+  <p>Current Player: {isCurrentPlayer ? "True" : "False"}</p>
+</Box>
               </Box>
             </>
           ) : (
