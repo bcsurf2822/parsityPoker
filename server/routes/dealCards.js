@@ -170,37 +170,5 @@ router.put("/river/:gameId", async (req, res) => {
   }
 });
 
-router.post("/endgame/:gameId", async (req, res) => {
-  const { gameId } = req.params;
-
-  try {
-    const game = await Game.findById(gameId);
-
-    if (!game) {
-      return res.status(404).json({ message: "Game not found!" });
-    }
-
-    game.currentDeck = [];
-    game.communityCards = [];
-    game.dealtCards = [];
-    game.winnerData = [];
-    game.pot = 0;
-
-    game.seats.forEach((seat) => {
-      if (seat.player) {
-        seat.player.handCards = [];
-        seat.player.checkBetFold = false; 
-      }
-    });
-
-    await game.save();
-    req.io.emit("game_ended", game);
-
-    res.json({ message: "Game ended, cards cleared" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to end the game" });
-  }
-});
 
 module.exports = router;

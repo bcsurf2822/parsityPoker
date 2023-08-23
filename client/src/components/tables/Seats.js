@@ -7,7 +7,7 @@ import {
   chipsToPot,
   playerUpdated,
   fold,
-  check,
+  check
 } from "../../rtk/slices/serverSlice";
 import DeactivatedBet from "./DeactivatedBet";
 import IconButton from "@mui/material/IconButton";
@@ -72,6 +72,7 @@ const Seat = ({ seat, currentGame }) => {
     if (seat.player) fetchUsername(seat.player);
   }, [seat, dispatch]);
 
+
   useEffect(() => {
     socket.on("playerJoined", (updatedGame) => {
       dispatch(playerJoined(updatedGame));
@@ -91,6 +92,7 @@ const Seat = ({ seat, currentGame }) => {
       socket.off("current_player");
     };
   }, [dispatch]);
+
 
   const handleClick = () => {
     setSeatChoice(true);

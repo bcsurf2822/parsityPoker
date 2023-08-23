@@ -24,7 +24,7 @@ import {
   playerUpdated,
   updatedBlinds,
   playerChecked,
-  playerFolded
+  playerFolded,
 } from "../../rtk/slices/serverSlice";
 
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
