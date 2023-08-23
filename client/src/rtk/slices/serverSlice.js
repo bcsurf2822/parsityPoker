@@ -299,13 +299,14 @@ export const chipsCollected = createAsyncThunk(
 
 export const check = createAsyncThunk(
   "games/playerCheck",
-  async (gameId, { dispatch, rejectWithValue }) => {
+  async (data, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `http://localhost:4000/game/${gameId}/check`
+        `http://localhost:4000/game/${data.gameId}/check`,
+        { seatId: data.seatId }
       );
 
-      dispatch(updateCurrentPlayer(gameId));
+      dispatch(updateCurrentPlayer(data.gameId));
 
       return response.data;
     } catch (err) {

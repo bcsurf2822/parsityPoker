@@ -128,7 +128,9 @@ const Seat = ({ seat, currentGame }) => {
   };
 
   const handleCheck = () => {
-    dispatch(check(tableId));
+    dispatch(check({  gameId: tableId,
+      seatId: seat._id }));
+
   };
 
   const handleAllIn = () => {

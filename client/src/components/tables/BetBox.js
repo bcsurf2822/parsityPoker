@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
 import MuiInput from "@mui/material/Input";
+import ButtonGroup from '@mui/material/ButtonGroup';
 
 const Input = styled(MuiInput)`
   width: 42px;
@@ -55,12 +56,21 @@ export default function BetBox({ playerChips, onBetChange, onCall, onAllIn, onCh
           marginBottom: 2,
         }}
       >
+
+        <ButtonGroup variant="text" aria-label="text button group">
         <Button onClick={onCall} variant="contained" color="primary">
           Call
         </Button>
         <Button onClick={onAllIn} variant="contained" color="secondary">
           All In
         </Button>
+        <Button onClick={onCheck} variant="contained" color="secondary">
+         Check
+        </Button>
+        <Button onClick={onFold} variant="contained" color="secondary">
+       Fold
+        </Button>
+      </ButtonGroup>
       </Box>
       <Grid container spacing={2} alignItems="center">
         <Grid item xs>
