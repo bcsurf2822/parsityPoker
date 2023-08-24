@@ -48,7 +48,7 @@ app.use(logoutRoute);
 const deckofcardsapiRoute = require("./routes/deckOfCardsAPI");
 app.use(deckofcardsapiRoute);
 
-const pokerApiRoute = require("./routes/pokerAPI");
+const pokerApiRoute = require("./routes/winning");
 app.use(pokerApiRoute);
 
 const fundingRoute = require("./routes/funding");
