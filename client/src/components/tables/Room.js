@@ -145,6 +145,8 @@ const Room = () => {
   //     socket.off("positions_and_blinds");
   //   };
   // }, [dispatch]);
+
+
   
   useEffect(() => {
     socket.on("current_player", (updatedGame) => {
@@ -193,13 +195,13 @@ const Room = () => {
 
   console.log(`Number of occupied seats: ${occupiedSeats}`);
 
-  useEffect(() => {
-    if (occupiedSeats < 2) {
-      console.log("Less than two players remaining, ending game...");
-      dispatch(endGame(id));
-      positionsAndBlindsUpdated.current = false;
-    }
-  }, [occupiedSeats, dispatch, id]);
+  // useEffect(() => {
+  //   if (occupiedSeats < 2) {
+  //     console.log("Less than two players remaining, ending game...");
+  //     dispatch(endGame(id));
+  //     positionsAndBlindsUpdated.current = false;
+  //   }
+  // }, [occupiedSeats, dispatch, id]);
 
   useEffect(() => {
     if (
@@ -214,10 +216,9 @@ const Room = () => {
           socket.emit("new_deck", currentGame._id);
           dispatch(fetchGames());
   
-          // Here, you can add the logic to assign the dealer and deal cards
           dispatch(updatePositionsAndBlinds(id))
             .then(() => {
-              positionsAndBlindsUpdated.current = true; // Update the ref to indicate the positions and blinds have been updated
+              positionsAndBlindsUpdated.current = true; // 
               dispatch(dealCards(id));
             });
         })
@@ -225,7 +226,6 @@ const Room = () => {
           console.error("Failed to fetch new deck:", error);
         });
     
-      // This listener should only be set up once, when the above conditions are met
       socket.on("positions_and_blinds", (updatedGame) => {
         dispatch(updatedBlinds(updatedGame));
       });
