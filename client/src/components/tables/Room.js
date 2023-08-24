@@ -47,6 +47,7 @@ const Room = () => {
   console.log("Current Game:", currentGame);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const transferredPot = useRef(false);
+  const positionsAndBlindsUpdated = useRef(false);
 
   const playersWithHandCards = currentGame ? currentGame.seats.filter((seat) => seat.player && seat.player.handCards && seat.player.handCards.length > 0) : [];
 
@@ -135,15 +136,15 @@ const Room = () => {
     };
   }, [dispatch]);
 
-  useEffect(() => {
-    socket.on("positions_and_blinds", (updatedGame) => {
-      dispatch(updatedBlinds(updatedGame));
-    });
+  // useEffect(() => {
+  //   socket.on("positions_and_blinds", (updatedGame) => {
+  //     dispatch(updatedBlinds(updatedGame));
+  //   });
   
-    return () => {
-      socket.off("positions_and_blinds");
-    };
-  }, [dispatch]);
+  //   return () => {
+  //     socket.off("positions_and_blinds");
+  //   };
+  // }, [dispatch]);
   
   useEffect(() => {
     socket.on("current_player", (updatedGame) => {
@@ -192,29 +193,42 @@ const Room = () => {
 
   console.log(`Number of occupied seats: ${occupiedSeats}`);
 
+
   useEffect(() => {
     if (
       currentGame &&
       currentGame.currentDeck.length === 0 &&
-      occupiedSeats > 1
+      occupiedSeats > 1 &&
+      !positionsAndBlindsUpdated.current // Only proceed if not already updated
     ) {
       // Fetch a new deck
       dispatch(fetchNewDeck(currentGame._id))
         .then(() => {
           socket.emit("new_deck", currentGame._id);
           dispatch(fetchGames());
-
+  
           // Here, you can add the logic to assign the dealer and deal cards
           dispatch(updatePositionsAndBlinds(id))
             .then(() => {
+              positionsAndBlindsUpdated.current = true; // Update the ref to indicate the positions and blinds have been updated
               dispatch(dealCards(id));
             });
         })
         .catch((error) => {
           console.error("Failed to fetch new deck:", error);
         });
+    
+      // This listener should only be set up once, when the above conditions are met
+      socket.on("positions_and_blinds", (updatedGame) => {
+        dispatch(updatedBlinds(updatedGame));
+      });
+
+      return () => {
+        socket.off("positions_and_blinds");
+      };
     }
 }, [dispatch, currentGame, occupiedSeats]);
+
 
 
   if (playersWithHandCards.length === 1 && !transferredPot.current && currentGame.pot > 0) {
@@ -254,6 +268,7 @@ const Room = () => {
 
   const handleEndGame = () => {
     dispatch(endGame(id));
+    positionsAndBlindsUpdated.current = false;
   };
 
   const handleDealCards = () => {
