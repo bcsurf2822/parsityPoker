@@ -93,6 +93,11 @@ router.post("/endgame/:gameId", async (req, res) => {
       }
     });
 
+    game.dealerPosition = -1
+    game.smallBlindPosition = -1
+    game.bigBlindPosition = -1
+    game.currentPlayerTurn = -1
+
     await game.save();
     req.io.emit("game_ended", game);
 
