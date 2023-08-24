@@ -1,5 +1,5 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -26,6 +26,7 @@ import {
   playerChecked,
   playerFolded,
   potTransferred,
+  potToPlayer,
 } from "../../rtk/slices/serverSlice";
 
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
@@ -45,6 +46,9 @@ const Room = () => {
   const currentGame = games.find((game) => game._id === id);
   console.log("Current Game:", currentGame);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const transferredPot = useRef(false);
+
+  const playersWithHandCards = currentGame ? currentGame.seats.filter((seat) => seat.player && seat.player.handCards && seat.player.handCards.length > 0) : [];
 
   useEffect(() => {
     dispatch(fetchGames());
@@ -213,6 +217,13 @@ const Room = () => {
         });
     }
   }, [dispatch, currentGame, occupiedSeats]);
+
+  if (playersWithHandCards.length === 1 && !transferredPot.current && currentGame.pot > 0) {
+    console.log("Only one player left with hand cards and pot is not empty!");
+    dispatch(potToPlayer(currentGame._id));
+    transferredPot.current = true;
+  }
+  
 
   const leaveTable = () => {
     if (!user) {

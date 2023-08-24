@@ -202,7 +202,7 @@ export const potToPlayer = createAsyncThunk(
   async (gameId, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/games/:gameId/potToPlayer`
+        `http://localhost:4000/games/${gameId}/potToPlayer`
       );
       console.log("Transfer Pot To Player Called & Response.Data:", response.data);
       const { message } = response.data;
