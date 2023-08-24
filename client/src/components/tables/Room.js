@@ -193,6 +193,13 @@ const Room = () => {
 
   console.log(`Number of occupied seats: ${occupiedSeats}`);
 
+  useEffect(() => {
+    if (occupiedSeats < 2) {
+      console.log("Less than two players remaining, ending game...");
+      dispatch(endGame(id));
+      positionsAndBlindsUpdated.current = false;
+    }
+  }, [occupiedSeats, dispatch, id]);
 
   useEffect(() => {
     if (
