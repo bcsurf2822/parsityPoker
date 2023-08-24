@@ -74,15 +74,6 @@ const Room = () => {
     };
   }, [dispatch]);
 
-  useEffect(() => {
-    socket.on("cards_dealt", (updatedGame) => {
-      dispatch(cardsDealt(updatedGame));
-    });
-
-    return () => {
-      socket.off("cards_dealt");
-    };
-  }, [dispatch]);
 
   useEffect(() => {
     socket.on("flop", (updatedGame) => {
@@ -207,16 +198,24 @@ const Room = () => {
       currentGame.currentDeck.length === 0 &&
       occupiedSeats > 1
     ) {
+      // Fetch a new deck
       dispatch(fetchNewDeck(currentGame._id))
         .then(() => {
           socket.emit("new_deck", currentGame._id);
           dispatch(fetchGames());
+
+          // Here, you can add the logic to assign the dealer and deal cards
+          dispatch(updatePositionsAndBlinds(id))
+            .then(() => {
+              dispatch(dealCards(id));
+            });
         })
         .catch((error) => {
           console.error("Failed to fetch new deck:", error);
         });
     }
-  }, [dispatch, currentGame, occupiedSeats]);
+}, [dispatch, currentGame, occupiedSeats]);
+
 
   if (playersWithHandCards.length === 1 && !transferredPot.current && currentGame.pot > 0) {
     console.log("Only one player left with hand cards and pot is not empty!");

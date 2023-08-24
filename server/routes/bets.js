@@ -24,32 +24,38 @@ router.put("/game/:gameId/toPot", async (req, res) => {
         }
   
         switch (action) {
-            case 'call':
-                const highestBet = Math.max(...game.seats.map(s => s.player ? s.player.bet : 0));
-                betAmount = highestBet - seat.player.bet;
-                if (betAmount <= 0) {
-                    return res.status(400).json({ message: "Player has already matched or exceeded the highest bet." });
-                }
-                break;
-  
-            case 'all-in':
-                betAmount = seat.player.chips;
-                break;
-  
-            case 'bet':
-                betAmount = Number(bet);
-                if (!betAmount || isNaN(betAmount)) {
-                    return res.status(400).json({ message: "Invalid bet amount!" });
-                }
-                break;
-  
-            default:
-                return res.status(400).json({ message: "Invalid action type!" });
-        }
-  
-        if (seat.player.chips < betAmount) {
-            return res.status(400).json({ message: "Insufficient chips!" });
-        }
+          case 'call':
+              const highestBet = Math.max(...game.seats.map(s => s.player ? s.player.bet : 0));
+              betAmount = highestBet - seat.player.bet;
+              if (betAmount <= 0) {
+                  return res.status(400).json({ message: "Player has already matched or exceeded the highest bet." });
+              }
+      
+              // Check if player has less chips than required to call
+              if (seat.player.chips < betAmount) {
+                  betAmount = seat.player.chips;  // Set betAmount to player's total chips
+              }
+              break;
+      
+          case 'all-in':
+              betAmount = seat.player.chips;
+              break;
+      
+          case 'bet':
+              betAmount = Number(bet);
+              if (!betAmount || isNaN(betAmount)) {
+                  return res.status(400).json({ message: "Invalid bet amount!" });
+              }
+              break;
+      
+          default:
+              return res.status(400).json({ message: "Invalid action type!" });
+      }
+      
+
+      if (seat.player.chips < betAmount && action !== 'call') {
+          return res.status(400).json({ message: "Insufficient chips!" });
+      }
   
         seat.player.chips -= betAmount;
         game.pot += betAmount;
