@@ -74,6 +74,22 @@ router.get("/games/:gameId/potToPlayer", async (req, res) => {
 
     const remainingSeat = occupiedSeats[0];
     remainingSeat.player.chips += game.pot;
+
+    // Construct the custom winnerData object
+    game.winnerData = {
+      players: [{
+        cards: remainingSeat.player.handCards.join(","),
+        chips: remainingSeat.player.chips,
+        seatId: remainingSeat._id // Adding a custom field for seat identification
+      }],
+      winners: [{
+        cards: remainingSeat.player.handCards.join(","),
+        chips: remainingSeat.player.chips,
+        seatId: remainingSeat._id // Adding a custom field for seat identification
+      }],
+      reason: "Last remaining player awarded the pot" // Additional context
+    };
+
     game.pot = 0;
 
     await game.save();

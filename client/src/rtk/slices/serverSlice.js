@@ -198,25 +198,27 @@ export const winnerReceived = createAsyncThunk(
 );
 
 export const potToPlayer = createAsyncThunk(
-  "games/collectPot",
-  async ({ gameId, seatId }, { rejectWithValue }) => {
+  "games/potToPlayer",
+  async (gameId, { rejectWithValue }) => {
     try {
-      const response = await axios.put(
-        `http://localhost:4000/game/${gameId}/getPot`,
-        { seatId }
+      const response = await axios.get(
+        `http://localhost:4000/games/:gameId/potToPlayer`
       );
-      return response.data;
+      console.log("Transfer Pot To Player Called & Response.Data:", response.data);
+      const { message } = response.data;
+
+      return { message };
     } catch (err) {
-      console.error("Error in collectPot:", err);
+      console.error("Error in potToPlayer:", err);
       return rejectWithValue(
-        err.response.data ? err.response.data : "Unknown error in collectPot"
+        err.message ? err.message : "Unknown error in potToPlayer"
       );
     }
   }
 );
 
-export const potCollected = createAsyncThunk(
-  "games/potCollected",
+export const potTransferred = createAsyncThunk(
+  "games/potTransferred",
   async (updatedGame) => {
     return updatedGame;
   }
@@ -562,6 +564,28 @@ const serverSlice = createSlice({
           state.games[updatedGameIndex] = action.payload;
         }
       })
+      .addCase(potToPlayer.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(potToPlayer.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentGameMessage = action.payload.message; // you can decide how you want to manage this message in the state
+      })
+      .addCase(potToPlayer.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to transfer pot to player";
+      })
+      .addCase(potTransferred.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedGameIndex = state.games.findIndex(
+          (game) => game._id === action.payload._id
+        );
+        if (updatedGameIndex > -1) {
+          state.games[updatedGameIndex] = action.payload;
+        }
+      })
+      
+      
       .addCase(chipsToPot.pending, (state) => {
         state.loading = true;
       })
@@ -610,22 +634,6 @@ const serverSlice = createSlice({
       .addCase(fold.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed during player fold action";
-      })
-      .addCase(potToPlayer.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(potToPlayer.fulfilled, (state, action) => {
-        state.loading = false;
-        const updatedGameIndex = state.games.findIndex(
-          (game) => game._id === action.payload._id
-        );
-        if (updatedGameIndex > -1) {
-          state.games[updatedGameIndex] = action.payload;
-        }
-      })
-      .addCase(potToPlayer.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload || "Failed to collect pot";
       })
 
       .addCase(updatePositionsAndBlinds.pending, (state) => {

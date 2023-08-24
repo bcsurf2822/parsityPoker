@@ -25,6 +25,7 @@ import {
   updatedBlinds,
   playerChecked,
   playerFolded,
+  potTransferred,
 } from "../../rtk/slices/serverSlice";
 
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
@@ -176,6 +177,16 @@ const Room = () => {
 
     return () => {
       socket.off("fold");
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    socket.on("pot_transfer", (updatedGame) => {
+      dispatch(potTransferred(updatedGame));
+    });
+
+    return () => {
+      socket.off("pot_transfer");
     };
   }, [dispatch]);
 
