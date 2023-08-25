@@ -1,11 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-input-slider";
-import { socket } from "../../socket";
 import {
   joinGame,
-  playerJoined,
   chipsToPot,
-  playerUpdated,
   fold,
   check
 } from "../../rtk/slices/serverSlice";
@@ -71,28 +68,6 @@ const Seat = ({ seat, currentGame }) => {
 
     if (seat.player) fetchUsername(seat.player);
   }, [seat, dispatch]);
-
-
-  useEffect(() => {
-    socket.on("playerJoined", (updatedGame) => {
-      dispatch(playerJoined(updatedGame));
-    });
-
-    return () => {
-      socket.off("playerJoined");
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    socket.on("current_player", (updatedGame) => {
-      dispatch(playerUpdated(updatedGame));
-    });
-
-    return () => {
-      socket.off("current_player");
-    };
-  }, [dispatch]);
-
 
   const handleClick = () => {
     setSeatChoice(true);

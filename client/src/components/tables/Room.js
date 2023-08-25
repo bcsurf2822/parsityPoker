@@ -28,6 +28,8 @@ import {
   playerFolded,
   potTransferred,
   potToPlayer,
+  playerJoined
+
 } from "../../rtk/slices/serverSlice";
 
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
@@ -67,6 +69,16 @@ const Room = () => {
 
   useEffect(() => {
     dispatch(fetchGames());
+  }, [dispatch]);
+
+  useEffect(() => {
+    socket.on("playerJoined", (updatedGame) => {
+      dispatch(playerJoined(updatedGame));
+    });
+
+    return () => {
+      socket.off("playerJoined");
+    };
   }, [dispatch]);
 
 
