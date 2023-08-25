@@ -2,6 +2,7 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import isEqual from 'lodash/isEqual';
 import { useParams } from "react-router-dom";
 import {
   fetchGames,
@@ -43,11 +44,14 @@ const Room = () => {
 
   const user = useSelector((state) => state.auth.user);
   const games = useSelector((state) => state.server.games);
+
   const currentGame = games.find((game) => game._id === id);
-  console.log("Current Game:", currentGame);
+
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const transferredPot = useRef(false);
   const positionsAndBlindsUpdated = useRef(false);
+  const prevCurrentGame = useRef();
+
 
   const playersWithHandCards = currentGame
     ? currentGame.seats.filter(
@@ -58,13 +62,13 @@ const Room = () => {
       )
     : [];
 
-    console.log("Players with cards----------------", playersWithHandCards)
 
   useEffect(() => {
     dispatch(fetchGames());
   }, [dispatch]);
 
-  useEffect(() => {
+
+    useEffect(() => {
     socket.on("playerLeft", (updatedGame) => {
       dispatch(playerLeft(updatedGame));
     });
@@ -189,7 +193,6 @@ const Room = () => {
     ? currentGame.seats.filter((seat) => seat.player !== null).length
     : 0;
 
-  console.log(`Number of occupied seats: ${occupiedSeats}`);
 
   // useEffect(() => {
   //   if (occupiedSeats < 2) {
@@ -200,29 +203,46 @@ const Room = () => {
   // }, [occupiedSeats, dispatch, id]);
 
   useEffect(() => {
-    if (
-      currentGame &&
-      currentGame.currentDeck.length === 0 &&
-      occupiedSeats > 1 &&
-      !positionsAndBlindsUpdated.current
-    ) {
+    console.log("useEffect triggered by:", {
+      currentGameChange: !isEqual(prevCurrentGame.current, currentGame),
+      occupiedSeatsChange: occupiedSeats,
+      positionsAndBlindsUpdated: positionsAndBlindsUpdated.current
+    });
+
+    console.log('dispatch-------:', dispatch);
+    console.log('currentGame--------:', currentGame);
+    console.log('occupiedSeats---------:', occupiedSeats);
+
+    if (!isEqual(prevCurrentGame.current, currentGame)) {
+        console.log("Previous currentGame:", prevCurrentGame.current);
+        console.log("New currentGame:", currentGame);
+    }
+    // prevCurrentGame.current = currentGame;
+    // if (!currentGame) return; 
+
+  if (
+    // currentGame.currentDeck.length === 0 &&
+    occupiedSeats > 1 &&
+    !positionsAndBlindsUpdated.current) {
       dispatch(fetchNewDeck(currentGame._id))
         .then(() => {
-          socket.emit("new_deck", currentGame._id);
-          dispatch(fetchGames());
+          // socket.emit("new_deck", currentGame._id);
+          // dispatch(fetchGames());
 
+          console.log("Dispatching updatePositionsAndBlinds=============");
           dispatch(updatePositionsAndBlinds(id)).then(() => {
-            positionsAndBlindsUpdated.current = true; //
-            dispatch(dealCards(id));
+              positionsAndBlindsUpdated.current = true;
+              dispatch(dealCards(id));
           });
+          
         })
         .catch((error) => {
-          console.error("Failed to fetch new deck:", error);
-        });
+          console.error("Failed to fetch new deck. Error:", error.message, "Full error object:", error);        });
 
       socket.on("positions_and_blinds", (updatedGame) => {
         dispatch(updatedBlinds(updatedGame));
       });
+
 
       return () => {
         socket.off("positions_and_blinds");
@@ -239,7 +259,7 @@ const Room = () => {
       dispatch(potToPlayer(currentGame._id));
       transferredPot.current = true;
     }
-  }, [playersWithHandCards, currentGame.pot]);
+  }, [playersWithHandCards, currentGame]);
 
   const leaveTable = () => {
     if (!user) {

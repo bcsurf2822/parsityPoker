@@ -41,14 +41,21 @@ router.get("/new-deck/:gameId", async (req, res) => {
 
     game.currentDeck = currentGameCards;
 
-    await game.save();
-
+    try {
+      await game.save();
+  } catch (error) {
+      if (error.name === 'VersionError') {
+          const freshGame = await Game.findById(gameId);
+      } else {
+          throw error;
+      }
+  }
     req.io.emit("new_deck", game);
 
     res.json(game);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to create new deck and draw cards" });
+    res.status(500).json({ error: `Failed to create new deck and draw cards: ${error.message}` });
   }
 });
 
