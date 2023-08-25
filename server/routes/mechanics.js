@@ -50,7 +50,9 @@ router.post("/:gameId/updatePostionsAndBlinds", async (req, res) => {
 
     await game.save();
 
+    console.log("Emitting positions_and_blinds for game:", gameId);
     req.io.emit("positions_and_blinds", game);
+
     res.status(200).json(game);
   } catch (error) {
     console.error(error);
