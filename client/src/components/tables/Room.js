@@ -29,7 +29,7 @@ import {
   potToPlayer,
 } from "../../rtk/slices/serverSlice";
 
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 import Chatbox from "./Chatbox";
 import { socket } from "../../socket";
@@ -49,7 +49,16 @@ const Room = () => {
   const transferredPot = useRef(false);
   const positionsAndBlindsUpdated = useRef(false);
 
-  const playersWithHandCards = currentGame ? currentGame.seats.filter((seat) => seat.player && seat.player.handCards && seat.player.handCards.length > 0) : [];
+  const playersWithHandCards = currentGame
+    ? currentGame.seats.filter(
+        (seat) =>
+          seat.player &&
+          seat.player.handCards &&
+          seat.player.handCards.length > 0
+      )
+    : [];
+
+    console.log("Players with cards----------------", playersWithHandCards)
 
   useEffect(() => {
     dispatch(fetchGames());
@@ -74,7 +83,6 @@ const Room = () => {
       socket.off("cards_dealt");
     };
   }, [dispatch]);
-
 
   useEffect(() => {
     socket.on("flop", (updatedGame) => {
@@ -136,23 +144,11 @@ const Room = () => {
     };
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   socket.on("positions_and_blinds", (updatedGame) => {
-  //     dispatch(updatedBlinds(updatedGame));
-  //   });
-  
-  //   return () => {
-  //     socket.off("positions_and_blinds");
-  //   };
-  // }, [dispatch]);
-
-
-  
   useEffect(() => {
     socket.on("current_player", (updatedGame) => {
       dispatch(playerUpdated(updatedGame));
     });
-  
+
     return () => {
       socket.off("current_player");
     };
@@ -208,24 +204,22 @@ const Room = () => {
       currentGame &&
       currentGame.currentDeck.length === 0 &&
       occupiedSeats > 1 &&
-      !positionsAndBlindsUpdated.current // Only proceed if not already updated
+      !positionsAndBlindsUpdated.current
     ) {
-      // Fetch a new deck
       dispatch(fetchNewDeck(currentGame._id))
         .then(() => {
           socket.emit("new_deck", currentGame._id);
           dispatch(fetchGames());
-  
-          dispatch(updatePositionsAndBlinds(id))
-            .then(() => {
-              positionsAndBlindsUpdated.current = true; // 
-              dispatch(dealCards(id));
-            });
+
+          dispatch(updatePositionsAndBlinds(id)).then(() => {
+            positionsAndBlindsUpdated.current = true; //
+            dispatch(dealCards(id));
+          });
         })
         .catch((error) => {
           console.error("Failed to fetch new deck:", error);
         });
-    
+
       socket.on("positions_and_blinds", (updatedGame) => {
         dispatch(updatedBlinds(updatedGame));
       });
@@ -234,16 +228,18 @@ const Room = () => {
         socket.off("positions_and_blinds");
       };
     }
-}, [dispatch, currentGame, occupiedSeats]);
+  }, [dispatch, currentGame, occupiedSeats]);
 
-
-
-  if (playersWithHandCards.length === 1 && !transferredPot.current && currentGame.pot > 0) {
-    console.log("Only one player left with hand cards and pot is not empty!");
-    dispatch(potToPlayer(currentGame._id));
-    transferredPot.current = true;
-  }
-  
+  useEffect(() => {
+    if (
+      playersWithHandCards.length === 1 &&
+      currentGame.pot > 0
+    ) {
+      console.log("Only one player left with hand cards and pot is not empty!");
+      dispatch(potToPlayer(currentGame._id));
+      transferredPot.current = true;
+    }
+  }, [playersWithHandCards, currentGame.pot]);
 
   const leaveTable = () => {
     if (!user) {
@@ -306,7 +302,7 @@ const Room = () => {
     <Container fluid className="h-100 bg">
       <Row className="mt-2">
         <Col className="d-flex justify-content-center">
-        <div className="table">{currentGame.name}</div>
+          <div className="table">{currentGame.name}</div>
           <Button variant="warning" onClick={leaveTable}>
             Leave Table
           </Button>
@@ -315,11 +311,11 @@ const Room = () => {
       <Row className="mt-2">
         <Row className="mt-2">
           <Col className="d-flex justify-content-center">
-          <Button variant="success" onClick={handleCurrentPlayer}>
-           Current Player
+            <Button variant="success" onClick={handleCurrentPlayer}>
+              Current Player
             </Button>
             <Button variant="success" onClick={handlePositionsAndBlinds}>
-              Dealer 
+              Dealer
             </Button>
             <Button variant="success" onClick={handleDealCards}>
               Deal Cards
@@ -359,9 +355,10 @@ const Room = () => {
         </Col>
         <Col></Col>
         <Col className="d-flex justify-content-center flex-column align-items-center">
-          <div className="pot"><AttachMoneyIcon/>
-          {parseFloat(currentGame.pot).toFixed(2)}
-</div>
+          <div className="pot">
+            <AttachMoneyIcon />
+            {parseFloat(currentGame.pot).toFixed(2)}
+          </div>
           {currentGame.communityCards &&
             currentGame.communityCards.length > 0 && (
               <div className="community-cards">
@@ -392,9 +389,7 @@ const Room = () => {
       </Row>
       <Row>
         <Col className="d-flex justify-content-center">
-        {isAuthenticated && (
-          <Chatbox gameId={id} currentGame={currentGame} />
-      )}
+          {isAuthenticated && <Chatbox gameId={id} currentGame={currentGame} />}
         </Col>
       </Row>
     </Container>
