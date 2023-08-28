@@ -1,8 +1,8 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { useEffect, useRef, memo } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import isEqual from 'lodash/isEqual';
+import isEqual from "lodash/isEqual";
 import { useParams } from "react-router-dom";
 import {
   fetchGames,
@@ -28,16 +28,17 @@ import {
   playerFolded,
   potTransferred,
   potToPlayer,
-  playerJoined
-
+  playerJoined,
+  chipsCollected,
 } from "../../rtk/slices/serverSlice";
 
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 import Chatbox from "./Chatbox";
 import { socket } from "../../socket";
-import { fetchNewDeck } from "../../rtk/slices/deckOfCardsSlice";
+import { fetchNewDeck, fetchedDeck } from "../../rtk/slices/deckOfCardsSlice";
 import Seat from "./Seats";
+import useSocketListeners from "../../rtk/hooks/socketListeners";
 
 const Room = () => {
   console.log("===============Room component rendered================");
@@ -49,231 +50,41 @@ const Room = () => {
   const games = useSelector((state) => state.server.games);
 
   const currentGame = games.find((game) => game._id === id);
-  console.log("currentGame-----------------------------------:", currentGame)
+  console.log("currentGame-----------------------------------:", currentGame);
+
+  if (currentGame && currentGame.currentDeck) {
+    console.log("currentGame.currentDeck.length:", currentGame.currentDeck.length);
+} else {
+    console.log("currentGame.currentDeck is not defined");
+}
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const transferredPot = useRef(false);
-  const positionsAndBlindsUpdated = useRef(false);
-  const prevCurrentGame = useRef();
 
-
-  const playersWithHandCards = currentGame
-    ? currentGame.seats.filter(
+  const playersWithHandCards = useMemo(() => {
+    if (currentGame && currentGame.seats) {
+      return currentGame.seats.filter(
         (seat) =>
           seat.player &&
           seat.player.handCards &&
           seat.player.handCards.length > 0
-      )
-    : [];
+      );
+    }
+    return [];
+  }, [currentGame]);
+
+  
+  const seatArray = currentGame ? currentGame.seats : [];
+  const occupiedSeats = currentGame
+    ? currentGame.seats.filter((seat) => seat.player !== null).length
+    : 0;
 
 
   useEffect(() => {
     dispatch(fetchGames());
   }, [dispatch]);
 
-  useEffect(() => {
-    socket.on("playerJoined", (updatedGame) => {
-      dispatch(playerJoined(updatedGame));
-    });
+  useSocketListeners(socket, currentGame, id)
 
-    return () => {
-      socket.off("playerJoined");
-    };
-  }, [dispatch]);
-
-
-    useEffect(() => {
-    socket.on("playerLeft", (updatedGame) => {
-      dispatch(playerLeft(updatedGame));
-    });
-
-    return () => {
-      socket.off("playerLeft");
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    socket.on("cards_dealt", (updatedGame) => {
-      dispatch(cardsDealt(updatedGame));
-    });
-
-    return () => {
-      socket.off("cards_dealt");
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    socket.on("flop", (updatedGame) => {
-      dispatch(flopDealt(updatedGame));
-    });
-
-    return () => {
-      socket.off("flop");
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    socket.on("turn", (updatedGame) => {
-      dispatch(turnDealt(updatedGame));
-    });
-
-    return () => {
-      socket.off("turn");
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    socket.on("river", (updatedGame) => {
-      dispatch(riverDealt(updatedGame));
-    });
-
-    return () => {
-      socket.off("river");
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    socket.on("winner", (updatedGame) => {
-      dispatch(winnerReceived(updatedGame));
-    });
-
-    return () => {
-      socket.off("winner");
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    socket.on("bet_placed", (updatedGame) => {
-      dispatch(winnerReceived(updatedGame));
-    });
-
-    return () => {
-      socket.off("bet_placed");
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    socket.on("game_ended", (updatedGame) => {
-      dispatch(gameEnded(updatedGame));
-    });
-
-    return () => {
-      socket.off("game_ended");
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    socket.on("current_player", (updatedGame) => {
-      dispatch(playerUpdated(updatedGame));
-    });
-
-    return () => {
-      socket.off("current_player");
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    socket.on("check", (updatedGame) => {
-      dispatch(playerChecked(updatedGame));
-    });
-
-    return () => {
-      socket.off("check");
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    socket.on("fold", (updatedGame) => {
-      dispatch(playerFolded(updatedGame));
-    });
-
-    return () => {
-      socket.off("fold");
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    socket.on("pot_transfer", (updatedGame) => {
-      dispatch(potTransferred(updatedGame));
-    });
-
-    return () => {
-      socket.off("pot_transfer");
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    socket.on("positions_and_blinds", (updatedGame) => {
-      dispatch(updatedBlinds(updatedGame));
-    });
-
-    return () => {
-      socket.off("positions_and_blinds");
-    };
-  }, [dispatch]);
-
-
-
-  const seatArray = currentGame ? currentGame.seats : [];
-  const occupiedSeats = currentGame
-    ? currentGame.seats.filter((seat) => seat.player !== null).length
-    : 0;
-
-    const prevOccupiedSeats = useRef(0);
-
-    useEffect(() => {
-      // Check if seats went from 1 to 2
-      if (prevOccupiedSeats.current === 1 && occupiedSeats === 2) {
-        // First, update positions and blinds
-        dispatch(updatePositionsAndBlinds(id))
-          .then(() => {
-            // After updating positions and blinds, fetch a new deck
-            dispatch(fetchNewDeck(currentGame._id));
-          })
-          .catch(error => {
-            console.error("Error updating positions and blinds:", error);
-          });
-      }
-    
-      // Update the ref for the next render
-      prevOccupiedSeats.current = occupiedSeats;
-    }, [occupiedSeats, dispatch, id, currentGame]);
-
-
-  // useEffect(() => {
-  //   if (occupiedSeats < 2) {
-  //     console.log("Less than two players remaining, ending game...");
-  //     dispatch(endGame(id));
-  //     positionsAndBlindsUpdated.current = false;
-  //   }
-  // }, [occupiedSeats, dispatch, id]);
-
-  // useEffect(() => {
-  //   if (currentGame && currentGame.currentDeck && currentGame.currentDeck.length === 0) {
-  //     console.log("Current deck is empty, fetching a new deck...");
-  //     dispatch(fetchNewDeck(currentGame._id))
-  //       .then(() => {
-  //         console.log("New deck fetched successfully!");
-  //       })
-  //       .catch(error => {
-  //         console.error("Error fetching new deck:", error);
-  //       });
-  //   }
-  // }, [currentGame, dispatch]);
-  
-
-
-useEffect(() => {
-  if (playersWithHandCards.length === 1 && currentGame.pot > 0) {
-    console.log("Only one player left with hand cards and pot is not empty!");
-    dispatch(potToPlayer(currentGame._id))
-
-      .catch(error => {
-        console.error("Error transferring pot to player:", error);
-      });
-    transferredPot.current = true;
-  }
-}, [playersWithHandCards, currentGame, occupiedSeats, dispatch, id]);
 
   const leaveTable = () => {
     if (!user) {
@@ -305,7 +116,6 @@ useEffect(() => {
 
   const handleEndGame = () => {
     dispatch(endGame(id));
-    positionsAndBlindsUpdated.current = false;
   };
 
   const handleDealCards = () => {
@@ -430,4 +240,4 @@ useEffect(() => {
   );
 };
 
-export default memo(Room);
+export default Room;

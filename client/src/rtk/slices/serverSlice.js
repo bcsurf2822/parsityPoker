@@ -569,7 +569,7 @@ const serverSlice = createSlice({
       })
       .addCase(potToPlayer.fulfilled, (state, action) => {
         state.loading = false;
-        state.currentGameMessage = action.payload.message; // you can decide how you want to manage this message in the state
+        state.currentGameMessage = action.payload.message; 
       })
       .addCase(potToPlayer.rejected, (state, action) => {
         state.loading = false;
