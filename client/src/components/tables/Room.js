@@ -1,5 +1,5 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect,  useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import isEqual from "lodash/isEqual";
@@ -7,36 +7,21 @@ import { useParams } from "react-router-dom";
 import {
   fetchGames,
   leaveGame,
-  playerLeft,
   dealCards,
-  cardsDealt,
   dealFlop,
-  flopDealt,
   dealTurn,
-  turnDealt,
   dealRiver,
-  riverDealt,
   endGame,
-  gameEnded,
   getWinner,
-  winnerReceived,
   updateCurrentPlayer,
   updatePositionsAndBlinds,
-  playerUpdated,
-  updatedBlinds,
-  playerChecked,
-  playerFolded,
-  potTransferred,
-  potToPlayer,
-  playerJoined,
-  chipsCollected,
 } from "../../rtk/slices/serverSlice";
 
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 import Chatbox from "./Chatbox";
 import { socket } from "../../socket";
-import { fetchNewDeck, fetchedDeck } from "../../rtk/slices/deckOfCardsSlice";
+import { fetchNewDeck } from "../../rtk/slices/deckOfCardsSlice";
 import Seat from "./Seats";
 import useSocketListeners from "../../rtk/hooks/socketListeners";
 
@@ -53,10 +38,13 @@ const Room = () => {
   console.log("currentGame-----------------------------------:", currentGame);
 
   if (currentGame && currentGame.currentDeck) {
-    console.log("currentGame.currentDeck.length:", currentGame.currentDeck.length);
-} else {
+    console.log(
+      "currentGame.currentDeck.length:",
+      currentGame.currentDeck.length
+    );
+  } else {
     console.log("currentGame.currentDeck is not defined");
-}
+  }
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
@@ -72,19 +60,16 @@ const Room = () => {
     return [];
   }, [currentGame]);
 
-  
   const seatArray = currentGame ? currentGame.seats : [];
   const occupiedSeats = currentGame
     ? currentGame.seats.filter((seat) => seat.player !== null).length
     : 0;
 
-
   useEffect(() => {
     dispatch(fetchGames());
   }, [dispatch]);
 
-  useSocketListeners(socket, currentGame, id)
-
+  useSocketListeners(socket, currentGame, id);
 
   const leaveTable = () => {
     if (!user) {

@@ -30,9 +30,9 @@ export const joinGame = createAsyncThunk(
         { userId, buyIn }
       );
       console.log("Join Called & response:", response);
-      dispatch(fetchUpdatedUser(userId));
-
-      return response.data.game;
+      
+      // Return both the game and user data if your backend supports it.
+      return { game: response.data.game, user: response.data.user };
     } catch (err) {
       return rejectWithValue(err.response.data);
     }
@@ -386,8 +386,12 @@ const serverSlice = createSlice({
       })
       .addCase(joinGame.fulfilled, (state, action) => {
         state.loading = false;
-        state.joinedGame = action.payload;
+        state.joinedGame = action.payload.game;
+        if (action.payload.user) {
+          state.user = action.payload.user;
+        }
       })
+      
       .addCase(joinGame.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to join game";

@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { depositSuccess, withdrawSuccess } from "../actions/depositWithdraw";
-import { login, logout, initializeAuth, fetchUpdatedUser } from "../actions/auth";
-
+import { login, logout, initializeAuth } from "../actions/auth";
 
 const authenticationSlice = createSlice({
   name: "authentication",
@@ -14,7 +13,7 @@ const authenticationSlice = createSlice({
   },
   reducers: {
     updateUser: (state, action) => {
-      state.user = action.payload;
+      state.user = { ...state.user, ...action.payload };
     },
   },
   extraReducers: (builder) => {
@@ -34,6 +33,7 @@ const authenticationSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state) => {
         state.isAuthenticated = false;
+        state.user = null; // clear user data on logout
       })
       .addCase(depositSuccess, (state, action) => {
         if (state.user && state.user.userId === action.payload.userId) {
@@ -59,9 +59,6 @@ const authenticationSlice = createSlice({
       })
       .addCase(initializeAuth.rejected, (state) => {
         state.initializing = false;
-      })
-      .addCase(fetchUpdatedUser.fulfilled, (state, action) => {
-        state.user = action.payload;
       });
   },
 });

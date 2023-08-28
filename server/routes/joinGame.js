@@ -70,7 +70,6 @@ router.post("/join/:gameId/:seatId", async (req, res) => {
     await game.save();
     await user.save();
 
-    req.io.emit("playerJoined", { gameId: game._id, userId: user._id });
     req.io.emit("playerJoined", game);
 
     res.status(200).json({ message: "Successfully joined the game!", game });
