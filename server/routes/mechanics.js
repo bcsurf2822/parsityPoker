@@ -19,14 +19,7 @@ router.post("/:gameId/updatePostionsAndBlinds", async (req, res) => {
       return res.status(404).send("Game not found!");
     }
 
-    // for (let seat of game.seats) {
-    //   if (seat.player && seat.player.handCards) {
-    //     seat.player.handCards = [];
-    //   }
-    // }
 
-    // game.dealtCards = [];
-    // game.communityCards = [];
 
     game.dealerPosition = findNextPosition(game.dealerPosition, game.seats);
     game.smallBlindPosition = findNextPosition(game.dealerPosition, game.seats);
@@ -37,6 +30,12 @@ router.post("/:gameId/updatePostionsAndBlinds", async (req, res) => {
     const [smallBlindAmount, bigBlindAmount] = game.blinds
       .split("/")
       .map(Number);
+
+      for (let seat of game.seats) {
+        if (seat.player) {
+          seat.player.checkBetFold = false;
+        }
+      }
 
     if (game.seats[game.smallBlindPosition].player) {
       game.seats[game.smallBlindPosition].player.chips -= smallBlindAmount;
