@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Game = require("../models/gamesSchema");
+const axios = require("axios");
 
 const findNextPosition = (startPosition, seats) => {
   let seatCount = seats.length;
@@ -84,6 +85,11 @@ router.post("/:gameId/updateCurrentPlayer", async (req, res) => {
   }
 });
 
+function cardCode(code) {
+  return code.replace('0', '10');
+}
+
+
 router.post("/endgame/:gameId", async (req, res) => {
   const { gameId } = req.params;
 
@@ -107,10 +113,21 @@ router.post("/endgame/:gameId", async (req, res) => {
       }
     });
 
-    game.dealerPosition = -1
-    game.smallBlindPosition = -1
-    game.bigBlindPosition = -1
-    game.currentPlayerTurn = -1
+    game.dealerPosition = -1;
+    game.smallBlindPosition = -1;
+    game.bigBlindPosition = -1;
+    game.currentPlayerTurn = -1;
+
+    // Fetch new deck and populate currentDeck
+    const response = await axios.get("https://www.deckofcardsapi.com/api/deck/new/draw/?count=52");
+
+    const currentGameCards = response.data.cards.map((card) => ({
+      value: card.value,
+      suit: card.suit,
+      code: cardCode(card.code)
+    }));
+
+    game.currentDeck = currentGameCards;
 
     await game.save();
     req.io.emit("game_ended", game);
