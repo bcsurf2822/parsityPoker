@@ -8,9 +8,9 @@ import serverReducer from "./slices/serverSlice";
 import chatReducer from "./slices/chatSlice";
 import usersReducer from "./slices/usersSlice";
 import deckOfCardsReducer from "./slices/deckOfCardsSlice";
-import preventDublicateReducer from "./slices/duplicateSlice";
 
-import preventDublicateMiddleware from "./middleware/preventDublicateMiddleware";
+
+
 
 export default configureStore({
   reducer: {
@@ -22,7 +22,5 @@ export default configureStore({
     chat: chatReducer,
     users: usersReducer,
     cards: deckOfCardsReducer,
-    preventDublicate: preventDublicateReducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(preventDublicateMiddleware)
 });

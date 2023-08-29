@@ -1,5 +1,5 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { useEffect,  useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import isEqual from "lodash/isEqual";
@@ -95,9 +95,9 @@ const Room = () => {
     dispatch(updateCurrentPlayer(id));
   };
 
-  const handlePositionsAndBlinds = () => {
+  const handlePositionsAndBlinds = useCallback(() => {
     dispatch(updatePositionsAndBlinds(id));
-  };
+}, [dispatch, id]);
 
   const handleEndGame = () => {
     dispatch(endGame(id));
@@ -164,6 +164,7 @@ const Room = () => {
             <Button variant="success" onClick={handleGetWinner}>
               Winner?
             </Button>
+  
           </Col>
         </Row>
       </Row>

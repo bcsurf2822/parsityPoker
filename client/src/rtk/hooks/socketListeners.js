@@ -14,7 +14,7 @@ import {
   updatedBlinds,
   playerUpdated,
   chipsCollected,
-  updatePositionsAndBlinds
+
 } from "../slices/serverSlice";
 import { useEffect } from "react";
 
@@ -33,7 +33,7 @@ function useSocketListeners(socket, currentGame, id) {
       winner: winnerReceived,
       cards_dealt: cardsDealt,
       pot_transfer: potTransferred,
-      updated_blinds: updatedBlinds,
+     positions_and_blinds: updatedBlinds,
       current_player: playerUpdated,
       check: playerChecked,
       fold: playerFolded,
@@ -50,15 +50,6 @@ function useSocketListeners(socket, currentGame, id) {
         }
 
         dispatch(actionCreator(updatedGame));
-        
-        if (event === "playerJoined") {
-          const playerCount = updatedGame?.seats?.filter(seat => seat?.player !== null).length;
-          console.log("playerJoined event triggered, playerCount:", playerCount);
-          if (playerCount === 2) {
-            console.log("Dispatching updatePositionsAndBlinds due to playerJoined event.");
-            dispatch(updatePositionsAndBlinds(id));
-          }
-        }
       });
     });
 
