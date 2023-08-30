@@ -80,6 +80,14 @@ const GameSchema = new Schema({
     type: Number,
     default: -1,  
   },
+  gameStart: {
+    type: Boolean,
+    default: false,
+  },
+  gameEnd: {
+    type: Boolean,
+    default: false,
+  },
   currentDeck: {
     type: [CardSchema],
     default: [],
@@ -100,6 +108,7 @@ const GameSchema = new Schema({
     type: [SeatSchema],
     default: Array.from({ length: 6 }, (_, i) => ({ id: i + 1, player: null })),
   },
+
 });
 
 const Game = mongoose.model("Game", GameSchema);

@@ -122,8 +122,7 @@ if (numOfPlayers === 2) {
 
                      console.log("Emitting positions_and_blinds for game:", req.params.gameId);
                      req.io.emit("positions_and_blinds", game);
-     
-                     // Start of Card Dealing Logic
+    
                      if (numOfPlayers * 2 > game.currentDeck.length) {
                          return res.status(400).json({ message: "Not enough cards in the deck to deal!" });
                      }
@@ -143,7 +142,6 @@ if (numOfPlayers === 2) {
      
                      await game.save();
                      req.io.emit("cards_dealt", game);
-                     // End of Card Dealing Logic
                  } catch (error) {
                      console.error(`Error updating positions and blinds for game ${req.params.gameId}:`, error);
                      return res.status(500).json({ message: error.message });
