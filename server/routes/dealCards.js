@@ -158,8 +158,8 @@ router.put("/river/:gameId", async (req, res) => {
     }
 
     if (game.stage !== 'river' || game.communityCards.length > 4) {
-      console.log(`Conditions not met to deal the flop.`);
-      return res.status(400).json({ message: "Conditions not met to deal the flop!" });
+      console.log(`Conditions not met to deal the river.`);
+      return res.status(400).json({ message: "Conditions not met to deal the river!" });
     }
 
     game.seats.forEach((seat) => {

@@ -146,8 +146,16 @@ const Room = () => {
 
 
   const handleGetWinner = () => {
+    console.log("get Winner called")
     dispatch(getWinner(id));
   };
+
+  useEffect(() => {
+    if (currentGame && currentGame.stage === 'showdown' && playersWithHandCards.length > 1) {
+      handleGetWinner();
+    }
+  }, [currentGame]);
+
 
   if (!currentGame) {
     return null;
