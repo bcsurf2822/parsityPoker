@@ -118,12 +118,6 @@ const Room = () => {
     dispatch(dealFlop(id));
   };
 
-  useEffect(() => {
-    if (currentGame && currentGame.stage === 'flop' && currentGame.communityCards.length === 0) {
-      handleDealFlop();
-    }
-  }, [currentGame]);
-
   const handleDealTurn = () => {
     dispatch(dealTurn(id));
   };
@@ -131,6 +125,25 @@ const Room = () => {
   const handleDealRiver = () => {
     dispatch(dealRiver(id));
   };
+
+  useEffect(() => {
+    if (currentGame && currentGame.stage === 'flop' && currentGame.communityCards.length === 0) {
+      handleDealFlop();
+    }
+  }, [currentGame]);
+
+  useEffect(() => {
+    if (currentGame && currentGame.stage === 'turn' && currentGame.communityCards.length === 3) {
+      handleDealTurn();
+    }
+  }, [currentGame]);
+
+  useEffect(() => {
+    if (currentGame && currentGame.stage === 'river' && currentGame.communityCards.length === 4) {
+      handleDealRiver();
+    }
+  }, [currentGame]);
+
 
   const handleGetWinner = () => {
     dispatch(getWinner(id));

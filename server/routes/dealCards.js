@@ -112,6 +112,11 @@ router.put("/turn/:gameId", async (req, res) => {
         .json({ message: "Not enough cards to deal the turn!" });
     }
 
+    if (game.stage !== 'turn' || game.communityCards.length > 3) {
+      console.log(`Conditions not met to deal the turn.`);
+      return res.status(400).json({ message: "Conditions not met to deal the turn" });
+    }
+
     game.seats.forEach((seat) => {
       if (seat.player) {
         seat.player.checkBetFold = false; 
@@ -150,6 +155,11 @@ router.put("/river/:gameId", async (req, res) => {
       return res
         .status(400)
         .json({ message: "Not enough cards to deal the river!" });
+    }
+
+    if (game.stage !== 'river' || game.communityCards.length > 4) {
+      console.log(`Conditions not met to deal the flop.`);
+      return res.status(400).json({ message: "Conditions not met to deal the flop!" });
     }
 
     game.seats.forEach((seat) => {
