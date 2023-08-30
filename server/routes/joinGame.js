@@ -120,20 +120,44 @@ if (numOfPlayers === 2) {
                      Big Blind: ${game.bigBlindPosition}, 
                      Current Turn: ${game.currentPlayerTurn}`);
 
-        console.log("Emitting positions_and_blinds for game:", req.params.gameId);
-        req.io.emit("positions_and_blinds", game);
-    } catch (error) {
-        console.error(`Error updating positions and blinds for game ${req.params.gameId}:`, error);
-        return res.status(500).json({ message: error.message });
-    }
-}
-
-res.status(200).json({ message: "Successfully joined the game!", game });
-} catch (err) {
-console.error(err);
-res.status(500).json({ message: err.message });
-}
-});
+                     console.log("Emitting positions_and_blinds for game:", req.params.gameId);
+                     req.io.emit("positions_and_blinds", game);
+     
+                     // Start of Card Dealing Logic
+                     if (numOfPlayers * 2 > game.currentDeck.length) {
+                         return res.status(400).json({ message: "Not enough cards in the deck to deal!" });
+                     }
+     
+                     const seatsWithPlayers = game.seats.filter((seat) => seat.player !== null);
+     
+                     for (let i = 0; i < 2; i++) {
+                         for (let j = 0; j < numOfPlayers; j++) {
+                             const playerIndex = (game.bigBlindPosition + 1 + j) % numOfPlayers;
+                             const seat = seatsWithPlayers[playerIndex];
+                             const card = game.currentDeck.shift();
+                             if (card) {
+                                 seat.player.handCards.push(card.code);
+                             }
+                         }
+                     }
+     
+                     await game.save();
+                     req.io.emit("cards_dealt", game);
+                     // End of Card Dealing Logic
+                 } catch (error) {
+                     console.error(`Error updating positions and blinds for game ${req.params.gameId}:`, error);
+                     return res.status(500).json({ message: error.message });
+                 }
+             }
+     
+             res.status(200).json({ message: "Successfully joined the game!", game });
+         } catch (err) {
+             console.error(err);
+             res.status(500).json({ message: err.message });
+         }
+     });
+     
+     module.exports = router;
 
 
 
@@ -215,4 +239,4 @@ res.status(500).json({ message: err.message });
 //   }
 // });
 
-module.exports = router;
+
