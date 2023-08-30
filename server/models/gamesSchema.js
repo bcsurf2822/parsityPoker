@@ -84,9 +84,9 @@ const GameSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  gameStage: {
+  stage: {
     type: String,
-    enum: ['preflop', 'flop', 'turn', 'river', 'showdown'],
+    enum: ['preflop',  'flop', 'turn', 'river', 'showdown'],
     default: 'preflop',
 },
   gameEnd: {

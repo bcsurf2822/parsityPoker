@@ -71,6 +71,13 @@ const Room = () => {
 
   useSocketListeners(socket, currentGame, id);
 
+  useEffect(() => {
+    if (currentGame && (!currentGame.currentDeck || currentGame.currentDeck.length === 0)) {
+      console.log("Deck is empty. Fetching a new one...");
+      dispatch(fetchNewDeck(id));
+    }
+  }, [currentGame, dispatch, id]);
+
   const leaveTable = () => {
     if (!user) {
       console.log("User is undefined");
@@ -110,6 +117,12 @@ const Room = () => {
   const handleDealFlop = () => {
     dispatch(dealFlop(id));
   };
+
+  useEffect(() => {
+    if (currentGame && currentGame.stage === 'flop' && currentGame.communityCards.length === 0) {
+      handleDealFlop();
+    }
+  }, [currentGame]);
 
   const handleDealTurn = () => {
     dispatch(dealTurn(id));

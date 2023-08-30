@@ -58,6 +58,11 @@ router.post("/flop/:gameId", async (req, res) => {
       return res.status(404).json({ message: "Game not found!" });
     }
 
+    if (game.stage !== 'flop' || game.communityCards.length > 0) {
+      console.log(`Conditions not met to deal the flop.`);
+      return res.status(400).json({ message: "Conditions not met to deal the flop!" });
+    }
+
     game.seats.forEach((seat) => {
       if (seat.player) {
         seat.player.checkBetFold = false;  
