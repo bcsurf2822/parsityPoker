@@ -16,7 +16,7 @@ router.get("/winner/:gameId", async (req, res) => {
 
     // Check if all players have checkBetFold set to true and game.stage is showdown
     const allPlayersChecked = game.seats.every(seat => seat.player && seat.player.checkBetFold === true);
-    if (!allPlayersChecked || game.stage !== 'showdown') {
+    if (!allPlayersChecked || !game.stage === 'showdown') {
       return res.status(400).json({ message: "Conditions not met for determining the winner" });
     }
 

@@ -187,6 +187,7 @@ const Seat = ({ seat, currentGame }) => {
                 <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
                   <p>{`Card 1 ${cards[0]}`}</p>
                   <p>{`Card 2 ${cards[1]}`}</p>
+                  <p>{`Check Bet Fold: ${seat.player.checkBetFold}`}</p>
                   {isDealer && <RadioButtonCheckedIcon />}
                   <p>Current Player: {isCurrentPlayer ? "True" : "False"}</p>
                 </Box>
