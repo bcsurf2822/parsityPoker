@@ -75,23 +75,25 @@ router.put("/game/:gameId/toPot", async (req, res) => {
 
       await game.save();
       if (playersHaveActed(game)) {
-          switch (game.stage) {
-              case 'preflop':
-                  game.stage = 'flop';
-                  break;
-              case 'flop':
-                  game.stage = 'turn';
-                  break;
-                  case 'turn':
+        if (game.stage !== 'showdown') { // Add this condition
+            switch (game.stage) {
+                case 'preflop':
+                    game.stage = 'flop';
+                    break;
+                case 'flop':
+                    game.stage = 'turn';
+                    break;
+                case 'turn':
                     game.stage = 'river';
                     break;
-                    case 'river':
-                      game.stage = 'showdown';
-                      break;
-          }
-          resetCheckBetFold(game);
-          await game.save();
-      }
+                case 'river':
+                    game.stage = 'showdown';
+                    break;
+            }
+            resetCheckBetFold(game);
+            await game.save();
+        }
+    }
 
       res.json(game);
       req.io.emit("bet_placed", game);
@@ -128,22 +130,24 @@ router.put("/game/:gameId/toPot", async (req, res) => {
       await game.save();
 
       if (playersHaveActed(game)) {
-        switch (game.stage) {
-            case 'preflop':
-                game.stage = 'flop';
-                break;
-            case 'flop':
-                game.stage = 'turn';
-                break;
+        if (game.stage !== 'showdown') { // Add this condition
+            switch (game.stage) {
+                case 'preflop':
+                    game.stage = 'flop';
+                    break;
+                case 'flop':
+                    game.stage = 'turn';
+                    break;
                 case 'turn':
-                  game.stage = 'river';
-                  break;
-                  case 'river':
+                    game.stage = 'river';
+                    break;
+                case 'river':
                     game.stage = 'showdown';
                     break;
+            }
+            resetCheckBetFold(game);
+            await game.save();
         }
-        resetCheckBetFold(game);
-        await game.save();
     }
   
       res.json(game);
@@ -182,22 +186,24 @@ router.put("/game/:gameId/toPot", async (req, res) => {
       await game.save();
 
       if (playersHaveActed(game)) {
-        switch (game.stage) {
-            case 'preflop':
-                game.stage = 'flop';
-                break;
-            case 'flop':
-                game.stage = 'turn';
-                break;
+        if (game.stage !== 'showdown') { // Add this condition
+            switch (game.stage) {
+                case 'preflop':
+                    game.stage = 'flop';
+                    break;
+                case 'flop':
+                    game.stage = 'turn';
+                    break;
                 case 'turn':
-                  game.stage = 'river';
-                  break;
-                  case 'river':
+                    game.stage = 'river';
+                    break;
+                case 'river':
                     game.stage = 'showdown';
                     break;
+            }
+            resetCheckBetFold(game);
+            await game.save();
         }
-        resetCheckBetFold(game);
-        await game.save();
     }
 
       req.io.emit("fold", game);

@@ -80,7 +80,7 @@ const GameSchema = new Schema({
     type: Number,
     default: -1,  
   },
-  gameStart: {
+  gameRunning: {
     type: Boolean,
     default: false,
   },

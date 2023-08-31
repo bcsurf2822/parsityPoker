@@ -15,6 +15,7 @@ import {
   getWinner,
   updateCurrentPlayer,
   updatePositionsAndBlinds,
+  potToPlayer
 } from "../../rtk/slices/serverSlice";
 
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
@@ -59,6 +60,8 @@ const Room = () => {
     }
     return [];
   }, [currentGame]);
+  
+  console.log("PLayers with cards", playersWithHandCards)
 
   const seatArray = currentGame ? currentGame.seats : [];
   const occupiedSeats = currentGame
@@ -126,35 +129,56 @@ const Room = () => {
     dispatch(dealRiver(id));
   };
 
-  useEffect(() => {
-    if (currentGame && currentGame.stage === 'flop' && currentGame.communityCards.length === 0) {
-      handleDealFlop();
-    }
-  }, [currentGame]);
-
-  useEffect(() => {
-    if (currentGame && currentGame.stage === 'turn' && currentGame.communityCards.length === 3) {
-      handleDealTurn();
-    }
-  }, [currentGame]);
-
-  useEffect(() => {
-    if (currentGame && currentGame.stage === 'river' && currentGame.communityCards.length === 4) {
-      handleDealRiver();
-    }
-  }, [currentGame]);
-
-
+  
   const handleGetWinner = () => {
     console.log("get Winner called")
     dispatch(getWinner(id));
   };
 
   useEffect(() => {
-    if (currentGame && currentGame.stage === 'showdown' && playersWithHandCards.length > 1) {
-      handleGetWinner();
+    if (currentGame && currentGame.stage === 'flop' && currentGame.communityCards.length === 0 && playersWithHandCards.length > 1) {
+      handleDealFlop();
     }
   }, [currentGame]);
+
+  useEffect(() => {
+    if (currentGame && currentGame.stage === 'turn' && currentGame.communityCards.length === 3 && playersWithHandCards.length > 1) {
+      handleDealTurn();
+    }
+  }, [currentGame]);
+
+  useEffect(() => {
+    if (currentGame && currentGame.stage === 'river' && currentGame.communityCards.length === 4 && playersWithHandCards.length > 1) {
+      handleDealRiver();
+    }
+  }, [currentGame]);
+
+
+  useEffect(() => {
+    if (playersWithHandCards.length >= 2) {
+      if (currentGame && currentGame.stage === 'showdown') {
+        console.log("GETTING WINNER");
+        handleGetWinner();
+      }
+    }
+  }, [playersWithHandCards, currentGame]);
+
+
+  
+
+// useEffect(() => {
+//   if (playersWithHandCards.length === 1) {
+//     console.log("GETTING WINNER DUE TO FOLD")
+//     dispatch(potToPlayer(id));
+//   }
+// }, []);
+
+  // useEffect(() => {
+  //   if (currentGame && currentGame.stage === 'showdown' && playe)rsWithHandCards.length > 1 {
+  //     console.log("GETTING WINNER")
+  //     handleGetWinner();
+  //   }
+  // }, [currentGame]);
 
 
   if (!currentGame) {
