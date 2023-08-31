@@ -32,22 +32,14 @@ const Room = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+
   const user = useSelector((state) => state.auth.user);
   const games = useSelector((state) => state.server.games);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const currentGame = games.find((game) => game._id === id);
   console.log("currentGame-----------------------------------:", currentGame);
-
-  if (currentGame && currentGame.currentDeck) {
-    console.log(
-      "currentGame.currentDeck.length:",
-      currentGame.currentDeck.length
-    );
-  } else {
-    console.log("currentGame.currentDeck is not defined");
-  }
-
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  useSocketListeners(socket, currentGame, id);
 
   const playersWithHandCards = useMemo(() => {
     if (currentGame && currentGame.seats) {
@@ -61,18 +53,22 @@ const Room = () => {
     return [];
   }, [currentGame]);
   
-  console.log("PLayers with cards", playersWithHandCards)
+  console.log("PLayers with cards---------------", playersWithHandCards)
 
   const seatArray = currentGame ? currentGame.seats : [];
+
+  //Number of Seats Occupied
   const occupiedSeats = currentGame
     ? currentGame.seats.filter((seat) => seat.player !== null).length
     : 0;
+
+    console.log("seat Info:", seatArray)
+
 
   useEffect(() => {
     dispatch(fetchGames());
   }, [dispatch]);
 
-  useSocketListeners(socket, currentGame, id);
 
   useEffect(() => {
     if (currentGame && (!currentGame.currentDeck || currentGame.currentDeck.length === 0)) {

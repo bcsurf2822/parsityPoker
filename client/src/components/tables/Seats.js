@@ -63,12 +63,10 @@ const Seat = ({ seat, currentGame }) => {
       if (player) {
         const result = await dispatch(fetchUsernameById(player.user));
         setUsername(result.payload);
-        console.log("this is the one---------")
       }
     };
 
     if (seat.player) fetchUsername(seat.player);
-    console.log("this is the two---------")
   }, [seat, dispatch]);
 
   const handleClick = () => {
