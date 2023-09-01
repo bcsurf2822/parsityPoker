@@ -24,17 +24,37 @@ router.post("/leave/:gameId/:userId", async (req, res) => {
     );
 
     if (!playerSeat) {
-      return res
-        .status(400)
-        .json({ message: "You are not sitting in this game!" });
+      return res.status(400).json({ message: "You are not sitting in this game!" });
     }
 
     user.accountBalance += playerSeat.player.chips;
-
     playerSeat.player = null;
 
-    await game.save();
     await user.save();
+
+    // Check the number of players left
+    const remainingPlayers = game.seats.filter(seat => seat.player !== null);
+    
+    // If only one player is left, transfer pot to that player and reset game
+    if (remainingPlayers.length === 1) {
+      const lastPlayer = remainingPlayers[0].player;
+      lastPlayer.chips += game.pot;
+      game.pot = 0;
+
+      // If you want to reset the game, add your reset logic here
+      game.currentDeck = [];
+      game.communityCards = [];
+      game.dealtCards = [];
+      game.winnerData = [];
+      game.stage = "preflop";
+      game.gameEnd = false;
+
+      // Reset other parameters if required
+
+      req.io.emit("game_ended", game);
+    }
+
+    await game.save();
 
     req.io.emit("playerLeft", game);
 

@@ -105,6 +105,7 @@ router.post("/endgame/:gameId", async (req, res) => {
     game.dealtCards = [];
     game.winnerData = [];
     game.pot = 0;
+    game.stage = "pre-flop";
 
     game.seats.forEach((seat) => {
       if (seat.player) {
@@ -113,12 +114,24 @@ router.post("/endgame/:gameId", async (req, res) => {
       }
     });
 
-    game.dealerPosition = -1;
-    game.smallBlindPosition = -1;
-    game.bigBlindPosition = -1;
-    game.currentPlayerTurn = -1;
-    game.stage = "preflop"
-    game.gameEnd = false;
+    // Logic to Move the blinds forward
+    game.dealerPosition = findNextPosition(game.dealerPosition, game.seats);
+    game.smallBlindPosition = findNextPosition(game.dealerPosition, game.seats);
+    game.bigBlindPosition = findNextPosition(game.smallBlindPosition, game.seats);
+    game.currentPlayerTurn = findNextPosition(game.bigBlindPosition, game.seats);
+
+    const [smallBlindAmount, bigBlindAmount] = game.blinds.split("/").map(Number);
+
+    // Deducting blinds from the players and adding to the pot
+    if (game.seats[game.smallBlindPosition].player) {
+      game.seats[game.smallBlindPosition].player.chips -= smallBlindAmount;
+      game.pot += smallBlindAmount;
+    }
+
+    if (game.seats[game.bigBlindPosition].player) {
+      game.seats[game.bigBlindPosition].player.chips -= bigBlindAmount;
+      game.pot += bigBlindAmount;
+    }
 
     // Fetch new deck and populate currentDeck
     const response = await axios.get("https://www.deckofcardsapi.com/api/deck/new/draw/?count=52");
@@ -140,6 +153,7 @@ router.post("/endgame/:gameId", async (req, res) => {
     res.status(500).json({ error: "Failed to end the game" });
   }
 });
+
 
 
 module.exports = router;
