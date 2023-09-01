@@ -14,11 +14,10 @@ router.get("/winner/:gameId", async (req, res) => {
       return res.status(404).json({ message: "Game not found!" });
     }
 
-    // Check if all players have checkBetFold set to true and game.stage is showdown
-    const allPlayersChecked = game.seats.every(seat => seat.player && seat.player.checkBetFold === true);
-    if (!allPlayersChecked || !game.stage === 'showdown') {
+    if (game.stage !== 'showdown') {
       return res.status(400).json({ message: "Conditions not met for determining the winner" });
-    }
+  }
+
 
     const communityCards = game.communityCards.join(",");
 

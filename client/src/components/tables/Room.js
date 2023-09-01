@@ -152,7 +152,7 @@ const Room = () => {
 
   useEffect(() => {
     if (playersWithHandCards.length >= 2) {
-      if (currentGame && currentGame.stage === 'showdown') {
+      if (currentGame && currentGame.stage === 'showdown' && !currentGame.gameEnd) {
         console.log("GETTING WINNER");
         handleGetWinner();
       }

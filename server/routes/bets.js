@@ -13,6 +13,11 @@ function resetCheckBetFold(game) {
   });
 }
 
+function playersWithCards(game) {
+  return game.seats.filter(seat => seat.player && seat.player.handCards.length).length;
+}
+
+
 
 router.put("/game/:gameId/toPot", async (req, res) => {
   const { gameId } = req.params;
@@ -74,23 +79,30 @@ router.put("/game/:gameId/toPot", async (req, res) => {
       seat.player.checkBetFold = true;
 
       await game.save();
+
       if (playersHaveActed(game)) {
-        if (game.stage !== 'showdown') { // Add this condition
-            switch (game.stage) {
-                case 'preflop':
-                    game.stage = 'flop';
-                    break;
-                case 'flop':
-                    game.stage = 'turn';
-                    break;
-                case 'turn':
-                    game.stage = 'river';
-                    break;
-                case 'river':
-                    game.stage = 'showdown';
-                    break;
+        if (game.stage !== 'showdown') {
+            if (playersWithCards(game) > 2) {
+                game.stage = 'showdown';
+            } else {
+                switch (game.stage) {
+                    case 'preflop':
+                        game.stage = 'flop';
+                        break;
+                    case 'flop':
+                        game.stage = 'turn';
+                        break;
+                    case 'turn':
+                        game.stage = 'river';
+                        break;
+                    case 'river':
+                        game.stage = 'showdown';
+                        break;
+                }
             }
-            resetCheckBetFold(game);
+            if(game.stage !== 'showdown') {
+                resetCheckBetFold(game);
+            }
             await game.save();
         }
     }
@@ -130,26 +142,31 @@ router.put("/game/:gameId/toPot", async (req, res) => {
       await game.save();
 
       if (playersHaveActed(game)) {
-        if (game.stage !== 'showdown') { // Add this condition
-            switch (game.stage) {
-                case 'preflop':
-                    game.stage = 'flop';
-                    break;
-                case 'flop':
-                    game.stage = 'turn';
-                    break;
-                case 'turn':
-                    game.stage = 'river';
-                    break;
-                case 'river':
-                    game.stage = 'showdown';
-                    break;
+        if (game.stage !== 'showdown') {
+            if (playersWithCards(game) > 2) {
+                game.stage = 'showdown';
+            } else {
+                switch (game.stage) {
+                    case 'preflop':
+                        game.stage = 'flop';
+                        break;
+                    case 'flop':
+                        game.stage = 'turn';
+                        break;
+                    case 'turn':
+                        game.stage = 'river';
+                        break;
+                    case 'river':
+                        game.stage = 'showdown';
+                        break;
+                }
             }
-            resetCheckBetFold(game);
+            if(game.stage !== 'showdown') {
+                resetCheckBetFold(game);
+            }
             await game.save();
         }
     }
-  
       res.json(game);
       req.io.emit("check", game);
   
@@ -186,22 +203,28 @@ router.put("/game/:gameId/toPot", async (req, res) => {
       await game.save();
 
       if (playersHaveActed(game)) {
-        if (game.stage !== 'showdown') { // Add this condition
-            switch (game.stage) {
-                case 'preflop':
-                    game.stage = 'flop';
-                    break;
-                case 'flop':
-                    game.stage = 'turn';
-                    break;
-                case 'turn':
-                    game.stage = 'river';
-                    break;
-                case 'river':
-                    game.stage = 'showdown';
-                    break;
+        if (game.stage !== 'showdown') {
+            if (playersWithCards(game) > 2) {
+                game.stage = 'showdown';
+            } else {
+                switch (game.stage) {
+                    case 'preflop':
+                        game.stage = 'flop';
+                        break;
+                    case 'flop':
+                        game.stage = 'turn';
+                        break;
+                    case 'turn':
+                        game.stage = 'river';
+                        break;
+                    case 'river':
+                        game.stage = 'showdown';
+                        break;
+                }
             }
-            resetCheckBetFold(game);
+            if(game.stage !== 'showdown') {
+                resetCheckBetFold(game);
+            }
             await game.save();
         }
     }

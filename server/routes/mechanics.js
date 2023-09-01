@@ -118,6 +118,7 @@ router.post("/endgame/:gameId", async (req, res) => {
     game.bigBlindPosition = -1;
     game.currentPlayerTurn = -1;
     game.stage = "preflop"
+    game.gameEnd = false;
 
     // Fetch new deck and populate currentDeck
     const response = await axios.get("https://www.deckofcardsapi.com/api/deck/new/draw/?count=52");
