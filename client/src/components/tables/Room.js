@@ -25,6 +25,7 @@ import { socket } from "../../socket";
 import { fetchNewDeck } from "../../rtk/slices/deckOfCardsSlice";
 import Seat from "./Seats";
 import useSocketListeners from "../../rtk/hooks/socketListeners";
+import { setCountdown, decrementCountdown, stopCountdown } from "../../rtk/slices/timingSlice";
 
 const Room = () => {
   console.log("===============Room component rendered================");
@@ -35,6 +36,11 @@ const Room = () => {
 
   const user = useSelector((state) => state.auth.user);
   const games = useSelector((state) => state.server.games);
+  const countDown = useSelector((state) => state.timing.value);
+  const counting = useSelector((state) => state.timing.isCounting);
+
+
+
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const currentGame = games.find((game) => game._id === id);
@@ -159,6 +165,21 @@ const Room = () => {
     }
   }, [playersWithHandCards, currentGame]);
 
+  useEffect(() => {
+    console.log("About to decrement countdown");
+    let interval;
+    if (counting && countDown > 0) {
+      interval = setInterval(() => {
+        console.log("Interval is running");
+        dispatch(decrementCountdown());
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [dispatch, countDown, counting]);
+
+
+
+
 
   
 
@@ -185,7 +206,14 @@ const Room = () => {
     <Container fluid className="h-100 bg">
       <Row className="mt-2">
         <Col className="d-flex justify-content-center">
-          <div className="table">{currentGame.name}</div>
+          <div className="table">{currentGame.name} 
+          {counting && (
+  <div className="countdown-display">
+    Game starts in: {countDown} seconds
+  </div>
+)}
+          </div>
+
           <Button variant="warning" onClick={leaveTable}>
             Leave Table
           </Button>

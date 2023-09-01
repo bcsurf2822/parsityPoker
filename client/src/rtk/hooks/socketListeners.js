@@ -17,6 +17,7 @@ import {
 
 } from "../slices/serverSlice";
 import { useEffect } from "react";
+import { setCountdown } from "../slices/timingSlice";
 
 function useSocketListeners(socket, currentGame, id) {
   const dispatch = useDispatch();
@@ -38,22 +39,27 @@ function useSocketListeners(socket, currentGame, id) {
       check: playerChecked,
       fold: playerFolded,
       bet_placed: chipsCollected,
-    };
+      game_starting: (data) => {
+        console.log("Dispatching setCountdown with value:", data.countdown);
+        return setCountdown(data.countdown);
+    }    };
 
-    // Attach socket event listeners
-    Object.entries(eventMapping).forEach(([event, actionCreator]) => {
-      socket.on(event, (updatedGame) => {
-        console.log(`Event ${event} received.`);
-        if (!updatedGame) {
-          console.error(`Socket event "${event}" received with no data.`);
-          return;
-        }
 
-        dispatch(actionCreator(updatedGame));
-      });
-    });
+Object.entries(eventMapping).forEach(([event, actionCreator]) => {
+  socket.on(event, (data) => {
+    console.log(`Event ${event} received with data:`, data);    
+    if (!data) {
+      console.error(`Socket event "${event}" received with no data.`);
+      return;
+    }
+    
+    dispatch(actionCreator(data)); 
+  });
+});
 
-    // Cleanup function to remove the event listeners
+    
+
+
     return () => {
       Object.keys(eventMapping).forEach((event) => {
         socket.off(event);
@@ -61,7 +67,7 @@ function useSocketListeners(socket, currentGame, id) {
     };
   }, [socket, currentGame, id, dispatch]);
 
-  return; // This is not needed unless you plan on returning something from the hook.
+  return;
 }
 
 export default useSocketListeners;

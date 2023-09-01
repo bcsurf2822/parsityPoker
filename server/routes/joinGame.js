@@ -86,6 +86,7 @@ req.io.emit("playerJoined", game);
 const numOfPlayers = game.seats.filter(seat => seat.player !== null).length;
 
 if (numOfPlayers === 2) {
+  req.io.emit("game_starting", { countdown: 5 }); 
     try {
         console.log(`Starting updatePostionsAndBlinds for game ${req.params.gameId}`);
 
@@ -139,7 +140,7 @@ if (numOfPlayers === 2) {
                              }
                          }
                      }
-     
+                     await new Promise(resolve => setTimeout(resolve, 5000));
                      await game.save();
                      req.io.emit("cards_dealt", game);
                  } catch (error) {

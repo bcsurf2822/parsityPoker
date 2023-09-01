@@ -102,5 +102,13 @@ code {
 
 .chatText {
   resize: none;
-  height: 40px; /* Adjust as needed */
+  height: 40px;
+}
+
+.countdown-display {
+  font-size: 24px;
+  font-weight: bold;
+  color: red;
+  text-align: center;
+  margin-top: 10px;
 }

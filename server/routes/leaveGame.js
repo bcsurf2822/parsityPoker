@@ -46,6 +46,7 @@ router.post("/leave/:gameId/:userId", async (req, res) => {
       game.winnerData = [];
       game.stage = "preflop";
       game.gameEnd = false;
+      game.dealerPosition = -1;
       game.smallBlindPosition = -1;
       game.bigBlindPosition = -1;
       game.currentPlayerTurn = -1;
