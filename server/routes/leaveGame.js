@@ -32,24 +32,23 @@ router.post("/leave/:gameId/:userId", async (req, res) => {
 
     await user.save();
 
-    // Check the number of players left
     const remainingPlayers = game.seats.filter(seat => seat.player !== null);
     
-    // If only one player is left, transfer pot to that player and reset game
     if (remainingPlayers.length === 1) {
       const lastPlayer = remainingPlayers[0].player;
       lastPlayer.chips += game.pot;
       game.pot = 0;
 
-      // If you want to reset the game, add your reset logic here
+
       game.currentDeck = [];
       game.communityCards = [];
       game.dealtCards = [];
       game.winnerData = [];
       game.stage = "preflop";
       game.gameEnd = false;
-
-      // Reset other parameters if required
+      game.smallBlindPosition = -1;
+      game.bigBlindPosition = -1;
+      game.currentPlayerTurn = -1;
 
       req.io.emit("game_ended", game);
     }
