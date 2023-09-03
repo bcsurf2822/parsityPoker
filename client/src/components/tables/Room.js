@@ -191,16 +191,16 @@ const Room = () => {
     }
   }, [currentGame]);
 
-  useEffect(() => {
-    if (currentGame 
-        && !currentGame.gameEnd  // gameEnd should be false
-        && playersWithHandCards.length === 0  // no players have handCards
-        && currentGame.pot > 0  // pot is greater than 0
-    ) {
-      console.log("Conditions met! Dealing cards...");
-      handleDealCards();
-    }
-  }, [currentGame, playersWithHandCards]);
+  // useEffect(() => {
+  //   if (currentGame 
+  //       && !currentGame.gameEnd  // gameEnd should be false
+  //       && playersWithHandCards.length === 0  // no players have handCards
+  //       && currentGame.pot > 0  // pot is greater than 0
+  //   ) {
+  //     console.log("Conditions met! Dealing cards...");
+  //     handleDealCards();
+  //   }
+  // }, [currentGame, playersWithHandCards]);
 
 
 

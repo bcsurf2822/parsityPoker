@@ -33,7 +33,7 @@ const authenticationSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state) => {
         state.isAuthenticated = false;
-        state.user = null; // clear user data on logout
+        state.user = null; 
       })
       .addCase(depositSuccess, (state, action) => {
         if (state.user && state.user.userId === action.payload.userId) {
