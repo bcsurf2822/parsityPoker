@@ -75,7 +75,7 @@ router.post("/join/:gameId/:seatId", async (req, res) => {
 
     console.log("user after buy in", user);
 
-    const player = { user: user._id, chips: buyIn, handCards: [], bet: 0 };
+    const player = { user: user._id, username: user.username, chips: buyIn, handCards: [], bet: 0 };
     availableSeat.player = player;
 
     await game.save();

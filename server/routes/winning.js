@@ -2,6 +2,10 @@ const router = require("express").Router();
 const axios = require("axios");
 const Game = require("../models/gamesSchema");
 
+const sleep = (milliseconds) => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds));
+}
+
 router.get("/winner/:gameId", async (req, res) => {
   const { gameId } = req.params;
 
@@ -50,12 +54,14 @@ router.get("/winner/:gameId", async (req, res) => {
         const winningSeat = occupiedSeats[index];
         winningSeat.player.chips += chipsPerWinner;
       }
-
+      req.io.emit("winner", game);
       game.pot = 0;
+
+      await sleep(2000); 
       game.gameEnd = true;
 
       await game.save();
-      req.io.emit("winner", game);
+
     }
 
     res.json(response.data);

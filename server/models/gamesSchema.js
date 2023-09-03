@@ -14,6 +14,7 @@ const PlayerSchema = new Schema({
     ref: "User",
     required: true,
   },
+  username: String, 
   chips: { type: Number, required: true },
   handCards: {
     type: [String],

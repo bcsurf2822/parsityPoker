@@ -20,8 +20,6 @@ import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
-import { useEffect } from "react";
-import { fetchUsernameById } from "../../rtk/slices/usersSlice";
 import BetBox from "./BetBox";
 
 const style = {
@@ -35,6 +33,8 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
+
 
 const Seat = ({ seat, currentGame }) => {
   const user = useSelector((state) => state.auth.user);
@@ -53,21 +53,10 @@ const Seat = ({ seat, currentGame }) => {
   const [sliderValue, setSliderValue] = useState(minBuyIn);
   const [seatChoice, setSeatChoice] = useState(false);
 
-  const [username, setUsername] = useState("");
   const dispatch = useDispatch();
 
   const tableId = currentGame._id;
 
-  useEffect(() => {
-    const fetchUsername = async (player) => {
-      if (player) {
-        const result = await dispatch(fetchUsernameById(player.user));
-        setUsername(result.payload);
-      }
-    };
-
-    if (seat.player) fetchUsername(seat.player);
-  }, [seat, dispatch]);
 
   const handleClick = () => {
     setSeatChoice(true);
@@ -150,7 +139,7 @@ const Seat = ({ seat, currentGame }) => {
                   <Grid container alignItems="center">
                     <Grid item xs>
                       <Typography gutterBottom variant="h4" component="div">
-                        {username}
+                        {seat.player.username}
                       </Typography>
                     </Grid>
                     <Grid item>

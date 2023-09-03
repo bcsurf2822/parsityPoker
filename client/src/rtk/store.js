@@ -6,7 +6,6 @@ import registrationReducer from "./slices/registrationSlice";
 import profileReducer from "./slices/profileSlice";
 import serverReducer from "./slices/serverSlice";
 import chatReducer from "./slices/chatSlice";
-import usersReducer from "./slices/usersSlice";
 import deckOfCardsReducer from "./slices/deckOfCardsSlice";
 import timingReducer from "./slices/timingSlice";
 
@@ -21,7 +20,6 @@ export default configureStore({
     profile: profileReducer,
     server: serverReducer,
     chat: chatReducer,
-    users: usersReducer,
     cards: deckOfCardsReducer,
     timing: timingReducer,
   },

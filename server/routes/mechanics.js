@@ -105,7 +105,8 @@ router.post("/endgame/:gameId", async (req, res) => {
     game.dealtCards = [];
     game.winnerData = [];
     game.pot = 0;
-    game.stage = "pre-flop";
+    game.stage = "preflop";
+    game.gameEnd = false;
 
     game.seats.forEach((seat) => {
       if (seat.player) {

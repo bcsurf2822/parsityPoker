@@ -38,10 +38,9 @@ const Room = () => {
   const games = useSelector((state) => state.server.games);
   const countDown = useSelector((state) => state.timing.value);
   const counting = useSelector((state) => state.timing.isCounting);
-
-
-
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+  const [winnerData, setWinnerData] = useState(null);
 
   const currentGame = games.find((game) => game._id === id);
   console.log("currentGame-----------------------------------:", currentGame);
@@ -177,6 +176,31 @@ const Room = () => {
     return () => clearInterval(interval);
   }, [dispatch, countDown, counting]);
 
+  useEffect(() => {
+    if (currentGame && currentGame.gameEnd) {
+      handleEndGame();
+    }
+  }, [currentGame]);
+
+
+  useEffect(() => {
+    if (currentGame && currentGame.winnerData) {
+      setWinnerData(currentGame.winnerData);
+      // Optionally, you can also log or show some notification about the winner
+      console.log("Winner is:", currentGame.winnerData);
+    }
+  }, [currentGame]);
+
+  useEffect(() => {
+    if (currentGame 
+        && !currentGame.gameEnd  // gameEnd should be false
+        && playersWithHandCards.length === 0  // no players have handCards
+        && currentGame.pot > 0  // pot is greater than 0
+    ) {
+      console.log("Conditions met! Dealing cards...");
+      handleDealCards();
+    }
+  }, [currentGame, playersWithHandCards]);
 
 
 
@@ -204,21 +228,22 @@ const Room = () => {
 
   return (
     <Container fluid className="h-100 bg">
-      <Row className="mt-2">
-        <Col className="d-flex justify-content-center">
-          <div className="table">{currentGame.name} 
-          {counting && (
-  <div className="countdown-display">
-    Game starts in: {countDown} seconds
-  </div>
-)}
-          </div>
-
-          <Button variant="warning" onClick={leaveTable}>
-            Leave Table
-          </Button>
-        </Col>
-      </Row>
+<Row className="mt-2">
+  <Col className="d-flex justify-content-center">
+    <div className="table">
+      {currentGame.name}
+      {counting && <div className="countdown-display">Game starts in: {countDown} seconds</div>}
+      {winnerData && (
+        <div className="winner-info">
+          Winner is: {winnerData.name} with {currentGame.pot} points.
+        </div>
+      )}
+    </div>
+    <Button variant="warning" onClick={leaveTable}>
+      Leave Table
+    </Button>
+  </Col>
+</Row>
       <Row className="mt-2">
         <Row className="mt-2">
           <Col className="d-flex justify-content-center">
