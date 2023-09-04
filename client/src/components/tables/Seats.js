@@ -1,11 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-input-slider";
 import {
-  joinGame,
+  // joinGame,
   chipsToPot,
   fold,
   check
 } from "../../rtk/slices/serverSlice";
+
+import { useJoinGameMutation } from "../../rtk/slices/apiSlice";
+
 import DeactivatedBet from "./DeactivatedBet";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
@@ -50,6 +53,9 @@ const Seat = ({ seat, currentGame }) => {
     setSeatChoice(false);
   };
 
+  const [joinGameMutation, { isLoading, isError, error }] = useJoinGameMutation();
+
+
   const [sliderValue, setSliderValue] = useState(minBuyIn);
   const [seatChoice, setSeatChoice] = useState(false);
 
@@ -62,22 +68,43 @@ const Seat = ({ seat, currentGame }) => {
     setSeatChoice(true);
   };
 
+  // const handleConfirm = () => {
+  //   if (!user) {
+  //     console.log("User is undefined");
+  //     return;
+  //   }
+
+  //   dispatch(
+  //     joinGame({
+  //       userId: user.id,
+  //       gameId: tableId,
+  //       buyIn: sliderValue,
+  //       seatId: seatId,
+  //     })
+  //   );
+  //   console.log(joinGame);
+  // };
+
   const handleConfirm = () => {
     if (!user) {
       console.log("User is undefined");
       return;
     }
-
-    dispatch(
-      joinGame({
-        userId: user.id,
-        gameId: tableId,
-        buyIn: sliderValue,
-        seatId: seatId,
-      })
-    );
-    console.log(joinGame);
+  
+    joinGameMutation({
+      userId: user.id,
+      gameId: tableId,
+      buyIn: sliderValue,
+      seatId: seatId,
+    })
+    .then(result => {
+      console.log("Mutation result:", result);
+    })
+    .catch(error => {
+      console.log("Mutation error:", error);
+    });
   };
+  
 
   const isDealer = currentGame.dealerPosition === seat.id - 1;
   const isCurrentPlayer = currentGame.currentPlayerTurn === seat.id - 1;

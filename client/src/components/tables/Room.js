@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import isEqual from "lodash/isEqual";
 import { useParams } from "react-router-dom";
 import {
-  fetchGames,
+  // fetchGames,
   leaveGame,
   dealCards,
   dealFlop,
@@ -25,6 +25,8 @@ import { socket } from "../../socket";
 import { fetchNewDeck } from "../../rtk/slices/deckOfCardsSlice";
 import Seat from "./Seats";
 import useSocketListeners from "../../rtk/hooks/socketListeners";
+import { useGetGamesQuery } from "../../rtk/slices/apiSlice";
+
 import { setCountdown, decrementCountdown, stopCountdown } from "../../rtk/slices/timingSlice";
 
 const Room = () => {
@@ -33,9 +35,13 @@ const Room = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { data, isLoading, isError } = useGetGamesQuery();
+  const games = data?.games || [];
+  console.log("QUERY GAMES",games);
+
 
   const user = useSelector((state) => state.auth.user);
-  const games = useSelector((state) => state.server.games);
+  // const games = useSelector((state) => state.server.games);
   const countDown = useSelector((state) => state.timing.value);
   const counting = useSelector((state) => state.timing.isCounting);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -70,9 +76,9 @@ const Room = () => {
     console.log("seat Info:", seatArray)
 
 
-  useEffect(() => {
-    dispatch(fetchGames());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchGames());
+  // }, [dispatch]);
 
 
   useEffect(() => {
