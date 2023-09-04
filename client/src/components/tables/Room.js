@@ -62,7 +62,7 @@ const Room = () => {
 
   const seatArray = currentGame ? currentGame.seats : [];
 
-  //Number of Seats Occupied
+
   const occupiedSeats = currentGame
     ? currentGame.seats.filter((seat) => seat.player !== null).length
     : 0;

@@ -2,19 +2,31 @@ import {  useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Table, Button, Container } from "react-bootstrap";
+import { useGetGamesQuery } from "../../rtk/slices/apiSlice";
 
-import { fetchGames} from "../../rtk/slices/serverSlice";
+// import { fetchGames} from "../../rtk/slices/serverSlice";
 
 const Tables = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { games } = useSelector((state) => state.server);
+  const { data, isLoading, isError } = useGetGamesQuery();
+  const games = data?.games || [];
+  console.log("QUERY GAMES",games);
 
-  useEffect(() => {
-    dispatch(fetchGames());
-  }, [dispatch]);
+  // const { games } = useSelector((state) => state.server);
 
+  // useEffect(() => {
+  //   dispatch(fetchGames());
+  // }, [dispatch]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error loading games.</div>;
+  }
   return (
     <Container style={{ maxHeight: "80vh", overflowY: "scroll" }}>
       <h1>Available Tables</h1>
@@ -36,7 +48,7 @@ const Tables = () => {
               <td>${game.blinds}</td>
               <td>{game.seats.filter((seat) => seat.player !== null).length}  / {game.seats.length} </td>
               <td>
-              <Button onClick={() => navigate(`/Room/${game._id}`)}>View</Button>
+                <Button onClick={() => navigate(`/Room/${game._id}`)}>View</Button>
               </td>
             </tr>
           ))}

@@ -97,6 +97,7 @@ export const dealFlop = createAsyncThunk(
   async (gameId, { rejectWithValue }) => {
     try {
       const response = await axios.post(`http://localhost:4000/flop/${gameId}`);
+      console.log("Deal flop response:", response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -104,12 +105,12 @@ export const dealFlop = createAsyncThunk(
   }
 );
 
-export const flopDealt = createAsyncThunk(
-  "games/flopDealt",
-  async (updatedGame) => {
-    return updatedGame;
-  }
-);
+// export const flopDealt = createAsyncThunk(
+//   "games/flopDealt",
+//   async (updatedGame) => {
+//     return updatedGame;
+//   }
+// );
 
 export const dealTurn = createAsyncThunk(
   "games/dealTurn",
@@ -465,14 +466,14 @@ const serverSlice = createSlice({
         state.loading = false;
         state.error = action.payload || "Failed to deal flop";
       })
-      .addCase(flopDealt.fulfilled, (state, action) => {
-        const updatedGameIndex = state.games.findIndex(
-          (game) => game._id === action.payload._id
-        );
-        if (updatedGameIndex > -1) {
-          state.games[updatedGameIndex] = action.payload;
-        }
-      })
+      // .addCase(flopDealt.fulfilled, (state, action) => {
+      //   const updatedGameIndex = state.games.findIndex(
+      //     (game) => game._id === action.payload._id
+      //   );
+      //   if (updatedGameIndex > -1) {
+      //     state.games[updatedGameIndex] = action.payload;
+      //   }
+      // })
 
       .addCase(dealTurn.pending, (state) => {
         state.loading = true;

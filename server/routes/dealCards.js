@@ -53,16 +53,17 @@ router.post("/flop/:gameId", async (req, res) => {
     const game = await Game.findById(gameId);
     console.log(`Retrieved game:`, game);
 
-    if (!game) {
-      console.log(`Game with ID: ${gameId} not found.`);
-      return res.status(404).json({ message: "Game not found!" });
-    }
+    console.log(`Current game state before conditions check: Stage - ${game.stage}, Community Cards Count - ${game.communityCards.length}`);
 
-    if (game.stage !== 'flop' || game.communityCards.length > 0) {
-      console.log(`Conditions not met to deal the flop.`);
-      return res.status(400).json({ message: "Conditions not met to deal the flop!" });
-    }
-
+    if (game.stage !== 'flop') {
+      console.log(`Game stage is not set to 'flop'. Current stage: ${game.stage}`);
+      return res.status(400).json({ message: "Game stage is not correct!" });
+  }
+  
+  if (game.communityCards.length > 0) {
+      console.log(`Community cards are not empty. Current community cards: ${JSON.stringify(game.communityCards)}`);
+      return res.status(400).json({ message: "Community cards are not empty!" });
+  }
     game.seats.forEach((seat) => {
       if (seat.player) {
         seat.player.checkBetFold = false;  

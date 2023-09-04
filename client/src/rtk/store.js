@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import logger from 'redux-logger';
 
 import authenticationReducer from "./slices/authenticationSlice";
 import registrationReducer from "./slices/registrationSlice";
@@ -8,11 +9,10 @@ import serverReducer from "./slices/serverSlice";
 import chatReducer from "./slices/chatSlice";
 import deckOfCardsReducer from "./slices/deckOfCardsSlice";
 import timingReducer from "./slices/timingSlice";
+import { api } from "./slices/apiSlice";
 
-
-
-
-export default configureStore({
+// Create the store
+const store = configureStore({
   reducer: {
     auth: authenticationReducer,
     register: registrationReducer,
@@ -22,5 +22,10 @@ export default configureStore({
     chat: chatReducer,
     cards: deckOfCardsReducer,
     timing: timingReducer,
+    [api.reducerPath]: api.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(logger).concat(api.middleware),  
 });
+
+export default store;
