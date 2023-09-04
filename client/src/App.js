@@ -20,12 +20,22 @@ import ProtectedRoute from "./components/Protected";
 
 
 import { initializeAuth } from "./rtk/actions/auth";
+import { initializeSockets } from "./rtk/hooks/socket2";
 
 function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(initializeAuth());
+  }, [dispatch]);
+
+  useEffect(() => {
+    initializeSockets(dispatch);
+    
+    return () => {
+      console.log("Disconnecting sockets...");
+      // socket.disconnect();
+    };
   }, [dispatch]);
 
   return (

@@ -4,7 +4,7 @@ import {
   // joinGame,
   chipsToPot,
   fold,
-  check
+  check,
 } from "../../rtk/slices/serverSlice";
 
 import { useJoinGameMutation } from "../../rtk/slices/apiSlice";
@@ -24,6 +24,7 @@ import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
 import BetBox from "./BetBox";
+import { joinGameSocket } from "../../rtk/hooks/socket2";
 
 const style = {
   position: "absolute",
@@ -36,8 +37,6 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
-
 
 const Seat = ({ seat, currentGame }) => {
   const user = useSelector((state) => state.auth.user);
@@ -53,8 +52,10 @@ const Seat = ({ seat, currentGame }) => {
     setSeatChoice(false);
   };
 
-  const [joinGameMutation, { isLoading, isError, error }] = useJoinGameMutation();
+  console.log("SEAT", seat);
 
+  const [joinGameMutation, { isLoading, isError, error }] =
+    useJoinGameMutation();
 
   const [sliderValue, setSliderValue] = useState(minBuyIn);
   const [seatChoice, setSeatChoice] = useState(false);
@@ -62,7 +63,6 @@ const Seat = ({ seat, currentGame }) => {
   const dispatch = useDispatch();
 
   const tableId = currentGame._id;
-
 
   const handleClick = () => {
     setSeatChoice(true);
@@ -90,21 +90,22 @@ const Seat = ({ seat, currentGame }) => {
       console.log("User is undefined");
       return;
     }
-  
+
+    joinGameSocket(tableId, seatId, user.id, sliderValue);
+
     joinGameMutation({
       userId: user.id,
       gameId: tableId,
       buyIn: sliderValue,
       seatId: seatId,
     })
-    .then(result => {
-      console.log("Mutation result:", result);
-    })
-    .catch(error => {
-      console.log("Mutation error:", error);
-    });
+      .then((result) => {
+        console.log("Mutation result:", result);
+      })
+      .catch((error) => {
+        console.log("Mutation error:", error);
+      });
   };
-  
 
   const isDealer = currentGame.dealerPosition === seat.id - 1;
   const isCurrentPlayer = currentGame.currentPlayerTurn === seat.id - 1;

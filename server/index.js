@@ -91,6 +91,10 @@ io.on("connection", (socket) => {
     console.log("User disconnected");
   });
 
+  socket.on("gameUpdated", (game) => {
+    console.log("Received gameUpdated event. Game data:", game);
+});
+
   socket.on("chat message", (msg) => {
     console.log(`Received message: ${msg.message}`);
     io.emit("chat message", msg);

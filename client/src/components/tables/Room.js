@@ -21,13 +21,15 @@ import {
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 import Chatbox from "./Chatbox";
-import { socket } from "../../socket";
+// import { socket } from "../../socket";
 import { fetchNewDeck } from "../../rtk/slices/deckOfCardsSlice";
 import Seat from "./Seats";
-import useSocketListeners from "../../rtk/hooks/socketListeners";
+// import useSocketListeners from "../../rtk/hooks/socketListeners";
+// import useSocket2 from "../../rtk/hooks/socket2";
 import { useGetGamesQuery } from "../../rtk/slices/apiSlice";
 
 import { setCountdown, decrementCountdown, stopCountdown } from "../../rtk/slices/timingSlice";
+import { initializeSockets } from "../../rtk/hooks/socket2";
 
 const Room = () => {
   console.log("===============Room component rendered================");
@@ -38,6 +40,13 @@ const Room = () => {
   const { data, isLoading, isError } = useGetGamesQuery();
   const games = data?.games || [];
   console.log("QUERY GAMES",games);
+
+  useEffect(() => {
+    initializeSockets(dispatch);
+    return () => {
+      // Cleanup listeners or disconnect the socket when component unmounts
+    };
+  }, [dispatch]);
 
 
   const user = useSelector((state) => state.auth.user);
@@ -50,7 +59,8 @@ const Room = () => {
 
   const currentGame = games.find((game) => game._id === id);
   console.log("currentGame-----------------------------------:", currentGame);
-  useSocketListeners(socket, currentGame, id);
+  // useSocketListeners(socket, currentGame, id);
+  // useSocket2(socket)
 
   const playersWithHandCards = useMemo(() => {
     if (currentGame && currentGame.seats) {
