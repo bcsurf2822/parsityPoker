@@ -52,7 +52,7 @@ const Seat = ({ seat, currentGame }) => {
     setSeatChoice(false);
   };
 
-  console.log("SEAT", seat);
+  // console.log("SEAT", seat);
 
   const [joinGameMutation, { isLoading, isError, error }] =
     useJoinGameMutation();
