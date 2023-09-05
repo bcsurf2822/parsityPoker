@@ -21,33 +21,29 @@ import {
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 import Chatbox from "./Chatbox";
-// import { socket } from "../../socket";
+
 import { fetchNewDeck } from "../../rtk/slices/deckOfCardsSlice";
 import Seat from "./Seats";
 // import useSocketListeners from "../../rtk/hooks/socketListeners";
-// import useSocket2 from "../../rtk/hooks/socket2";
+import useSocketListeners from "../../rtk/hooks/useSocketListeners";
+
 import { useGetGamesQuery } from "../../rtk/slices/apiSlice";
 
 import { setCountdown, decrementCountdown, stopCountdown } from "../../rtk/slices/timingSlice";
-import { initializeSockets } from "../../rtk/hooks/socket2";
+
+
 
 const Room = () => {
+  useSocketListeners();
   console.log("===============Room component rendered================");
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+
   const { data, isLoading, isError } = useGetGamesQuery();
   const games = data?.games || [];
   console.log("QUERY GAMES",games);
-
-  useEffect(() => {
-    initializeSockets(dispatch);
-    return () => {
-      // Cleanup listeners or disconnect the socket when component unmounts
-    };
-  }, [dispatch]);
-
 
   const user = useSelector((state) => state.auth.user);
   // const games = useSelector((state) => state.server.games);
@@ -60,7 +56,7 @@ const Room = () => {
   const currentGame = games.find((game) => game._id === id);
   console.log("currentGame-----------------------------------:", currentGame);
   // useSocketListeners(socket, currentGame, id);
-  // useSocket2(socket)
+
 
   const playersWithHandCards = useMemo(() => {
     if (currentGame && currentGame.seats) {
@@ -181,11 +177,10 @@ const Room = () => {
   }, [playersWithHandCards, currentGame]);
 
   useEffect(() => {
-    console.log("About to decrement countdown");
+
     let interval;
     if (counting && countDown > 0) {
       interval = setInterval(() => {
-        console.log("Interval is running");
         dispatch(decrementCountdown());
       }, 1000);
     }

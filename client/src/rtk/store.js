@@ -11,7 +11,6 @@ import deckOfCardsReducer from "./slices/deckOfCardsSlice";
 import timingReducer from "./slices/timingSlice";
 import { api } from "./slices/apiSlice";
 
-// Create the store
 const store = configureStore({
   reducer: {
     auth: authenticationReducer,
@@ -25,7 +24,9 @@ const store = configureStore({
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(logger).concat(api.middleware),  
+    getDefaultMiddleware().concat(api.middleware),
+    devTools: process.env.NODE_ENV !== 'production'
 });
 
 export default store;
+

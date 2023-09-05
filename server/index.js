@@ -7,6 +7,7 @@ const http = require("http");
 
 const app = express();
 const server = http.createServer(app);
+const setupSockets = require("./sockets");
 const io = require("socket.io")(server, {
   cors: {
     origin: "http://localhost:3000",
@@ -84,22 +85,8 @@ app.use(updateUserRoute);
 const userNameRoute = require("./routes/userNames");
 app.use(userNameRoute);
 
-io.on("connection", (socket) => {
-  console.log("A user connected");
+setupSockets(io);
 
-  socket.on("disconnect", () => {
-    console.log("User disconnected");
-  });
-
-  socket.on("gameUpdated", (game) => {
-    console.log("Received gameUpdated event. Game data:", game);
-});
-
-  socket.on("chat message", (msg) => {
-    console.log(`Received message: ${msg.message}`);
-    io.emit("chat message", msg);
-  });
-});
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

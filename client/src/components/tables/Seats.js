@@ -7,8 +7,6 @@ import {
   check,
 } from "../../rtk/slices/serverSlice";
 
-import { useJoinGameMutation } from "../../rtk/slices/apiSlice";
-
 import DeactivatedBet from "./DeactivatedBet";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
@@ -24,7 +22,8 @@ import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
 import BetBox from "./BetBox";
-import { joinGameSocket } from "../../rtk/hooks/socket2";
+import useSocketListeners from "../../rtk/hooks/useSocketListeners";
+
 
 const style = {
   position: "absolute",
@@ -39,7 +38,10 @@ const style = {
 };
 
 const Seat = ({ seat, currentGame }) => {
+  useSocketListeners();
   const user = useSelector((state) => state.auth.user);
+
+
   const seatId = seat._id;
   const maxBuyIn = currentGame.max;
   const minBuyIn = currentGame.min;
@@ -54,8 +56,7 @@ const Seat = ({ seat, currentGame }) => {
 
   // console.log("SEAT", seat);
 
-  const [joinGameMutation, { isLoading, isError, error }] =
-    useJoinGameMutation();
+
 
   const [sliderValue, setSliderValue] = useState(minBuyIn);
   const [seatChoice, setSeatChoice] = useState(false);
@@ -91,20 +92,6 @@ const Seat = ({ seat, currentGame }) => {
       return;
     }
 
-    joinGameSocket(tableId, seatId, user.id, sliderValue);
-
-    joinGameMutation({
-      userId: user.id,
-      gameId: tableId,
-      buyIn: sliderValue,
-      seatId: seatId,
-    })
-      .then((result) => {
-        console.log("Mutation result:", result);
-      })
-      .catch((error) => {
-        console.log("Mutation error:", error);
-      });
   };
 
   const isDealer = currentGame.dealerPosition === seat.id - 1;
