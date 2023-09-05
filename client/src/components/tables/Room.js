@@ -58,15 +58,17 @@ const Room = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Request game by ID
-    socket.emit("getRoom", id);
+    socket.emit("getGameById", id);
+    console.log("Emitted getGameById with ID:", id);
 
     socket.on("gameData", (data) => {
+      console.log("Received gameData from server:", data);
       setCurrentGame(data);
       setIsLoading(false);
     });
-
+    
     socket.on("gameError", (errorMsg) => {
+      console.log("Received gameError from server:", errorMsg);
       setError(errorMsg);
       setIsLoading(false);
     });
@@ -110,21 +112,21 @@ const Room = () => {
     }
   }, [currentGame, dispatch, id]);
 
-  const leaveTable = () => {
-    if (!user) {
-      console.log("User is undefined");
-      return;
-    }
+  // const leaveTable = () => {
+  //   if (!user) {
+  //     console.log("User is undefined");
+  //     return;
+  //   }
 
-    dispatch(leaveGame({ gameId: id, userId: user.id }))
-      .then(() => {
-        const updatedGame = games.find((game) => game._id === id);
-        if (!updatedGame) {
-          navigate("/Tables");
-        }
-      })
-      .catch((error) => console.log("Error leaving the game:", error));
-  };
+  //   dispatch(leaveGame({ gameId: id, userId: user.id }))
+  //     .then(() => {
+  //       const updatedGame = games.find((game) => game._id === id);
+  //       if (!updatedGame) {
+  //         navigate("/Tables");
+  //       }
+  //     })
+  //     .catch((error) => console.log("Error leaving the game:", error));
+  // };
 
   const closeTable = () => {
     navigate("/Tables");
@@ -266,7 +268,7 @@ const Room = () => {
         </div>
       )}
     </div>
-    <Button variant="warning" onClick={leaveTable}>
+    <Button variant="warning" onClick={console.log("LEAVE")}>
       Leave Table
     </Button>
   </Col>
