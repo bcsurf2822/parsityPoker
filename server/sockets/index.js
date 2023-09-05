@@ -1,10 +1,16 @@
 const gamesSocket = require("./gameSocket");
+const joinSocket = require("./joinSocket");
+const leaveSocket = require("./leaveSocket");
+
 
 function setupSockets(io) {
   io.on("connection", (socket) => {
     console.log("a user connected");
 
-    gamesSocket(socket);  // set up games related socket events
+    gamesSocket(socket); 
+    joinSocket(socket);
+    leaveSocket(socket);
+
 
     socket.on("disconnect", () => {
       console.log("user disconnected");

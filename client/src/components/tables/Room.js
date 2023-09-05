@@ -26,6 +26,7 @@ import { fetchNewDeck } from "../../rtk/slices/deckOfCardsSlice";
 import Seat from "./Seats";
 // import useSocketListeners from "../../rtk/hooks/socketListeners";
 import useSocketListeners from "../../rtk/hooks/useSocketListeners";
+import { socket } from "../../socket";
 
 import { useGetGamesQuery } from "../../rtk/slices/apiSlice";
 
@@ -41,21 +42,41 @@ const Room = () => {
   const navigate = useNavigate();
 
 
-  const { data, isLoading, isError } = useGetGamesQuery();
-  const games = data?.games || [];
-  console.log("QUERY GAMES",games);
-
   const user = useSelector((state) => state.auth.user);
-  // const games = useSelector((state) => state.server.games);
   const countDown = useSelector((state) => state.timing.value);
   const counting = useSelector((state) => state.timing.isCounting);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const [winnerData, setWinnerData] = useState(null);
 
-  const currentGame = games.find((game) => game._id === id);
-  console.log("currentGame-----------------------------------:", currentGame);
-  // useSocketListeners(socket, currentGame, id);
+  // const currentGame = games.find((game) => game._id === id);
+  // console.log("currentGame-----------------------------------:", currentGame);
+
+  const [currentGame, setCurrentGame] = useState(null);
+  console.log("Current Game:", currentGame);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Request game by ID
+    socket.emit("getRoom", id);
+
+    socket.on("gameData", (data) => {
+      setCurrentGame(data);
+      setIsLoading(false);
+    });
+
+    socket.on("gameError", (errorMsg) => {
+      setError(errorMsg);
+      setIsLoading(false);
+    });
+
+    return () => {
+      socket.off("gameData");
+      socket.off("gameError");
+    };
+  }, [id]);
+
 
 
   const playersWithHandCards = useMemo(() => {
@@ -80,11 +101,6 @@ const Room = () => {
     : 0;
 
     console.log("seat Info:", seatArray)
-
-
-  // useEffect(() => {
-  //   dispatch(fetchGames());
-  // }, [dispatch]);
 
 
   useEffect(() => {

@@ -38,7 +38,7 @@ const style = {
 };
 
 const Seat = ({ seat, currentGame }) => {
-  useSocketListeners();
+  const { gameState, joinGame } = useSocketListeners();
   const user = useSelector((state) => state.auth.user);
 
 
@@ -91,6 +91,15 @@ const Seat = ({ seat, currentGame }) => {
       console.log("User is undefined");
       return;
     }
+
+    joinGame({
+      userId: user.id,
+      gameId: tableId,
+      buyIn: sliderValue,
+      seatId: seatId,
+    });
+  
+    console.log('Attempting to join game via socket');
 
   };
 
