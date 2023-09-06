@@ -9,8 +9,10 @@ import { requestGames } from "../../rtk/slices/socketSlice";
 const Tables = () => {
   const dispatch = useDispatch();
   const games = useSelector((state) => state.socket.data);
-  const isLoading = useSelector((state) => state.socket.isLoading);
+  // const isLoading = useSelector((state) => state.socket.isLoading);
   const error = useSelector((state) => state.socket.error);
+
+  console.log("Games In tables", games)
 
   useEffect(() => {
     dispatch(requestGames());
@@ -19,9 +21,7 @@ const Tables = () => {
 
   const navigate = useNavigate();
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+
   return (
     <Container style={{ maxHeight: "80vh", overflowY: "scroll" }}>
       <h1>Available Tables</h1>
