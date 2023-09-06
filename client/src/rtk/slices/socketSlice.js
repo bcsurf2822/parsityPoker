@@ -5,7 +5,10 @@ const socketSlice = createSlice({
   initialState: {
     data: [],
     isLoading: true,
-    error: null
+    error: null,
+    joinLoading: false,
+    joinError: null,
+    currentGame: null
   },
   reducers: {
     requestGames: state => {
@@ -19,9 +22,24 @@ const socketSlice = createSlice({
     receiveGamesError: (state, action) => {
       state.error = action.payload;
       state.isLoading = false;
+    },
+    requestJoinGame: state => {
+      state.joinLoading = true;
+      state.joinError = null;
+    },
+    gameJoined: (state, action) => {
+      state.currentGame = action.payload;
+      state.joinLoading = false;
+    },
+    joinGameError: (state, action) => {
+      state.joinError = action.payload;
+      state.joinLoading = false;
     }
   }
 });
 
-export const { requestGames, receiveGames, receiveGamesError } = socketSlice.actions;
+export const { 
+  requestGames, receiveGames, receiveGamesError, 
+  requestJoinGame, gameJoined, joinGameError 
+} = socketSlice.actions;
 export default socketSlice.reducer;

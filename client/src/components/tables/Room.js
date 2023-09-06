@@ -28,7 +28,7 @@ import Seat from "./Seats";
 import useSocketListeners from "../../rtk/hooks/useSocketListeners";
 import { socket } from "../../socket";
 
-import { useGetGamesQuery } from "../../rtk/slices/apiSlice";
+
 
 import { setCountdown, decrementCountdown, stopCountdown } from "../../rtk/slices/timingSlice";
 
@@ -49,35 +49,16 @@ const Room = () => {
 
   const [winnerData, setWinnerData] = useState(null);
 
-  // const currentGame = games.find((game) => game._id === id);
-  // console.log("currentGame-----------------------------------:", currentGame);
+  const games = useSelector((state) => state.socket.data);
 
-  const [currentGame, setCurrentGame] = useState(null);
+  const currentGame = games.find((game) => game._id === id);
+  console.log("currentGame-----------------------------------:", currentGame);
+
   console.log("Current Game:", currentGame);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    socket.emit("getGameById", id);
-    console.log("Emitted getGameById with ID:", id);
 
-    socket.on("gameData", (data) => {
-      console.log("Received gameData from server:", data);
-      setCurrentGame(data);
-      setIsLoading(false);
-    });
-    
-    socket.on("gameError", (errorMsg) => {
-      console.log("Received gameError from server:", errorMsg);
-      setError(errorMsg);
-      setIsLoading(false);
-    });
 
-    return () => {
-      socket.off("gameData");
-      socket.off("gameError");
-    };
-  }, [id]);
+
 
 
 

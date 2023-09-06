@@ -1,4 +1,4 @@
-import { requestGames, receiveGames, receiveGamesError } from "../slices/socketSlice";
+import { requestGames, receiveGames, receiveGamesError, gameJoined, requestJoinGame, joinGameError } from "../slices/socketSlice";
 import { socket } from "../../socket";
 
 export const socketMiddleware = store => next => action => {
@@ -13,6 +13,20 @@ export const socketMiddleware = store => next => action => {
   socket.on('gamesError', (errorMsg) => {
     store.dispatch(receiveGamesError(errorMsg));
   });
+
+  if (action.type === requestJoinGame.toString()) {
+    const { userId, gameId, seatId, buyIn } = action.payload;
+    socket.emit('joinGame', { userId, gameId, seatId, buyIn });
+  }
+
+  socket.on('gameJoined', (data) => {
+    store.dispatch(gameJoined(data));
+  });
+
+  socket.on('joinGameError', (errorMsg) => {
+    store.dispatch(joinGameError(errorMsg));
+  });
+
 
   return next(action);
 };
