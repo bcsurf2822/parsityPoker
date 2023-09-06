@@ -20,9 +20,10 @@ import Typography from "@mui/material/Typography";
 import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 
 import Modal from "@mui/material/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BetBox from "./BetBox";
-import useSocketListeners from "../../rtk/hooks/useSocketListeners";
+import { requestJoinGame } from "../../rtk/slices/socketSlice";
+// import useSocketListeners from "../../rtk/hooks/useSocketListeners";
 
 
 const style = {
@@ -38,10 +39,11 @@ const style = {
 };
 
 const Seat = ({ seat, currentGame }) => {
-  const { gameState, joinGame } = useSocketListeners();
   const user = useSelector((state) => state.auth.user);
 
+  const dispatch = useDispatch();
 
+  const tableId = currentGame._id;
   const seatId = seat._id;
   const maxBuyIn = currentGame.max;
   const minBuyIn = currentGame.min;
@@ -54,54 +56,33 @@ const Seat = ({ seat, currentGame }) => {
     setSeatChoice(false);
   };
 
-  // console.log("SEAT", seat);
+
 
 
 
   const [sliderValue, setSliderValue] = useState(minBuyIn);
   const [seatChoice, setSeatChoice] = useState(false);
 
-  const dispatch = useDispatch();
-
-  const tableId = currentGame._id;
-
   const handleClick = () => {
     setSeatChoice(true);
   };
 
-  // const handleConfirm = () => {
-  //   if (!user) {
-  //     console.log("User is undefined");
-  //     return;
-  //   }
 
-  //   dispatch(
-  //     joinGame({
-  //       userId: user.id,
-  //       gameId: tableId,
-  //       buyIn: sliderValue,
-  //       seatId: seatId,
-  //     })
-  //   );
-  //   console.log(joinGame);
-  // };
 
   const handleConfirm = () => {
     if (!user) {
-      console.log("User is undefined");
-      return;
+        console.log("User is undefined");
+        return;
     }
 
-    joinGame({
-      userId: user.id,
-      gameId: tableId,
-      buyIn: sliderValue,
-      seatId: seatId,
-    });
-  
+    dispatch(requestJoinGame({
+        userId: user.id,
+        gameId: tableId,
+        buyIn: sliderValue,
+        seatId: seatId,
+    }));
     console.log('Attempting to join game via socket');
-
-  };
+};
 
   const isDealer = currentGame.dealerPosition === seat.id - 1;
   const isCurrentPlayer = currentGame.currentPlayerTurn === seat.id - 1;

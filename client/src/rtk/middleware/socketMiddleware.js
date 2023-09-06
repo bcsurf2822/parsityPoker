@@ -1,4 +1,4 @@
-import { requestGames, receiveGames, receiveGamesError, gameJoined, requestJoinGame, joinGameError } from "../slices/socketSlice";
+import { requestGames, receiveGames, receiveGamesError, gameJoined, requestJoinGame, joinGameError, playerJoin } from "../slices/socketSlice";
 import { socket } from "../../socket";
 
 export const socketMiddleware = store => next => action => {
@@ -25,6 +25,10 @@ export const socketMiddleware = store => next => action => {
 
   socket.on('joinGameError', (errorMsg) => {
     store.dispatch(joinGameError(errorMsg));
+  });
+
+  socket.on('playerJoin', (data) => {
+    store.dispatch(playerJoin(data));
   });
 
 
