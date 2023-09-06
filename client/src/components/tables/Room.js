@@ -249,7 +249,7 @@ const Room = () => {
         </div>
       )}
     </div>
-    <Button variant="warning" onClick={console.log("LEAVE")}>
+    <Button variant="warning">
       Leave Table
     </Button>
   </Col>

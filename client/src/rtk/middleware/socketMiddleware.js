@@ -1,10 +1,8 @@
 import { requestGames, receiveGames, receiveGamesError, gameJoined, requestJoinGame, joinGameError, playerJoin } from "../slices/socketSlice";
 import { socket } from "../../socket";
 
-export const socketMiddleware = store => next => action => {
-  if (action.type === requestGames.toString()) {
-    socket.emit('getGames');
-  }
+export const socketMiddleware = store => {
+  // Set up event listeners once when the middleware is initialized
 
   socket.on('gamesData', (data) => {
     store.dispatch(receiveGames(data));
@@ -13,11 +11,6 @@ export const socketMiddleware = store => next => action => {
   socket.on('gamesError', (errorMsg) => {
     store.dispatch(receiveGamesError(errorMsg));
   });
-
-  if (action.type === requestJoinGame.toString()) {
-    const { userId, gameId, seatId, buyIn } = action.payload;
-    socket.emit('joinGame', { userId, gameId, seatId, buyIn });
-  }
 
   socket.on('gameJoined', (data) => {
     store.dispatch(gameJoined(data));
@@ -28,9 +21,19 @@ export const socketMiddleware = store => next => action => {
   });
 
   socket.on('playerJoin', (data) => {
-    store.dispatch(playerJoin(data));
+    store.dispatch(playerJoin(data)); 
   });
 
+  return next => action => {
+    if (action.type === requestGames.toString()) {
+      socket.emit('getGames');
+    }
 
-  return next(action);
+    if (action.type === requestJoinGame.toString()) {
+      const { userId, gameId, seatId, buyIn } = action.payload;
+      socket.emit('joinGame', { userId, gameId, seatId, buyIn });
+    }
+
+    return next(action);
+  };
 };
