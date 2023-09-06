@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import logger from 'redux-logger';
+import logger from "redux-logger";
 
 import authenticationReducer from "./slices/authenticationSlice";
 import registrationReducer from "./slices/registrationSlice";
@@ -10,6 +10,8 @@ import chatReducer from "./slices/chatSlice";
 import deckOfCardsReducer from "./slices/deckOfCardsSlice";
 import timingReducer from "./slices/timingSlice";
 import { api } from "./slices/apiSlice";
+import socketReducer from "./slices/socketSlice";
+import { socketMiddleware } from "./middleware/socketMiddleware";
 
 const store = configureStore({
   reducer: {
@@ -22,11 +24,10 @@ const store = configureStore({
     cards: deckOfCardsReducer,
     timing: timingReducer,
     [api.reducerPath]: api.reducer,
+    socket: socketReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware),
-    devTools: process.env.NODE_ENV !== 'production'
+    getDefaultMiddleware().concat(socketMiddleware),
 });
 
 export default store;
-

@@ -1,33 +1,21 @@
 import {  useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Table, Button, Container } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { requestGames } from "../../rtk/slices/socketSlice";
 
-import { socket } from "../../socket";
+
 
 const Tables = () => {
-  const [games, setGames] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  const games = useSelector((state) => state.socket.data);
+  const isLoading = useSelector((state) => state.socket.isLoading);
+  const error = useSelector((state) => state.socket.error);
 
   useEffect(() => {
+    dispatch(requestGames());
+  }, [dispatch]);
 
-    socket.emit("getGames");
-
-    socket.on("gamesData", (data) => {
-      setGames(data);
-      setIsLoading(false);
-    });
-
-    socket.on("gamesError", (errorMsg) => {
-      setError(errorMsg);
-      setIsLoading(false);
-    });
-
-    return () => {
-      socket.off("gamesData");
-      socket.off("gamesError");
-    };
-  }, []);
 
   const navigate = useNavigate();
 
