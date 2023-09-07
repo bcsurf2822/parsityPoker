@@ -5,7 +5,7 @@ const isSeatAvailable = (seats, seatId) => {
   return seats.some(seat => seat._id.toString() === seatId && !seat.player);
 }
 
-function joinSocket(socket) {
+function joinSocket(socket, io) {
   socket.on('joinGame', async (data) => {
   try {
     const { userId, gameId, seatId, buyIn } = data;
@@ -50,7 +50,7 @@ function joinSocket(socket) {
     await user.save();
     
 
-    socket.broadcast.emit("playerJoin", {
+io.emit("playerJoin", {
       gameId,
       player,
       seatId

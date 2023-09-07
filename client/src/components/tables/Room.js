@@ -1,11 +1,10 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import isEqual from "lodash/isEqual";
+
 import { useParams } from "react-router-dom";
 import {
-  // fetchGames,
   leaveGame,
   dealCards,
   dealFlop,
@@ -24,13 +23,8 @@ import Chatbox from "./Chatbox";
 
 import { fetchNewDeck } from "../../rtk/slices/deckOfCardsSlice";
 import Seat from "./Seats";
-// import useSocketListeners from "../../rtk/hooks/socketListeners";
 import useSocketListeners from "../../rtk/hooks/useSocketListeners";
-import { socket } from "../../socket";
 
-
-
-import { setCountdown, decrementCountdown, stopCountdown } from "../../rtk/slices/timingSlice";
 
 
 
@@ -50,10 +44,10 @@ const Room = () => {
   const [winnerData, setWinnerData] = useState(null);
 
   const games = useSelector((state) => state.socket.data);
+  const gamesCurrent = useSelector((state) => state.socket.currentGame);
+  console.log("Current", gamesCurrent)
 
   const currentGame = games.find((game) => game._id === id);
-  console.log("currentGame-----------------------------------:", currentGame);
-
   console.log("Current Game:", currentGame);
 
 
@@ -62,7 +56,7 @@ const Room = () => {
 
 
 
-  const playersWithHandCards = useMemo(() => {
+  const playersWithHandCards = (() => {
     if (currentGame && currentGame.seats) {
       return currentGame.seats.filter(
         (seat) =>
@@ -175,16 +169,6 @@ const Room = () => {
     }
   }, [playersWithHandCards, currentGame]);
 
-  useEffect(() => {
-
-    let interval;
-    if (counting && countDown > 0) {
-      interval = setInterval(() => {
-        dispatch(decrementCountdown());
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [dispatch, countDown, counting]);
 
   useEffect(() => {
     if (currentGame && currentGame.gameEnd) {
@@ -196,7 +180,7 @@ const Room = () => {
   useEffect(() => {
     if (currentGame && currentGame.winnerData) {
       setWinnerData(currentGame.winnerData);
-      // Optionally, you can also log or show some notification about the winner
+
       console.log("Winner is:", currentGame.winnerData);
     }
   }, [currentGame]);
@@ -212,10 +196,6 @@ const Room = () => {
   //   }
   // }, [currentGame, playersWithHandCards]);
 
-
-
-
-  
 
 // useEffect(() => {
 //   if (playersWithHandCards.length === 1) {

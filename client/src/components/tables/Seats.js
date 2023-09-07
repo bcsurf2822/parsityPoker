@@ -22,7 +22,7 @@ import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import Modal from "@mui/material/Modal";
 import { useEffect, useState } from "react";
 import BetBox from "./BetBox";
-import { requestJoinGame } from "../../rtk/slices/socketSlice";
+import { startJoinGame } from "../../rtk/slices/socketSlice";
 import { socket } from "../../rtk/middleware/socketMiddleware";
 
 
@@ -56,6 +56,7 @@ const Seat = ({ seat, currentGame }) => {
     setSeatChoice(false);
   };
 
+  console.log("USER", user)
 
 
 
@@ -68,16 +69,10 @@ const Seat = ({ seat, currentGame }) => {
   };
 
   const handleConfirm = (gameId, userId, seatId, buyIn) => {
-    dispatch({ type: 'games/connectSocket' });
+    console.log("Dispatching startJoinGame with params:", gameId, userId, seatId, buyIn);
+    dispatch(startJoinGame({ userId, gameId, seatId, buyIn }));
+};
 
-
-    socket.emit('joinGame', {
-      userId,
-      gameId,
-      seatId,
-      buyIn
-    });
-  };
 
 
   const isDealer = currentGame.dealerPosition === seat.id - 1;
@@ -213,7 +208,7 @@ const Seat = ({ seat, currentGame }) => {
                       <Button
                         className="buyIn"
                         onClick={() => {
-                          handleConfirm();
+                          handleConfirm(tableId, user.id, seat._id, sliderValue);
                           handleClose();
                         }}
                       >

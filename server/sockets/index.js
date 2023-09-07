@@ -8,8 +8,8 @@ function setupSockets(io) {
   io.on("connection", (socket) => {
     console.log("a user connected");
 
-    gamesSocket(socket); 
-    joinSocket(socket);
+    gamesSocket(socket, io); 
+    joinSocket(socket, io);
     leaveSocket(socket);
     roomSocket(socket);
 
