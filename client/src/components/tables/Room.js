@@ -17,6 +17,8 @@ import {
   potToPlayer
 } from "../../rtk/slices/serverSlice";
 
+import { startLeaveGame } from "../../rtk/slices/socketSlice";
+
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 import Chatbox from "./Chatbox";
@@ -87,21 +89,10 @@ const Room = () => {
     }
   }, [currentGame, dispatch, id]);
 
-  // const leaveTable = () => {
-  //   if (!user) {
-  //     console.log("User is undefined");
-  //     return;
-  //   }
-
-  //   dispatch(leaveGame({ gameId: id, userId: user.id }))
-  //     .then(() => {
-  //       const updatedGame = games.find((game) => game._id === id);
-  //       if (!updatedGame) {
-  //         navigate("/Tables");
-  //       }
-  //     })
-  //     .catch((error) => console.log("Error leaving the game:", error));
-  // };
+  const handleLeaveGame = (userId, gameId) => {
+    console.log("Dispatching startLeaveGame with params:", userId, gameId);
+    dispatch(startLeaveGame({ userId, gameId }));
+  };
 
   const closeTable = () => {
     navigate("/Tables");
@@ -229,7 +220,10 @@ const Room = () => {
         </div>
       )}
     </div>
-    <Button variant="warning">
+    <Button variant="warning"           onClick={() => {
+                          handleLeaveGame(user.id, id);
+        
+                        }}>
       Leave Table
     </Button>
   </Col>

@@ -10,7 +10,7 @@ function setupSockets(io) {
 
     gamesSocket(socket, io); 
     joinSocket(socket, io);
-    leaveSocket(socket);
+    leaveSocket(socket, io);
     roomSocket(socket);
 
 

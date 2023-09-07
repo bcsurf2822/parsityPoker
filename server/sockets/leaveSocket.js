@@ -1,7 +1,8 @@
 const Game = require("../models/gamesSchema");
+const User = require("../models/userSchema");
 
 
-function leaveSocket(socket) {
+function leaveSocket(socket, io) {
   socket.on('leaveGame', async (data) => {
   try {
     const { gameId, userId } = data;
@@ -52,7 +53,7 @@ function leaveSocket(socket) {
 
     await game.save();
 
-    socket.broadcast.emit("playerLeft", game);
+    io.emit("playerLeft", game);
 
     socket.emit("gameLeft", { message: "Successfully left the game!", game });
   } catch (err) {

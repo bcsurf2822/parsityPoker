@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { socket } from '../middleware/socketMiddleware';
 import { useEffect } from 'react';
-import { joinGameSuccess, receiveGames, joinGameError, playerJoined  } from '../slices/socketSlice';
+import { joinGameSuccess, receiveGames, joinGameError, playerJoined, leaveGameError, playerLeftGame  } from '../slices/socketSlice';
 
 
 
@@ -21,7 +21,6 @@ function useSocketListeners() {
       dispatch(joinGameSuccess(data));
     });
 
-    // Listener for an error during game join
     socket.on('joinError', (error) => {
       console.log('Error while joining game:', error);
       dispatch(joinGameError(error));
@@ -32,12 +31,25 @@ function useSocketListeners() {
       dispatch(playerJoined(data));
     });
 
+    socket.on('gameLeft', (data) => {
+      console.log('Game left:', data);
+      dispatch(playerLeftGame(data));
+    });
+    
+ 
+    socket.on('leaveGameError', (error) => {
+      console.log('Error while leaving game:', error);
+      dispatch(leaveGameError(error));
+    });
+
     return () => {
-      // Clean up listeners when they're no longer needed
+   
       socket.off('gamesData');
       socket.off('gameJoined');
       socket.off('joinError');
       socket.off('playerJoin');
+      socket.off('gameLeft');
+      socket.off('leaveGameError');
     };
   }, [dispatch]);
 }

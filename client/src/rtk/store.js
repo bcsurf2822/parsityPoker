@@ -9,7 +9,6 @@ import serverReducer from "./slices/serverSlice";
 import chatReducer from "./slices/chatSlice";
 import deckOfCardsReducer from "./slices/deckOfCardsSlice";
 import timingReducer from "./slices/timingSlice";
-import { api } from "./slices/apiSlice";
 import socketReducer from "./slices/socketSlice";
 import { socketMiddleware } from "./middleware/socketMiddleware";
 
@@ -23,7 +22,6 @@ const store = configureStore({
     chat: chatReducer,
     cards: deckOfCardsReducer,
     timing: timingReducer,
-    [api.reducerPath]: api.reducer,
     socket: socketReducer,
   },
   middleware: (getDefaultMiddleware) =>

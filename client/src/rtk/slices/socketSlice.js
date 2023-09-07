@@ -7,6 +7,7 @@ const socketSlice = createSlice({
     isLoading: true,
     error: null,
     joinLoading: false,
+    leaveLoading: false, 
     joinError: null,
     currentGame: null
   },
@@ -54,14 +55,32 @@ const socketSlice = createSlice({
       }
     }
   },
-
-  
+  startLeaveGame: (state, action) => {
+    console.log("startLeaveGame called with payload:", action.payload);
+    state.leaveLoading = true;
+    state.error = null;  
+  },
+  playerLeftGame: (state, action) => {
+    console.log("playerLeftGame called with payload:", action.payload);
+    const updatedGame = action.payload;
+    state.data = state.data.map(game => 
+      game._id === updatedGame._id ? updatedGame : game
+    );
+    // If the current game is the one being left, set it to null
+    if(state.currentGame && state.currentGame._id === updatedGame._id) {
+      state.currentGame = null;
+    }
+  },
+  leaveGameError: (state, action) => {
+    console.log("leaveGameError called with error:", action.payload);
+    state.error = action.payload;
   }
+}
 });
 
 export const { 
   requestGames, receiveGames, receiveGamesError, 
-  startJoinGame, joinGameSuccess, joinGameError, playerJoined
+  startJoinGame, joinGameSuccess, joinGameError, playerJoined, leaveGameError, playerLeftGame, startLeaveGame
 } = socketSlice.actions;
 
 export default socketSlice.reducer;
