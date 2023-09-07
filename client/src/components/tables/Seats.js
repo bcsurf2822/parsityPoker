@@ -23,7 +23,7 @@ import Modal from "@mui/material/Modal";
 import { useEffect, useState } from "react";
 import BetBox from "./BetBox";
 import { requestJoinGame } from "../../rtk/slices/socketSlice";
-// import useSocketListeners from "../../rtk/hooks/useSocketListeners";
+import { socket } from "../../rtk/middleware/socketMiddleware";
 
 
 const style = {
@@ -67,22 +67,18 @@ const Seat = ({ seat, currentGame }) => {
     setSeatChoice(true);
   };
 
+  const handleConfirm = (gameId, userId, seatId, buyIn) => {
+    dispatch({ type: 'games/connectSocket' });
 
 
-  const handleConfirm = () => {
-    if (!user) {
-        console.log("User is undefined");
-        return;
-    }
+    socket.emit('joinGame', {
+      userId,
+      gameId,
+      seatId,
+      buyIn
+    });
+  };
 
-    dispatch(requestJoinGame({
-        userId: user.id,
-        gameId: tableId,
-        buyIn: sliderValue,
-        seatId: seatId,
-    }));
-    console.log('Attempting to join game via socket');
-};
 
   const isDealer = currentGame.dealerPosition === seat.id - 1;
   const isCurrentPlayer = currentGame.currentPlayerTurn === seat.id - 1;
