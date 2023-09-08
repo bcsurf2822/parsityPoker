@@ -2,6 +2,7 @@ const gamesSocket = require("./gameSocket");
 const joinSocket = require("./joinSocket");
 const leaveSocket = require("./leaveSocket");
 const roomSocket = require("./roomSocket");
+const positionsAndBlindsSocket = require("./posAndBlindsSocket")
 
 
 function setupSockets(io) {
@@ -12,6 +13,7 @@ function setupSockets(io) {
     joinSocket(socket, io);
     leaveSocket(socket, io);
     roomSocket(socket);
+    positionsAndBlindsSocket(socket, io);
 
 
     socket.on("disconnect", () => {

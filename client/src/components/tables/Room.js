@@ -17,7 +17,7 @@ import {
   potToPlayer
 } from "../../rtk/slices/serverSlice";
 
-import { startLeaveGame } from "../../rtk/slices/socketSlice";
+import { startLeaveGame, startUpdatePositionsAndBlinds  } from "../../rtk/slices/socketSlice";
 
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
@@ -102,9 +102,11 @@ const Room = () => {
     dispatch(updateCurrentPlayer(id));
   };
 
-  const handlePositionsAndBlinds = useCallback(() => {
-    dispatch(updatePositionsAndBlinds(id));
-}, [dispatch, id]);
+const handlePositionsAndBlinds = (gameid) => {
+  console.log("Dispatching Pos and Blinds with params:", gameid);
+  dispatch(startUpdatePositionsAndBlinds({_id: gameid}));
+
+};
 
   const handleEndGame = () => {
     dispatch(endGame(id));
@@ -234,7 +236,10 @@ const Room = () => {
             <Button variant="success" onClick={handleCurrentPlayer}>
               Current Player
             </Button>
-            <Button variant="success" onClick={handlePositionsAndBlinds}>
+            <Button variant="success" onClick={() => {
+                          handlePositionsAndBlinds(id);
+        
+                        }}>
               Dealer
             </Button>
             <Button variant="success" onClick={handleDealCards}>

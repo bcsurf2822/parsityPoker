@@ -75,4 +75,4 @@ function positionsAndBlindsSocket(socket, io) {
   });
 };
 
-module.export = positionsAndBlindsSocket;
+module.exports = positionsAndBlindsSocket;
