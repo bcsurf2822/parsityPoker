@@ -74,13 +74,40 @@ const socketSlice = createSlice({
   leaveGameError: (state, action) => {
     console.log("leaveGameError called with error:", action.payload);
     state.error = action.payload;
-  }
+  },
+  startUpdatePositionsAndBlinds: (state, action) => {
+    console.log("startUpdatePositionsAndBlinds called with payload:", action.payload);
+    // Optionally, you can set some kind of loading state if you want to show a loading spinner or something similar
+    // state.updateLoading = true;
+    // state.updateError = null;
+  },
+  
+  updatePositionsAndBlindsSuccess: (state, action) => {
+    console.log("updatePositionsAndBlindsSuccess called with payload:", action.payload);
+    const updatedGame = action.payload;
+    state.data = state.data.map(game => 
+      game._id === updatedGame._id ? updatedGame : game
+    );
+    // Update the current game if it's the one being updated
+    if(state.currentGame && state.currentGame._id === updatedGame._id) {
+      state.currentGame = updatedGame;
+    }
+    // Optionally, you can reset the loading state if you added one
+    // state.updateLoading = false;
+  },
+  
+  updatePositionsAndBlindsError: (state, action) => {
+    console.log("updatePositionsAndBlindsError called with error:", action.payload);
+    state.error = action.payload;
+    // Optionally, reset the loading state if you added one
+    // state.updateLoading = false;
+  },
 }
 });
 
 export const { 
   requestGames, receiveGames, receiveGamesError, 
-  startJoinGame, joinGameSuccess, joinGameError, playerJoined, leaveGameError, playerLeftGame, startLeaveGame
+  startJoinGame, joinGameSuccess, joinGameError, playerJoined, leaveGameError, playerLeftGame, startLeaveGame, updatePositionsAndBlindsError, updatePositionsAndBlindsSuccess, startUpdatePositionsAndBlinds
 } = socketSlice.actions;
 
 export default socketSlice.reducer;
