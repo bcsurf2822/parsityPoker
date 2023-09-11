@@ -52,9 +52,10 @@ function leaveSocket(socket, io) {
     }
 
     await game.save();
-
+    console.log("Emitting playerLeave event...");
     io.emit("playerLeft", game);
 
+    console.log("Emitting gameLeft event...");
     socket.emit("gameLeft", { message: "Successfully left the game!", game });
   } catch (err) {
     console.error(err);

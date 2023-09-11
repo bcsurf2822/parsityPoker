@@ -23,7 +23,7 @@ import Modal from "@mui/material/Modal";
 import { useEffect, useState } from "react";
 import BetBox from "./BetBox";
 import { startJoinGame } from "../../rtk/slices/socketSlice";
-import { socket } from "../../rtk/middleware/socketMiddleware";
+
 
 
 const style = {

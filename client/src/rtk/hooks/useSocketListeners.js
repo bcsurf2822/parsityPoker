@@ -10,6 +10,10 @@ import {
   playerLeftGame,
   updatePositionsAndBlindsSuccess,
   updatePositionsAndBlindsError,
+  updateCurrentPlayerSuccess,
+  updateCurrentPlayerError,
+  endGameSuccess,
+  endGameError
 } from "../slices/socketSlice";
 
 function useSocketListeners() {
@@ -58,6 +62,26 @@ function useSocketListeners() {
       dispatch(updatePositionsAndBlindsError(error));
     });
 
+    socket.on("current_player", (data) => {
+      console.log("Current Player Positions updated:", data);
+      dispatch(updateCurrentPlayerSuccess(data));
+    });
+
+    socket.on("currentPlayerError", (error) => {
+      console.log("Error while updating current player:", error);
+      dispatch(updateCurrentPlayerError(error));
+    });
+
+    socket.on("end_game", (data) => {
+      console.log("Game Ended:", data);
+      dispatch(endGameSuccess(data));
+    });
+
+    socket.on("endGameError", (error) => {
+      console.log("Error while ending game:", error);
+      dispatch(endGameError(error));
+    });
+
     return () => {
       socket.off("gamesData");
       socket.off("gameJoined");
@@ -67,6 +91,10 @@ function useSocketListeners() {
       socket.off("leaveGameError");
       socket.off("positions_and_blinds");
       socket.off("positionsAndBlindsError");
+      socket.off("current_player");
+      socket.off("currentPlayerError");
+      socket.off("end_game");
+      socket.off("endGameError");
     };
   }, [dispatch]);
 }

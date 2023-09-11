@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { useParams } from "react-router-dom";
 import {
-  leaveGame,
   dealCards,
   dealFlop,
   dealTurn,
@@ -13,8 +12,7 @@ import {
   endGame,
   getWinner,
   updateCurrentPlayer,
-  updatePositionsAndBlinds,
-  potToPlayer
+
 } from "../../rtk/slices/serverSlice";
 
 import { startLeaveGame, startUpdatePositionsAndBlinds  } from "../../rtk/slices/socketSlice";
@@ -25,13 +23,13 @@ import Chatbox from "./Chatbox";
 
 import { fetchNewDeck } from "../../rtk/slices/deckOfCardsSlice";
 import Seat from "./Seats";
-import useSocketListeners from "../../rtk/hooks/useSocketListeners";
+// import useSocketListeners from "../../rtk/hooks/useSocketListeners";
 
 
 
 
 const Room = () => {
-  useSocketListeners();
+  // useSocketListeners();
   console.log("===============Room component rendered================");
   const { id } = useParams();
   const dispatch = useDispatch();
