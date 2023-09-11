@@ -104,7 +104,7 @@ const Room = () => {
 
 const handlePositionsAndBlinds = (gameid) => {
   console.log("Dispatching Pos and Blinds with params:", gameid);
-  dispatch(startUpdatePositionsAndBlinds({_id: gameid}));
+  dispatch(startUpdatePositionsAndBlinds({gameId: gameid}));
 
 };
 

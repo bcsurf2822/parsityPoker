@@ -10,7 +10,7 @@ const findNextPosition = (startPosition, seats) => {
 };
 
 function positionsAndBlindsSocket(socket, io) {
-  socket.on("updatePositionsAndBlinds", async (gameId) => {
+  socket.on("updatePositionsAndBlinds", async ({ gameId }) => {
     try {
       const game = await Game.findById(gameId);
 
