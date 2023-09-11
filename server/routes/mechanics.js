@@ -11,58 +11,58 @@ const findNextPosition = (startPosition, seats) => {
   return nextPosition;
 };
 
-router.post("/:gameId/updatePostionsAndBlinds", async (req, res) => {
-  try {
-    const gameId = req.params.gameId;
-    const game = await Game.findById(gameId);
+// router.post("/:gameId/updatePostionsAndBlinds", async (req, res) => {
+//   try {
+//     const gameId = req.params.gameId;
+//     const game = await Game.findById(gameId);
 
-    if (!game) {
-      console.error(`Game with ID: ${gameId} not found!`);
-      return res.status(404).send("Game not found!");
-    }
+//     if (!game) {
+//       console.error(`Game with ID: ${gameId} not found!`);
+//       return res.status(404).send("Game not found!");
+//     }
 
-    console.log(`Starting updatePostionsAndBlinds for game ${gameId}`);
+//     console.log(`Starting updatePostionsAndBlinds for game ${gameId}`);
 
-    game.dealerPosition = findNextPosition(game.dealerPosition, game.seats);
-    game.smallBlindPosition = findNextPosition(game.dealerPosition, game.seats);
-    game.bigBlindPosition = findNextPosition(game.smallBlindPosition, game.seats);
-    game.currentPlayerTurn = findNextPosition(game.bigBlindPosition, game.seats);
+//     game.dealerPosition = findNextPosition(game.dealerPosition, game.seats);
+//     game.smallBlindPosition = findNextPosition(game.dealerPosition, game.seats);
+//     game.bigBlindPosition = findNextPosition(game.smallBlindPosition, game.seats);
+//     game.currentPlayerTurn = findNextPosition(game.bigBlindPosition, game.seats);
 
-    const [smallBlindAmount, bigBlindAmount] = game.blinds.split("/").map(Number);
+//     const [smallBlindAmount, bigBlindAmount] = game.blinds.split("/").map(Number);
 
-    for (let seat of game.seats) {
-      if (seat.player) {
-        seat.player.checkBetFold = false;
-      }
-    }
+//     for (let seat of game.seats) {
+//       if (seat.player) {
+//         seat.player.checkBetFold = false;
+//       }
+//     }
 
-    if (game.seats[game.smallBlindPosition].player) {
-      game.seats[game.smallBlindPosition].player.chips -= smallBlindAmount;
-      game.pot += smallBlindAmount;
-    }
+//     if (game.seats[game.smallBlindPosition].player) {
+//       game.seats[game.smallBlindPosition].player.chips -= smallBlindAmount;
+//       game.pot += smallBlindAmount;
+//     }
 
-    if (game.seats[game.bigBlindPosition].player) {
-      game.seats[game.bigBlindPosition].player.chips -= bigBlindAmount;
-      game.pot += bigBlindAmount;
-    }
+//     if (game.seats[game.bigBlindPosition].player) {
+//       game.seats[game.bigBlindPosition].player.chips -= bigBlindAmount;
+//       game.pot += bigBlindAmount;
+//     }
 
-    await game.save();
+//     await game.save();
 
-    console.log(`Updated positions and blinds for game ${gameId}. 
-                 Dealer: ${game.dealerPosition}, 
-                 Small Blind: ${game.smallBlindPosition}, 
-                 Big Blind: ${game.bigBlindPosition}, 
-                 Current Turn: ${game.currentPlayerTurn}`);
+//     console.log(`Updated positions and blinds for game ${gameId}. 
+//                  Dealer: ${game.dealerPosition}, 
+//                  Small Blind: ${game.smallBlindPosition}, 
+//                  Big Blind: ${game.bigBlindPosition}, 
+//                  Current Turn: ${game.currentPlayerTurn}`);
 
-    console.log("Emitting positions_and_blinds for game:", gameId);
-    req.io.emit("positions_and_blinds", game);
+//     console.log("Emitting positions_and_blinds for game:", gameId);
+//     req.io.emit("positions_and_blinds", game);
 
-    res.status(200).json(game);
-  } catch (error) {
-    console.error(`Error updating positions and blinds for game ${gameId}:`, error);
-    res.status(500).send(error.message);
-  }
-});
+//     res.status(200).json(game);
+//   } catch (error) {
+//     console.error(`Error updating positions and blinds for game ${gameId}:`, error);
+//     res.status(500).send(error.message);
+//   }
+// });
 
 
 router.post("/:gameId/updateCurrentPlayer", async (req, res) => {
