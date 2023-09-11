@@ -59,11 +59,7 @@ function joinSocket(socket, io) {
       await user.save();
 
       console.log("Emitting playerJoin event...");
-      io.emit("playerJoin", {
-        gameId,
-        player,
-        seatId
-      });
+      io.emit("playerJoin", game); 
 
       console.log("Emitting gameJoined event...");
       socket.emit("gameJoined", { message: "Successfully joined the game!", game });
