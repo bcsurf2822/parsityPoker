@@ -40,9 +40,7 @@ function dealToPlayersSocket(socket, io) {
 
       await game.save();
 
-
       io.emit("cards_dealt", game);
-
     } catch (error) {
       console.error(error);
       socket.emit("dealCardsError", { error: "Failed to deal cards" });
@@ -57,13 +55,15 @@ function dealFlopSocket(socket, io) {
     try {
       const game = await Game.findById(gameId);
 
-      if (game.stage !== 'flop' || game.communityCards.length > 0) {
-        return socket.emit("dealFlopError", { message: "Conditions not met to deal the flop!" });
+      if (game.stage !== "flop" || game.communityCards.length > 0) {
+        return socket.emit("dealFlopError", {
+          message: "Conditions not met to deal the flop!",
+        });
       }
 
       game.seats.forEach((seat) => {
         if (seat.player) {
-          seat.player.checkBetFold = false;  
+          seat.player.checkBetFold = false;
         }
       });
 
@@ -71,24 +71,24 @@ function dealFlopSocket(socket, io) {
       game.dealtCards.push(burnCard);
 
       if (game.currentDeck.length < 3) {
-        return socket.emit("dealFlopError", { message: "Not enough cards to deal the flop!" });
+        return socket.emit("dealFlopError", {
+          message: "Not enough cards to deal the flop!",
+        });
       }
 
-      const flopCards = game.currentDeck.splice(0, 3).map(card => card.code);
+      const flopCards = game.currentDeck.splice(0, 3).map((card) => card.code);
       game.dealtCards.push(...flopCards);
       game.communityCards.push(...flopCards);
 
       await game.save();
 
       io.emit("flop_dealt", game);
-
     } catch (error) {
       console.error(error);
       socket.emit("dealFlopError", { error: "Failed to deal the flop" });
     }
   });
 }
-
 
 function dealTurnSocket(socket, io) {
   socket.on("deal_turn", async (data) => {
@@ -97,13 +97,19 @@ function dealTurnSocket(socket, io) {
     try {
       const game = await Game.findById(gameId);
 
-      if (game.currentDeck.length < 2 || game.stage !== 'turn' || game.communityCards.length > 3) {
-        return socket.emit("dealTurnError", { message: "Conditions not met to deal the turn!" });
+      if (
+        game.currentDeck.length < 2 ||
+        game.stage !== "turn" ||
+        game.communityCards.length > 3
+      ) {
+        return socket.emit("dealTurnError", {
+          message: "Conditions not met to deal the turn!",
+        });
       }
 
       game.seats.forEach((seat) => {
         if (seat.player) {
-          seat.player.checkBetFold = false; 
+          seat.player.checkBetFold = false;
         }
       });
 
@@ -112,19 +118,17 @@ function dealTurnSocket(socket, io) {
 
       const turnCard = game.currentDeck.shift().code;
       game.dealtCards.push(turnCard);
-      game.communityCards.push(turnCard)
+      game.communityCards.push(turnCard);
 
       await game.save();
 
       io.emit("turn_dealt", game);
-
     } catch (error) {
       console.error(error);
       socket.emit("dealTurnError", { error: "Failed to deal the turn" });
     }
   });
 }
-
 
 function dealRiverSocket(socket, io) {
   socket.on("deal_river", async (data) => {
@@ -133,13 +137,19 @@ function dealRiverSocket(socket, io) {
     try {
       const game = await Game.findById(gameId);
 
-      if (game.currentDeck.length < 2 || game.stage !== 'river' || game.communityCards.length > 4) {
-        return socket.emit("dealRiverError", { message: "Conditions not met to deal the river!" });
+      if (
+        game.currentDeck.length < 2 ||
+        game.stage !== "river" ||
+        game.communityCards.length > 4
+      ) {
+        return socket.emit("dealRiverError", {
+          message: "Conditions not met to deal the river!",
+        });
       }
 
       game.seats.forEach((seat) => {
         if (seat.player) {
-          seat.player.checkBetFold = false; 
+          seat.player.checkBetFold = false;
         }
       });
 
@@ -153,7 +163,6 @@ function dealRiverSocket(socket, io) {
       await game.save();
 
       io.emit("river_dealt", game);
-
     } catch (error) {
       console.error(error);
       socket.emit("dealRiverError", { error: "Failed to deal the river" });
@@ -161,5 +170,9 @@ function dealRiverSocket(socket, io) {
   });
 }
 
-
-module.exports = {dealToPlayersSocket, dealFlopSocket, dealTurnSocket, dealRiverSocket};
+module.exports = {
+  dealToPlayersSocket,
+  dealFlopSocket,
+  dealTurnSocket,
+  dealRiverSocket,
+};

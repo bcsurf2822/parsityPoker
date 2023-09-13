@@ -1,5 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const updateGameState = (state, action) => {
+  const updatedGame = action.payload;
+  state.data = state.data.map((game) =>
+    game._id === updatedGame._id ? updatedGame : game
+  );
+  if (state.currentGame && state.currentGame._id === updatedGame._id) {
+    state.currentGame = updatedGame;
+  }
+};
+
 const socketSlice = createSlice({
   name: "games",
   initialState: {
@@ -37,16 +47,7 @@ const socketSlice = createSlice({
     },
     playerJoinedGame: (state, action) => {
       console.log("joinGameUpdated called with payload:", action.payload);
-      const updatedGame = action.payload;
-
-      state.data = state.data.map((game) =>
-        game._id === updatedGame._id ? updatedGame : game
-      );
-
-      if (state.currentGame && state.currentGame._id === updatedGame._id) {
-        state.currentGame = updatedGame;
-      }
-
+      updateGameState(state, action);
       state.joinLoading = false;
     },
 
@@ -57,13 +58,7 @@ const socketSlice = createSlice({
     },
     playerLeftGame: (state, action) => {
       console.log("playerLeftGame called with payload:", action.payload);
-      const updatedGame = action.payload;
-      state.data = state.data.map((game) =>
-        game._id === updatedGame._id ? updatedGame : game
-      );
-      if (state.currentGame && state.currentGame._id === updatedGame._id) {
-        state.currentGame = null;
-      }
+      updateGameState(state, action);
     },
     leaveGameError: (state, action) => {
       console.log("leaveGameError called with error:", action.payload);
@@ -85,15 +80,7 @@ const socketSlice = createSlice({
         "updatePositionsAndBlindsSuccess called with payload:",
         action.payload
       );
-      const updatedGame = action.payload;
-      state.data = state.data.map((game) =>
-        game._id === updatedGame._id ? updatedGame : game
-      );
-      if (state.currentGame && state.currentGame._id === updatedGame._id) {
-        state.currentGame = updatedGame;
-      }
-      // Optionally, you can reset the loading state if you added one
-      // state.updateLoading = false;
+      updateGameState(state, action);
     },
 
     updatePositionsAndBlindsError: (state, action) => {
@@ -119,13 +106,7 @@ const socketSlice = createSlice({
         "updateCurrentPlayerSuccess called with payload:",
         action.payload
       );
-      const updatedGame = action.payload;
-      state.data = state.data.map((game) =>
-        game._id === updatedGame._id ? updatedGame : game
-      );
-      if (state.currentGame && state.currentGame._id === updatedGame._id) {
-        state.currentGame = updatedGame;
-      }
+      updateGameState(state, action);
     },
 
     updateCurrentPlayerError: (state, action) => {
@@ -143,13 +124,7 @@ const socketSlice = createSlice({
 
     endGameSuccess: (state, action) => {
       console.log("endGameSuccess called with payload:", action.payload);
-      const updatedGame = action.payload;
-      state.data = state.data.map((game) =>
-        game._id === updatedGame._id ? updatedGame : game
-      );
-      if (state.currentGame && state.currentGame._id === updatedGame._id) {
-        state.currentGame = updatedGame;
-      }
+      updateGameState(state, action);
     },
 
     endGameError: (state, action) => {
@@ -161,15 +136,7 @@ const socketSlice = createSlice({
     },
     dealCardsSuccess: (state, action) => {
       console.log("cardsDealtSuccess called with payload:", action.payload);
-      const updatedGame = action.payload;
-
-      state.data = state.data.map((game) =>
-        game._id === updatedGame._id ? updatedGame : game
-      );
-
-      if (state.currentGame && state.currentGame._id === updatedGame._id) {
-        state.currentGame = updatedGame;
-      }
+      updateGameState(state, action);
     },
     dealCardsError: (state, action) => {
       console.log("dealCardsError called with error:", action.payload);
@@ -180,15 +147,7 @@ const socketSlice = createSlice({
     },
     dealFlopSuccess: (state, action) => {
       console.log("dealFlopSuccess called with payload:", action.payload);
-      const updatedGame = action.payload;
-
-      state.data = state.data.map((game) =>
-        game._id === updatedGame._id ? updatedGame : game
-      );
-
-      if (state.currentGame && state.currentGame._id === updatedGame._id) {
-        state.currentGame = updatedGame;
-      }
+      updateGameState(state, action);
     },
     dealFlopError: (state, action) => {
       console.log("dealFlopError called with error:", action.payload);
@@ -199,36 +158,18 @@ const socketSlice = createSlice({
     },
     dealTurnSuccess: (state, action) => {
       console.log("dealTurnSuccess called with payload:", action.payload);
-      const updatedGame = action.payload;
-
-      state.data = state.data.map((game) =>
-        game._id === updatedGame._id ? updatedGame : game
-      );
-
-      if (state.currentGame && state.currentGame._id === updatedGame._id) {
-        state.currentGame = updatedGame;
-      }
-
+      updateGameState(state, action);
     },
     dealTurnError: (state, action) => {
       console.log("dealTurnError called with error:", action.payload);
       state.error = action.payload;
-
     },
     startDealRiver: (state, action) => {
       console.log("startDealRiver called with payload:", action.payload);
     },
     dealRiverSuccess: (state, action) => {
       console.log("dealTurnSuccess called with payload:", action.payload);
-      const updatedGame = action.payload;
-
-      state.data = state.data.map((game) =>
-        game._id === updatedGame._id ? updatedGame : game
-      );
-
-      if (state.currentGame && state.currentGame._id === updatedGame._id) {
-        state.currentGame = updatedGame;
-      }
+      updateGameState(state, action);
     },
   },
 });
