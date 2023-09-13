@@ -3,6 +3,7 @@ const joinSocket = require("./joinSocket");
 const leaveSocket = require("./leaveSocket");
 const roomSocket = require("./roomSocket");
 const { positionsAndBlindsSocket, updateCurrentPlayerSocket, endGameSocket } = require("./mechSocket");
+const {dealToPlayersSocket} = require("./dealCardsSocket");
 
 
 function setupSockets(io) {
@@ -16,6 +17,7 @@ function setupSockets(io) {
     positionsAndBlindsSocket(socket, io);
     updateCurrentPlayerSocket(socket, io);
     endGameSocket(socket, io);
+    dealToPlayersSocket(socket, io);
 
     socket.on("disconnect", () => {
       console.log("user disconnected");

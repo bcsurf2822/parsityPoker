@@ -30,7 +30,6 @@ const socketSlice = createSlice({
       state.joinError = null;
     },
 
-
     joinGameError: (state, action) => {
       console.log("joinGameError called with error:", action.payload);
       state.joinError = action.payload;
@@ -39,7 +38,7 @@ const socketSlice = createSlice({
     playerJoinedGame: (state, action) => {
       console.log("joinGameUpdated called with payload:", action.payload);
       const updatedGame = action.payload;
-    
+
       state.data = state.data.map((game) =>
         game._id === updatedGame._id ? updatedGame : game
       );
@@ -47,10 +46,10 @@ const socketSlice = createSlice({
       if (state.currentGame && state.currentGame._id === updatedGame._id) {
         state.currentGame = updatedGame;
       }
-    
+
       state.joinLoading = false;
-    }, 
-    
+    },
+
     startLeaveGame: (state, action) => {
       console.log("startLeaveGame called with payload:", action.payload);
       state.leaveLoading = true;
@@ -158,6 +157,25 @@ const socketSlice = createSlice({
       console.log("endGameError called with error:", action.payload);
       state.error = action.payload;
     },
+    startDealCards: (state, action) => {
+      console.log("startDealCards called with payload:", action.payload);
+    },
+    dealCardsSuccess: (state, action) => {
+      console.log("cardsDealtSuccess called with payload:", action.payload);
+      const updatedGame = action.payload;
+
+      state.data = state.data.map((game) =>
+        game._id === updatedGame._id ? updatedGame : game
+      );
+
+      if (state.currentGame && state.currentGame._id === updatedGame._id) {
+        state.currentGame = updatedGame;
+      }
+    },
+    dealCardsError: (state, action) => {
+      console.log("dealCardsError called with error:", action.payload);
+      state.error = action.payload;
+    },
   },
 });
 
@@ -180,6 +198,9 @@ export const {
   startEndGame,
   endGameSuccess,
   endGameError,
+  startDealCards,
+  dealCardsSuccess,
+  dealCardsError,
 } = socketSlice.actions;
 
 export default socketSlice.reducer;
