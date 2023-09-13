@@ -12,10 +12,13 @@ import {
   endGame,
   getWinner,
   updateCurrentPlayer,
-
 } from "../../rtk/slices/serverSlice";
 
-import { startLeaveGame, startUpdatePositionsAndBlinds  } from "../../rtk/slices/socketSlice";
+import {
+  startDealCards,
+  startLeaveGame,
+  startUpdatePositionsAndBlinds,
+} from "../../rtk/slices/socketSlice";
 
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
@@ -25,16 +28,12 @@ import { fetchNewDeck } from "../../rtk/slices/deckOfCardsSlice";
 import Seat from "./Seats";
 // import useSocketListeners from "../../rtk/hooks/useSocketListeners";
 
-
-
-
 const Room = () => {
   // useSocketListeners();
   console.log("===============Room component rendered================");
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
 
   const user = useSelector((state) => state.auth.user);
   const countDown = useSelector((state) => state.timing.value);
@@ -45,43 +44,40 @@ const Room = () => {
 
   const games = useSelector((state) => state.socket.data);
   const gamesCurrent = useSelector((state) => state.socket.currentGame);
-  console.log("Current", gamesCurrent)
+  console.log("Current", gamesCurrent);
 
   const currentGame = games.find((game) => game._id === id);
   console.log("Current Game:", currentGame);
 
+  const playersWithHandCards =
+    (() => {
+      if (currentGame && currentGame.seats) {
+        return currentGame.seats.filter(
+          (seat) =>
+            seat.player &&
+            seat.player.handCards &&
+            seat.player.handCards.length > 0
+        );
+      }
+      return [];
+    },
+    [currentGame]);
 
-
-
-
-
-
-  const playersWithHandCards = (() => {
-    if (currentGame && currentGame.seats) {
-      return currentGame.seats.filter(
-        (seat) =>
-          seat.player &&
-          seat.player.handCards &&
-          seat.player.handCards.length > 0
-      );
-    }
-    return [];
-  }, [currentGame]);
-  
-  console.log("PLayers with cards---------------", playersWithHandCards)
+  console.log("PLayers with cards---------------", playersWithHandCards);
 
   const seatArray = currentGame ? currentGame.seats : [];
-
 
   const occupiedSeats = currentGame
     ? currentGame.seats.filter((seat) => seat.player !== null).length
     : 0;
 
-    console.log("seat Info:", seatArray)
-
+  console.log("seat Info:", seatArray);
 
   useEffect(() => {
-    if (currentGame && (!currentGame.currentDeck || currentGame.currentDeck.length === 0)) {
+    if (
+      currentGame &&
+      (!currentGame.currentDeck || currentGame.currentDeck.length === 0)
+    ) {
       console.log("Deck is empty. Fetching a new one...");
       dispatch(fetchNewDeck(id));
     }
@@ -100,18 +96,18 @@ const Room = () => {
     dispatch(updateCurrentPlayer(id));
   };
 
-const handlePositionsAndBlinds = (gameid) => {
-  console.log("Dispatching Pos and Blinds with params:", gameid);
-  dispatch(startUpdatePositionsAndBlinds({gameId: gameid}));
-
-};
+  const handlePositionsAndBlinds = (gameid) => {
+    console.log("Dispatching Pos and Blinds with params:", gameid);
+    dispatch(startUpdatePositionsAndBlinds({ gameId: gameid }));
+  };
 
   const handleEndGame = () => {
     dispatch(endGame(id));
   };
 
-  const handleDealCards = () => {
-    dispatch(dealCards(id));
+  const handleDealCards = (gameId) => {
+    console.log("Dispatching dealCards with params:", gameId);
+    dispatch(startDealCards({ gameId: gameId }));
   };
 
   const handleDealFlop = () => {
@@ -126,47 +122,62 @@ const handlePositionsAndBlinds = (gameid) => {
     dispatch(dealRiver(id));
   };
 
-  
   const handleGetWinner = () => {
-    console.log("get Winner called")
+    console.log("get Winner called");
     dispatch(getWinner(id));
   };
 
   useEffect(() => {
-    if (currentGame && currentGame.stage === 'flop' && currentGame.communityCards.length === 0 && playersWithHandCards.length > 1) {
+    if (
+      currentGame &&
+      currentGame.stage === "flop" &&
+      currentGame.communityCards.length === 0 &&
+      playersWithHandCards.length > 1
+    ) {
       handleDealFlop();
     }
   }, [currentGame]);
 
   useEffect(() => {
-    if (currentGame && currentGame.stage === 'turn' && currentGame.communityCards.length === 3 && playersWithHandCards.length > 1) {
+    if (
+      currentGame &&
+      currentGame.stage === "turn" &&
+      currentGame.communityCards.length === 3 &&
+      playersWithHandCards.length > 1
+    ) {
       handleDealTurn();
     }
   }, [currentGame]);
 
   useEffect(() => {
-    if (currentGame && currentGame.stage === 'river' && currentGame.communityCards.length === 4 && playersWithHandCards.length > 1) {
+    if (
+      currentGame &&
+      currentGame.stage === "river" &&
+      currentGame.communityCards.length === 4 &&
+      playersWithHandCards.length > 1
+    ) {
       handleDealRiver();
     }
   }, [currentGame]);
 
-
   useEffect(() => {
     if (playersWithHandCards.length >= 2) {
-      if (currentGame && currentGame.stage === 'showdown' && !currentGame.gameEnd) {
+      if (
+        currentGame &&
+        currentGame.stage === "showdown" &&
+        !currentGame.gameEnd
+      ) {
         console.log("GETTING WINNER");
         handleGetWinner();
       }
     }
   }, [playersWithHandCards, currentGame]);
 
-
   useEffect(() => {
     if (currentGame && currentGame.gameEnd) {
       handleEndGame();
     }
   }, [currentGame]);
-
 
   useEffect(() => {
     if (currentGame && currentGame.winnerData) {
@@ -177,7 +188,7 @@ const handlePositionsAndBlinds = (gameid) => {
   }, [currentGame]);
 
   // useEffect(() => {
-  //   if (currentGame 
+  //   if (currentGame
   //       && !currentGame.gameEnd  // gameEnd should be false
   //       && playersWithHandCards.length === 0  // no players have handCards
   //       && currentGame.pot > 0  // pot is greater than 0
@@ -187,13 +198,12 @@ const handlePositionsAndBlinds = (gameid) => {
   //   }
   // }, [currentGame, playersWithHandCards]);
 
-
-// useEffect(() => {
-//   if (playersWithHandCards.length === 1) {
-//     console.log("GETTING WINNER DUE TO FOLD")
-//     dispatch(potToPlayer(id));
-//   }
-// }, []);
+  // useEffect(() => {
+  //   if (playersWithHandCards.length === 1) {
+  //     console.log("GETTING WINNER DUE TO FOLD")
+  //     dispatch(potToPlayer(id));
+  //   }
+  // }, []);
 
   // useEffect(() => {
   //   if (currentGame && currentGame.stage === 'showdown' && playe)rsWithHandCards.length > 1 {
@@ -202,45 +212,54 @@ const handlePositionsAndBlinds = (gameid) => {
   //   }
   // }, [currentGame]);
 
-
   if (!currentGame) {
     return null;
   }
 
   return (
     <Container fluid className="h-100 bg">
-<Row className="mt-2">
-  <Col className="d-flex justify-content-center">
-    <div className="table">
-      {currentGame.name}
-      {counting && <div className="countdown-display">Game starts in: {countDown} seconds</div>}
-      {winnerData && (
-        <div className="winner-info">
-          Winner is: {winnerData.name} with {currentGame.pot} points.
-        </div>
-      )}
-    </div>
-    <Button variant="warning"           onClick={() => {
-                          handleLeaveGame(user.id, id);
-        
-                        }}>
-      Leave Table
-    </Button>
-  </Col>
-</Row>
+      <Row className="mt-2">
+        <Col className="d-flex justify-content-center">
+          <div className="table">
+            {currentGame.name}
+            {counting && (
+              <div className="countdown-display">
+                Game starts in: {countDown} seconds
+              </div>
+            )}
+            {winnerData && (
+              <div className="winner-info">
+                Winner is: {winnerData.name} with {currentGame.pot} points.
+              </div>
+            )}
+          </div>
+          <Button
+            variant="warning"
+            onClick={() => {
+              handleLeaveGame(user.id, id);
+            }}
+          >
+            Leave Table
+          </Button>
+        </Col>
+      </Row>
       <Row className="mt-2">
         <Row className="mt-2">
           <Col className="d-flex justify-content-center">
             <Button variant="success" onClick={handleCurrentPlayer}>
               Current Player
             </Button>
-            <Button variant="success" onClick={() => {
-                          handlePositionsAndBlinds(id);
-        
-                        }}>
+            <Button
+              variant="success"
+              onClick={() => {
+                handlePositionsAndBlinds(id);
+              }}
+            >
               Dealer
             </Button>
-            <Button variant="success" onClick={handleDealCards}>
+            <Button variant="success"            onClick={() => {
+                handleDealCards(id);
+              }}>
               Deal Cards
             </Button>
             <Button variant="primary" onClick={handleDealFlop}>
@@ -258,7 +277,6 @@ const handlePositionsAndBlinds = (gameid) => {
             <Button variant="success" onClick={handleGetWinner}>
               Winner?
             </Button>
-  
           </Col>
         </Row>
       </Row>

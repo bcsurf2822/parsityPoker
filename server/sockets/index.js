@@ -3,7 +3,7 @@ const joinSocket = require("./joinSocket");
 const leaveSocket = require("./leaveSocket");
 const roomSocket = require("./roomSocket");
 const { positionsAndBlindsSocket, updateCurrentPlayerSocket, endGameSocket } = require("./mechSocket");
-const {dealToPlayersSocket} = require("./dealCardsSocket");
+const dealToPlayersSocket = require("./dealCardsSocket");
 
 
 function setupSockets(io) {

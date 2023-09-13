@@ -89,7 +89,6 @@ const socketSlice = createSlice({
       state.data = state.data.map((game) =>
         game._id === updatedGame._id ? updatedGame : game
       );
-      // Update the current game if it's the one being updated
       if (state.currentGame && state.currentGame._id === updatedGame._id) {
         state.currentGame = updatedGame;
       }

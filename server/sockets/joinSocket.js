@@ -8,7 +8,7 @@ const isSeatAvailable = (seats, seatId) => {
 function joinSocket(socket, io) {
   socket.on('joinGame', async (data) => {
     try {
-      console.log("Received joinGame event with data:", data); // initial logging to confirm event is captured
+      console.log("Received joinGame event with data:", data); 
 
       const { userId, gameId, seatId, buyIn } = data;
 

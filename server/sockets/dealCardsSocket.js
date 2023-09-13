@@ -1,3 +1,5 @@
+const Game = require("../models/gamesSchema");
+
 function dealToPlayersSocket(socket, io) {
   socket.on("deal_cards", async (data) => {
     const { gameId } = data;
@@ -37,7 +39,10 @@ function dealToPlayersSocket(socket, io) {
       }
 
       await game.save();
-      socket.emit("cards_dealt", game);
+
+
+      io.emit("cards_dealt", game);
+
     } catch (error) {
       console.error(error);
       socket.emit("dealCardsError", { error: "Failed to deal cards" });
