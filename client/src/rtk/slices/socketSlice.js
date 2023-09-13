@@ -175,6 +175,61 @@ const socketSlice = createSlice({
       console.log("dealCardsError called with error:", action.payload);
       state.error = action.payload;
     },
+    startDealFlop: (state, action) => {
+      console.log("startDealFlop called with payload:", action.payload);
+    },
+    dealFlopSuccess: (state, action) => {
+      console.log("dealFlopSuccess called with payload:", action.payload);
+      const updatedGame = action.payload;
+
+      state.data = state.data.map((game) =>
+        game._id === updatedGame._id ? updatedGame : game
+      );
+
+      if (state.currentGame && state.currentGame._id === updatedGame._id) {
+        state.currentGame = updatedGame;
+      }
+    },
+    dealFlopError: (state, action) => {
+      console.log("dealFlopError called with error:", action.payload);
+      state.error = action.payload;
+    },
+    startDealTurn: (state, action) => {
+      console.log("startDealTurn called with payload:", action.payload);
+    },
+    dealTurnSuccess: (state, action) => {
+      console.log("dealTurnSuccess called with payload:", action.payload);
+      const updatedGame = action.payload;
+
+      state.data = state.data.map((game) =>
+        game._id === updatedGame._id ? updatedGame : game
+      );
+
+      if (state.currentGame && state.currentGame._id === updatedGame._id) {
+        state.currentGame = updatedGame;
+      }
+
+    },
+    dealTurnError: (state, action) => {
+      console.log("dealTurnError called with error:", action.payload);
+      state.error = action.payload;
+
+    },
+    startDealRiver: (state, action) => {
+      console.log("startDealRiver called with payload:", action.payload);
+    },
+    dealRiverSuccess: (state, action) => {
+      console.log("dealTurnSuccess called with payload:", action.payload);
+      const updatedGame = action.payload;
+
+      state.data = state.data.map((game) =>
+        game._id === updatedGame._id ? updatedGame : game
+      );
+
+      if (state.currentGame && state.currentGame._id === updatedGame._id) {
+        state.currentGame = updatedGame;
+      }
+    },
   },
 });
 
@@ -200,6 +255,14 @@ export const {
   startDealCards,
   dealCardsSuccess,
   dealCardsError,
+  startDealFlop,
+  dealFlopSuccess,
+  dealFlopError,
+  startDealTurn,
+  dealTurnSuccess,
+  dealTurnError,
+  startDealRiver,
+  dealRiverSuccess,
 } = socketSlice.actions;
 
 export default socketSlice.reducer;
