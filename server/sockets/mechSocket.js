@@ -1,6 +1,9 @@
 const Game = require("../models/gamesSchema");
 const axios = require("axios");
 
+function cardCode(code) {
+  return code.replace('0', '10');
+}
 
 const findNextPosition = (startPosition, seats) => {
   let seatCount = seats.length;
@@ -96,7 +99,7 @@ function updateCurrentPlayerSocket(socket, io) {
 
       console.log(`Updated current player position for game ${gameId}. Current Turn: ${game.currentPlayerTurn}`);
 
-      io.emit("current_player", game);
+      io.emit("next_current_player", game);
 
     } catch (error) {
       console.error(`Error updating current player for game ${gameId}:`, error);

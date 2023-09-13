@@ -18,6 +18,8 @@ import {
   startDealCards,
   dealCardsSuccess,
   dealCardsError,
+  startUpdateCurrentPlayer,
+  startEndGame,
 } from "../slices/socketSlice";
 import { io } from "socket.io-client";
 const socket = io("http://localhost:4000");
@@ -59,7 +61,7 @@ const socketMiddleware = (store) => {
     store.dispatch(updatePositionsAndBlindsError(error.message));
   });
 
-  socket.on("current_player", (data) => {
+  socket.on("next_current_player", (data) => {
     store.dispatch(updateCurrentPlayerSuccess(data));
   });
 
@@ -67,7 +69,7 @@ const socketMiddleware = (store) => {
     store.dispatch(updateCurrentPlayerError(error));
   });
 
-  socket.on("end_game", (data) => {
+  socket.on("game_ended", (data) => {
     store.dispatch(endGameSuccess(data));
   });
 
@@ -123,6 +125,16 @@ const socketMiddleware = (store) => {
         const { gameId: uGameId } = action.payload;
         socket.emit("updatePositionsAndBlinds", { gameId: uGameId });
         break;
+
+        case startUpdateCurrentPlayer.toString():
+          const { gameId: ucGameId } = action.payload;
+          socket.emit("updateCurrentPlayer", { gameId: ucGameId });
+          break;
+  
+        case startEndGame.toString():
+          const { gameId: eGameId } = action.payload;
+          socket.emit("end_game", { gameId: eGameId });
+          break;
 
         case startDealCards.toString():
           const { gameId: dGameId } = action.payload;

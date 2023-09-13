@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { useParams } from "react-router-dom";
 import {
-  dealCards,
   dealFlop,
   dealTurn,
   dealRiver,
@@ -18,6 +17,8 @@ import {
   startDealCards,
   startLeaveGame,
   startUpdatePositionsAndBlinds,
+  startEndGame,
+  startUpdateCurrentPlayer,
 } from "../../rtk/slices/socketSlice";
 
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
@@ -26,10 +27,8 @@ import Chatbox from "./Chatbox";
 
 import { fetchNewDeck } from "../../rtk/slices/deckOfCardsSlice";
 import Seat from "./Seats";
-// import useSocketListeners from "../../rtk/hooks/useSocketListeners";
 
 const Room = () => {
-  // useSocketListeners();
   console.log("===============Room component rendered================");
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -92,17 +91,19 @@ const Room = () => {
     navigate("/Tables");
   };
 
-  const handleCurrentPlayer = () => {
-    dispatch(updateCurrentPlayer(id));
+  const handleCurrentPlayer = (gameId) => {
+    console.log("Dispatching Current Player with params:", gameId);
+    dispatch(startUpdateCurrentPlayer({ gameId: gameId }));
   };
 
-  const handlePositionsAndBlinds = (gameid) => {
-    console.log("Dispatching Pos and Blinds with params:", gameid);
-    dispatch(startUpdatePositionsAndBlinds({ gameId: gameid }));
+  const handlePositionsAndBlinds = (gameId) => {
+    console.log("Dispatching Pos and Blinds with params:", gameId);
+    dispatch(startUpdatePositionsAndBlinds({ gameId: gameId }));
   };
 
-  const handleEndGame = () => {
-    dispatch(endGame(id));
+  const handleEndGame = (gameId) => {
+    console.log("Dispatching endGame with params:", gameId);
+    dispatch(startEndGame({ gameId: gameId }));
   };
 
   const handleDealCards = (gameId) => {
@@ -246,7 +247,9 @@ const Room = () => {
       <Row className="mt-2">
         <Row className="mt-2">
           <Col className="d-flex justify-content-center">
-            <Button variant="success" onClick={handleCurrentPlayer}>
+            <Button variant="success" onClick={() => {
+                handleCurrentPlayer(id);
+              }}>
               Current Player
             </Button>
             <Button
@@ -271,7 +274,9 @@ const Room = () => {
             <Button variant="primary" onClick={handleDealRiver}>
               Deal River
             </Button>
-            <Button variant="danger" onClick={handleEndGame}>
+            <Button variant="danger" onClick={() => {
+                handleEndGame(id);
+              }}>
               EndGame
             </Button>
             <Button variant="success" onClick={handleGetWinner}>
