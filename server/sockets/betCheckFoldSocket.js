@@ -36,17 +36,17 @@ function playerToPotSocket(socket, io) {
       const game = await Game.findById(gameId);
 
       if (!game) {
-        return res.status(404).json({ message: "Game not found!" });
+        return socket.emit("error", { message: "Game not found!" });
       }
 
       const seat = game.seats.find((s) => s._id.toString() === seatId);
 
       if (!seat) {
-        return res.status(400).json({ message: "Seat not found!" });
+        return socket.emit("error", { message: "Seat not Found!" });
       }
 
       if (!seat.player) {
-        return res.status(400).json({ message: "No player at the seat!" });
+        return socket.emit("error", { message: "No Player at this Seat" });
       }
 
       switch (action) {
@@ -56,9 +56,8 @@ function playerToPotSocket(socket, io) {
           );
           betAmount = highestBet - seat.player.bet;
           if (betAmount <= 0) {
-            return res.status(400).json({
-              message:
-                "Player has already matched or exceeded the highest bet.",
+            return socket.emit("error", {
+              message: "Player has Match or exceeded bet",
             });
           }
 
@@ -74,16 +73,16 @@ function playerToPotSocket(socket, io) {
         case "bet":
           betAmount = Number(bet);
           if (!betAmount || isNaN(betAmount)) {
-            return res.status(400).json({ message: "Invalid bet amount!" });
+            return socket.emit("error", { message: "Invalid Bet" });
           }
           break;
 
         default:
-          return res.status(400).json({ message: "Invalid action type!" });
+          return socket.emit("error", { message: "Invalid Action" });
       }
 
       if (seat.player.chips < betAmount && action !== "call") {
-        return res.status(400).json({ message: "Insufficient chips!" });
+        return socket.emit("error", { message: "Not Enough Chips to Call" });
       }
 
       seat.player.chips -= betAmount;
@@ -155,17 +154,17 @@ function checkSocket(socket, io) {
       const game = await Game.findById(gameId);
 
       if (!game) {
-        return res.status(404).json({ message: "Game not found!" });
+        return socket.emit("error", { message: "Game not found!" });
       }
 
       const seat = game.seats.find((s) => s._id.toString() === seatId);
 
       if (!seat) {
-        return res.status(400).json({ message: "Seat not found!" });
+        return socket.emit("error", { message: "Seat not found!" });
       }
 
       if (!seat.player) {
-        return res.status(400).json({ message: "No player at the seat!" });
+        return socket.emit("error", { message: "No Player At Seat" });
       }
 
       seat.player.checkBetFold = true;
@@ -234,17 +233,17 @@ function foldSocket(socket, io) {
       const game = await Game.findById(gameId);
 
       if (!game) {
-        return res.status(404).send({ message: "Game not found" });
+        return socket.emit("error", { message: "Game not found!" });
       }
 
       const seat = game.seats.find((s) => s._id.toString() === seatId);
 
       if (!seat) {
-        return res.status(404).send({ message: "Seat not found" });
+        return socket.emit("error", { message: "Seat not found!" });
       }
 
       if (!seat.player) {
-        return res.status(404).send({ message: "No player at the seat!" });
+        return socket.emit("error", { message: "No Player At Seat" });
       }
 
       seat.player.handCards = [];

@@ -45,8 +45,6 @@ const Room = () => {
   const [winnerData, setWinnerData] = useState(null);
 
   const games = useSelector((state) => state.socket.data);
-  const gamesCurrent = useSelector((state) => state.socket.currentGame);
-  console.log("Current", gamesCurrent);
 
   const currentGame = games.find((game) => game._id === id);
   console.log("Current Game:", currentGame);

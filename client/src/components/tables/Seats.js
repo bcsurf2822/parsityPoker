@@ -30,8 +30,6 @@ import { useEffect, useState } from "react";
 import BetBox from "./BetBox";
 import { startJoinGame } from "../../rtk/slices/socketSlice";
 
-
-
 const style = {
   position: "absolute",
   top: "50%",
@@ -62,11 +60,6 @@ const Seat = ({ seat, currentGame }) => {
     setSeatChoice(false);
   };
 
-  console.log("USER", user)
-
-
-
-
   const [sliderValue, setSliderValue] = useState(minBuyIn);
   const [seatChoice, setSeatChoice] = useState(false);
 
@@ -75,11 +68,15 @@ const Seat = ({ seat, currentGame }) => {
   };
 
   const handleConfirm = (gameId, userId, seatId, buyIn) => {
-    console.log("Dispatching startJoinGame with params:", gameId, userId, seatId, buyIn);
+    console.log(
+      "Dispatching startJoinGame with params:",
+      gameId,
+      userId,
+      seatId,
+      buyIn
+    );
     dispatch(startJoinGame({ userId, gameId, seatId, buyIn }));
-};
-
-
+  };
 
   const isDealer = currentGame.dealerPosition === seat.id - 1;
   const isCurrentPlayer = currentGame.currentPlayerTurn === seat.id - 1;
@@ -103,7 +100,7 @@ const Seat = ({ seat, currentGame }) => {
       })
     );
   };
-  
+
   const handleCall = (gameId, seatId) => {
     dispatch(
       startPlayerBet({
@@ -113,7 +110,7 @@ const Seat = ({ seat, currentGame }) => {
       })
     );
   };
-  
+
   const handleSliderBet = (gameId, seatId, betValue) => {
     dispatch(
       startPlayerBet({
@@ -157,19 +154,23 @@ const Seat = ({ seat, currentGame }) => {
                   <Stack direction="row" spacing={1}>
                     {isCurrentPlayer ? (
                       <BetBox
-                      playerChips={parseFloat(seat.player.chips).toFixed(2)}
-                      onBetChange={(betValue) => handleSliderBet(tableId, seat._id, betValue)}
-                      onCall={() => handleCall(tableId, seat._id)}
-                      onAllIn={() => handleAllIn(tableId, seat._id)}
-                      onCheck={() => handleCheck(tableId, seat._id)}
-                      onFold={() => handleFold(tableId, seat._id)}
+                        playerChips={parseFloat(seat.player.chips).toFixed(2)}
+                        onBetChange={(betValue) =>
+                          handleSliderBet(tableId, seat._id, betValue)
+                        }
+                        onCall={() => handleCall(tableId, seat._id)}
+                        onAllIn={() => handleAllIn(tableId, seat._id)}
+                        onCheck={() => handleCheck(tableId, seat._id)}
+                        onFold={() => handleFold(tableId, seat._id)}
                       />
                     ) : (
                       <DeactivatedBet
-                      playerChips={parseFloat(seat.player.chips).toFixed(2)}
-                      onBetChange={(betValue) => handleSliderBet(tableId, seat._id, betValue)}
-                      onCall={() => handleCall(tableId, seat._id)}
-                      onAllIn={() => handleAllIn(tableId, seat._id)}
+                        playerChips={parseFloat(seat.player.chips).toFixed(2)}
+                        onBetChange={(betValue) =>
+                          handleSliderBet(tableId, seat._id, betValue)
+                        }
+                        onCall={() => handleCall(tableId, seat._id)}
+                        onAllIn={() => handleAllIn(tableId, seat._id)}
                       />
                     )}
                   </Stack>
@@ -215,7 +216,12 @@ const Seat = ({ seat, currentGame }) => {
                       <Button
                         className="buyIn"
                         onClick={() => {
-                          handleConfirm(tableId, user.id, seat._id, sliderValue);
+                          handleConfirm(
+                            tableId,
+                            user.id,
+                            seat._id,
+                            sliderValue
+                          );
                           handleClose();
                         }}
                       >

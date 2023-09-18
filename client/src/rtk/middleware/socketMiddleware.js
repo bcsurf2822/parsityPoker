@@ -43,7 +43,6 @@ import { io } from "socket.io-client";
 const socket = io("http://localhost:4000");
 
 const socketMiddleware = (store) => {
-  // Set up socket event listeners
   socket.on("gamesData", (data) => {
     store.dispatch(receiveGames(data));
   });
@@ -57,7 +56,7 @@ const socketMiddleware = (store) => {
     store.dispatch(playerJoinedGame(data));
   });
 
-  // This is assuming the server sends "joinGameError" when there's an error with joining a game.
+
   socket.on("joinGameError", (error) => {
     store.dispatch(joinGameError(error.message));
   });
