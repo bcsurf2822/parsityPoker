@@ -171,6 +171,10 @@ const socketSlice = createSlice({
       console.log("dealTurnSuccess called with payload:", action.payload);
       updateGameState(state, action);
     },
+    dealRiverError: (state, action) => {
+      console.log("dealRiverError called with error:", action.payload);
+      state.error = action.payload;
+    },
   },
 });
 
@@ -204,6 +208,7 @@ export const {
   dealTurnError,
   startDealRiver,
   dealRiverSuccess,
+  dealRiverError,
 } = socketSlice.actions;
 
 export default socketSlice.reducer;

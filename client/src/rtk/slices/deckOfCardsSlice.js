@@ -4,6 +4,7 @@ import axios from 'axios';
 
 export const fetchNewDeck = createAsyncThunk('deck/fetchNew', async (gameId) => {
   const response = await axios.get(`http://localhost:4000/new-deck/${gameId}`);
+  console.log("Get Deck Response:", response.data);
   return response.data;
 });
 

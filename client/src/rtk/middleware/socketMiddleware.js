@@ -18,6 +18,15 @@ import {
   startDealCards,
   dealCardsSuccess,
   dealCardsError,
+  startDealFlop,
+  dealFlopSuccess,
+  dealFlopError,
+  startDealTurn,
+  dealTurnSuccess,
+  dealTurnError,
+  startDealRiver,
+  dealRiverSuccess,
+  dealRiverError,
   startUpdateCurrentPlayer,
   startEndGame,
 } from "../slices/socketSlice";
@@ -85,6 +94,31 @@ const socketMiddleware = (store) => {
     store.dispatch(dealCardsError(error));
   });
 
+  socket.on("flop_dealt", (data) => {
+    store.dispatch(dealFlopSuccess(data));
+  });
+
+  socket.on("dealFlopError", (error) => {
+    store.dispatch(dealFlopError(error));
+  });
+
+  socket.on("turn_dealt", (data) => {
+    store.dispatch(dealTurnSuccess(data));
+  });
+
+  socket.on("dealTurnError", (error) => {
+    store.dispatch(dealTurnError(error));
+  });
+
+  socket.on("river_dealt", (data) => {
+    store.dispatch(dealRiverSuccess(data));
+  });
+
+  socket.on("dealRiverError", (error) => {
+    store.dispatch(dealRiverError(error));
+  });
+
+
   return (next) => (action) => {
     switch (action.type) {
       case requestGames.toString():
@@ -140,6 +174,21 @@ const socketMiddleware = (store) => {
           const { gameId: dGameId } = action.payload;
           socket.emit("deal_cards", { gameId: dGameId });
           break;
+
+          case startDealFlop.toString():
+            const { gameId: dfGameId } = action.payload;
+            socket.emit("deal_flop", { gameId: dfGameId });
+            break;
+      
+          case startDealTurn.toString():
+            const { gameId: dtGameId } = action.payload;
+            socket.emit("deal_turn", { gameId: dtGameId });
+            break;
+      
+          case startDealRiver.toString():
+            const { gameId: drGameId } = action.payload;
+            socket.emit("deal_river", { gameId: drGameId });
+            break;
 
       default:
         break;

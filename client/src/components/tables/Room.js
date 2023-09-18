@@ -19,6 +19,9 @@ import {
   startUpdatePositionsAndBlinds,
   startEndGame,
   startUpdateCurrentPlayer,
+  startDealFlop,
+  startDealTurn,
+  startDealRiver,
 } from "../../rtk/slices/socketSlice";
 
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
@@ -111,16 +114,19 @@ const Room = () => {
     dispatch(startDealCards({ gameId: gameId }));
   };
 
-  const handleDealFlop = () => {
-    dispatch(dealFlop(id));
+  const handleDealFlop = (gameId) => {
+    console.log("Dispatching dealFlop with params:", gameId);
+    dispatch(startDealFlop({ gameId: gameId }));
   };
 
-  const handleDealTurn = () => {
-    dispatch(dealTurn(id));
+  const handleDealTurn = (gameId) => {
+    console.log("Dispatching dealTurn with params:", gameId);
+    dispatch(startDealTurn({ gameId: gameId }));
   };
 
-  const handleDealRiver = () => {
-    dispatch(dealRiver(id));
+  const handleDealRiver = (gameId) => {
+    console.log("Dispatching dealRiver with params:", gameId);
+    dispatch(startDealRiver({ gameId: gameId }));
   };
 
   const handleGetWinner = () => {
@@ -265,13 +271,19 @@ const Room = () => {
               }}>
               Deal Cards
             </Button>
-            <Button variant="primary" onClick={handleDealFlop}>
+            <Button variant="primary"          onClick={() => {
+                handleDealFlop(id);
+              }}>
               Deal Flop
             </Button>
-            <Button variant="primary" onClick={handleDealTurn}>
+            <Button variant="primary"          onClick={() => {
+                handleDealTurn(id);
+              }}>
               Deal Turn
             </Button>
-            <Button variant="primary" onClick={handleDealRiver}>
+            <Button variant="primary"          onClick={() => {
+                handleDealRiver(id);
+              }}>
               Deal River
             </Button>
             <Button variant="danger" onClick={() => {
