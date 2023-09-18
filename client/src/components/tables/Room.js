@@ -1,17 +1,9 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
 import { useParams } from "react-router-dom";
-import {
-  dealFlop,
-  dealTurn,
-  dealRiver,
-  // endGame,
-  getWinner,
-  // updateCurrentPlayer,
-} from "../../rtk/slices/serverSlice";
+import { getWinner } from "../../rtk/slices/serverSlice";
 
 import {
   startDealCards,
@@ -38,8 +30,6 @@ const Room = () => {
   const navigate = useNavigate();
 
   const user = useSelector((state) => state.auth.user);
-  const countDown = useSelector((state) => state.timing.value);
-  const counting = useSelector((state) => state.timing.isCounting);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const [winnerData, setWinnerData] = useState(null);
@@ -50,28 +40,18 @@ const Room = () => {
   console.log("Current Game:", currentGame);
 
   const playersWithHandCards =
-    (() => {
-      if (currentGame && currentGame.seats) {
-        return currentGame.seats.filter(
+    currentGame && currentGame.seats
+      ? currentGame.seats.filter(
           (seat) =>
             seat.player &&
             seat.player.handCards &&
             seat.player.handCards.length > 0
-        );
-      }
-      return [];
-    },
-    [currentGame]);
-
+        )
+      : [];
   console.log("PLayers with cards---------------", playersWithHandCards);
 
   const seatArray = currentGame ? currentGame.seats : [];
-
-  const occupiedSeats = currentGame
-    ? currentGame.seats.filter((seat) => seat.player !== null).length
-    : 0;
-
-  console.log("seat Info:", seatArray);
+  console.log("Seat Array:", seatArray);
 
   useEffect(() => {
     if (
@@ -132,88 +112,44 @@ const Room = () => {
     dispatch(getWinner(id));
   };
 
-  useEffect(() => {
-    if (
-      currentGame &&
-      currentGame.stage === "flop" &&
-      currentGame.communityCards.length === 0 &&
-      playersWithHandCards.length > 1
-    ) {
-      handleDealFlop();
-    }
-  }, [currentGame]);
-
-  useEffect(() => {
-    if (
-      currentGame &&
-      currentGame.stage === "turn" &&
-      currentGame.communityCards.length === 3 &&
-      playersWithHandCards.length > 1
-    ) {
-      handleDealTurn();
-    }
-  }, [currentGame]);
-
-  useEffect(() => {
-    if (
-      currentGame &&
-      currentGame.stage === "river" &&
-      currentGame.communityCards.length === 4 &&
-      playersWithHandCards.length > 1
-    ) {
-      handleDealRiver();
-    }
-  }, [currentGame]);
-
-  useEffect(() => {
-    if (playersWithHandCards.length >= 2) {
-      if (
-        currentGame &&
-        currentGame.stage === "showdown" &&
-        !currentGame.gameEnd
-      ) {
-        console.log("GETTING WINNER");
-        handleGetWinner();
-      }
-    }
-  }, [playersWithHandCards, currentGame]);
-
-  useEffect(() => {
-    if (currentGame && currentGame.gameEnd) {
-      handleEndGame();
-    }
-  }, [currentGame]);
-
-  useEffect(() => {
-    if (currentGame && currentGame.winnerData) {
-      setWinnerData(currentGame.winnerData);
-
-      console.log("Winner is:", currentGame.winnerData);
-    }
-  }, [currentGame]);
-
   // useEffect(() => {
-  //   if (currentGame
-  //       && !currentGame.gameEnd  // gameEnd should be false
-  //       && playersWithHandCards.length === 0  // no players have handCards
-  //       && currentGame.pot > 0  // pot is greater than 0
+  //   if (
+  //     currentGame &&
+  //     currentGame.stage === "flop" &&
+  //     currentGame.communityCards.length === 0 &&
+  //     playersWithHandCards.length > 1
   //   ) {
-  //     console.log("Conditions met! Dealing cards...");
-  //     handleDealCards();
+  //     handleDealFlop();
   //   }
-  // }, [currentGame, playersWithHandCards]);
+  // }, [currentGame]);
 
   // useEffect(() => {
-  //   if (playersWithHandCards.length === 1) {
-  //     console.log("GETTING WINNER DUE TO FOLD")
-  //     dispatch(potToPlayer(id));
+  //   if (
+  //     currentGame &&
+  //     currentGame.stage === "turn" &&
+  //     currentGame.communityCards.length === 3 &&
+  //     playersWithHandCards.length > 1
+  //   ) {
+  //     handleDealTurn();
   //   }
-  // }, []);
+  // }, [currentGame]);
 
   // useEffect(() => {
-  //   if (currentGame && currentGame.stage === 'showdown' && playe)rsWithHandCards.length > 1 {
-  //     console.log("GETTING WINNER")
-  //     handleGetWinner();
+  //   if (
+  //     currentGame &&
+  //     currentGame.stage === "river" &&
+  //     currentGame.communityCards.length === 4 &&
+  //     playersWithHandCards.length > 1
+  //   ) {
+  //     handleDealRiver();
+  //   }
+  // }, [currentGame]);
+
+  // useEffect(() => {
+  //   if (currentGame && currentGame.winnerData) {
+  //     setWinnerData(currentGame.winnerData);
+
+  //     console.log("Winner is:", currentGame.winnerData);
   //   }
   // }, [currentGame]);
 
@@ -226,12 +162,6 @@ const Room = () => {
       <Row className="mt-2">
         <Col className="d-flex justify-content-center">
           <div className="table">
-            {currentGame.name}
-            {counting && (
-              <div className="countdown-display">
-                Game starts in: {countDown} seconds
-              </div>
-            )}
             {winnerData && (
               <div className="winner-info">
                 Winner is: {winnerData.name} with {currentGame.pot} points.
@@ -251,9 +181,12 @@ const Room = () => {
       <Row className="mt-2">
         <Row className="mt-2">
           <Col className="d-flex justify-content-center">
-            <Button variant="success" onClick={() => {
+            <Button
+              variant="success"
+              onClick={() => {
                 handleCurrentPlayer(id);
-              }}>
+              }}
+            >
               Current Player
             </Button>
             <Button
@@ -264,29 +197,44 @@ const Room = () => {
             >
               Dealer
             </Button>
-            <Button variant="success"            onClick={() => {
+            <Button
+              variant="success"
+              onClick={() => {
                 handleDealCards(id);
-              }}>
+              }}
+            >
               Deal Cards
             </Button>
-            <Button variant="primary"          onClick={() => {
+            <Button
+              variant="primary"
+              onClick={() => {
                 handleDealFlop(id);
-              }}>
+              }}
+            >
               Deal Flop
             </Button>
-            <Button variant="primary"          onClick={() => {
+            <Button
+              variant="primary"
+              onClick={() => {
                 handleDealTurn(id);
-              }}>
+              }}
+            >
               Deal Turn
             </Button>
-            <Button variant="primary"          onClick={() => {
+            <Button
+              variant="primary"
+              onClick={() => {
                 handleDealRiver(id);
-              }}>
+              }}
+            >
               Deal River
             </Button>
-            <Button variant="danger" onClick={() => {
+            <Button
+              variant="danger"
+              onClick={() => {
                 handleEndGame(id);
-              }}>
+              }}
+            >
               EndGame
             </Button>
             <Button variant="success" onClick={handleGetWinner}>

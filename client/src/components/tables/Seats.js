@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-input-slider";
-import {
+// import {s
   // joinGame,
-  chipsToPot,
-  fold,
-  check,
-} from "../../rtk/slices/serverSlice";
+//   chipsToPot,
+//   fold,
+//   check,
+// } from "../../rtk/slices/serverSlice";
 
 import {
   startPlayerBet,
@@ -48,7 +48,6 @@ const Seat = ({ seat, currentGame }) => {
   const dispatch = useDispatch();
 
   const tableId = currentGame._id;
-  const seatId = seat._id;
   const maxBuyIn = currentGame.max;
   const minBuyIn = currentGame.min;
   const cards = seat.player ? seat.player.handCards : [];

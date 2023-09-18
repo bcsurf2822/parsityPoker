@@ -1,15 +1,15 @@
-const router = require("express").Router();
-const Game = require("../models/gamesSchema");
-const axios = require("axios");
+// const router = require("express").Router();
+// const Game = require("../models/gamesSchema");
+// const axios = require("axios");
 
-const findNextPosition = (startPosition, seats) => {
-  let seatCount = seats.length;
-  let nextPosition = (startPosition + 1) % seatCount;
-  while (!seats[nextPosition].player) {
-    nextPosition = (nextPosition + 1) % seatCount;
-  }
-  return nextPosition;
-};
+// const findNextPosition = (startPosition, seats) => {
+//   let seatCount = seats.length;
+//   let nextPosition = (startPosition + 1) % seatCount;
+//   while (!seats[nextPosition].player) {
+//     nextPosition = (nextPosition + 1) % seatCount;
+//   }
+//   return nextPosition;
+// };
 
 // router.post("/:gameId/updatePostionsAndBlinds", async (req, res) => {
 //   try {
@@ -65,96 +65,96 @@ const findNextPosition = (startPosition, seats) => {
 // });
 
 
-router.post("/:gameId/updateCurrentPlayer", async (req, res) => {
-  try {
-    const gameId = req.params.gameId;
-    const game = await Game.findById(gameId);
-    if (!game) {
-      return res.status(404).send("Game not found!");
-    }
+// router.post("/:gameId/updateCurrentPlayer", async (req, res) => {
+//   try {
+//     const gameId = req.params.gameId;
+//     const game = await Game.findById(gameId);
+//     if (!game) {
+//       return res.status(404).send("Game not found!");
+//     }
 
-    game.currentPlayerTurn = findNextPosition(game.currentPlayerTurn, game.seats);
+//     game.currentPlayerTurn = findNextPosition(game.currentPlayerTurn, game.seats);
 
-    await game.save();
+//     await game.save();
 
-    req.io.emit("current_player", game);
-    res.status(200).json(game);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send(error.message);
-  }
-});
+//     req.io.emit("current_player", game);
+//     res.status(200).json(game);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send(error.message);
+//   }
+// });
 
-function cardCode(code) {
-  return code.replace('0', '10');
-}
-
-
-router.post("/endgame/:gameId", async (req, res) => {
-  const { gameId } = req.params;
-
-  try {
-    const game = await Game.findById(gameId);
-
-    if (!game) {
-      return res.status(404).json({ message: "Game not found!" });
-    }
-
-    game.currentDeck = [];
-    game.communityCards = [];
-    game.dealtCards = [];
-    game.winnerData = [];
-    game.pot = 0;
-    game.stage = "preflop";
-    game.gameEnd = false;
-
-    game.seats.forEach((seat) => {
-      if (seat.player) {
-        seat.player.handCards = [];
-        seat.player.checkBetFold = false; 
-      }
-    });
-
-    // Logic to Move the blinds forward
-    game.dealerPosition = findNextPosition(game.dealerPosition, game.seats);
-    game.smallBlindPosition = findNextPosition(game.dealerPosition, game.seats);
-    game.bigBlindPosition = findNextPosition(game.smallBlindPosition, game.seats);
-    game.currentPlayerTurn = findNextPosition(game.bigBlindPosition, game.seats);
-
-    const [smallBlindAmount, bigBlindAmount] = game.blinds.split("/").map(Number);
-
-    // Deducting blinds from the players and adding to the pot
-    if (game.seats[game.smallBlindPosition].player) {
-      game.seats[game.smallBlindPosition].player.chips -= smallBlindAmount;
-      game.pot += smallBlindAmount;
-    }
-
-    if (game.seats[game.bigBlindPosition].player) {
-      game.seats[game.bigBlindPosition].player.chips -= bigBlindAmount;
-      game.pot += bigBlindAmount;
-    }
-
-    // Fetch new deck and populate currentDeck
-    const response = await axios.get("https://www.deckofcardsapi.com/api/deck/new/draw/?count=52");
-
-    const currentGameCards = response.data.cards.map((card) => ({
-      value: card.value,
-      suit: card.suit,
-      code: cardCode(card.code)
-    }));
-
-    game.currentDeck = currentGameCards;
-
-    await game.save();
-    req.io.emit("game_ended", game);
-
-    res.json({ message: "Game ended, cards cleared" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to end the game" });
-  }
-});
+// function cardCode(code) {
+//   return code.replace('0', '10');
+// }
 
 
+// router.post("/endgame/:gameId", async (req, res) => {
+//   const { gameId } = req.params;
 
-module.exports = router;
+//   try {
+//     const game = await Game.findById(gameId);
+
+//     if (!game) {
+//       return res.status(404).json({ message: "Game not found!" });
+//     }
+
+//     game.currentDeck = [];
+//     game.communityCards = [];
+//     game.dealtCards = [];
+//     game.winnerData = [];
+//     game.pot = 0;
+//     game.stage = "preflop";
+//     game.gameEnd = false;
+
+//     game.seats.forEach((seat) => {
+//       if (seat.player) {
+//         seat.player.handCards = [];
+//         seat.player.checkBetFold = false; 
+//       }
+//     });
+
+//     // Logic to Move the blinds forward
+//     game.dealerPosition = findNextPosition(game.dealerPosition, game.seats);
+//     game.smallBlindPosition = findNextPosition(game.dealerPosition, game.seats);
+//     game.bigBlindPosition = findNextPosition(game.smallBlindPosition, game.seats);
+//     game.currentPlayerTurn = findNextPosition(game.bigBlindPosition, game.seats);
+
+//     const [smallBlindAmount, bigBlindAmount] = game.blinds.split("/").map(Number);
+
+//     // Deducting blinds from the players and adding to the pot
+//     if (game.seats[game.smallBlindPosition].player) {
+//       game.seats[game.smallBlindPosition].player.chips -= smallBlindAmount;
+//       game.pot += smallBlindAmount;
+//     }
+
+//     if (game.seats[game.bigBlindPosition].player) {
+//       game.seats[game.bigBlindPosition].player.chips -= bigBlindAmount;
+//       game.pot += bigBlindAmount;
+//     }
+
+//     // Fetch new deck and populate currentDeck
+//     const response = await axios.get("https://www.deckofcardsapi.com/api/deck/new/draw/?count=52");
+
+//     const currentGameCards = response.data.cards.map((card) => ({
+//       value: card.value,
+//       suit: card.suit,
+//       code: cardCode(card.code)
+//     }));
+
+//     game.currentDeck = currentGameCards;
+
+//     await game.save();
+//     req.io.emit("game_ended", game);
+
+//     res.json({ message: "Game ended, cards cleared" });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Failed to end the game" });
+//   }
+// });
+
+
+
+// module.exports = router;
