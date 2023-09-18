@@ -2,7 +2,7 @@ const Game = require("../models/gamesSchema");
 
 function playersHaveActed(game) {
   return game.seats.every((seat) => !seat.player || seat.player.checkBetFold);
-}
+};
 
 function resetCheckBetFold(game) {
   game.seats.forEach((seat) => {
@@ -10,15 +10,24 @@ function resetCheckBetFold(game) {
       seat.player.checkBetFold = false;
     }
   });
-}
+};
 
 function playersWithCards(game) {
   return game.seats.filter(
     (seat) => seat.player && seat.player.handCards.length
   ).length;
-}
+};
 
-function playerToPotSocket(socket, ioi) {
+const findNextPosition = (startPosition, seats) => {
+  let seatCount = seats.length;
+  let nextPosition = (startPosition + 1) % seatCount;
+  while (!seats[nextPosition].player) {
+    nextPosition = (nextPosition + 1) % seatCount;
+  }
+  return nextPosition;
+};
+
+function playerToPotSocket(socket, io) {
   socket.on("player_to_pot", async (data) => {
     const { gameId, seatId, bet, action } = data;
     let betAmount;
@@ -113,13 +122,26 @@ function playerToPotSocket(socket, ioi) {
         }
       }
 
+game.currentPlayerTurn = findNextPosition(game.currentPlayerTurn, game.seats);
+
+
+while (!game.seats[game.currentPlayerTurn].player || game.seats[game.currentPlayerTurn].player.handCards.length === 0) {
+    game.currentPlayerTurn = findNextPosition(game.currentPlayerTurn, game.seats);
+}
+
+await game.save();
+
+io.emit("next_current_player", game);
+
+
+
       io.emit("player_acted", game);
     } catch (error) {
       console.error(error);
       socket.emit("playerToPotError", { error: "Failed to place bet" });
     }
   });
-}
+};
 
 function checkSocket(socket, io) {
   socket.on("check", async (data) => {
