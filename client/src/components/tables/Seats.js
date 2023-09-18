@@ -7,6 +7,12 @@ import {
   check,
 } from "../../rtk/slices/serverSlice";
 
+import {
+  startPlayerBet,
+  startPlayerCheck,
+  startPlayerFold,
+} from "../../rtk/slices/socketSlice";
+
 import DeactivatedBet from "./DeactivatedBet";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
@@ -78,45 +84,46 @@ const Seat = ({ seat, currentGame }) => {
   const isDealer = currentGame.dealerPosition === seat.id - 1;
   const isCurrentPlayer = currentGame.currentPlayerTurn === seat.id - 1;
 
-  const handleFold = () => {
-    dispatch(fold({ gameId: tableId, seatId: seat._id }));
+  const handleFold = (gameId, seatId) => {
+    console.log("Dispatching startPlayerFold with params:", gameId, seatId);
+    dispatch(startPlayerFold({ gameId: gameId, seatId: seatId }));
   };
 
-  const handleCheck = () => {
-    dispatch(check({ gameId: tableId, seatId: seat._id }));
+  const handleCheck = (gameId, seatId) => {
+    console.log("Dispatching startPlayerCheck with params:", gameId, seatId);
+    dispatch(startPlayerCheck({ gameId: gameId, seatId: seatId }));
   };
 
-  const handleAllIn = () => {
+  const handleAllIn = (gameId, seatId) => {
     dispatch(
-      chipsToPot({
-        gameId: tableId,
-        seatId: seat._id,
+      startPlayerBet({
+        gameId: gameId,
+        seatId: seatId,
         action: "all-in",
       })
     );
   };
-
-  const handleCall = () => {
+  
+  const handleCall = (gameId, seatId) => {
     dispatch(
-      chipsToPot({
-        gameId: tableId,
-        seatId: seat._id,
+      startPlayerBet({
+        gameId: gameId,
+        seatId: seatId,
         action: "call",
       })
     );
   };
-
-  const handleSliderBet = (betValue) => {
+  
+  const handleSliderBet = (gameId, seatId, betValue) => {
     dispatch(
-      chipsToPot({
-        gameId: tableId,
-        seatId: seat._id,
+      startPlayerBet({
+        gameId: gameId,
+        seatId: seatId,
         bet: betValue,
         action: "bet",
       })
     );
   };
-
   return (
     <div className="d-flex justify-content-center seat">
       {seat && (
@@ -154,8 +161,12 @@ const Seat = ({ seat, currentGame }) => {
                         onBetChange={handleSliderBet}
                         onCall={handleCall}
                         onAllIn={handleAllIn}
-                        onCheck={handleCheck}
-                        onFold={handleFold}
+                        onCheck={() => {
+                          handleCheck(tableId, seat._id);
+                        }}
+                        onFold={() => {
+                          handleFold(tableId, seat._id);
+                        }}
                       />
                     ) : (
                       <DeactivatedBet

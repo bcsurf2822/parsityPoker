@@ -175,6 +175,47 @@ const socketSlice = createSlice({
       console.log("dealRiverError called with error:", action.payload);
       state.error = action.payload;
     },
+
+    startPlayerBet: (state, action) => {
+      console.log("startPlayerBet called with payload:", action.payload);
+    },
+
+    playerBetSuccess: (state, action) => {
+      console.log("playerBetSuccess called with payload:", action.payload);
+      updateGameState(state, action);
+    },
+    playerBetError: (state, action) => {
+      console.log("playerBetError called with error:", action.payload);
+      state.error = action.payload;
+    },
+
+    startPlayerCheck: (state, action) => {
+      console.log("startPlayerCheck called with payload:", action.payload);
+    },
+
+    playerCheckSuccess: (state, action) => {
+      console.log("playerCheckSuccess called with payload:", action.payload);
+      updateGameState(state, action);
+    },
+    playerCheckError: (state, action) => {
+      console.log("playerCheckError called with error:", action.payload);
+      state.error = action.payload;
+    },
+
+    startPlayerFold: (state, action) => {
+      console.log("startPlayerFold called with payload:", action.payload);
+    },
+
+    playerFoldSuccess: (state, action) => {
+      console.log("playerFoldSuccess called with payload:", action.payload);
+      updateGameState(state, action);
+    } ,
+
+    playerFoldError: (state, action) => { 
+      console.log("playerFoldError called with error:", action.payload);
+      state.error = action.payload;
+    },
+    
   },
 });
 
@@ -209,6 +250,15 @@ export const {
   startDealRiver,
   dealRiverSuccess,
   dealRiverError,
+  startPlayerBet,
+  playerBetSuccess,
+  playerBetError,
+  startPlayerCheck,
+  playerCheckSuccess,
+  playerCheckError,
+  startPlayerFold,
+  playerFoldSuccess,
+  playerFoldError,
 } = socketSlice.actions;
 
 export default socketSlice.reducer;

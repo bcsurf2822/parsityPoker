@@ -4,6 +4,7 @@ const leaveSocket = require("./leaveSocket");
 const roomSocket = require("./roomSocket");
 const { positionsAndBlindsSocket, updateCurrentPlayerSocket, endGameSocket } = require("./mechSocket");
 const {dealToPlayersSocket, dealFlopSocket, dealTurnSocket, dealRiverSocket} = require("./dealerSocket");
+const {playerToPotSocket, checkSocket, foldSocket} = require("./betCheckFoldSocket");
 
 
 function setupSockets(io) {
@@ -21,6 +22,9 @@ function setupSockets(io) {
     dealFlopSocket(socket, io);
     dealTurnSocket(socket, io);
     dealRiverSocket(socket, io);
+    playerToPotSocket(socket, io);
+    checkSocket(socket, io);
+    foldSocket(socket, io);
 
     socket.on("disconnect", () => {
       console.log("user disconnected");

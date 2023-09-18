@@ -29,6 +29,15 @@ import {
   dealRiverError,
   startUpdateCurrentPlayer,
   startEndGame,
+  startPlayerBet,
+  playerBetSuccess,
+  playerBetError,
+  startPlayerCheck,
+  playerCheckSuccess,
+  playerCheckError,
+  startPlayerFold,
+  playerFoldSuccess,
+  playerFoldError,
 } from "../slices/socketSlice";
 import { io } from "socket.io-client";
 const socket = io("http://localhost:4000");
@@ -118,6 +127,32 @@ const socketMiddleware = (store) => {
     store.dispatch(dealRiverError(error));
   });
 
+  socket.on("player_acted", (data) => {
+    console.log("Received player_acted event with data:", data);
+    store.dispatch(playerBetSuccess(data));
+  });
+
+  socket.on("playerBetError", (error) => {
+    store.dispatch(playerBetError(error.message));
+  });
+
+  socket.on("player_checked", (data) => {
+    console.log("Received player_checked event with data:", data);
+    store.dispatch(playerCheckSuccess(data));
+  });
+
+  socket.on("checkError", (error) => {
+    store.dispatch(playerCheckError(error.message));
+  });
+
+  socket.on("player_folded", (data) => {
+    console.log("Received player_folded event with data:", data);
+    store.dispatch(playerFoldSuccess(data));
+  });
+
+  socket.on("foldError", (error) => {
+    store.dispatch(playerFoldError(error.message));
+  });
 
   return (next) => (action) => {
     switch (action.type) {
@@ -160,35 +195,53 @@ const socketMiddleware = (store) => {
         socket.emit("updatePositionsAndBlinds", { gameId: uGameId });
         break;
 
-        case startUpdateCurrentPlayer.toString():
-          const { gameId: ucGameId } = action.payload;
-          socket.emit("updateCurrentPlayer", { gameId: ucGameId });
-          break;
-  
-        case startEndGame.toString():
-          const { gameId: eGameId } = action.payload;
-          socket.emit("end_game", { gameId: eGameId });
-          break;
+      case startUpdateCurrentPlayer.toString():
+        const { gameId: ucGameId } = action.payload;
+        socket.emit("updateCurrentPlayer", { gameId: ucGameId });
+        break;
 
-        case startDealCards.toString():
-          const { gameId: dGameId } = action.payload;
-          socket.emit("deal_cards", { gameId: dGameId });
-          break;
+      case startEndGame.toString():
+        const { gameId: eGameId } = action.payload;
+        socket.emit("end_game", { gameId: eGameId });
+        break;
 
-          case startDealFlop.toString():
-            const { gameId: dfGameId } = action.payload;
-            socket.emit("deal_flop", { gameId: dfGameId });
-            break;
-      
-          case startDealTurn.toString():
-            const { gameId: dtGameId } = action.payload;
-            socket.emit("deal_turn", { gameId: dtGameId });
-            break;
-      
-          case startDealRiver.toString():
-            const { gameId: drGameId } = action.payload;
-            socket.emit("deal_river", { gameId: drGameId });
-            break;
+      case startDealCards.toString():
+        const { gameId: dGameId } = action.payload;
+        socket.emit("deal_cards", { gameId: dGameId });
+        break;
+
+      case startDealFlop.toString():
+        const { gameId: dfGameId } = action.payload;
+        socket.emit("deal_flop", { gameId: dfGameId });
+        break;
+
+      case startDealTurn.toString():
+        const { gameId: dtGameId } = action.payload;
+        socket.emit("deal_turn", { gameId: dtGameId });
+        break;
+
+      case startDealRiver.toString():
+        const { gameId: drGameId } = action.payload;
+        socket.emit("deal_river", { gameId: drGameId });
+        break;
+
+      case startPlayerBet.toString():
+        console.log(
+          "Emitting player_to_pot event with payload:",
+          action.payload
+        );
+        socket.emit("player_to_pot", action.payload);
+        break;
+
+      case startPlayerCheck.toString():
+        console.log("Emitting check event with payload:", action.payload);
+        socket.emit("check", action.payload);
+        break;
+
+      case startPlayerFold.toString():
+        console.log("Emitting fold event with payload:", action.payload);
+        socket.emit("fold", action.payload);
+        break;
 
       default:
         break;
