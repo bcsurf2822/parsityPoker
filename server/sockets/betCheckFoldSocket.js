@@ -2,7 +2,7 @@ const Game = require("../models/gamesSchema");
 
 function playersHaveActed(game) {
   return game.seats.every((seat) => !seat.player || seat.player.checkBetFold);
-};
+}
 
 function resetCheckBetFold(game) {
   game.seats.forEach((seat) => {
@@ -10,13 +10,13 @@ function resetCheckBetFold(game) {
       seat.player.checkBetFold = false;
     }
   });
-};
+}
 
 function playersWithCards(game) {
   return game.seats.filter(
     (seat) => seat.player && seat.player.handCards.length
   ).length;
-};
+}
 
 const findNextPosition = (startPosition, seats) => {
   let seatCount = seats.length;
@@ -56,12 +56,10 @@ function playerToPotSocket(socket, io) {
           );
           betAmount = highestBet - seat.player.bet;
           if (betAmount <= 0) {
-            return res
-              .status(400)
-              .json({
-                message:
-                  "Player has already matched or exceeded the highest bet.",
-              });
+            return res.status(400).json({
+              message:
+                "Player has already matched or exceeded the highest bet.",
+            });
           }
 
           if (seat.player.chips < betAmount) {
@@ -122,18 +120,24 @@ function playerToPotSocket(socket, io) {
         }
       }
 
-game.currentPlayerTurn = findNextPosition(game.currentPlayerTurn, game.seats);
+      game.currentPlayerTurn = findNextPosition(
+        game.currentPlayerTurn,
+        game.seats
+      );
 
+      while (
+        !game.seats[game.currentPlayerTurn].player ||
+        game.seats[game.currentPlayerTurn].player.handCards.length === 0
+      ) {
+        game.currentPlayerTurn = findNextPosition(
+          game.currentPlayerTurn,
+          game.seats
+        );
+      }
 
-while (!game.seats[game.currentPlayerTurn].player || game.seats[game.currentPlayerTurn].player.handCards.length === 0) {
-    game.currentPlayerTurn = findNextPosition(game.currentPlayerTurn, game.seats);
-}
+      await game.save();
 
-await game.save();
-
-io.emit("next_current_player", game);
-
-
+      io.emit("next_current_player", game);
 
       io.emit("player_acted", game);
     } catch (error) {
@@ -141,7 +145,7 @@ io.emit("next_current_player", game);
       socket.emit("playerToPotError", { error: "Failed to place bet" });
     }
   });
-};
+}
 
 function checkSocket(socket, io) {
   socket.on("check", async (data) => {
@@ -194,6 +198,25 @@ function checkSocket(socket, io) {
           await game.save();
         }
       }
+
+      game.currentPlayerTurn = findNextPosition(
+        game.currentPlayerTurn,
+        game.seats
+      );
+
+      while (
+        !game.seats[game.currentPlayerTurn].player ||
+        game.seats[game.currentPlayerTurn].player.handCards.length === 0
+      ) {
+        game.currentPlayerTurn = findNextPosition(
+          game.currentPlayerTurn,
+          game.seats
+        );
+      }
+
+      await game.save();
+
+      io.emit("next_current_player", game);
 
       io.emit("player_checked", game);
     } catch (error) {
@@ -255,6 +278,25 @@ function foldSocket(socket, io) {
           await game.save();
         }
       }
+
+      game.currentPlayerTurn = findNextPosition(
+        game.currentPlayerTurn,
+        game.seats
+      );
+
+      while (
+        !game.seats[game.currentPlayerTurn].player ||
+        game.seats[game.currentPlayerTurn].player.handCards.length === 0
+      ) {
+        game.currentPlayerTurn = findNextPosition(
+          game.currentPlayerTurn,
+          game.seats
+        );
+      }
+
+      await game.save();
+
+      io.emit("next_current_player", game);
 
       io.emit("player_folded", game);
     } catch (error) {
