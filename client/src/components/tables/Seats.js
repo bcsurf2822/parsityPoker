@@ -157,23 +157,19 @@ const Seat = ({ seat, currentGame }) => {
                   <Stack direction="row" spacing={1}>
                     {isCurrentPlayer ? (
                       <BetBox
-                        playerChips={parseFloat(seat.player.chips).toFixed(2)}
-                        onBetChange={handleSliderBet}
-                        onCall={handleCall}
-                        onAllIn={handleAllIn}
-                        onCheck={() => {
-                          handleCheck(tableId, seat._id);
-                        }}
-                        onFold={() => {
-                          handleFold(tableId, seat._id);
-                        }}
+                      playerChips={parseFloat(seat.player.chips).toFixed(2)}
+                      onBetChange={(betValue) => handleSliderBet(tableId, seat._id, betValue)}
+                      onCall={() => handleCall(tableId, seat._id)}
+                      onAllIn={() => handleAllIn(tableId, seat._id)}
+                      onCheck={() => handleCheck(tableId, seat._id)}
+                      onFold={() => handleFold(tableId, seat._id)}
                       />
                     ) : (
                       <DeactivatedBet
-                        playerChips={parseFloat(seat.player.chips).toFixed(2)}
-                        onBetChange={handleSliderBet}
-                        onCall={handleCall}
-                        onAllIn={handleAllIn}
+                      playerChips={parseFloat(seat.player.chips).toFixed(2)}
+                      onBetChange={(betValue) => handleSliderBet(tableId, seat._id, betValue)}
+                      onCall={() => handleCall(tableId, seat._id)}
+                      onAllIn={() => handleAllIn(tableId, seat._id)}
                       />
                     )}
                   </Stack>
