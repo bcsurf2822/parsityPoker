@@ -27,6 +27,7 @@ function leaveSocket(socket, io) {
 
     user.accountBalance += playerSeat.player.chips;
     playerSeat.player = null;
+    game.playerCount -= 1;
 
     await user.save();
 

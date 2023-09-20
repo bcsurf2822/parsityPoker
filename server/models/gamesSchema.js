@@ -60,6 +60,10 @@ const GameSchema = new Schema({
     type: Number,
     required: true,
   },
+  playerCount: {
+    type: Number,
+    default: 0,
+  },
   pot: Number,
   timestamp: {
     type: Date,

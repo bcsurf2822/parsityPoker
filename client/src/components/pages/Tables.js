@@ -10,13 +10,19 @@ const Tables = () => {
   const dispatch = useDispatch();
   const games = useSelector((state) => state.socket.data);
 
-  console.log("Games In tables", games)
+  const totalPlayers = games.reduce((sum, game) => sum + (game.playerCount || 0), 0);
 
-  // useEffect(() => {
-  //   console.log("Tables component useEffect called")
-  //   dispatch(requestGames());
-  // }, [dispatch]);
+  const [previousTotalPlayers, setPreviousTotalPlayers] = useState(totalPlayers);
 
+  console.log("Games In tables", games);
+
+  useEffect(() => {
+    if (!games.length || totalPlayers !== previousTotalPlayers) {
+      console.log("Tables component useEffect called");
+      dispatch(requestGames());
+      setPreviousTotalPlayers(totalPlayers); 
+    }
+  }, [dispatch, !games.length, totalPlayers]); 
 
   const navigate = useNavigate();
 
@@ -24,7 +30,7 @@ const Tables = () => {
   return (
     <Container style={{ maxHeight: "80vh", overflowY: "scroll" }}>
       <h1>Available Tables</h1>
-      <Button onClick={() => dispatch(requestGames())}>Load Games</Button>
+      {/* <Button onClick={() => dispatch(requestGames())}>Load Games</Button> */}
 
       <Table striped bordered hover>
         <thead>

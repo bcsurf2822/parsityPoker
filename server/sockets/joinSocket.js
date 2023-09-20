@@ -45,6 +45,7 @@ function joinSocket(socket, io) {
       }
 
       user.accountBalance -= buyIn;
+      game.playerCount += 1;
       const player = {
         user: user._id,
         username: user.username,
