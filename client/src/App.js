@@ -23,6 +23,7 @@ import { initializeAuth } from "./rtk/actions/auth";
 
 
 function App() {
+  console.log("App Rendered")
   const dispatch = useDispatch();
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import {  useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Table, Button, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,10 +12,10 @@ const Tables = () => {
 
   console.log("Games In tables", games)
 
-  useEffect(() => {
-    console.log("Tables component useEffect called")
-    dispatch(requestGames());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   console.log("Tables component useEffect called")
+  //   dispatch(requestGames());
+  // }, [dispatch]);
 
 
   const navigate = useNavigate();
@@ -24,6 +24,8 @@ const Tables = () => {
   return (
     <Container style={{ maxHeight: "80vh", overflowY: "scroll" }}>
       <h1>Available Tables</h1>
+      <Button onClick={() => dispatch(requestGames())}>Load Games</Button>
+
       <Table striped bordered hover>
         <thead>
           <tr>

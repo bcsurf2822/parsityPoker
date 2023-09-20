@@ -1,7 +1,6 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
-import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';import { logout } from "../rtk/actions/auth";
@@ -13,36 +12,6 @@ const MyNav = () => {
   const userInfo = useSelector((state) => state.auth.user);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-  const toHome = function () {
-    navigate("/");
-  };
-  const toPromo = function () {
-    navigate("/Promotions");
-  };
-  const toAbout = function () {
-    navigate("/About");
-  };
-  const toTables = function () {
-    navigate("/Tables");
-  };
-  const toProfile = function () {
-    navigate("/Profile");
-  };
-  const toDeposit = function () {
-    navigate("/Deposit");
-  };
-  const toWithdrawl = function () {
-    navigate("/Withdrawl");
-  };
-  const toHands = function () {
-    navigate("/handhistory");
-  };
-  const toAdvanced = function () {
-    navigate("/advancedsettings");
-  };
-  const toAccountHistory = function () {
-    navigate("/accounthistory");
-  };
   const toLogout = function () {
     dispatch(logout(userInfo.id));
     navigate("/");
@@ -61,28 +30,29 @@ const MyNav = () => {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
-          <Nav.Link onClick={toHome}>Home</Nav.Link>
-          <Nav.Link onClick={toAbout}>About</Nav.Link>
-          <Nav.Link onClick={toPromo}>Promotions</Nav.Link>
-          <Nav.Link onClick={toTables}>Tables</Nav.Link>
+        <Nav.Link as={Link} to="/">Home</Nav.Link>
+
+          <Nav.Link as={Link} to="/About">About</Nav.Link>
+          <Nav.Link as={Link} to="/Promotions">Promotions</Nav.Link>
+          <Nav.Link as={Link} to="/Tables">Tables</Nav.Link>
           {isAuthenticated && (
             <NavDropdown title="Settings" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#" onClick={toProfile}>
+              <NavDropdown.Item as={Link} to="/Profile">
                 Profile
               </NavDropdown.Item>
-              <NavDropdown.Item href="#" onClick={toDeposit}>
+              <NavDropdown.Item  as={Link} to="/Deposit">
                 Deposit
               </NavDropdown.Item>
-              <NavDropdown.Item href="#" onClick={toWithdrawl}>
+              <NavDropdown.Item  as={Link} to="/Withdrawl">
                 Withdrawl
               </NavDropdown.Item>
-              <NavDropdown.Item href="#" onClick={toAdvanced}>
+              <NavDropdown.Item  as={Link} to="/advancedsettings">
                 Advanced Settings
               </NavDropdown.Item>
-              <NavDropdown.Item href="#" onClick={toHands}>
+              <NavDropdown.Item  as={Link} to="/handhistory">
                 Hand History
               </NavDropdown.Item>
-              <NavDropdown.Item href="#" onClick={toAccountHistory}>
+              <NavDropdown.Item as={Link} to="/accounthistory">
                 Account History
               </NavDropdown.Item>
               <NavDropdown.Item onClick={toLogout}>Log Out</NavDropdown.Item>
