@@ -32,7 +32,9 @@ const Room = () => {
   const user = useSelector((state) => state.auth.user);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
+  const [previousSeatCount, setPreviousSeatCount] = useState(0);
   const [winnerData, setWinnerData] = useState(null);
+  const previousSeatCountRef = useRef(previousSeatCount);
 
   const games = useSelector((state) => state.socket.data);
 
@@ -52,6 +54,10 @@ const Room = () => {
 
   const seatArray = currentGame ? currentGame.seats : [];
   console.log("Seat Array:", seatArray);
+  //How many players are at the table?
+  const occupiedSeatCount = seatArray.filter(seat => seat.player !== null).length;
+  console.log("Occupied Seat Count:", occupiedSeatCount);
+
 
   useEffect(() => {
     if (
@@ -111,6 +117,15 @@ const Room = () => {
     console.log("get Winner called");
     dispatch(getWinner(id));
   };
+
+  useEffect(() => {
+    if (occupiedSeatCount > previousSeatCount && occupiedSeatCount === 2) {
+      console.log("2nd player has joined the table!");
+      handlePositionsAndBlinds(id);
+    }
+    setPreviousSeatCount(occupiedSeatCount);
+}, [seatArray]);
+
 
   // useEffect(() => {
   //   if (

@@ -5,16 +5,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { requestGames } from "../../rtk/slices/socketSlice";
 
 
-
 const Tables = () => {
+  console.log("Tables component rendered")
   const dispatch = useDispatch();
   const games = useSelector((state) => state.socket.data);
-  // const isLoading = useSelector((state) => state.socket.isLoading);
-  const error = useSelector((state) => state.socket.error);
 
   console.log("Games In tables", games)
 
   useEffect(() => {
+    console.log("Tables component useEffect called")
     dispatch(requestGames());
   }, [dispatch]);
 

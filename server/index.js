@@ -61,8 +61,8 @@ app.use(userInfoRoute);
 const createGamesRoute = require("./routes/createGames");
 app.use(createGamesRoute);
 
-const gamesListRoute = require("./routes/gamesList");
-app.use(gamesListRoute);
+// const gamesListRoute = require("./routes/gamesList");
+// app.use(gamesListRoute);
 
 // const gameMechanicsRoute = require("./routes/mechanics");
 // app.use(gameMechanicsRoute);
