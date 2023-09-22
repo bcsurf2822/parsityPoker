@@ -2,69 +2,29 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const updateGameState = (state, action) => {
   const updatedGame = action.payload;
-  state.data = state.data.map((game) =>
-    game._id === updatedGame._id ? updatedGame : game
-  );
   if (state.currentGame && state.currentGame._id === updatedGame._id) {
     state.currentGame = updatedGame;
   }
 };
 
-const socketSlice = createSlice({
-  name: "games",
+const currentGameSlice = createSlice({
+  name: "game",
   initialState: {
-    data: [],
-    isLoading: true,
-    error: null,
-    joinLoading: false,
-    leaveLoading: false,
-    joinError: null,
     currentGame: null,
+    error: null,
   },
   reducers: {
-    requestGames: (state) => {
-      state.isLoading = true;
-      state.error = null;
+    requestGame: (state, action) => {
+      console.log("requestGame called with payload:", action.payload);
     },
-    receiveGames: (state, action) => {
-      state.data = action.payload;
-      state.isLoading = false;
+    receiveGame: (state, action) => {
+      console.log("receiveGame called with payload:", action.payload);
+      state.currentGame = action.payload;
     },
-    receiveGamesError: (state, action) => {
-      state.error = action.payload;
-      state.isLoading = false;
-    },
-    startJoinGame: (state, action) => {
-      console.log("startJoinGame called with payload:", action.payload);
-      state.joinLoading = true;
-      state.joinError = null;
-    },
-
-    joinGameError: (state, action) => {
-      console.log("joinGameError called with error:", action.payload);
-      state.joinError = action.payload;
-      state.joinLoading = false;
-    },
-    playerJoinedGame: (state, action) => {
-      console.log("joinGameUpdated called with payload:", action.payload);
-      updateGameState(state, action);
-      state.joinLoading = false;
-    },
-
-    startLeaveGame: (state, action) => {
-      console.log("startLeaveGame called with payload:", action.payload);
-      state.leaveLoading = true;
-      state.error = null;
-    },
-    playerLeftGame: (state, action) => {
-      console.log("playerLeftGame called with payload:", action.payload);
-      updateGameState(state, action);
-    },
-    leaveGameError: (state, action) => {
-      console.log("leaveGameError called with error:", action.payload);
+    receiveGameError: (state, action) => {
+      console.log("receiveGameError called with error:", action.payload);
       state.error = action.payload;
     },
-
     startUpdatePositionsAndBlinds: (state, action) => {
       console.log(
         "startUpdatePositionsAndBlinds called with payload:",
@@ -74,7 +34,6 @@ const socketSlice = createSlice({
       // state.updateLoading = true;
       // state.updateError = null;
     },
-
     updatePositionsAndBlindsSuccess: (state, action) => {
       console.log(
         "updatePositionsAndBlindsSuccess called with payload:",
@@ -82,7 +41,6 @@ const socketSlice = createSlice({
       );
       updateGameState(state, action);
     },
-
     updatePositionsAndBlindsError: (state, action) => {
       console.log(
         "updatePositionsAndBlindsError called with error:",
@@ -92,7 +50,6 @@ const socketSlice = createSlice({
       // Optionally, reset the loading state if you added one
       // state.updateLoading = false;
     },
-
     startUpdateCurrentPlayer: (state, action) => {
       console.log(
         "startUpdateCurrentPlayer called with payload:",
@@ -100,7 +57,6 @@ const socketSlice = createSlice({
       );
       // Any loading or initial state modifications can go here
     },
-
     updateCurrentPlayerSuccess: (state, action) => {
       console.log(
         "updateCurrentPlayerSuccess called with payload:",
@@ -108,7 +64,6 @@ const socketSlice = createSlice({
       );
       updateGameState(state, action);
     },
-
     updateCurrentPlayerError: (state, action) => {
       console.log(
         "updateCurrentPlayerError called with error:",
@@ -209,29 +164,22 @@ const socketSlice = createSlice({
     playerFoldSuccess: (state, action) => {
       console.log("playerFoldSuccess called with payload:", action.payload);
       updateGameState(state, action);
-    } ,
+    },
 
-    playerFoldError: (state, action) => { 
+    playerFoldError: (state, action) => {
       console.log("playerFoldError called with error:", action.payload);
       state.error = action.payload;
     },
-    
   },
 });
 
 export const {
-  requestGames,
-  receiveGames,
-  receiveGamesError,
-  startJoinGame,
-  joinGameError,
-  playerJoinedGame,
-  leaveGameError,
-  playerLeftGame,
-  startLeaveGame,
-  updatePositionsAndBlindsError,
-  updatePositionsAndBlindsSuccess,
+  requestGame,
+  receiveGame,
+  receiveGameError,
   startUpdatePositionsAndBlinds,
+  updatePositionsAndBlindsSuccess,
+  updatePositionsAndBlindsError,
   startUpdateCurrentPlayer,
   updateCurrentPlayerSuccess,
   updateCurrentPlayerError,
@@ -259,6 +207,6 @@ export const {
   startPlayerFold,
   playerFoldSuccess,
   playerFoldError,
-} = socketSlice.actions;
+} = currentGameSlice.actions;
 
-export default socketSlice.reducer;
+export default currentGameSlice.reducer;

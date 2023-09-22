@@ -1,36 +1,31 @@
-import React, {  useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {  useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Table, Button, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { requestGames } from "../../rtk/slices/socketSlice";
+import { requestGames } from "../../rtk/slices/allGamesSlice";
 
 
 const Tables = () => {
   console.log("Tables component rendered")
   const dispatch = useDispatch();
-  const games = useSelector((state) => state.socket.data);
-
-  const totalPlayers = games.reduce((sum, game) => sum + (game.playerCount || 0), 0);
-
-  const [previousTotalPlayers, setPreviousTotalPlayers] = useState(totalPlayers);
-
-  console.log("Games In tables", games);
+  const games = useSelector((state) => state.allGames.data);
+  console.log("Games in tables", games)
 
   useEffect(() => {
-    if (!games.length || totalPlayers !== previousTotalPlayers) {
-      console.log("Tables component useEffect called");
-      dispatch(requestGames());
-      setPreviousTotalPlayers(totalPlayers); 
-    }
-  }, [dispatch, !games.length, totalPlayers]); 
+    dispatch(requestGames());
+}, [dispatch]);
 
-  const navigate = useNavigate();
+
+//   const navigate = useNavigate();
+
+//   const toRoom = useCallback((id) => {
+//     navigate(`/Room/${id}`);
+// }, [navigate]);
 
 
   return (
     <Container style={{ maxHeight: "80vh", overflowY: "scroll" }}>
       <h1>Available Tables</h1>
-      {/* <Button onClick={() => dispatch(requestGames())}>Load Games</Button> */}
 
       <Table striped bordered hover>
         <thead>
@@ -49,9 +44,7 @@ const Tables = () => {
               <td>{game.gameType}</td>
               <td>${game.blinds}</td>
               <td>{game.seats.filter((seat) => seat.player !== null).length}  / {game.seats.length} </td>
-              <td>
-                <Button onClick={() => navigate(`/Room/${game._id}`)}>View</Button>
-              </td>
+              <td><Link to={`/room/${game._id}`}>View</Link></td>       
             </tr>
           ))}
         </tbody>

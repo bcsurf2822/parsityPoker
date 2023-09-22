@@ -1,5 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-import logger from "redux-logger";
 
 import authenticationReducer from "./slices/authenticationSlice";
 import registrationReducer from "./slices/registrationSlice";
@@ -9,7 +8,9 @@ import serverReducer from "./slices/serverSlice";
 import chatReducer from "./slices/chatSlice";
 import deckOfCardsReducer from "./slices/deckOfCardsSlice";
 import timingReducer from "./slices/timingSlice";
-import socketReducer from "./slices/socketSlice";
+// import socketReducer from "./slices/socketSlice";
+import currentGameReducer from "./slices/currentGameSlice";
+import allGamesReducer from "./slices/allGamesSlice";
 import { socketMiddleware } from "./middleware/socketMiddleware";
 
 const store = configureStore({
@@ -22,7 +23,9 @@ const store = configureStore({
     chat: chatReducer,
     cards: deckOfCardsReducer,
     timing: timingReducer,
-    socket: socketReducer,
+    // socket: socketReducer,
+    currentGame: currentGameReducer,
+    allGames: allGamesReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(socketMiddleware),

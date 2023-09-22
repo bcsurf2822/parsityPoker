@@ -1,17 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-input-slider";
-// import {s
-  // joinGame,
-//   chipsToPot,
-//   fold,
-//   check,
-// } from "../../rtk/slices/serverSlice";
 
 import {
   startPlayerBet,
   startPlayerCheck,
   startPlayerFold,
-} from "../../rtk/slices/socketSlice";
+} from "../../rtk/slices/currentGameSlice";
+
+import { startJoinGame } from "../../rtk/slices/allGamesSlice";
 
 import DeactivatedBet from "./DeactivatedBet";
 import IconButton from "@mui/material/IconButton";
@@ -28,7 +24,6 @@ import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import Modal from "@mui/material/Modal";
 import { useEffect, useState } from "react";
 import BetBox from "./BetBox";
-import { startJoinGame } from "../../rtk/slices/socketSlice";
 
 const style = {
   position: "absolute",

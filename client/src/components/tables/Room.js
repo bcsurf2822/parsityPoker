@@ -7,14 +7,18 @@ import { getWinner } from "../../rtk/slices/serverSlice";
 
 import {
   startDealCards,
-  startLeaveGame,
+
   startUpdatePositionsAndBlinds,
   startEndGame,
   startUpdateCurrentPlayer,
   startDealFlop,
   startDealTurn,
   startDealRiver,
-} from "../../rtk/slices/socketSlice";
+} from "../../rtk/slices/currentGameSlice";
+
+import {
+  startLeaveGame,
+} from "../../rtk/slices/allGamesSlice";
 
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 

@@ -1,10 +1,12 @@
 import {
-  receiveGames,
-  receiveGamesError,
-  requestGames,
-  playerLeftGame,
-  leaveGameError,
-  startLeaveGame,
+  // receiveGames,
+  // receiveGamesError,
+  // requestGames,
+  receiveGame,
+  requestGame,
+  // playerLeftGame,
+  // leaveGameError,
+  // startLeaveGame,
   updatePositionsAndBlindsSuccess,
   updatePositionsAndBlindsError,
   startUpdatePositionsAndBlinds,
@@ -12,9 +14,6 @@ import {
   updateCurrentPlayerError,
   endGameSuccess,
   endGameError,
-  playerJoinedGame,
-  joinGameError,
-  startJoinGame,
   startDealCards,
   dealCardsSuccess,
   dealCardsError,
@@ -38,13 +37,30 @@ import {
   startPlayerFold,
   playerFoldSuccess,
   playerFoldError,
-} from "../slices/socketSlice";
+} from "../slices/currentGameSlice";
+
+import {
+  receiveGames,
+  receiveGamesError,
+  requestGames,
+  startJoinGame,
+  joinGameError,
+  playerJoinedGame,
+  startLeaveGame,
+  playerLeftGame,
+  leaveGameError,
+} from "../slices/allGamesSlice";
 import { io } from "socket.io-client";
 const socket = io("http://localhost:4000");
 
 const socketMiddleware = (store) => {
   socket.on("gamesData", (data) => {
     store.dispatch(receiveGames(data));
+  });
+
+  socket.on("gameData", (data) => {
+    // Dispatch appropriate action. Here I'm assuming `receiveGame` is the action you'd use.
+    store.dispatch(receiveGame(data));
   });
 
   socket.on("gamesError", (errorMsg) => {
@@ -55,7 +71,6 @@ const socketMiddleware = (store) => {
     console.log("Received playerJoin event with data:", data);
     store.dispatch(playerJoinedGame(data));
   });
-
 
   socket.on("joinGameError", (error) => {
     store.dispatch(joinGameError(error.message));
@@ -157,6 +172,12 @@ const socketMiddleware = (store) => {
     switch (action.type) {
       case requestGames.toString():
         socket.emit("getGames");
+        break;
+
+      case requestGame.toString():
+        const { gameId: rGameId } = action.payload;
+        console.log("Emitting getGame event with gameId:", rGameId);
+        socket.emit("getGame", rGameId);
         break;
 
       case startJoinGame.toString():
