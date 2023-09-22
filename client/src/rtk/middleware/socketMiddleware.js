@@ -1,12 +1,6 @@
 import {
-  // receiveGames,
-  // receiveGamesError,
-  // requestGames,
   receiveGame,
   requestGame,
-  // playerLeftGame,
-  // leaveGameError,
-  // startLeaveGame,
   updatePositionsAndBlindsSuccess,
   updatePositionsAndBlindsError,
   startUpdatePositionsAndBlinds,
@@ -59,7 +53,6 @@ const socketMiddleware = (store) => {
   });
 
   socket.on("gameData", (data) => {
-    // Dispatch appropriate action. Here I'm assuming `receiveGame` is the action you'd use.
     store.dispatch(receiveGame(data));
   });
 
@@ -175,7 +168,7 @@ const socketMiddleware = (store) => {
         break;
 
       case requestGame.toString():
-        const { gameId: rGameId } = action.payload;
+        const rGameId = action.payload;
         console.log("Emitting getGame event with gameId:", rGameId);
         socket.emit("getGame", rGameId);
         break;

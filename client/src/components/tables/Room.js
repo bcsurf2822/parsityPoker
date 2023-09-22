@@ -6,8 +6,8 @@ import { useParams } from "react-router-dom";
 import { getWinner } from "../../rtk/slices/serverSlice";
 
 import {
+  requestGame,
   startDealCards,
-
   startUpdatePositionsAndBlinds,
   startEndGame,
   startUpdateCurrentPlayer,
@@ -30,8 +30,13 @@ import Seat from "./Seats";
 const Room = () => {
   console.log("===============Room component rendered================");
   const { id } = useParams();
+  console.log("Game ID:", id)
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(requestGame(id));
+  }, [dispatch, id]);
 
   const user = useSelector((state) => state.auth.user);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -40,9 +45,8 @@ const Room = () => {
   const [winnerData, setWinnerData] = useState(null);
   const previousSeatCountRef = useRef(previousSeatCount);
 
-  const games = useSelector((state) => state.socket.data);
+  const currentGame = useSelector((state) => state.currentGame.currentGame);
 
-  const currentGame = games.find((game) => game._id === id);
   console.log("Current Game:", currentGame);
 
   const playersWithHandCards =
