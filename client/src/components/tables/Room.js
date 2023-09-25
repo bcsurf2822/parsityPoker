@@ -3,8 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getWinner } from "../../rtk/slices/serverSlice";
-
 import {
   startLeaveGame,
   requestGame,
@@ -16,7 +14,6 @@ import {
   startDealRiver,
 } from "../../rtk/slices/currentGameSlice";
 
-
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 import Chatbox from "./Chatbox";
@@ -27,7 +24,7 @@ import Seat from "./Seats";
 const Room = () => {
   console.log("===============Room component rendered================");
   const { id } = useParams();
-  console.log("Game ID:", id)
+  console.log("Game ID:", id);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -35,16 +32,16 @@ const Room = () => {
     dispatch(requestGame(id));
   }, [dispatch, id]);
 
+  const currentGame = useSelector((state) => state.currentGame.currentGame);
+  console.log("Current Game:", currentGame);
+
   const user = useSelector((state) => state.auth.user);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const [previousSeatCount, setPreviousSeatCount] = useState(0);
-  const [winnerData, setWinnerData] = useState(null);
-  const previousSeatCountRef = useRef(previousSeatCount);
 
-  const currentGame = useSelector((state) => state.currentGame.currentGame);
-
-  console.log("Current Game:", currentGame);
+  const seatArray = currentGame ? currentGame.seats : [];
+  console.log("Seat Array:", seatArray);
 
   const playersWithHandCards =
     currentGame && currentGame.seats
@@ -57,22 +54,11 @@ const Room = () => {
       : [];
   console.log("PLayers with cards---------------", playersWithHandCards);
 
-  const seatArray = currentGame ? currentGame.seats : [];
-  console.log("Seat Array:", seatArray);
   //How many players are at the table?
-  const occupiedSeatCount = seatArray.filter(seat => seat.player !== null).length;
+  const occupiedSeatCount = seatArray.filter(
+    (seat) => seat.player !== null
+  ).length;
   console.log("Occupied Seat Count:", occupiedSeatCount);
-
-
-  useEffect(() => {
-    if (
-      currentGame &&
-      (!currentGame.currentDeck || currentGame.currentDeck.length === 0)
-    ) {
-      console.log("Deck is empty. Fetching a new one...");
-      dispatch(fetchNewDeck(id));
-    }
-  }, [currentGame, dispatch, id]);
 
   const handleLeaveGame = (userId, gameId) => {
     console.log("Dispatching startLeaveGame with params:", userId, gameId);
@@ -81,11 +67,6 @@ const Room = () => {
 
   const closeTable = () => {
     navigate("/Tables");
-  };
-
-  const handleCurrentPlayer = (gameId) => {
-    console.log("Dispatching Current Player with params:", gameId);
-    dispatch(startUpdateCurrentPlayer({ gameId: gameId }));
   };
 
   const handlePositionsAndBlinds = (gameId) => {
@@ -115,68 +96,67 @@ const Room = () => {
 
   const handleGetWinner = () => {
     console.log("get Winner called");
-    dispatch(getWinner(id));
   };
 
   //For Use When 2nd Player Joins Table
   useEffect(() => {
-    if (occupiedSeatCount > previousSeatCount && occupiedSeatCount === 2 && currentGame.gameEnd) {
+    if (
+      occupiedSeatCount > previousSeatCount &&
+      occupiedSeatCount === 2 &&
+      currentGame.gameEnd
+    ) {
       console.log("2nd player has joined the table!");
       handlePositionsAndBlinds(id);
     }
     setPreviousSeatCount(occupiedSeatCount);
-}, [seatArray, currentGame]);
+  }, [seatArray, currentGame]);
 
-//For when Only 1 player Remains EndGame Will be triggered
-useEffect(() => {
-  if (occupiedSeatCount === 1) {
-    console.log("Only one player left at the table. Ending game...");
-    handleEndGame(id);
-  }
-}, [occupiedSeatCount, id]);
+  //For when Only 1 player Remains EndGame Will be triggered
+  useEffect(() => {
+    if (occupiedSeatCount === 1) {
+      console.log("Only one player left at the table. Ending game...");
+      handleEndGame(id);
+    }
+  }, [occupiedSeatCount, id]);
 
-
-
+  //FLOP RULES
   useEffect(() => {
     if (
       currentGame &&
       currentGame.stage === "flop" &&
       currentGame.communityCards.length === 0 &&
-      playersWithHandCards.length > 1 && currentGame.gameRunning
+      playersWithHandCards.length > 1 &&
+      currentGame.gameRunning
     ) {
       handleDealFlop(id);
     }
   }, [currentGame]);
 
+  //TURN RULES
   useEffect(() => {
     if (
       currentGame &&
       currentGame.stage === "turn" &&
       currentGame.communityCards.length === 3 &&
-      playersWithHandCards.length > 1 && currentGame.gameRunning
+      playersWithHandCards.length > 1 &&
+      currentGame.gameRunning
     ) {
       handleDealTurn(id);
     }
   }, [currentGame]);
 
+  //RIVER RULES
   useEffect(() => {
     if (
       currentGame &&
       currentGame.stage === "river" &&
       currentGame.communityCards.length === 4 &&
-      playersWithHandCards.length > 1 && currentGame.gameRunning
+      playersWithHandCards.length > 1 &&
+      currentGame.gameRunning
     ) {
       handleDealRiver(id);
     }
   }, [currentGame]);
-
-  // useEffect(() => {
-  //   if (currentGame && currentGame.winnerData) {
-  //     setWinnerData(currentGame.winnerData);
-
-  //     console.log("Winner is:", currentGame.winnerData);
-  //   }
-  // }, [currentGame]);
 
   if (!currentGame) {
     return null;
@@ -186,13 +166,7 @@ useEffect(() => {
     <Container fluid className="h-100 bg">
       <Row className="mt-2">
         <Col className="d-flex justify-content-center">
-          <div className="table">
-            {winnerData && (
-              <div className="winner-info">
-                Winner is: {winnerData.name} with {currentGame.pot} points.
-              </div>
-            )}
-          </div>
+          <div className="table">{currentGame.name}</div>
           <Button
             variant="warning"
             onClick={() => {
@@ -206,46 +180,6 @@ useEffect(() => {
       <Row className="mt-2">
         <Row className="mt-2">
           <Col className="d-flex justify-content-center">
-            <Button
-              variant="success"
-              onClick={() => {
-                handleCurrentPlayer(id);
-              }}
-            >
-              Current Player
-            </Button>
-            <Button
-              variant="success"
-              onClick={() => {
-                handlePositionsAndBlinds(id);
-              }}
-            >
-              Dealer
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => {
-                handleDealFlop(id);
-              }}
-            >
-              Deal Flop
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => {
-                handleDealTurn(id);
-              }}
-            >
-              Deal Turn
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => {
-                handleDealRiver(id);
-              }}
-            >
-              Deal River
-            </Button>
             <Button
               variant="danger"
               onClick={() => {

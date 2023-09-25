@@ -96,7 +96,6 @@ const currentGameSlice = createSlice({
 
     startEndGame: (state, action) => {
       console.log("startEndGame called with payload:", action.payload);
-      // Any loading or initial state modifications can go here
     },
 
     endGameSuccess: (state, action) => {
