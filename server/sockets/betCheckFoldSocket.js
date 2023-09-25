@@ -141,7 +141,7 @@ function playerToPotSocket(socket, io) {
       io.emit("player_acted", game);
     } catch (error) {
       console.error(error);
-      socket.emit("playerToPotError", { error: "Failed to place bet" });
+      socket.emit("playerBetError", { error: "Failed to place bet" });
     }
   });
 }
@@ -149,15 +149,17 @@ function playerToPotSocket(socket, io) {
 function checkSocket(socket, io) {
   socket.on("check", async (data) => {
     const { gameId, seatId } = data;
-
+    console.log("Received check event on server with data:", data);
     try {
       const game = await Game.findById(gameId);
+      console.log("Retrieved game from DB:", game._id);
 
       if (!game) {
         return socket.emit("error", { message: "Game not found!" });
       }
 
       const seat = game.seats.find((s) => s._id.toString() === seatId);
+      console.log("Retrieved seat:", seat._id);
 
       if (!seat) {
         return socket.emit("error", { message: "Seat not found!" });
@@ -166,12 +168,18 @@ function checkSocket(socket, io) {
       if (!seat.player) {
         return socket.emit("error", { message: "No Player At Seat" });
       }
-
+      console.log("Before setting checkBetFold");
       seat.player.checkBetFold = true;
+      console.log("After setting checkBetFold");
+      
 
+      console.log("Attempting to save game");
       await game.save();
+      console.log("Game saved successfully");
 
+      console.log("Checking if players have acted");
       if (playersHaveActed(game)) {
+        console.log("Players have acted");
         if (game.stage !== "showdown") {
           if (playersWithCards(game) > 2) {
             game.stage = "showdown";
@@ -194,14 +202,15 @@ function checkSocket(socket, io) {
           if (game.stage !== "showdown") {
             resetCheckBetFold(game);
           }
+          console.log("Attempting to save game after resetting");
           await game.save();
+          console.log("Game saved successfully after resetting");
         }
       }
 
-      game.currentPlayerTurn = findNextPosition(
-        game.currentPlayerTurn,
-        game.seats
-      );
+      console.log("Finding next position");
+      game.currentPlayerTurn = findNextPosition(game.currentPlayerTurn, game.seats);
+      console.log("Found next position:", game.currentPlayerTurn);
 
       while (
         !game.seats[game.currentPlayerTurn].player ||
@@ -215,9 +224,14 @@ function checkSocket(socket, io) {
 
       await game.save();
 
+
+      console.log("Emitting next_current_player with game:", game);
       io.emit("next_current_player", game);
 
+      console.log("About to emit player_checked with game:", game);
       io.emit("player_checked", game);
+      console.log("Emitted player_checked with game:", game);
+
     } catch (error) {
       console.error(error);
       socket.emit("checkError", { error: "Failed to handle the check" });

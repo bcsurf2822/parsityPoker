@@ -25,6 +25,11 @@ function positionsAndBlindsSocket(socket, io) {
         return;
       }
 
+      if (!game.gameEnd) {
+        console.log(`Game ${gameId} has not ended yet. Skipping logic.`);
+        return;
+      }
+
       console.log(`Starting updatePostionsAndBlinds for game ${gameId}`);
 
       game.dealerPosition = findNextPosition(game.dealerPosition, game.seats);
@@ -132,7 +137,8 @@ function endGameSocket(socket, io) {
       game.winnerData = [];
       game.pot = 0;
       game.stage = "preflop";
-      game.gameEnd = false;
+      game.gameEnd = true;
+      game.gameRunning = false;
 
       game.seats.forEach((seat) => {
         if (seat.player) {
