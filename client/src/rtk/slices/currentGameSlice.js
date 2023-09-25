@@ -108,17 +108,7 @@ const currentGameSlice = createSlice({
       console.log("endGameError called with error:", action.payload);
       state.error = action.payload;
     },
-    startDealCards: (state, action) => {
-      console.log("startDealCards called with payload:", action.payload);
-    },
-    dealCardsSuccess: (state, action) => {
-      console.log("cardsDealtSuccess called with payload:", action.payload);
-      updateGameState(state, action);
-    },
-    dealCardsError: (state, action) => {
-      console.log("dealCardsError called with error:", action.payload);
-      state.error = action.payload;
-    },
+
     startDealFlop: (state, action) => {
       console.log("startDealFlop called with payload:", action.payload);
     },
@@ -214,9 +204,6 @@ export const {
   startEndGame,
   endGameSuccess,
   endGameError,
-  startDealCards,
-  dealCardsSuccess,
-  dealCardsError,
   startDealFlop,
   dealFlopSuccess,
   dealFlopError,

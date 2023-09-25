@@ -14,9 +14,6 @@ import {
   updateCurrentPlayerError,
   endGameSuccess,
   endGameError,
-  startDealCards,
-  dealCardsSuccess,
-  dealCardsError,
   startDealFlop,
   dealFlopSuccess,
   dealFlopError,
@@ -103,14 +100,6 @@ const socketMiddleware = (store) => {
 
   socket.on("endGameError", (error) => {
     store.dispatch(endGameError(error));
-  });
-
-  socket.on("cards_dealt", (data) => {
-    store.dispatch(dealCardsSuccess(data));
-  });
-
-  socket.on("dealCardsError", (error) => {
-    store.dispatch(dealCardsError(error));
   });
 
   socket.on("flop_dealt", (data) => {
@@ -219,11 +208,6 @@ const socketMiddleware = (store) => {
       case startEndGame.toString():
         const { gameId: eGameId } = action.payload;
         socket.emit("end_game", { gameId: eGameId });
-        break;
-
-      case startDealCards.toString():
-        const { gameId: dGameId } = action.payload;
-        socket.emit("deal_cards", { gameId: dGameId });
         break;
 
       case startDealFlop.toString():

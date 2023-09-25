@@ -8,7 +8,6 @@ import { getWinner } from "../../rtk/slices/serverSlice";
 import {
   startLeaveGame,
   requestGame,
-  startDealCards,
   startUpdatePositionsAndBlinds,
   startEndGame,
   startUpdateCurrentPlayer,
@@ -97,11 +96,6 @@ const Room = () => {
   const handleEndGame = (gameId) => {
     console.log("Dispatching endGame with params:", gameId);
     dispatch(startEndGame({ gameId: gameId }));
-  };
-
-  const handleDealCards = (gameId) => {
-    console.log("Dispatching dealCards with params:", gameId);
-    dispatch(startDealCards({ gameId: gameId }));
   };
 
   const handleDealFlop = (gameId) => {
@@ -227,14 +221,6 @@ useEffect(() => {
               }}
             >
               Dealer
-            </Button>
-            <Button
-              variant="success"
-              onClick={() => {
-                handleDealCards(id);
-              }}
-            >
-              Deal Cards
             </Button>
             <Button
               variant="primary"
