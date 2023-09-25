@@ -25,6 +25,28 @@ const currentGameSlice = createSlice({
       console.log("receiveGameError called with error:", action.payload);
       state.error = action.payload;
     },
+    startJoinGame: (state, action) => {
+      console.log("joinGame called with payload:", action.payload);
+    },
+    joinGameSuccess: (state, action) => {
+      console.log("joinGameSuccess called with payload:", action.payload);
+      updateGameState(state, action);
+    },
+    joinGameError: (state, action) => {
+      console.log("joinGameError called with error:", action.payload);
+      state.error = action.payload;
+    },
+    startLeaveGame: (state) => {
+      console.log("startLeaveGame called");
+    },
+    leaveGameSuccess: (state, action) => {
+      console.log("leaveGameSuccess called with payload:", action.payload);
+      updateGameState(state, action);
+    },
+    leaveGameError: (state, action) => {
+      console.log("leaveGameError called with error:", action.payload);
+      state.error = action.payload;
+    },
     startUpdatePositionsAndBlinds: (state, action) => {
       console.log(
         "startUpdatePositionsAndBlinds called with payload:",
@@ -177,6 +199,12 @@ export const {
   requestGame,
   receiveGame,
   receiveGameError,
+  startJoinGame,
+  joinGameSuccess,
+  joinGameError,
+  startLeaveGame,
+  leaveGameSuccess,
+  leaveGameError,
   startUpdatePositionsAndBlinds,
   updatePositionsAndBlindsSuccess,
   updatePositionsAndBlindsError,

@@ -1,6 +1,12 @@
 import {
   receiveGame,
   requestGame,
+  startJoinGame,
+  joinGameSuccess,
+  joinGameError,
+  startLeaveGame,
+  leaveGameError,
+  leaveGameSuccess,
   updatePositionsAndBlindsSuccess,
   updatePositionsAndBlindsError,
   startUpdatePositionsAndBlinds,
@@ -34,15 +40,10 @@ import {
 } from "../slices/currentGameSlice";
 
 import {
+  playerUpdate,
   receiveGames,
   receiveGamesError,
   requestGames,
-  startJoinGame,
-  joinGameError,
-  playerJoinedGame,
-  startLeaveGame,
-  playerLeftGame,
-  leaveGameError,
 } from "../slices/allGamesSlice";
 import { io } from "socket.io-client";
 const socket = io("http://localhost:4000");
@@ -62,7 +63,8 @@ const socketMiddleware = (store) => {
 
   socket.on("playerJoin", (data) => {
     console.log("Received playerJoin event with data:", data);
-    store.dispatch(playerJoinedGame(data));
+    store.dispatch(joinGameSuccess(data));
+    store.dispatch(playerUpdate(data))
   });
 
   socket.on("joinGameError", (error) => {
@@ -71,7 +73,8 @@ const socketMiddleware = (store) => {
 
   socket.on("playerLeft", (data) => {
     console.log("Received playerLeft event with data:", data);
-    store.dispatch(playerLeftGame(data));
+    store.dispatch(leaveGameSuccess(data));
+    store.dispatch(playerUpdate(data))
   });
 
   socket.on("leaveGameError", (error) => {

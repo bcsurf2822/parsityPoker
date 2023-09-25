@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { getWinner } from "../../rtk/slices/serverSlice";
 
 import {
+  startLeaveGame,
   requestGame,
   startDealCards,
   startUpdatePositionsAndBlinds,
@@ -16,9 +17,6 @@ import {
   startDealRiver,
 } from "../../rtk/slices/currentGameSlice";
 
-import {
-  startLeaveGame,
-} from "../../rtk/slices/allGamesSlice";
 
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 

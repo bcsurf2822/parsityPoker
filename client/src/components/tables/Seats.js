@@ -5,9 +5,8 @@ import {
   startPlayerBet,
   startPlayerCheck,
   startPlayerFold,
+  startJoinGame,
 } from "../../rtk/slices/currentGameSlice";
-
-import { startJoinGame } from "../../rtk/slices/allGamesSlice";
 
 import DeactivatedBet from "./DeactivatedBet";
 import IconButton from "@mui/material/IconButton";
