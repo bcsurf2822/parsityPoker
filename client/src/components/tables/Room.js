@@ -8,21 +8,19 @@ import {
   requestGame,
   startUpdatePositionsAndBlinds,
   startEndGame,
-  startUpdateCurrentPlayer,
   startDealFlop,
   startDealTurn,
   startDealRiver,
 } from "../../rtk/slices/currentGameSlice";
 
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-
 import Chatbox from "./Chatbox";
-
-import { fetchNewDeck } from "../../rtk/slices/deckOfCardsSlice";
 import Seat from "./Seats";
 
 const Room = () => {
   console.log("===============Room component rendered================");
+  const formatBalance = (balance) => balance.toFixed(2);
+
   const { id } = useParams();
   console.log("Game ID:", id);
   const dispatch = useDispatch();
@@ -213,7 +211,7 @@ const Room = () => {
         <Col className="d-flex justify-content-center flex-column align-items-center">
           <div className="pot">
             <AttachMoneyIcon />
-            {parseFloat(currentGame.pot).toFixed(2)}
+            {formatBalance(currentGame.pot)}
           </div>
           {currentGame.communityCards &&
             currentGame.communityCards.length > 0 && (

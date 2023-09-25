@@ -21,7 +21,7 @@ import Typography from "@mui/material/Typography";
 import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 
 import Modal from "@mui/material/Modal";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import BetBox from "./BetBox";
 
 const style = {
@@ -38,6 +38,8 @@ const style = {
 
 const Seat = ({ seat, currentGame }) => {
   const user = useSelector((state) => state.auth.user);
+
+  const formatBalance = (balance) => balance.toFixed(2);
 
   const dispatch = useDispatch();
 
@@ -137,7 +139,7 @@ const Seat = ({ seat, currentGame }) => {
                     </Grid>
                     <Grid item>
                       <Typography gutterBottom variant="h6" component="div">
-                        $ {parseFloat(seat.player.chips).toFixed(2)}
+                      {formatBalance(seat.player.chips)}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -147,7 +149,7 @@ const Seat = ({ seat, currentGame }) => {
                   <Stack direction="row" spacing={1}>
                     {isCurrentPlayer ? (
                       <BetBox
-                        playerChips={parseFloat(seat.player.chips).toFixed(2)}
+                        playerChips={formatBalance(seat.player.chips)}
                         onBetChange={(betValue) =>
                           handleSliderBet(tableId, seat._id, betValue)
                         }

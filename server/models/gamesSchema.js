@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
+function toDecimal(value) {
+  return parseFloat(value.toFixed(2));
+}
+
 const CardSchema = new Schema({
   value: String,
   suit: String,
@@ -15,12 +19,12 @@ const PlayerSchema = new Schema({
     required: true,
   },
   username: String,
-  chips: { type: Number, required: true },
+  chips: { type: Number, required: true, set: toDecimal },
   handCards: {
     type: [String],
     default: [],
   },
-  bet: { type: Number, required: true },
+  bet: { type: Number, required: true, set: toDecimal },
   checkBetFold: {
     type: Boolean,
     default: false,
@@ -64,7 +68,11 @@ const GameSchema = new Schema({
     type: Number,
     default: 0,
   },
-  pot: Number,
+  pot: {
+    type: Number,
+    default: 0,
+    set: toDecimal,
+  },
   timestamp: {
     type: Date,
     default: Date.now,

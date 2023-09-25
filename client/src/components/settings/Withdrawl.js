@@ -8,16 +8,15 @@ const Withdrawl = () => {
   const [amount, setAmount] = useState("");
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-
   const navigate = useNavigate();
 
   const handleWithdraw = async (e) => {
     e.preventDefault();
     if (amount !== "") {
       dispatch(withdraw({ userId: user.id, amount: Number(amount) }));
+      setAmount("");
+      navigate("/profile");
     }
-    setAmount("");
-    navigate("/profile");
   };
 
   return (
@@ -37,9 +36,9 @@ const Withdrawl = () => {
               onChange={(e) => setAmount(e.target.value)}
             />
           </Form.Group>
-          <Button variant="primary" type="submit">
-            Withdraw
-          </Button>
+            <Button variant="primary" type="submit">
+              Withdraw
+            </Button>
         </Form>
         <div className="mt-4">
           <h6>Additional Information:</h6>

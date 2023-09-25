@@ -12,6 +12,8 @@ const Profile = () => {
   const [newUsername, setNewUsername] = useState("");
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const formatDate = new Date(user.lastLogin).toLocaleString();
+  const formatBalance = (balance) => balance.toFixed(2);
+
 
   const navigate = useNavigate();
 
@@ -78,8 +80,8 @@ const Profile = () => {
               <strong>Email:</strong> {user.email}
             </Card.Text>
             <Card.Text className="border-bottom pb-3">
-              <strong>Account Balance:</strong> <TfiMoney />{" "}
-              {parseFloat(user.accountBalance).toFixed(2)}
+            <strong>Account Balance:</strong> <TfiMoney />{" "}{formatBalance(user.accountBalance)}
+
               <Button
                 onClick={toDeposit}
                 variant="outline-primary"
@@ -90,8 +92,7 @@ const Profile = () => {
               </Button>
             </Card.Text>
             <Card.Text className="border-bottom pb-3">
-              <strong>Bank Balance:</strong> <TfiMoney />{parseFloat(user.bankBalance).toFixed(2)}
-
+              <strong>Bank Balance:</strong> <TfiMoney />{formatBalance(user.bankBalance)}
               <Button
                 onClick={toWithdraw}
                 variant="outline-primary"

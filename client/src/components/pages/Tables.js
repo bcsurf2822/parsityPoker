@@ -1,6 +1,6 @@
-import React, {  useCallback, useEffect, useState } from "react";
+import React, {   useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Table, Button, Container } from "react-bootstrap";
+import { Table, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { requestGames } from "../../rtk/slices/allGamesSlice";
 
@@ -15,12 +15,6 @@ const Tables = () => {
     dispatch(requestGames());
 }, [dispatch]);
 
-
-//   const navigate = useNavigate();
-
-//   const toRoom = useCallback((id) => {
-//     navigate(`/Room/${id}`);
-// }, [navigate]);
 
 
   return (
