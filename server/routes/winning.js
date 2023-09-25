@@ -119,7 +119,7 @@ router.get("/games/:gameId/potToPlayer", async (req, res) => {
           seatId: remainingSeat._id,
         },
       ],
-      reason: "Last remaining player awarded the pot", // Additional context
+      reason: "Last remaining player awarded the pot",
     };
 
     game.pot = 0;
