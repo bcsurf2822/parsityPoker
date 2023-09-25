@@ -137,38 +137,38 @@ useEffect(() => {
 
 
 
-  // useEffect(() => {
-  //   if (
-  //     currentGame &&
-  //     currentGame.stage === "flop" &&
-  //     currentGame.communityCards.length === 0 &&
-  //     playersWithHandCards.length > 1
-  //   ) {
-  //     handleDealFlop();
-  //   }
-  // }, [currentGame]);
+  useEffect(() => {
+    if (
+      currentGame &&
+      currentGame.stage === "flop" &&
+      currentGame.communityCards.length === 0 &&
+      playersWithHandCards.length > 1 && currentGame.gameRunning
+    ) {
+      handleDealFlop(id);
+    }
+  }, [currentGame]);
 
-  // useEffect(() => {
-  //   if (
-  //     currentGame &&
-  //     currentGame.stage === "turn" &&
-  //     currentGame.communityCards.length === 3 &&
-  //     playersWithHandCards.length > 1
-  //   ) {
-  //     handleDealTurn();
-  //   }
-  // }, [currentGame]);
+  useEffect(() => {
+    if (
+      currentGame &&
+      currentGame.stage === "turn" &&
+      currentGame.communityCards.length === 3 &&
+      playersWithHandCards.length > 1 && currentGame.gameRunning
+    ) {
+      handleDealTurn(id);
+    }
+  }, [currentGame]);
 
-  // useEffect(() => {
-  //   if (
-  //     currentGame &&
-  //     currentGame.stage === "river" &&
-  //     currentGame.communityCards.length === 4 &&
-  //     playersWithHandCards.length > 1
-  //   ) {
-  //     handleDealRiver();
-  //   }
-  // }, [currentGame]);
+  useEffect(() => {
+    if (
+      currentGame &&
+      currentGame.stage === "river" &&
+      currentGame.communityCards.length === 4 &&
+      playersWithHandCards.length > 1 && currentGame.gameRunning
+    ) {
+      handleDealRiver(id);
+    }
+  }, [currentGame]);
 
   // useEffect(() => {
   //   if (currentGame && currentGame.winnerData) {
