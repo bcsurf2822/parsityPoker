@@ -125,12 +125,12 @@ const Room = () => {
   };
 
   useEffect(() => {
-    if (occupiedSeatCount > previousSeatCount && occupiedSeatCount === 2) {
+    if (occupiedSeatCount > previousSeatCount && occupiedSeatCount === 2 && currentGame.gameEnd) {
       console.log("2nd player has joined the table!");
       handlePositionsAndBlinds(id);
     }
     setPreviousSeatCount(occupiedSeatCount);
-}, [seatArray]);
+}, [seatArray, currentGame]);
 
 
   // useEffect(() => {

@@ -14,7 +14,7 @@ const PlayerSchema = new Schema({
     ref: "User",
     required: true,
   },
-  username: String, 
+  username: String,
   chips: { type: Number, required: true },
   handCards: {
     type: [String],
@@ -24,7 +24,7 @@ const PlayerSchema = new Schema({
   checkBetFold: {
     type: Boolean,
     default: false,
-  }
+  },
 });
 
 const SeatSchema = new Schema({
@@ -83,7 +83,7 @@ const GameSchema = new Schema({
   },
   currentPlayerTurn: {
     type: Number,
-    default: -1,  
+    default: -1,
   },
   gameRunning: {
     type: Boolean,
@@ -91,12 +91,16 @@ const GameSchema = new Schema({
   },
   stage: {
     type: String,
-    enum: ['preflop',  'flop', 'turn', 'river', 'showdown'],
-    default: 'preflop',
-},
-  gameEnd: {
+    enum: ["preflop", "flop", "turn", "river", "showdown"],
+    default: "preflop",
+  },
+  gameRunning: {
     type: Boolean,
     default: false,
+  },
+  gameEnd: {
+    type: Boolean,
+    default: true,
   },
   currentDeck: {
     type: [CardSchema],
@@ -111,14 +115,13 @@ const GameSchema = new Schema({
     default: [],
   },
   winnerData: {
-    type: Schema.Types.Mixed, 
+    type: Schema.Types.Mixed,
     default: {},
-},
+  },
   seats: {
     type: [SeatSchema],
     default: Array.from({ length: 6 }, (_, i) => ({ id: i + 1, player: null })),
   },
-
 });
 
 const Game = mongoose.model("Game", GameSchema);

@@ -2,7 +2,7 @@ const Game = require("../models/gamesSchema");
 const axios = require("axios");
 
 function cardCode(code) {
-  return code.replace('0', '10');
+  return code.replace("0", "10");
 }
 
 const findNextPosition = (startPosition, seats) => {
@@ -61,6 +61,9 @@ function positionsAndBlindsSocket(socket, io) {
         game.pot += bigBlindAmount;
       }
 
+      game.gameRunning = true;
+      game.gameEnd = false;
+
       await game.save();
 
       console.log(`Updated positions and blinds for game ${gameId}. 
@@ -78,7 +81,7 @@ function positionsAndBlindsSocket(socket, io) {
       socket.emit("error", error.message);
     }
   });
-};
+}
 
 function updateCurrentPlayerSocket(socket, io) {
   socket.on("updateCurrentPlayer", async ({ gameId }) => {
@@ -93,20 +96,24 @@ function updateCurrentPlayerSocket(socket, io) {
 
       console.log(`Updating current player for game ${gameId}`);
 
-      game.currentPlayerTurn = findNextPosition(game.currentPlayerTurn, game.seats);
+      game.currentPlayerTurn = findNextPosition(
+        game.currentPlayerTurn,
+        game.seats
+      );
 
       await game.save();
 
-      console.log(`Updated current player position for game ${gameId}. Current Turn: ${game.currentPlayerTurn}`);
+      console.log(
+        `Updated current player position for game ${gameId}. Current Turn: ${game.currentPlayerTurn}`
+      );
 
       io.emit("next_current_player", game);
-
     } catch (error) {
       console.error(`Error updating current player for game ${gameId}:`, error);
       socket.emit("error", error.message);
     }
   });
-};
+}
 
 function endGameSocket(socket, io) {
   socket.on("end_game", async ({ gameId }) => {
@@ -126,22 +133,24 @@ function endGameSocket(socket, io) {
       game.pot = 0;
       game.stage = "preflop";
       game.gameEnd = false;
-  
+
       game.seats.forEach((seat) => {
         if (seat.player) {
           seat.player.handCards = [];
-          seat.player.checkBetFold = false; 
+          seat.player.checkBetFold = false;
         }
       });
-  
-      const response = await axios.get("https://www.deckofcardsapi.com/api/deck/new/draw/?count=52");
-  
+
+      const response = await axios.get(
+        "https://www.deckofcardsapi.com/api/deck/new/draw/?count=52"
+      );
+
       const currentGameCards = response.data.cards.map((card) => ({
         value: card.value,
         suit: card.suit,
-        code: cardCode(card.code)
+        code: cardCode(card.code),
       }));
-  
+
       game.currentDeck = currentGameCards;
 
       await game.save();
@@ -153,10 +162,10 @@ function endGameSocket(socket, io) {
       socket.emit("error", "Failed to end the game");
     }
   });
-};
+}
 
 module.exports = {
   positionsAndBlindsSocket,
   updateCurrentPlayerSocket,
-  endGameSocket
+  endGameSocket,
 };
