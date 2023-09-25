@@ -124,6 +124,7 @@ const Room = () => {
     dispatch(getWinner(id));
   };
 
+  //For Use When 2nd Player Joins Table
   useEffect(() => {
     if (occupiedSeatCount > previousSeatCount && occupiedSeatCount === 2 && currentGame.gameEnd) {
       console.log("2nd player has joined the table!");
@@ -131,6 +132,15 @@ const Room = () => {
     }
     setPreviousSeatCount(occupiedSeatCount);
 }, [seatArray, currentGame]);
+
+//For when Only 1 player Remains EndGame Will be triggered
+useEffect(() => {
+  if (occupiedSeatCount === 1) {
+    console.log("Only one player left at the table. Ending game...");
+    handleEndGame(id);
+  }
+}, [occupiedSeatCount, id]);
+
 
 
   // useEffect(() => {
