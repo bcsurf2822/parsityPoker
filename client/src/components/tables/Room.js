@@ -11,6 +11,7 @@ import {
   startDealFlop,
   startDealTurn,
   startDealRiver,
+  startPotToPlayer,
 } from "../../rtk/slices/currentGameSlice";
 
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
@@ -155,6 +156,18 @@ const Room = () => {
       handleDealRiver(id);
     }
   }, [currentGame]);
+
+  //When All players Fold
+  useEffect(() => {
+    if (
+      playersWithHandCards.length === 1 && 
+      currentGame && 
+      currentGame.gameRunning
+    ) {
+      console.log("Only one player with hand cards. Transferring pot...");
+      dispatch(startPotToPlayer({ gameId: id }));
+    }
+  }, [playersWithHandCards, currentGame, id, dispatch]);
 
   if (!currentGame) {
     return null;

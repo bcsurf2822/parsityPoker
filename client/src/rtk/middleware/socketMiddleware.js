@@ -34,6 +34,9 @@ import {
   startPlayerFold,
   playerFoldSuccess,
   playerFoldError,
+  startPotToPlayer,
+  potToPlayerSuccess,
+  potToPlayerError,
 } from "../slices/currentGameSlice";
 
 import {
@@ -153,6 +156,16 @@ const socketMiddleware = (store) => {
     store.dispatch(playerFoldError(error.message));
   });
 
+  socket.on("pot_transferred", (data) => {
+    console.log("Received pot_transferred event with data:", data);
+    store.dispatch(potToPlayerSuccess(data));
+  });
+
+  socket.on("potTransferError", (error) => {
+    store.dispatch(potToPlayerError(error.message));
+  });
+
+
   return (next) => (action) => {
     switch (action.type) {
       case requestGames.toString():
@@ -241,6 +254,11 @@ const socketMiddleware = (store) => {
       case startPlayerFold.toString():
         console.log("Emitting fold event with payload:", action.payload);
         socket.emit("fold", action.payload);
+        break;
+
+      case startPotToPlayer.toString():
+        console.log("Emitting pot_to_player event with payload:", action.payload);
+        socket.emit("pot_to_player", action.payload);
         break;
 
       default:

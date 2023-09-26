@@ -6,6 +6,7 @@ const { updateCurrentPlayerSocket, endGameSocket } = require("./mechSocket");
 const {dealFlopSocket, dealTurnSocket, dealRiverSocket} = require("./dealerSocket");
 const {playerToPotSocket, checkSocket, foldSocket} = require("./betCheckFoldSocket");
 const positionsAndBlindsSocket = require("./newRoundSocket");
+const potToPlayerSocket = require("./winningSocket");
 
 
 function setupSockets(io) {
@@ -26,6 +27,7 @@ function setupSockets(io) {
     playerToPotSocket(socket, io);
     checkSocket(socket, io);
     foldSocket(socket, io);
+    potToPlayerSocket(socket, io);
 
 
     socket.on("disconnect", () => {

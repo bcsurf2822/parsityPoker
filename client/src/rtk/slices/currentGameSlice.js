@@ -181,6 +181,17 @@ const currentGameSlice = createSlice({
       console.log("playerFoldError called with error:", action.payload);
       state.error = action.payload;
     },
+    startPotToPlayer: (state, action) => {
+      console.log("startPotToPlayer called with payload:", action.payload);
+    },
+    potToPlayerSuccess: (state, action) => {
+      console.log("potToPlayerSuccess called with payload:", action.payload);
+      updateGameState(state, action);
+    },
+    potToPlayerError: (state, action) => {
+      console.log("potToPlayerError called with error:", action.payload);
+      state.error = action.payload;
+    },
   },
 });
 
@@ -221,6 +232,9 @@ export const {
   startPlayerFold,
   playerFoldSuccess,
   playerFoldError,
+  startPotToPlayer,
+  potToPlayerSuccess,
+  potToPlayerError,
 } = currentGameSlice.actions;
 
 export default currentGameSlice.reducer;
