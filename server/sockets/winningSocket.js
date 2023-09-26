@@ -1,8 +1,5 @@
 const Game = require("../models/gamesSchema");
-const axios = require("axios");
 
-
-//When All players fold, the pot is transferred to the remaining player
 function potToPlayerSocket(socket, io) {
   socket.on("pot_to_player", async (data) => {
     const { gameId } = data;
@@ -18,7 +15,9 @@ function potToPlayerSocket(socket, io) {
 
       if (Object.keys(game.winnerData).length) {
         console.log("Winner data already present, skipping pot transfer.");
-        return socket.emit("error", { message: "Winner data already present. Pot transfer aborted." });
+        return socket.emit("error", {
+          message: "Winner data already present. Pot transfer aborted.",
+        });
       }
 
       const occupiedSeats = game.seats.filter(
@@ -36,13 +35,19 @@ function potToPlayerSocket(socket, io) {
       const potBeforeTransfer = game.pot;
       remainingSeat.player.chips += game.pot;
 
+      for (let seat of game.seats) {
+        if (seat.player) {
+          seat.player.handCards = [];
+        }
+      }
+
       game.winnerData = {
         players: [
           {
             cards: remainingSeat.player.handCards.join(","),
             chips: remainingSeat.player.chips,
             seatId: remainingSeat.id,
-            user:  remainingSeat.player.username,
+            user: remainingSeat.player.username,
           },
         ],
         winners: [
@@ -50,8 +55,7 @@ function potToPlayerSocket(socket, io) {
             cards: remainingSeat.player.handCards.join(","),
             chips: potBeforeTransfer,
             seatId: remainingSeat.id,
-            user:  remainingSeat.player.username,
-
+            user: remainingSeat.player.username,
           },
         ],
         reason: "Last remaining player awarded the pot",
@@ -77,6 +81,5 @@ function potToPlayerSocket(socket, io) {
     }
   });
 }
-
 
 module.exports = potToPlayerSocket;
