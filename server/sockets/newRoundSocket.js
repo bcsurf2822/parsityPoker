@@ -1,4 +1,5 @@
 const Game = require("../models/gamesSchema");
+const axios = require("axios");
 
 const findNextPosition = (startPosition, seats) => {
   let seatCount = seats.length;
@@ -8,6 +9,21 @@ const findNextPosition = (startPosition, seats) => {
   }
   return nextPosition;
 };
+
+function cardCode(code) {
+  return code.replace("0", "10");
+}
+
+async function fetchNewDeck() {
+  const response = await axios.get(
+    "https://www.deckofcardsapi.com/api/deck/new/draw/?count=52"
+  );
+  return response.data.cards.map((card) => ({
+    value: card.value,
+    suit: card.suit,
+    code: cardCode(card.code),
+  }));
+}
 
 async function updatePositionsAndBlinds(gameId) {
   const game = await Game.findById(gameId);
@@ -23,7 +39,12 @@ async function updatePositionsAndBlinds(gameId) {
 
   if (!game.gameEnd) {
     console.log(`Game ${gameId} has not ended yet. Skipping logic.`);
-    return game; 
+    return game;
+  }
+
+  if (game.currentDeck.length === 0) {
+    console.log(`Fetching a new deck for game ${gameId}.`);
+    game.currentDeck = await fetchNewDeck();
   }
 
   game.dealerPosition = findNextPosition(game.dealerPosition, game.seats);

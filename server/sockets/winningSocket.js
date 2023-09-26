@@ -61,6 +61,7 @@ function potToPlayerSocket(socket, io) {
       game.gameEnd = true;
       game.gameRunning = false;
       game.currentDeck = [];
+      game.stage = "end";
 
       await game.save();
 
