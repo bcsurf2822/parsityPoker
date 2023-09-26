@@ -18,6 +18,7 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import Chatbox from "./Chatbox";
 import Seat from "./Seats";
 import WinnerAlert from "./WinnerAlert";
+import Spinner from "./Spinner";
 
 const Room = () => {
   console.log("===============Room component rendered================");
@@ -35,10 +36,14 @@ const Room = () => {
   const currentGame = useSelector((state) => state.currentGame.currentGame);
   console.log("Current Game:", currentGame);
 
+  const currentGameLoading = useSelector(state => state.currentGame.currentGameLoading);
+  console.log("Is Game Loading:", currentGameLoading);
+
   const user = useSelector((state) => state.auth.user);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const [previousSeatCount, setPreviousSeatCount] = useState(0);
+  const [showLoad, setShowLoad] = useState(false);
 
   const seatArray = currentGame ? currentGame.seats : [];
   console.log("Seat Array:", seatArray);
@@ -52,7 +57,7 @@ const Room = () => {
             seat.player.handCards.length > 0
         )
       : [];
-  console.log("PLayers with cards---------------", playersWithHandCards);
+  console.log("PLayers with cards--", playersWithHandCards);
 
   //How many players are at the table?
   const occupiedSeatCount = seatArray.filter(
@@ -69,34 +74,26 @@ const Room = () => {
     navigate("/Tables");
   };
 
-  const handlePositionsAndBlinds = (gameId) => {
-    console.log("Dispatching Pos and Blinds with params:", gameId);
-    dispatch(startUpdatePositionsAndBlinds({ gameId: gameId }));
-  };
-
   const handleEndGame = (gameId) => {
     console.log("Dispatching endGame with params:", gameId);
     dispatch(startEndGame({ gameId: gameId }));
   };
 
-  const handleDealFlop = (gameId) => {
-    console.log("Dispatching dealFlop with params:", gameId);
-    dispatch(startDealFlop({ gameId: gameId }));
-  };
-
-  const handleDealTurn = (gameId) => {
-    console.log("Dispatching dealTurn with params:", gameId);
-    dispatch(startDealTurn({ gameId: gameId }));
-  };
-
-  const handleDealRiver = (gameId) => {
-    console.log("Dispatching dealRiver with params:", gameId);
-    dispatch(startDealRiver({ gameId: gameId }));
-  };
-
   const handleGetWinner = () => {
     console.log("get Winner called");
   };
+
+  //Show Load Spinnner
+  useEffect(() => {
+    if (currentGameLoading) {
+      setShowLoad(true);
+      const timer = setTimeout(() => {
+        setShowLoad(false);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [currentGameLoading]);
 
   //For Use When 2nd Player Joins Table
   useEffect(() => {
@@ -106,7 +103,7 @@ const Room = () => {
       currentGame.gameEnd
     ) {
       console.log("2nd player has joined the table!");
-      handlePositionsAndBlinds(id);
+      dispatch(startUpdatePositionsAndBlinds({ gameId: id }));
     }
     setPreviousSeatCount(occupiedSeatCount);
   }, [seatArray, currentGame]);
@@ -115,48 +112,48 @@ const Room = () => {
   useEffect(() => {
     if (occupiedSeatCount === 1) {
       console.log("Only one player left at the table. Ending game...");
-      handleEndGame(id);
+      dispatch(startEndGame({ gameId: id }));
     }
-  }, [occupiedSeatCount, id]);
+  }, [occupiedSeatCount, id, dispatch]);
 
-  //FLOP RULES
-  useEffect(() => {
-    if (
-      currentGame &&
-      currentGame.stage === "flop" &&
-      currentGame.communityCards.length === 0 &&
-      playersWithHandCards.length > 1 &&
-      currentGame.gameRunning
-    ) {
-      handleDealFlop(id);
-    }
-  }, [currentGame]);
+ //FLOP RULES
+ useEffect(() => {
+  if (
+    currentGame &&
+    currentGame.stage === "flop" &&
+    currentGame.communityCards.length === 0 &&
+    playersWithHandCards.length > 1 &&
+    currentGame.gameRunning
+  ) {
+    dispatch(startDealFlop({ gameId: id }));
+  }
+}, [currentGame, id, dispatch]);
 
-  //TURN RULES
-  useEffect(() => {
-    if (
-      currentGame &&
-      currentGame.stage === "turn" &&
-      currentGame.communityCards.length === 3 &&
-      playersWithHandCards.length > 1 &&
-      currentGame.gameRunning
-    ) {
-      handleDealTurn(id);
-    }
-  }, [currentGame]);
+//TURN RULES
+useEffect(() => {
+  if (
+    currentGame &&
+    currentGame.stage === "turn" &&
+    currentGame.communityCards.length === 3 &&
+    playersWithHandCards.length > 1 &&
+    currentGame.gameRunning
+  ) {
+    dispatch(startDealTurn({ gameId: id }));
+  }
+}, [currentGame, id, dispatch]);
 
-  //RIVER RULES
-  useEffect(() => {
-    if (
-      currentGame &&
-      currentGame.stage === "river" &&
-      currentGame.communityCards.length === 4 &&
-      playersWithHandCards.length > 1 &&
-      currentGame.gameRunning
-    ) {
-      handleDealRiver(id);
-    }
-  }, [currentGame]);
+//RIVER RULES
+useEffect(() => {
+  if (
+    currentGame &&
+    currentGame.stage === "river" &&
+    currentGame.communityCards.length === 4 &&
+    playersWithHandCards.length > 1 &&
+    currentGame.gameRunning
+  ) {
+    dispatch(startDealRiver({ gameId: id }));
+  }
+}, [currentGame, id, dispatch]);
 
   //When All players Fold
   useEffect(() => {
@@ -227,22 +224,24 @@ const Room = () => {
         </Col>
         <Col></Col>
         <Col className="d-flex justify-content-center flex-column align-items-center">
-          <div className="pot">
-            <AttachMoneyIcon />
-            {formatBalance(currentGame.pot)}
-          </div>
-          {currentGame.communityCards &&
-            currentGame.communityCards.length > 0 && (
-              <div className="community-cards">
-                {currentGame.communityCards.map((card, index) => (
-                  <span key={index} className="card">
-                    {card}
-                  </span>
-                ))}
-              </div>
-            )}
-        </Col>
-
+  <div className="loading">
+    {currentGameLoading && <Spinner />}
+  </div>
+  <div className="pot">
+    <AttachMoneyIcon />
+    {formatBalance(currentGame.pot)}
+  </div>
+  {currentGame.communityCards &&
+    currentGame.communityCards.length > 0 && (
+      <div className="community-cards">
+        {currentGame.communityCards.map((card, index) => (
+          <span key={index} className="card">
+            {card}
+          </span>
+        ))}
+      </div>
+    )}
+</Col>
         <Col></Col>
         <Col className="d-flex justify-content-center">
           <Seat seat={seatArray[3]} currentGame={currentGame} />

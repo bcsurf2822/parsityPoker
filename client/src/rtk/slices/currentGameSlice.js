@@ -12,6 +12,8 @@ const currentGameSlice = createSlice({
   initialState: {
     currentGame: null,
     error: null,
+    currentGameLoading: false,
+    updateError: null,
   },
   reducers: {
     requestGame: (state, action) => {
@@ -52,16 +54,18 @@ const currentGameSlice = createSlice({
         "startUpdatePositionsAndBlinds called with payload:",
         action.payload
       );
-      // Optionally, you can set some kind of loading state if you want to show a loading spinner or something similar
-      // state.updateLoading = true;
-      // state.updateError = null;
+      state.currentGameLoading = true;
+      console.log("currentGameLoading set to:", state.currentGameLoading);
+      state.updateError = null;
     },
+
     updatePositionsAndBlindsSuccess: (state, action) => {
       console.log(
         "updatePositionsAndBlindsSuccess called with payload:",
         action.payload
       );
       updateGameState(state, action);
+      state.currentGameLoading = false;
     },
     updatePositionsAndBlindsError: (state, action) => {
       console.log(
@@ -69,8 +73,8 @@ const currentGameSlice = createSlice({
         action.payload
       );
       state.error = action.payload;
-      // Optionally, reset the loading state if you added one
-      // state.updateLoading = false;
+      state.currentGameLoading = false;
+      state.updateError = action.payload;
     },
     startUpdateCurrentPlayer: (state, action) => {
       console.log(
