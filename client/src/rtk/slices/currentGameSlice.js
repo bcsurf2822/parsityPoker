@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const updateGameState = (state, action) => {
   const updatedGame = action.payload;
@@ -6,6 +6,8 @@ const updateGameState = (state, action) => {
     state.currentGame = updatedGame;
   }
 };
+
+
 
 const currentGameSlice = createSlice({
   name: "game",
@@ -196,8 +198,25 @@ const currentGameSlice = createSlice({
       console.log("potToPlayerError called with error:", action.payload);
       state.error = action.payload;
     },
+    startLoading: (state) => {
+      console.log("Starting the loading spinner");
+      state.currentGameLoading = true;
+    },
+    endLoading: (state) => {
+      console.log("Stopping the loading spinner");
+      state.currentGameLoading = false;
+    },
   },
 });
+
+export const showLoading = createAsyncThunk(
+  'game/showLoading',
+  async (_, { dispatch }) => {
+    dispatch(currentGameSlice.actions.startLoading());
+    await new Promise(resolve => setTimeout(resolve, 3000)); 
+    dispatch(currentGameSlice.actions.endLoading());
+  }
+);
 
 export const {
   requestGame,
@@ -239,6 +258,8 @@ export const {
   startPotToPlayer,
   potToPlayerSuccess,
   potToPlayerError,
+  startLoading,
+  endLoading,
 } = currentGameSlice.actions;
 
 export default currentGameSlice.reducer;

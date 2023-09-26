@@ -12,6 +12,7 @@ import {
   startDealTurn,
   startDealRiver,
   startPotToPlayer,
+  showLoading,
 } from "../../rtk/slices/currentGameSlice";
 
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
@@ -43,7 +44,6 @@ const Room = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const [previousSeatCount, setPreviousSeatCount] = useState(0);
-  const [showLoad, setShowLoad] = useState(false);
 
   const seatArray = currentGame ? currentGame.seats : [];
   console.log("Seat Array:", seatArray);
@@ -83,18 +83,6 @@ const Room = () => {
     console.log("get Winner called");
   };
 
-  //Show Load Spinnner
-  useEffect(() => {
-    if (currentGameLoading) {
-      setShowLoad(true);
-      const timer = setTimeout(() => {
-        setShowLoad(false);
-      }, 2000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [currentGameLoading]);
-
   //For Use When 2nd Player Joins Table
   useEffect(() => {
     if (
@@ -103,7 +91,8 @@ const Room = () => {
       currentGame.gameEnd
     ) {
       console.log("2nd player has joined the table!");
-      dispatch(startUpdatePositionsAndBlinds({ gameId: id }));
+      dispatch(showLoading())
+      // dispatch(startUpdatePositionsAndBlinds({ gameId: id }));
     }
     setPreviousSeatCount(occupiedSeatCount);
   }, [seatArray, currentGame]);
