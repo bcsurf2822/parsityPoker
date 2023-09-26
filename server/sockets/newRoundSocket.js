@@ -47,6 +47,8 @@ async function updatePositionsAndBlinds(gameId) {
     game.currentDeck = await fetchNewDeck();
   }
 
+  game.stage = "preflop";
+
   game.dealerPosition = findNextPosition(game.dealerPosition, game.seats);
   game.smallBlindPosition = findNextPosition(game.dealerPosition, game.seats);
   game.bigBlindPosition = findNextPosition(game.smallBlindPosition, game.seats);

@@ -17,6 +17,7 @@ import {
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import Chatbox from "./Chatbox";
 import Seat from "./Seats";
+import WinnerAlert from "./WinnerAlert";
 
 const Room = () => {
   console.log("===============Room component rendered================");
@@ -177,7 +178,9 @@ const Room = () => {
 
   return (
     <Container fluid className="h-100 bg">
-      <Row className="mt-2">
+ {currentGame.winnerData && currentGame.winnerData.winners && currentGame.winnerData.winners[0] && 
+      <WinnerAlert winnerData={currentGame.winnerData.winners[0]} />
+    }<Row className="mt-2">
         <Col className="d-flex justify-content-center">
           <div className="table">{currentGame.name}</div>
           <Button
