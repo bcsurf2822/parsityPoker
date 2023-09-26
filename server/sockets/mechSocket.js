@@ -14,80 +14,6 @@ const findNextPosition = (startPosition, seats) => {
   return nextPosition;
 };
 
-// function positionsAndBlindsSocket(socket, io) {
-//   socket.on("updatePositionsAndBlinds", async ({ gameId }) => {
-//     try {
-//       const game = await Game.findById(gameId);
-
-//       if (!game) {
-//         console.error(`Game with ID: ${gameId} not found!`);
-//         socket.emit("error", "Game not found!");
-//         return;
-//       }
-
-//       if (!game.gameEnd) {
-//         console.log(`Game ${gameId} has not ended yet. Skipping logic.`);
-//         return;
-//       }
-
-//       console.log(`Starting updatePostionsAndBlinds for game ${gameId}`);
-
-//       game.dealerPosition = findNextPosition(game.dealerPosition, game.seats);
-//       game.smallBlindPosition = findNextPosition(
-//         game.dealerPosition,
-//         game.seats
-//       );
-//       game.bigBlindPosition = findNextPosition(
-//         game.smallBlindPosition,
-//         game.seats
-//       );
-//       game.currentPlayerTurn = findNextPosition(
-//         game.bigBlindPosition,
-//         game.seats
-//       );
-
-//       const [smallBlindAmount, bigBlindAmount] = game.blinds
-//         .split("/")
-//         .map(Number);
-
-//       for (let seat of game.seats) {
-//         if (seat.player) {
-//           seat.player.checkBetFold = false;
-//         }
-//       }
-
-//       if (game.seats[game.smallBlindPosition].player) {
-//         game.seats[game.smallBlindPosition].player.chips -= smallBlindAmount;
-//         game.pot += smallBlindAmount;
-//       }
-
-//       if (game.seats[game.bigBlindPosition].player) {
-//         game.seats[game.bigBlindPosition].player.chips -= bigBlindAmount;
-//         game.pot += bigBlindAmount;
-//       }
-
-//       game.gameRunning = true;
-//       game.gameEnd = false;
-
-//       await game.save();
-
-//       console.log(`Updated positions and blinds for game ${gameId}. 
-//                    Dealer: ${game.dealerPosition}, 
-//                    Small Blind: ${game.smallBlindPosition}, 
-//                    Big Blind: ${game.bigBlindPosition}, 
-//                    Current Turn: ${game.currentPlayerTurn}`);
-
-//       io.emit("positions_and_blinds", game);
-//     } catch (error) {
-//       console.error(
-//         `Error updating positions and blinds for game ${gameId}:`,
-//         error
-//       );
-//       socket.emit("error", error.message);
-//     }
-//   });
-// }
-
 function updateCurrentPlayerSocket(socket, io) {
   socket.on("updateCurrentPlayer", async ({ gameId }) => {
     try {
@@ -131,6 +57,8 @@ function endGameSocket(socket, io) {
         return;
       }
 
+      const occupiedSeatsCount = game.seats.filter(seat => seat.player !== null).length;
+
       game.currentDeck = [];
       game.communityCards = [];
       game.dealtCards = [];
@@ -146,6 +74,14 @@ function endGameSocket(socket, io) {
           seat.player.checkBetFold = false;
         }
       });
+
+      if (occupiedSeatsCount < 2) {
+        game.dealerPosition = -1;
+        game.smallBlindPosition = -1;
+        game.bigBlindPosition = -1;
+        game.currentPlayerTurn = -1;
+        console.log("Positions Have Been Reset")
+      }
 
       const response = await axios.get(
         "https://www.deckofcardsapi.com/api/deck/new/draw/?count=52"
@@ -171,7 +107,6 @@ function endGameSocket(socket, io) {
 }
 
 module.exports = {
-  // positionsAndBlindsSocket,
   updateCurrentPlayerSocket,
   endGameSocket,
 };

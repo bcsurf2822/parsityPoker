@@ -16,6 +16,11 @@ function potToPlayerSocket(socket, io) {
         return socket.emit("error", { message: "Game not found!" });
       }
 
+      if (Object.keys(game.winnerData).length) {
+        console.log("Winner data already present, skipping pot transfer.");
+        return socket.emit("error", { message: "Winner data already present. Pot transfer aborted." });
+      }
+
       const occupiedSeats = game.seats.filter(
         (seat) => seat.player && seat.player.handCards.length
       );
@@ -28,6 +33,7 @@ function potToPlayerSocket(socket, io) {
       }
 
       const remainingSeat = occupiedSeats[0];
+      const potBeforeTransfer = game.pot;
       remainingSeat.player.chips += game.pot;
 
       game.winnerData = {
@@ -35,14 +41,17 @@ function potToPlayerSocket(socket, io) {
           {
             cards: remainingSeat.player.handCards.join(","),
             chips: remainingSeat.player.chips,
-            seatId: remainingSeat._id,
+            seatId: remainingSeat.id,
+            user:  remainingSeat.player.username,
           },
         ],
         winners: [
           {
             cards: remainingSeat.player.handCards.join(","),
-            chips: remainingSeat.player.chips,
-            seatId: remainingSeat._id,
+            chips: potBeforeTransfer,
+            seatId: remainingSeat.id,
+            user:  remainingSeat.player.username,
+
           },
         ],
         reason: "Last remaining player awarded the pot",

@@ -16,6 +16,11 @@ async function updatePositionsAndBlinds(gameId) {
     throw new Error(`Game with ID: ${gameId} not found!`);
   }
 
+  if (game.gameRunning) {
+    console.log(`Game ${gameId} is already running. Skipping logic.`);
+    return game;
+  }
+
   if (!game.gameEnd) {
     console.log(`Game ${gameId} has not ended yet. Skipping logic.`);
     return game; 
