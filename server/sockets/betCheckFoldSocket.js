@@ -142,7 +142,7 @@ function playerToPotSocket(socket, io) {
       seat.player.chips -= betAmount;
       game.pot += betAmount;
       seat.player.bet += betAmount;
-      seat.player.action = "bet";
+      seat.player.action = action;
       seat.player.checkBetFold = true;
 
       await game.save();
