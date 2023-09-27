@@ -78,6 +78,11 @@ const GameSchema = new Schema({
     default: 0,
     set: toDecimal,
   },
+  hightestBet: {
+    type: Number,
+    default: 0,
+    set: toDecimal,
+  },
   timestamp: {
     type: Date,
     default: Date.now,

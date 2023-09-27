@@ -1,8 +1,11 @@
 const Game = require("../models/gamesSchema");
 
-function playersHaveActed(game) {
-  return game.seats.every((seat) => !seat.player || seat.player.checkBetFold);
+function playersHaveActed(game, currentSeatId) {
+  return game.seats.every((seat) => {
+    return !seat.player || seat._id.toString() === currentSeatId || seat.player.checkBetFold;
+  });
 }
+
 
 function resetCheckBetFold(game) {
   game.seats.forEach((seat) => {
@@ -51,6 +54,8 @@ function proceedToNextStage(game) {
       resetCheckBetFold(game);
     }
   }
+
+  game.currentHighestBet = 0;
 }
 
 function playerToPotSocket(socket, io) {
@@ -107,6 +112,16 @@ function playerToPotSocket(socket, io) {
           return socket.emit("error", { message: "Invalid Action" });
       }
 
+      if (action === "bet" && betAmount > game.highestBet) {
+        game.currentHighestBet = betAmount;
+  
+        game.seats.forEach((s) => {
+          if (s._id.toString() !== seatId && s.player) {
+            s.player.checkBetFold = false;
+          }
+        });
+      }
+  
       if (seat.player.chips < betAmount && action !== "call") {
         return socket.emit("error", { message: "Not Enough Chips to Call" });
       }
@@ -119,10 +134,17 @@ function playerToPotSocket(socket, io) {
 
       await game.save();
 
-      if (playersHaveActed(game)) {
-        proceedToNextStage(game);
-        await game.save();
-      }
+// Check if all players except the current one have acted
+if (playersHaveActed(game, seatId)) {
+  proceedToNextStage(game);
+  await game.save();
+} else {
+  // Otherwise, determine the next player's turn as usual
+  game.currentPlayerTurn = findNextPosition(game.currentPlayerTurn, game.seats);
+  while (!game.seats[game.currentPlayerTurn].player || game.seats[game.currentPlayerTurn].player.handCards.length === 0) {
+    game.currentPlayerTurn = findNextPosition(game.currentPlayerTurn, game.seats);
+  }
+}
 
       game.currentPlayerTurn = findNextPosition(
         game.currentPlayerTurn,
