@@ -64,6 +64,7 @@ function endGameSocket(socket, io) {
       game.dealtCards = [];
       game.winnerData = [];
       game.pot = 0;
+      game.highestBet = 0;
       game.stage = "preflop";
       game.gameEnd = true;
       game.gameRunning = false;

@@ -2,10 +2,13 @@ const Game = require("../models/gamesSchema");
 
 function playersHaveActed(game, currentSeatId) {
   return game.seats.every((seat) => {
-    return !seat.player || seat._id.toString() === currentSeatId || seat.player.checkBetFold;
+    return (
+      !seat.player ||
+      seat._id.toString() === currentSeatId ||
+      seat.player.checkBetFold
+    );
   });
 }
-
 
 function resetCheckBetFold(game) {
   game.seats.forEach((seat) => {
@@ -108,20 +111,30 @@ function playerToPotSocket(socket, io) {
           }
           break;
 
+        case "raise":
+          betAmount = Number(bet);
+          if (!betAmount || isNaN(betAmount) || betAmount <= game.highestBet) {
+            return socket.emit("error", { message: "Invalid Raise Amount" });
+          }
+          break;
+
         default:
           return socket.emit("error", { message: "Invalid Action" });
       }
 
-      if (action === "bet" && betAmount > game.highestBet) {
-        game.currentHighestBet = betAmount;
-  
+      if (
+        (action === "bet" || action === "raise") &&
+        betAmount > game.highestBet
+      ) {
+        game.highestBet = betAmount;
+
         game.seats.forEach((s) => {
-          if (s._id.toString() !== seatId && s.player) {
+          if (s.player) {
             s.player.checkBetFold = false;
           }
         });
       }
-  
+
       if (seat.player.chips < betAmount && action !== "call") {
         return socket.emit("error", { message: "Not Enough Chips to Call" });
       }
@@ -134,31 +147,25 @@ function playerToPotSocket(socket, io) {
 
       await game.save();
 
-// Check if all players except the current one have acted
-if (playersHaveActed(game, seatId)) {
-  proceedToNextStage(game);
-  await game.save();
-} else {
-  // Otherwise, determine the next player's turn as usual
-  game.currentPlayerTurn = findNextPosition(game.currentPlayerTurn, game.seats);
-  while (!game.seats[game.currentPlayerTurn].player || game.seats[game.currentPlayerTurn].player.handCards.length === 0) {
-    game.currentPlayerTurn = findNextPosition(game.currentPlayerTurn, game.seats);
-  }
-}
-
-      game.currentPlayerTurn = findNextPosition(
-        game.currentPlayerTurn,
-        game.seats
-      );
-
-      while (
-        !game.seats[game.currentPlayerTurn].player ||
-        game.seats[game.currentPlayerTurn].player.handCards.length === 0
-      ) {
+      // Check if all players except the current one have acted
+      if (playersHaveActed(game, seatId)) {
+        proceedToNextStage(game);
+        await game.save();
+      } else {
+        // Otherwise, determine the next player's turn as usual
         game.currentPlayerTurn = findNextPosition(
           game.currentPlayerTurn,
           game.seats
         );
+        while (
+          !game.seats[game.currentPlayerTurn].player ||
+          game.seats[game.currentPlayerTurn].player.handCards.length === 0
+        ) {
+          game.currentPlayerTurn = findNextPosition(
+            game.currentPlayerTurn,
+            game.seats
+          );
+        }
       }
 
       await game.save();
@@ -196,17 +203,18 @@ function checkSocket(socket, io) {
 
       seat.player.action = "check";
       seat.player.checkBetFold = true;
- 
-      await game.save();
 
+      await game.save();
 
       if (playersHaveActed(game)) {
         proceedToNextStage(game);
         await game.save();
       }
 
-
-      game.currentPlayerTurn = findNextPosition(game.currentPlayerTurn, game.seats);
+      game.currentPlayerTurn = findNextPosition(
+        game.currentPlayerTurn,
+        game.seats
+      );
 
       while (
         !game.seats[game.currentPlayerTurn].player ||
@@ -220,14 +228,12 @@ function checkSocket(socket, io) {
 
       await game.save();
 
-
       console.log("Emitting next_current_player with game:", game);
       io.emit("next_current_player", game);
 
       console.log("About to emit player_checked with game:", game);
       io.emit("player_checked", game);
       console.log("Emitted player_checked with game:", game);
-
     } catch (error) {
       console.error(error);
       socket.emit("checkError", { error: "Failed to handle the check" });

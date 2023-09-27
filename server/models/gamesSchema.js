@@ -78,7 +78,7 @@ const GameSchema = new Schema({
     default: 0,
     set: toDecimal,
   },
-  hightestBet: {
+  highestBet: {
     type: Number,
     default: 0,
     set: toDecimal,
