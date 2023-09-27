@@ -27,7 +27,7 @@ const PlayerSchema = new Schema({
   bet: { type: Number, required: true, set: toDecimal },
   action: {
     type: String,
-    enum: ["check", "bet", "fold", "raise", "none"], 
+    enum: ["check","call", "bet", "fold", "raise", "none"], 
     default: "none"
   },
   checkBetFold: {
