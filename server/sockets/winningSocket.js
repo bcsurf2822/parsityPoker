@@ -13,6 +13,12 @@ function potToPlayerSocket(socket, io) {
         return socket.emit("error", { message: "Game not found!" });
       }
 
+      if (game.pot <= 0) {
+        return socket.emit("error", {
+          message: "Pot is not greater than 0. Pot transfer aborted.",
+        });
+      }
+
       if (Object.keys(game.winnerData).length) {
         console.log("Winner data already present, skipping pot transfer.");
         return socket.emit("error", {

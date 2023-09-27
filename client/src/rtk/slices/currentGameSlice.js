@@ -213,7 +213,7 @@ export const showLoading = createAsyncThunk(
   'game/showLoading',
   async (_, { dispatch }) => {
     dispatch(currentGameSlice.actions.startLoading());
-    await new Promise(resolve => setTimeout(resolve, 3000)); 
+    await new Promise(resolve => setTimeout(resolve, 1000)); 
     dispatch(currentGameSlice.actions.endLoading());
   }
 );

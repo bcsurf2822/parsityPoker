@@ -85,17 +85,22 @@ const Room = () => {
 
   //For Use When 2nd Player Joins Table
   useEffect(() => {
-    if (
-      occupiedSeatCount > previousSeatCount &&
-      occupiedSeatCount === 2 &&
-      currentGame.gameEnd
-    ) {
-      console.log("2nd player has joined the table!");
-      dispatch(showLoading())
-      // dispatch(startUpdatePositionsAndBlinds({ gameId: id }));
-    }
-    setPreviousSeatCount(occupiedSeatCount);
+    const handlePlayerJoin = async () => {
+      if (
+        occupiedSeatCount > previousSeatCount &&
+        occupiedSeatCount === 2 &&
+        currentGame.gameEnd
+      ) {
+        console.log("2nd player has joined the table!");
+        await dispatch(showLoading());
+        dispatch(startUpdatePositionsAndBlinds({ gameId: id }));
+      }
+      setPreviousSeatCount(occupiedSeatCount);
+    };
+  
+    handlePlayerJoin();
   }, [seatArray, currentGame]);
+  
 
   //For when Only 1 player Remains EndGame Will be triggered
   useEffect(() => {
@@ -157,6 +162,22 @@ useEffect(() => {
   }, [playersWithHandCards, currentGame, id, dispatch]);
 
   //For If there is winner data more then 2 players at table and game is ended A new Round will comence
+  useEffect(() => {
+    const restartGameIfConditionsMet = async () => {
+      if (
+        currentGame &&
+        currentGame.stage === "end" &&
+        occupiedSeatCount >= 2
+      ) {
+        console.log("Restarting the game...");
+        await dispatch(showLoading());
+        dispatch(startUpdatePositionsAndBlinds({ gameId: id }));
+      }
+    };
+
+    restartGameIfConditionsMet();
+  }, [currentGame, occupiedSeatCount, dispatch, id]);
+
 
   if (!currentGame) {
     return null;

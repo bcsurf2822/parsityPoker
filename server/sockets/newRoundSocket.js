@@ -46,7 +46,8 @@ async function updatePositionsAndBlinds(gameId) {
     console.log(`Fetching a new deck for game ${gameId}.`);
     game.currentDeck = await fetchNewDeck();
   }
-
+game.winnerData = {};
+  game.communityCards = [];
   game.stage = "preflop";
 
   game.dealerPosition = findNextPosition(game.dealerPosition, game.seats);
