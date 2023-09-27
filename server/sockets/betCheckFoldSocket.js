@@ -27,6 +27,32 @@ const findNextPosition = (startPosition, seats) => {
   return nextPosition;
 };
 
+function proceedToNextStage(game) {
+  if (game.stage !== "showdown") {
+    if (playersWithCards(game) > 2) {
+      game.stage = "showdown";
+    } else {
+      switch (game.stage) {
+        case "preflop":
+          game.stage = "flop";
+          break;
+        case "flop":
+          game.stage = "turn";
+          break;
+        case "turn":
+          game.stage = "river";
+          break;
+        case "river":
+          game.stage = "showdown";
+          break;
+      }
+    }
+    if (game.stage !== "showdown") {
+      resetCheckBetFold(game);
+    }
+  }
+}
+
 function playerToPotSocket(socket, io) {
   socket.on("player_to_pot", async (data) => {
     const { gameId, seatId, bet, action } = data;
