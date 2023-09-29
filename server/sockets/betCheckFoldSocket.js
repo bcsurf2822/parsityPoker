@@ -66,6 +66,8 @@ function playerToPotSocket(socket, io) {
     const { gameId, seatId, bet, action } = data;
     let betAmount;
 
+    console.log("Received player_to_pot data:", data);
+
     try {
       const game = await Game.findById(gameId);
 
@@ -89,6 +91,11 @@ function playerToPotSocket(socket, io) {
             ...game.seats.map((s) => (s.player ? s.player.bet : 0))
           );
           betAmount = highestBet - seat.player.bet;
+
+          console.log("Highest Bet from all players:", highestBet);
+          console.log("Current Player's Bet:", seat.player.bet);
+          console.log("Computed Bet Amount for Call:", betAmount);
+
           if (betAmount <= 0) {
             return socket.emit("error", {
               message: "Player has Match or exceeded bet",

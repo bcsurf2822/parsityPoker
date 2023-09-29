@@ -161,7 +161,7 @@ useEffect(() => {
     }
   }, [playersWithHandCards, currentGame, id, dispatch]);
 
-  //For If there is winner data more then 2 players at table and game is ended A new Round will comence
+
   useEffect(() => {
     const restartGameIfConditionsMet = async () => {
       if (
