@@ -4,7 +4,7 @@ const leaveSocket = require("./leaveSocket");
 const roomSocket = require("./roomSocket");
 const { updateCurrentPlayerSocket, endGameSocket } = require("./mechSocket");
 const {dealFlopSocket, dealTurnSocket, dealRiverSocket} = require("./dealerSocket");
-const {playerToPotSocket, checkSocket, foldSocket} = require("./betCheckFoldSocket");
+const {playerToPotSocket, playerBetSocket, checkSocket, foldSocket} = require("./betCheckFoldSocket");
 const positionsAndBlindsSocket = require("./newRoundSocket");
 const potToPlayerSocket = require("./winningSocket");
 
@@ -28,6 +28,7 @@ function setupSockets(io) {
     checkSocket(socket, io);
     foldSocket(socket, io);
     potToPlayerSocket(socket, io);
+    playerBetSocket(socket, io);
 
 
     socket.on("disconnect", () => {

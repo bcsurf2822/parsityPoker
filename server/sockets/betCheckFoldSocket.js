@@ -61,6 +61,107 @@ function proceedToNextStage(game) {
   game.currentHighestBet = 0;
 }
 
+//Bet and All in
+
+function playerBetSocket(socket, io) {
+  socket.on("player_bet", async (data) => {
+    const { gameId, seatId, bet, action } = data;
+    let betAmount;
+
+    console.log("Received player_bet_all_in data:", data);
+
+    try {
+      const game = await Game.findById(gameId);
+
+      if (!game) {
+        return socket.emit("error", { message: "Game not found!" });
+      }
+
+      const seat = game.seats.find((s) => s._id.toString() === seatId);
+
+      if (!seat) {
+        return socket.emit("error", { message: "Seat not Found!" });
+      }
+
+      if (!seat.player) {
+        return socket.emit("error", { message: "No Player at this Seat" });
+      }
+
+      switch (action) {
+        case "all-in":
+            console.log("All-in action recognized", data);
+            betAmount = seat.player.chips;
+            break;
+            
+        case "bet":
+          betAmount = Number(bet);
+          if (!betAmount || isNaN(betAmount)) {
+            return socket.emit("error", { message: "Invalid Bet" });
+          }
+          break;
+
+        default:
+          return socket.emit("error", { message: "Invalid Action" });
+      }
+
+      if (
+        action === "bet" &&
+        betAmount > game.highestBet
+      ) {
+        game.highestBet = betAmount;
+
+        game.seats.forEach((s) => {
+          if (s.player) {
+            s.player.checkBetFold = false;
+          }
+        });
+      }
+
+      if (seat.player.chips < betAmount && action !== "all-in") {
+        return socket.emit("error", { message: "Not Enough Chips to Bet" });
+      }
+
+      seat.player.chips -= betAmount;
+      game.pot += betAmount;
+      seat.player.bet += betAmount;
+      seat.player.action = action;
+      seat.player.checkBetFold = true;
+
+      await game.save();
+
+      // Check if all players except the current one have acted
+      if (playersHaveActed(game, seatId)) {
+        proceedToNextStage(game);
+        await game.save();
+      } else {
+        // Otherwise, determine the next player's turn as usual
+        game.currentPlayerTurn = findNextPosition(
+          game.currentPlayerTurn,
+          game.seats
+        );
+        while (
+          !game.seats[game.currentPlayerTurn].player ||
+          game.seats[game.currentPlayerTurn].player.handCards.length === 0
+        ) {
+          game.currentPlayerTurn = findNextPosition(
+            game.currentPlayerTurn,
+            game.seats
+          );
+        }
+      }
+
+      await game.save();
+
+      io.emit("next_current_player", game);
+
+      io.emit("player_bet_placed", game);
+    } catch (error) {
+      console.error(error);
+      socket.emit("playerBetError", { error: "Failed to place bet" });
+    }
+  });
+}
+
 function playerToPotSocket(socket, io) {
   socket.on("player_to_pot", async (data) => {
     const { gameId, seatId, bet, action } = data;
@@ -90,7 +191,7 @@ function playerToPotSocket(socket, io) {
           const highestBet = Math.max(
             ...game.seats.map((s) => (s.player ? s.player.bet : 0))
           );
-          betAmount = highestBet - seat.player.bet;
+          betAmount = highestBet
 
           console.log("Highest Bet from all players:", highestBet);
           console.log("Current Player's Bet:", seat.player.bet);
@@ -309,6 +410,7 @@ function foldSocket(socket, io) {
 
 module.exports = {
   playerToPotSocket,
+  playerBetSocket,
   checkSocket,
   foldSocket,
 };

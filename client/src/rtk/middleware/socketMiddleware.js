@@ -129,8 +129,8 @@ const socketMiddleware = (store) => {
     store.dispatch(dealRiverError(error));
   });
 
-  socket.on("player_acted", (data) => {
-    console.log("Received player_acted event with data:", data);
+  socket.on("player_bet_placed", (data) => {
+    console.log("Received player_bet_placed event with data:", data);
     store.dispatch(playerBetSuccess(data));
   });
 
@@ -240,10 +240,10 @@ const socketMiddleware = (store) => {
 
       case startPlayerBet.toString():
         console.log(
-          "Emitting player_to_pot event with payload:",
+          "Emitting player_bet event with payload:",
           action.payload
         );
-        socket.emit("player_to_pot", action.payload);
+        socket.emit("player_bet", action.payload);
         break;
 
       case startPlayerCheck.toString():
