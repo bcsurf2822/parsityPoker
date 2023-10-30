@@ -129,12 +129,10 @@ function playerBetSocket(socket, io) {
 
       await game.save();
 
-      // Check if all players except the current one have acted
       if (playersHaveActed(game, seatId)) {
         proceedToNextStage(game);
         await game.save();
       } else {
-        // Otherwise, determine the next player's turn as usual
         game.currentPlayerTurn = findNextPosition(
           game.currentPlayerTurn,
           game.seats
