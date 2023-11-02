@@ -6,6 +6,7 @@ import {
   startPlayerCheck,
   startPlayerFold,
   startJoinGame,
+  startPlayerCall,
 } from "../../rtk/slices/currentGameSlice";
 
 import DeactivatedBet from "./DeactivatedBet";
@@ -98,7 +99,7 @@ const Seat = ({ seat, currentGame }) => {
 
   const handleCall = (gameId, seatId) => {
     dispatch(
-      startPlayerBet({
+      startPlayerCall({
         gameId: gameId,
         seatId: seatId,
         action: "call",
