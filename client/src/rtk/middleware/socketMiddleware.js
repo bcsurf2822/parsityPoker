@@ -28,6 +28,9 @@ import {
   startPlayerBet,
   playerBetSuccess,
   playerBetError,
+  startPlayerCall,
+  playerCallSuccess,
+  playerCallError,
   startPlayerCheck,
   playerCheckSuccess,
   playerCheckError,
@@ -138,6 +141,15 @@ const socketMiddleware = (store) => {
     store.dispatch(playerBetError(error.message));
   });
 
+  socket.on("player_called_bet", (data) => {
+    console.log("Received player_called event with data:", data);
+    store.dispatch(playerCallSuccess(data));
+  });
+
+  socket.on("playerCallError", (error) => {
+    store.dispatch(playerCallError(error.message));
+  });
+
   socket.on("player_checked", (data) => {
     console.log("Received player_checked event with data:", data);
     store.dispatch(playerCheckSuccess(data));
@@ -244,6 +256,11 @@ const socketMiddleware = (store) => {
           action.payload
         );
         socket.emit("player_bet", action.payload);
+        break;
+
+      case startPlayerCall.toString():
+        console.log("Emitting call event with payload:", action.payload);
+        socket.emit("player_call", action.payload);
         break;
 
       case startPlayerCheck.toString():

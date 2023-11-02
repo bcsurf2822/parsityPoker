@@ -477,8 +477,9 @@ function foldSocket(socket, io) {
 }
 
 module.exports = {
-  playerToPotSocket,
+  // playerToPotSocket,
   playerBetSocket,
+  callSocket,
   checkSocket,
   foldSocket,
 };
