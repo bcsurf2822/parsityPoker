@@ -160,6 +160,76 @@ function playerBetSocket(socket, io) {
   });
 }
 
+//call socket
+function callSocket(socket, io) {
+  socket.on("player_call", async (data) => {
+    const { gameId, seatId } = data;
+
+    console.log("Received player_call data:", data);
+
+    try {
+      const game = await Game.findById(gameId);
+
+      if (!game) {
+        return socket.emit("error", { message: "Game not found!" });
+      }
+
+      const seat = game.seats.find((s) => s._id.toString() === seatId);
+
+      if (!seat) {
+        return socket.emit("error", { message: "Seat not Found!" });
+      }
+
+      if (!seat.player) {
+        return socket.emit("error", { message: "No Player at this Seat" });
+      }
+
+      const callAmount = game.highestBet - seat.player.bet;
+
+      if (seat.player.chips < callAmount) {
+        return socket.emit("error", { message: "Not Enough Chips to Call" });
+      }
+
+      seat.player.chips -= callAmount;
+      game.pot += callAmount;
+      seat.player.bet += callAmount;
+      seat.player.action = "call";
+      seat.player.checkBetFold = true;
+
+      await game.save();
+
+      if (playersHaveActed(game, seatId)) {
+        proceedToNextStage(game);
+        await game.save();
+      } else {
+        game.currentPlayerTurn = findNextPosition(
+          game.currentPlayerTurn,
+          game.seats
+        );
+        while (
+          !game.seats[game.currentPlayerTurn].player ||
+          game.seats[game.currentPlayerTurn].player.handCards.length === 0
+        ) {
+          game.currentPlayerTurn = findNextPosition(
+            game.currentPlayerTurn,
+            game.seats
+          );
+        }
+      }
+
+      await game.save();
+
+      io.emit("next_current_player", game);
+
+      io.emit("player_called_bet", game);
+    } catch (error) {
+      console.error(error);
+      socket.emit("playerCallError", { error: "Failed to call bet" });
+    }
+  });
+}
+
+
 function playerToPotSocket(socket, io) {
   socket.on("player_to_pot", async (data) => {
     const { gameId, seatId, bet, action } = data;
