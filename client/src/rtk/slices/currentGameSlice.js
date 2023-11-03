@@ -161,6 +161,20 @@ const currentGameSlice = createSlice({
       state.error = action.payload;
     },
 
+    startPlayerRaise: (state, action) => {
+      console.log("startPlayerRaise called with payload:", action.payload);
+    },
+
+    playerRaiseSuccess: (state, action) => {
+      console.log("playerRaiseSuccess called with payload:", action.payload);
+      updateGameState(state, action);
+    },
+
+    playerRaiseError: (state, action) => {
+      console.log("playerRaiseError called with error:", action.payload);
+      state.error = action.payload;
+    },
+
     startPlayerCall: (state, action) => {
       console.log("startPlayerCall called with payload:", action.payload);
     },
@@ -263,6 +277,9 @@ export const {
   startPlayerBet,
   playerBetSuccess,
   playerBetError,
+  startPlayerRaise,
+  playerRaiseSuccess,
+  playerRaiseError,
   startPlayerCall,
   playerCallSuccess,
   playerCallError,
