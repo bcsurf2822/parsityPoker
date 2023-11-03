@@ -89,10 +89,10 @@ function playerBetSocket(socket, io) {
 
       switch (action) {
         case "all-in":
-            console.log("All-in action recognized", data);
-            betAmount = seat.player.chips;
-            break;
-            
+          console.log("All-in action recognized", data);
+          betAmount = seat.player.chips;
+          break;
+
         case "bet":
           betAmount = Number(bet);
           if (!betAmount || isNaN(betAmount)) {
@@ -104,10 +104,7 @@ function playerBetSocket(socket, io) {
           return socket.emit("error", { message: "Invalid Action" });
       }
 
-      if (
-        action === "bet" &&
-        betAmount > game.highestBet
-      ) {
+      if (action === "bet" && betAmount > game.highestBet) {
         game.highestBet = betAmount;
 
         game.seats.forEach((s) => {
@@ -161,6 +158,7 @@ function playerBetSocket(socket, io) {
 }
 
 //call socket
+
 function callSocket(socket, io) {
   socket.on("player_call", async (data) => {
     const { gameId, seatId } = data;
@@ -229,13 +227,13 @@ function callSocket(socket, io) {
   });
 }
 
+// Raise Socket
 
-function playerToPotSocket(socket, io) {
-  socket.on("player_to_pot", async (data) => {
-    const { gameId, seatId, bet, action } = data;
-    let betAmount;
+function raiseSocket(socket, io) {
+  socket.on("player_raise", async (data) => {
+    const { gameId, seatId, raiseAmount } = data;
 
-    console.log("Received player_to_pot data:", data);
+    console.log("Received player_raise data:", data);
 
     try {
       const game = await Game.findById(gameId);
@@ -254,104 +252,47 @@ function playerToPotSocket(socket, io) {
         return socket.emit("error", { message: "No Player at this Seat" });
       }
 
-      switch (action) {
-        case "call":
-          const highestBet = Math.max(
-            ...game.seats.map((s) => (s.player ? s.player.bet : 0))
-          );
-          betAmount = highestBet
-
-          console.log("Highest Bet from all players:", highestBet);
-          console.log("Current Player's Bet:", seat.player.bet);
-          console.log("Computed Bet Amount for Call:", betAmount);
-
-          if (betAmount <= 0) {
-            return socket.emit("error", {
-              message: "Player has Match or exceeded bet",
-            });
-          }
-
-          if (seat.player.chips < betAmount) {
-            betAmount = seat.player.chips;
-          }
-          break;
-
-        case "all-in":
-          betAmount = seat.player.chips;
-          break;
-
-        case "bet":
-          betAmount = Number(bet);
-          if (!betAmount || isNaN(betAmount)) {
-            return socket.emit("error", { message: "Invalid Bet" });
-          }
-          break;
-
-        case "raise":
-          betAmount = Number(bet);
-          if (!betAmount || isNaN(betAmount) || betAmount <= game.highestBet) {
-            return socket.emit("error", { message: "Invalid Raise Amount" });
-          }
-          break;
-
-        default:
-          return socket.emit("error", { message: "Invalid Action" });
+      const raiseValue = Number(raiseAmount);
+      if (!raiseValue || isNaN(raiseValue) || raiseValue <= game.highestBet) {
+        return socket.emit("error", { message: "Invalid raise amount" });
       }
 
-      if (
-        (action === "bet" || action === "raise") &&
-        betAmount > game.highestBet
-      ) {
-        game.highestBet = betAmount;
-
-        game.seats.forEach((s) => {
-          if (s.player) {
-            s.player.checkBetFold = false;
-          }
-        });
+      if (seat.player.chips < raiseValue) {
+        return socket.emit("error", { message: "Not Enough Chips to Raise" });
       }
 
-      if (seat.player.chips < betAmount && action !== "call") {
-        return socket.emit("error", { message: "Not Enough Chips to Call" });
-      }
+      // Deduct the raise amount from player's chips
+      const additionalBet = raiseValue - seat.player.bet;
+      seat.player.chips -= additionalBet;
+      game.pot += additionalBet;
+      seat.player.bet = raiseValue; // Update player's bet to the new raise amount
+      seat.player.action = "raise";
+      game.highestBet = raiseValue; // Update the highest bet in the game
 
-      seat.player.chips -= betAmount;
-      game.pot += betAmount;
-      seat.player.bet += betAmount;
-      seat.player.action = action;
-      seat.player.checkBetFold = true;
-
-      await game.save();
-
-      // Check if all players except the current one have acted
-      if (playersHaveActed(game, seatId)) {
-        proceedToNextStage(game);
-        await game.save();
-      } else {
-        // Otherwise, determine the next player's turn as usual
-        game.currentPlayerTurn = findNextPosition(
-          game.currentPlayerTurn,
-          game.seats
-        );
-        while (
-          !game.seats[game.currentPlayerTurn].player ||
-          game.seats[game.currentPlayerTurn].player.handCards.length === 0
-        ) {
-          game.currentPlayerTurn = findNextPosition(
-            game.currentPlayerTurn,
-            game.seats
-          );
+      // Reset checkBetFold for all players except the one who raised
+      game.seats.forEach((s) => {
+        if (s.player && s._id.toString() !== seatId) {
+          s.player.checkBetFold = false;
         }
-      }
+      });
 
       await game.save();
 
-      io.emit("next_current_player", game);
+      // Move to the next player
+      game.currentPlayerTurn = findNextPosition(seatId, game.seats);
+      await game.save();
 
-      io.emit("player_acted", game);
+      // Notify all clients about the raise
+      io.emit("player_raised_bet", game);
+
+      // Notify the next current player
+      io.emit("next_current_player", {
+        currentPlayerTurn: game.currentPlayerTurn,
+        highestBet: game.highestBet,
+      });
     } catch (error) {
       console.error(error);
-      socket.emit("playerBetError", { error: "Failed to place bet" });
+      socket.emit("playerRaiseError", { error: "Failed to raise bet" });
     }
   });
 }
@@ -477,9 +418,9 @@ function foldSocket(socket, io) {
 }
 
 module.exports = {
-  // playerToPotSocket,
   playerBetSocket,
   callSocket,
   checkSocket,
   foldSocket,
+  raiseSocket,
 };
