@@ -75,6 +75,7 @@ game.winnerData = {};
 
   game.gameRunning = true;
   game.gameEnd = false;
+  
 
   await game.save();
 

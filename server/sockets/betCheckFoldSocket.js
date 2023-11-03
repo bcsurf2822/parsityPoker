@@ -58,7 +58,7 @@ function proceedToNextStage(game) {
     }
   }
 
-  game.currentHighestBet = 0;
+  game.highestBet = 0;
 }
 
 //Bet and All in
@@ -91,6 +91,7 @@ function playerBetSocket(socket, io) {
         case "all-in":
           console.log("All-in action recognized", data);
           betAmount = seat.player.chips;
+          game.highestBet = betAmount;
           break;
 
         case "bet":
