@@ -10,7 +10,6 @@ import {
   startPlayerRaise,
 } from "../../rtk/slices/currentGameSlice";
 
-import DeactivatedBet from "./DeactivatedBet";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
@@ -179,7 +178,7 @@ const Seat = ({ seat, currentGame }) => {
         }
       />
     )}
-    {/* Optionally handle the else case, to display a message or another component */}
+
   </Stack>
 </Box>
                 <Box sx={{ mt: 3, ml: 1, mb: 1 }}>

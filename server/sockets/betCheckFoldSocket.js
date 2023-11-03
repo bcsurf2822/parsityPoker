@@ -261,15 +261,13 @@ function raiseSocket(socket, io) {
         return socket.emit("error", { message: "Not Enough Chips to Raise" });
       }
 
-      // Deduct the raise amount from player's chips
+
       const additionalBet = raiseValue - seat.player.bet;
       seat.player.chips -= additionalBet;
       game.pot += additionalBet;
-      seat.player.bet = raiseValue; // Update player's bet to the new raise amount
+      seat.player.bet = raiseValue; 
       seat.player.action = "raise";
-      game.highestBet = raiseValue; // Update the highest bet in the game
-
-      // Reset checkBetFold for all players except the one who raised
+      game.highestBet = raiseValue;
       game.seats.forEach((s) => {
         if (s.player && s._id.toString() !== seatId) {
           s.player.checkBetFold = false;
@@ -278,14 +276,13 @@ function raiseSocket(socket, io) {
 
       await game.save();
 
-      // Move to the next player
+
       game.currentPlayerTurn = findNextPosition(seatId, game.seats);
       await game.save();
 
-      // Notify all clients about the raise
       io.emit("player_raised_bet", game);
 
-      // Notify the next current player
+
       io.emit("next_current_player", {
         currentPlayerTurn: game.currentPlayerTurn,
         highestBet: game.highestBet,
