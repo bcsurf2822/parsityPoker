@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import Button from "@mui/material/Button";
@@ -11,33 +11,24 @@ const Input = styled(MuiInput)`
   width: 42px;
 `;
 
-export default function BetBox({ playerChips, onBetChange, onCall, onAllIn, onCheck, onFold }) {
-  const [selectedBet, setSelectedBet] = useState(0);
+export default function BetBox({ playerChips, onBetChange, onCall, onAllIn, onCheck, onFold, onRaise, chipsInPot, highestBet }) {
+  const [selectedBet, setSelectedBet] = useState(highestBet);
 
-  const marks = [
-    { value: 0, label: "0" },
-    {
-      value: Math.round(playerChips / 3),
-      label: `${Math.round(playerChips / 3)}`,
-    },
-    {
-      value: Math.round(playerChips / 2),
-      label: `${Math.round(playerChips / 2)}`,
-    },
-    { value: playerChips, label: `${playerChips}` },
-  ];
+  useEffect(() => {
+    setSelectedBet(highestBet);
+  }, [highestBet]);
 
   const handleSliderChange = (_, value) => {
-    setSelectedBet(value);
+    setSelectedBet(Math.max(value, highestBet));
   };
 
   const handleInputChange = (event) => {
-    setSelectedBet(event.target.value === "" ? 0 : Number(event.target.value));
+    setSelectedBet(Math.max(event.target.value === "" ? 0 : Number(event.target.value), highestBet));
   };
 
   const handleBlur = () => {
-    if (selectedBet < 0) {
-      setSelectedBet(0);
+    if (selectedBet < highestBet) {
+      setSelectedBet(highestBet);
     } else if (selectedBet > playerChips) {
       setSelectedBet(playerChips);
     }
@@ -46,6 +37,8 @@ export default function BetBox({ playerChips, onBetChange, onCall, onAllIn, onCh
   const confirmBet = () => {
     onBetChange(selectedBet);
   };
+
+  const canRaise = selectedBet > highestBet;
 
   return (
     <Box sx={{ width: 300 }}>
@@ -59,29 +52,32 @@ export default function BetBox({ playerChips, onBetChange, onCall, onAllIn, onCh
 
         <ButtonGroup variant="text" aria-label="text button group">
         <Button onClick={onCall} variant="contained" color="primary">
-          Call
+          Call {highestBet}
+        </Button>
+        <Button onClick={() => onRaise(selectedBet)} variant="contained" color="primary" disabled={!canRaise}>
+          Raise to {selectedBet}
         </Button>
         <Button onClick={onAllIn} variant="contained" color="secondary">
           All In
         </Button>
         <Button onClick={onCheck} variant="contained" color="secondary">
-         Check
+          Check
         </Button>
         <Button onClick={onFold} variant="contained" color="secondary">
-       Fold
+          Fold
         </Button>
       </ButtonGroup>
       </Box>
       <Grid container spacing={2} alignItems="center">
         <Grid item xs>
           <Slider
-            value={typeof selectedBet === "number" ? selectedBet : 0}
+            value={typeof selectedBet === "number" ? selectedBet : highestBet}
             onChange={handleSliderChange}
             aria-labelledby="input-slider"
             step={0.25}
             valueLabelDisplay="auto"
-            marks={marks}
             max={playerChips}
+            min={highestBet}
           />
         </Grid>
         <Grid item>
@@ -91,7 +87,8 @@ export default function BetBox({ playerChips, onBetChange, onCall, onAllIn, onCh
             onChange={handleInputChange}
             onBlur={handleBlur}
             inputProps={{
-              min: 0,
+              step: 0.25,
+              min: highestBet,
               max: playerChips,
               type: "number",
               "aria-labelledby": "input-slider",
@@ -100,8 +97,8 @@ export default function BetBox({ playerChips, onBetChange, onCall, onAllIn, onCh
         </Grid>
       </Grid>
       <Box sx={{ marginTop: 2 }}>
-        <Button variant="outlined" onClick={confirmBet}>
-          Confirm Bet
+        <Button variant="outlined" onClick={confirmBet} disabled={!canRaise}>
+          Bet $ {selectedBet}
         </Button>
       </Box>
     </Box>

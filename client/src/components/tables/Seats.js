@@ -7,6 +7,7 @@ import {
   startPlayerFold,
   startJoinGame,
   startPlayerCall,
+  startPlayerRaise,
 } from "../../rtk/slices/currentGameSlice";
 
 import DeactivatedBet from "./DeactivatedBet";
@@ -117,6 +118,18 @@ const Seat = ({ seat, currentGame }) => {
       })
     );
   };
+
+  const handleRaise = (gameId, seatId, betValue) => {
+    dispatch(
+      startPlayerRaise({
+        gameId: gameId,
+        seatId: seatId,
+        bet: betValue,
+        action: "raise",
+      })
+    );
+  };
+
   return (
     <div className="d-flex justify-content-center seat">
       {seat && (
@@ -146,31 +159,29 @@ const Seat = ({ seat, currentGame }) => {
                   </Grid>
                 </Box>
                 <Divider variant="middle" />
+
                 <Box sx={{ m: 2 }}>
-                  <Stack direction="row" spacing={1}>
-                    {isCurrentPlayer ? (
-                      <BetBox
-                        playerChips={formatBalance(seat.player.chips)}
-                        onBetChange={(betValue) =>
-                          handleSliderBet(tableId, seat._id, betValue)
-                        }
-                        onCall={() => handleCall(tableId, seat._id)}
-                        onAllIn={() => handleAllIn(tableId, seat._id)}
-                        onCheck={() => handleCheck(tableId, seat._id)}
-                        onFold={() => handleFold(tableId, seat._id)}
-                      />
-                    ) : (
-                      <DeactivatedBet
-                        playerChips={parseFloat(seat.player.chips).toFixed(2)}
-                        onBetChange={(betValue) =>
-                          handleSliderBet(tableId, seat._id, betValue)
-                        }
-                        onCall={() => handleCall(tableId, seat._id)}
-                        onAllIn={() => handleAllIn(tableId, seat._id)}
-                      />
-                    )}
-                  </Stack>
-                </Box>
+  <Stack direction="row" spacing={1}>
+    {isCurrentPlayer && (
+      <BetBox
+        chipsInPot={formatBalance(currentGame.pot)}
+        highestBet={formatBalance(currentGame.highestBet)}
+        playerChips={formatBalance(seat.player.chips)}
+        onBetChange={(betValue) =>
+          handleSliderBet(tableId, seat._id, betValue)
+        }
+        onCall={() => handleCall(tableId, seat._id)}
+        onAllIn={() => handleAllIn(tableId, seat._id)}
+        onCheck={() => handleCheck(tableId, seat._id)}
+        onFold={() => handleFold(tableId, seat._id)}
+        onRaise={(betValue) =>
+          handleRaise(tableId, seat._id, betValue)
+        }
+      />
+    )}
+    {/* Optionally handle the else case, to display a message or another component */}
+  </Stack>
+</Box>
                 <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
                   <p>{`Card 1 ${cards[0]}`}</p>
                   <p>{`Card 2 ${cards[1]}`}</p>

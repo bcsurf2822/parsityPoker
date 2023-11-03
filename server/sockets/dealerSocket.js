@@ -31,6 +31,7 @@ function dealFlopSocket(socket, io) {
       const flopCards = game.currentDeck.splice(0, 3).map((card) => card.code);
       game.dealtCards.push(...flopCards);
       game.communityCards.push(...flopCards);
+      game.highestBet = 0;
 
       await game.save();
 
@@ -71,6 +72,7 @@ function dealTurnSocket(socket, io) {
       const turnCard = game.currentDeck.shift().code;
       game.dealtCards.push(turnCard);
       game.communityCards.push(turnCard);
+      game.highestBet = 0;
 
       await game.save();
 
@@ -111,6 +113,7 @@ function dealRiverSocket(socket, io) {
       const riverCard = game.currentDeck.shift().code;
       game.dealtCards.push(riverCard);
       game.communityCards.push(riverCard);
+      game.highestBet = 0;
 
       await game.save();
 
