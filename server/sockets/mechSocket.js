@@ -68,6 +68,7 @@ function endGameSocket(socket, io) {
       game.stage = "preflop";
       game.gameEnd = true;
       game.gameRunning = false;
+      game.betPlaced = false;
 
       game.seats.forEach((seat) => {
         if (seat.player) {

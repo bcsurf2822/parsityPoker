@@ -78,6 +78,10 @@ const GameSchema = new Schema({
     default: 0,
     set: toDecimal,
   },
+  betPlaced: {
+    type: Boolean,
+    default: false,
+  },
   highestBet: {
     type: Number,
     default: 0,
@@ -102,10 +106,6 @@ const GameSchema = new Schema({
   currentPlayerTurn: {
     type: Number,
     default: -1,
-  },
-  gameRunning: {
-    type: Boolean,
-    default: false,
   },
   stage: {
     type: String,

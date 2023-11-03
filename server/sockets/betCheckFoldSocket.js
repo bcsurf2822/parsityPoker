@@ -123,6 +123,7 @@ function playerBetSocket(socket, io) {
       seat.player.bet += betAmount;
       seat.player.action = action;
       seat.player.checkBetFold = true;
+      game.betPlaced = true;
 
       await game.save();
 

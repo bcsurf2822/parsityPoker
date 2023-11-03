@@ -1,9 +1,9 @@
 const Game = require("../models/gamesSchema");
 
 function findNextActivePlayer(game, startingPosition) {
-  let nextPosition = startingPosition % game.seats.length; 
+  let nextPosition = startingPosition % game.seats.length;
   while (
-    game.seats[nextPosition].player == null || 
+    game.seats[nextPosition].player == null ||
     game.seats[nextPosition].player.handCards.length === 0
   ) {
     nextPosition = (nextPosition + 1) % game.seats.length;
@@ -11,8 +11,6 @@ function findNextActivePlayer(game, startingPosition) {
 
   return nextPosition;
 }
-
-
 
 function dealFlopSocket(socket, io) {
   socket.on("deal_flop", async (data) => {
@@ -46,7 +44,11 @@ function dealFlopSocket(socket, io) {
       game.dealtCards.push(...flopCards);
       game.communityCards.push(...flopCards);
       game.highestBet = 0;
-      game.currentPlayerTurn = findNextActivePlayer(game, game.dealerPosition + 1);
+      game.betPlaced = false;
+      game.currentPlayerTurn = findNextActivePlayer(
+        game,
+        game.dealerPosition + 1
+      );
 
       await game.save();
 
@@ -88,7 +90,11 @@ function dealTurnSocket(socket, io) {
       game.dealtCards.push(turnCard);
       game.communityCards.push(turnCard);
       game.highestBet = 0;
-      game.currentPlayerTurn = findNextActivePlayer(game, game.dealerPosition + 1);
+      game.betPlaced = false;
+      game.currentPlayerTurn = findNextActivePlayer(
+        game,
+        game.dealerPosition + 1
+      );
 
       await game.save();
 
@@ -130,7 +136,11 @@ function dealRiverSocket(socket, io) {
       game.dealtCards.push(riverCard);
       game.communityCards.push(riverCard);
       game.highestBet = 0;
-      game.currentPlayerTurn = findNextActivePlayer(game, game.dealerPosition + 1);
+      game.betPlaced = false;
+      game.currentPlayerTurn = findNextActivePlayer(
+        game,
+        game.dealerPosition + 1
+      );
 
       await game.save();
 
