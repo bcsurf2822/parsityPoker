@@ -38,7 +38,6 @@ const Room = () => {
   console.log("Current Game:", currentGame);
 
   const currentGameLoading = useSelector(state => state.currentGame.currentGameLoading);
-  console.log("Is Game Loading:", currentGameLoading);
 
   const user = useSelector((state) => state.auth.user);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);

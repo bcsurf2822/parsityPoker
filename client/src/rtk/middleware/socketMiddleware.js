@@ -182,6 +182,7 @@ const socketMiddleware = (store) => {
 
   socket.on("pot_transferred", (data) => {
     console.log("Received pot_transferred event with data:", data);
+    console.log("Reason for pot transfer:", data.winnerData.reason)
     store.dispatch(potToPlayerSuccess(data));
   });
 

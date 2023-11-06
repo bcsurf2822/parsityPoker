@@ -219,7 +219,7 @@ const currentGameSlice = createSlice({
       console.log("startPotToPlayer called with payload:", action.payload);
     },
     potToPlayerSuccess: (state, action) => {
-      console.log("potToPlayerSuccess called with payload:", action.payload);
+      console.log("potToPlayerSuccess called with payload:", action.payload.winnerData);
       updateGameState(state, action);
     },
     potToPlayerError: (state, action) => {

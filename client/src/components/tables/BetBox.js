@@ -55,9 +55,15 @@ export default function BetBox({ playerChips, onBetChange, onCall, onAllIn, onCh
       >
 
         <ButtonGroup variant="text" aria-label="text button group">
-        <Button onClick={onCall} variant="contained" color="primary">
-          Call {highestBet}
-        </Button>
+        <Button
+  onClick={onCall}
+  variant="contained"
+  color="primary"
+  disabled={highestBet <= 0} 
+>
+  Call {highestBet}
+</Button>
+
         <Button onClick={() => onRaise(selectedBet)} variant="contained" color="primary" disabled={!canRaise}>
           Raise to {selectedBet}
         </Button>
@@ -78,12 +84,12 @@ export default function BetBox({ playerChips, onBetChange, onCall, onAllIn, onCh
             aria-label="Bet slider"
             defaultValue={highestBet}
             getAriaValueText={valueText}
-            step={1} // Adjust the step based on the granularity you want for the bet values
+            step={1}
             marks
-            min={0} // Minimum is set to 0
-            max={playerChips} // Maximum is set to the number of player chips
+            min={0} 
+            max={playerChips}
             valueLabelDisplay="auto"
-            value={selectedBet} // Controlled value
+            value={selectedBet} 
             onChange={handleSliderChange}
           />
         </Grid>
@@ -94,9 +100,9 @@ export default function BetBox({ playerChips, onBetChange, onCall, onAllIn, onCh
             onChange={handleInputChange}
             onBlur={handleBlur}
             inputProps={{
-              step: 1, // Adjust the step based on the granularity you want for the bet values
-              min: 0, // Minimum is set to 0
-              max: playerChips, // Maximum is set to the number of player chips
+              step: 1,
+              min: 0,
+              max: playerChips, 
               type: "number",
               "aria-labelledby": "input-slider",
             }}
