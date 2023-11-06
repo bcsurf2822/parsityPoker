@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import Box from "@mui/material/Box";
-import Slider from "@mui/material/Slider";
+import Box from "@mui/joy/Box";
+import Slider from "@mui/joy/Slider";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import { styled } from "@mui/material/styles";
 import MuiInput from "@mui/material/Input";
 import ButtonGroup from '@mui/material/ButtonGroup';
+import { styled } from "@mui/material/styles";
 
 const Input = styled(MuiInput)`
   width: 42px;
@@ -19,11 +19,11 @@ export default function BetBox({ playerChips, onBetChange, onCall, onAllIn, onCh
   }, [highestBet]);
 
   const handleSliderChange = (_, value) => {
-    setSelectedBet(Math.max(value, highestBet));
+    setSelectedBet(value);
   };
 
   const handleInputChange = (event) => {
-    setSelectedBet(Math.max(event.target.value === "" ? 0 : Number(event.target.value), highestBet));
+    setSelectedBet(event.target.value === "" ? highestBet : Number(event.target.value));
   };
 
   const handleBlur = () => {
@@ -39,6 +39,10 @@ export default function BetBox({ playerChips, onBetChange, onCall, onAllIn, onCh
   };
 
   const canRaise = selectedBet > highestBet;
+
+  function valueText(value) {
+    return `${value} Chips`;
+  }
 
   return (
     <Box sx={{ width: 300 }}>
@@ -71,13 +75,16 @@ export default function BetBox({ playerChips, onBetChange, onCall, onAllIn, onCh
       <Grid container spacing={2} alignItems="center">
         <Grid item xs>
           <Slider
-            value={typeof selectedBet === "number" ? selectedBet : highestBet}
-            onChange={handleSliderChange}
-            aria-labelledby="input-slider"
-            step={0.25}
+            aria-label="Bet slider"
+            defaultValue={highestBet}
+            getAriaValueText={valueText}
+            step={1} // Adjust the step based on the granularity you want for the bet values
+            marks
+            min={0} // Minimum is set to 0
+            max={playerChips} // Maximum is set to the number of player chips
             valueLabelDisplay="auto"
-            max={playerChips}
-            min={highestBet}
+            value={selectedBet} // Controlled value
+            onChange={handleSliderChange}
           />
         </Grid>
         <Grid item>
@@ -87,9 +94,9 @@ export default function BetBox({ playerChips, onBetChange, onCall, onAllIn, onCh
             onChange={handleInputChange}
             onBlur={handleBlur}
             inputProps={{
-              step: 0.25,
-              min: highestBet,
-              max: playerChips,
+              step: 1, // Adjust the step based on the granularity you want for the bet values
+              min: 0, // Minimum is set to 0
+              max: playerChips, // Maximum is set to the number of player chips
               type: "number",
               "aria-labelledby": "input-slider",
             }}
