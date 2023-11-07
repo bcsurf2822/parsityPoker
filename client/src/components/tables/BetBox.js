@@ -63,10 +63,6 @@ export default function BetBox({ playerChips, onBetChange, onCall, onAllIn, onCh
 >
   Call {highestBet}
 </Button>
-
-        <Button onClick={() => onRaise(selectedBet)} variant="contained" color="primary" disabled={!canRaise}>
-          Raise to {selectedBet}
-        </Button>
         <Button onClick={onAllIn} variant="contained" color="secondary">
           All In
         </Button>
@@ -110,8 +106,12 @@ export default function BetBox({ playerChips, onBetChange, onCall, onAllIn, onCh
         </Grid>
       </Grid>
       <Box sx={{ marginTop: 2 }}>
-        <Button variant="outlined" onClick={confirmBet} disabled={!canRaise}>
-          Bet $ {selectedBet}
+        <Button
+          variant="outlined"
+          onClick={confirmBet}
+          disabled={!canRaise}
+        >
+          {highestBet > 0 ? `Raise to $${selectedBet}` : `Bet $${selectedBet}`}
         </Button>
       </Box>
     </Box>
