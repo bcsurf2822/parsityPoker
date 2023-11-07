@@ -68,7 +68,7 @@ function playerBetSocket(socket, io) {
     const { gameId, seatId, bet, action } = data;
     let betAmount;
 
-    console.log("Received player_bet_all_in data:", data);
+    console.log("Received player_bet or all_in data:", data);
 
     try {
       const game = await Game.findById(gameId);
@@ -233,14 +233,14 @@ function callSocket(socket, io) {
 
 function raiseSocket(socket, io) {
   socket.on("player_raise", async (data) => {
-    const { gameId, seatId, raiseAmount } = data;
+    const { gameId, seatId, bet, action } = data; // Include action in the destructured data
 
     console.log("Received player_raise data:", data);
 
     try {
       const game = await Game.findById(gameId);
 
-      if (!game) {
+           if (!game) {
         return socket.emit("error", { message: "Game not found!" });
       }
 
@@ -254,28 +254,31 @@ function raiseSocket(socket, io) {
         return socket.emit("error", { message: "No Player at this Seat" });
       }
 
-      const raiseValue = Number(raiseAmount);
-      if (!raiseValue || isNaN(raiseValue) || raiseValue <= game.highestBet) {
+      const raiseAmount = Number(bet); // Assuming bet is the additional amount the player wants to raise by
+
+      if (action !== "raise") {
+        return socket.emit("error", { message: "Invalid Action" });
+      }
+
+      if (!raiseAmount || isNaN(raiseAmount) || raiseAmount <= game.highestBet) {
         return socket.emit("error", { message: "Invalid raise amount" });
       }
 
-      if (seat.player.chips < raiseValue) {
+      if (seat.player.chips < raiseAmount) {
         return socket.emit("error", { message: "Not Enough Chips to Raise" });
       }
-
-
-      const additionalBet = raiseValue - seat.player.bet;
+      
+      const additionalBet = raiseAmount - seat.player.bet; // Fixed variable name here
       seat.player.chips -= additionalBet;
       game.pot += additionalBet;
-      seat.player.bet = raiseValue; 
+      seat.player.bet += additionalBet; // Fixed variable name here and adjusted logic
       seat.player.action = "raise";
-      game.highestBet = raiseValue;
+      game.highestBet += raiseAmount; // Assuming this should be the new highest bet
       game.seats.forEach((s) => {
         if (s.player && s._id.toString() !== seatId) {
           s.player.checkBetFold = false;
         }
       });
-
       await game.save();
 
 
