@@ -119,12 +119,12 @@ const Seat = ({ seat, currentGame }) => {
     );
   };
 
-  const handleRaise = (gameId, seatId, betValue) => {
+  const handleRaise = (gameId, seatId, raiseValue) => {
     dispatch(
-      startPlayerRaise({
+      startPlayerBet({
         gameId: gameId,
         seatId: seatId,
-        bet: betValue,
+        bet: raiseValue,
         action: "raise",
       })
     );

@@ -101,12 +101,32 @@ function playerBetSocket(socket, io) {
           }
           break;
 
+          case "raise": // Handle 'raise' in the same switch case
+          betAmount = Number(bet);
+          if (!betAmount || isNaN(betAmount)) {
+            return socket.emit("error", { message: "Invalid Bet" });
+          }
+          
+          if (action === "raise" && betAmount <= game.highestBet) {
+            return socket.emit("error", { message: "Raise must be higher than the current highest bet" });
+          }
+          break;
+
         default:
           return socket.emit("error", { message: "Invalid Action" });
       }
 
       if (action === "bet" && betAmount > game.highestBet) {
         game.highestBet = betAmount;
+
+        if (action === "raise") {
+          // Set other players' checkBetFold to false for a raise
+          game.seats.forEach((s) => {
+            if (s.player && s._id.toString() !== seatId) {
+              s.player.checkBetFold = false;
+            }
+          });
+        }
 
         game.seats.forEach((s) => {
           if (s.player) {
@@ -151,7 +171,7 @@ function playerBetSocket(socket, io) {
 
       io.emit("next_current_player", game);
 
-      io.emit("player_bet_placed", game);
+      io.emit(action === "raise" ? "player_raised_bet" : "player_bet_placed", game);
     } catch (error) {
       console.error(error);
       socket.emit("playerBetError", { error: "Failed to place bet" });
@@ -231,73 +251,73 @@ function callSocket(socket, io) {
 
 // Raise Socket
 
-function raiseSocket(socket, io) {
-  socket.on("player_raise", async (data) => {
-    const { gameId, seatId, bet, action } = data; // Include action in the destructured data
+// function raiseSocket(socket, io) {
+//   socket.on("player_raise", async (data) => {
+//     const { gameId, seatId, bet, action } = data; // Include action in the destructured data
 
-    console.log("Received player_raise data:", data);
+//     console.log("Received player_raise data:", data);
 
-    try {
-      const game = await Game.findById(gameId);
+//     try {
+//       const game = await Game.findById(gameId);
 
-           if (!game) {
-        return socket.emit("error", { message: "Game not found!" });
-      }
+//            if (!game) {
+//         return socket.emit("error", { message: "Game not found!" });
+//       }
 
-      const seat = game.seats.find((s) => s._id.toString() === seatId);
+//       const seat = game.seats.find((s) => s._id.toString() === seatId);
 
-      if (!seat) {
-        return socket.emit("error", { message: "Seat not Found!" });
-      }
+//       if (!seat) {
+//         return socket.emit("error", { message: "Seat not Found!" });
+//       }
 
-      if (!seat.player) {
-        return socket.emit("error", { message: "No Player at this Seat" });
-      }
+//       if (!seat.player) {
+//         return socket.emit("error", { message: "No Player at this Seat" });
+//       }
 
-      const raiseAmount = Number(bet); // Assuming bet is the additional amount the player wants to raise by
+//       const raiseAmount = Number(bet); // Assuming bet is the additional amount the player wants to raise by
 
-      if (action !== "raise") {
-        return socket.emit("error", { message: "Invalid Action" });
-      }
+//       if (action !== "raise") {
+//         return socket.emit("error", { message: "Invalid Action" });
+//       }
 
-      if (!raiseAmount || isNaN(raiseAmount) || raiseAmount <= game.highestBet) {
-        return socket.emit("error", { message: "Invalid raise amount" });
-      }
+//       if (!raiseAmount || isNaN(raiseAmount) || raiseAmount <= game.highestBet) {
+//         return socket.emit("error", { message: "Invalid raise amount" });
+//       }
 
-      if (seat.player.chips < raiseAmount) {
-        return socket.emit("error", { message: "Not Enough Chips to Raise" });
-      }
+//       if (seat.player.chips < raiseAmount) {
+//         return socket.emit("error", { message: "Not Enough Chips to Raise" });
+//       }
       
-      const additionalBet = raiseAmount - seat.player.bet; // Fixed variable name here
-      seat.player.chips -= additionalBet;
-      game.pot += additionalBet;
-      seat.player.bet += additionalBet; // Fixed variable name here and adjusted logic
-      seat.player.action = "raise";
-      game.highestBet += raiseAmount; // Assuming this should be the new highest bet
-      game.seats.forEach((s) => {
-        if (s.player && s._id.toString() !== seatId) {
-          s.player.checkBetFold = false;
-        }
-      });
-      await game.save();
+//       const additionalBet = raiseAmount - seat.player.bet; // Fixed variable name here
+//       seat.player.chips -= additionalBet;
+//       game.pot += additionalBet;
+//       seat.player.bet += additionalBet; // Fixed variable name here and adjusted logic
+//       seat.player.action = "raise";
+//       game.highestBet += raiseAmount; // Assuming this should be the new highest bet
+//       game.seats.forEach((s) => {
+//         if (s.player && s._id.toString() !== seatId) {
+//           s.player.checkBetFold = false;
+//         }
+//       });
+//       await game.save();
 
 
-      game.currentPlayerTurn = findNextPosition(seatId, game.seats);
-      await game.save();
+//       game.currentPlayerTurn = findNextPosition(seatId, game.seats);
+//       await game.save();
 
-      io.emit("player_raised_bet", game);
+//       io.emit("player_raised_bet", game);
 
 
-      io.emit("next_current_player", {
-        currentPlayerTurn: game.currentPlayerTurn,
-        highestBet: game.highestBet,
-      });
-    } catch (error) {
-      console.error(error);
-      socket.emit("playerRaiseError", { error: "Failed to raise bet" });
-    }
-  });
-}
+//       io.emit("next_current_player", {
+//         currentPlayerTurn: game.currentPlayerTurn,
+//         highestBet: game.highestBet,
+//       });
+//     } catch (error) {
+//       console.error(error);
+//       socket.emit("playerRaiseError", { error: "Failed to raise bet" });
+//     }
+//   });
+// }
 
 function checkSocket(socket, io) {
   socket.on("check", async (data) => {
@@ -424,5 +444,5 @@ module.exports = {
   callSocket,
   checkSocket,
   foldSocket,
-  raiseSocket,
+  // raiseSocket,
 };
