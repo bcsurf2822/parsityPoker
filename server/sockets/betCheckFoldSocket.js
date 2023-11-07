@@ -1,19 +1,17 @@
 const Game = require("../models/gamesSchema");
 
 function playersHaveActed(game, currentSeatId, currentAction) {
-  // If the current action is a raise, then we must check that all players have either called, folded, or are all-in.
-  if (currentAction === 'raise') {
+  if (currentAction === "raise") {
     return game.seats.every((seat) => {
       return (
         !seat.player ||
         seat._id.toString() === currentSeatId ||
-        seat.player.action === 'fold' ||
-        seat.player.action === 'all-in' ||
+        seat.player.action === "fold" ||
+        seat.player.action === "all-in" ||
         (seat.player.bet >= game.highestBet && seat.player.checkBetFold)
       );
     });
   } else {
-    // Original logic for non-raise actions
     return game.seats.every((seat) => {
       return (
         !seat.player ||
@@ -23,7 +21,6 @@ function playersHaveActed(game, currentSeatId, currentAction) {
     });
   }
 }
-
 
 function resetCheckBetFold(game) {
   game.seats.forEach((seat) => {
@@ -97,28 +94,34 @@ function playerBetSocket(socket, io) {
       }
 
       betAmount = Number(bet);
-      if (!betAmount || isNaN(betAmount) || seat.player.chips < betAmount && action !== "all-in") {
-        return socket.emit("error", { message: "Invalid Bet or Not Enough Chips" });
+      if (
+        !betAmount ||
+        isNaN(betAmount) ||
+        (seat.player.chips < betAmount && action !== "all-in")
+      ) {
+        return socket.emit("error", {
+          message: "Invalid Bet or Not Enough Chips",
+        });
       }
 
       switch (action) {
         case "all-in":
-          betAmount = seat.player.chips; // all-in could be a bet or a call depending on the amount
-          // No break here since all-in needs to set game.highestBet if it's higher than the current highest bet
+          betAmount = seat.player.chips;
         case "bet":
-          // for both bet and all-in, set the highestBet if it's higher than the current highest bet
           if (betAmount > game.highestBet) {
             game.highestBet = betAmount;
           }
           break;
         case "raise":
           if (betAmount <= game.highestBet) {
-            return socket.emit("error", { message: "Raise must be higher than the current highest bet" });
+            return socket.emit("error", {
+              message: "Raise must be higher than the current highest bet",
+            });
           }
           game.highestBet = betAmount;
           game.seats.forEach((s) => {
             if (s.player && s._id.toString() !== seatId) {
-              s.player.checkBetFold = false; // Only reset for other players on a raise
+              s.player.checkBetFold = false;
             }
           });
           break;
@@ -139,13 +142,19 @@ function playerBetSocket(socket, io) {
         proceedToNextStage(game);
         await game.save();
       } else {
-        game.currentPlayerTurn = findNextPosition(game.currentPlayerTurn, game.seats);
+        game.currentPlayerTurn = findNextPosition(
+          game.currentPlayerTurn,
+          game.seats
+        );
       }
 
       await game.save();
 
       io.emit("next_current_player", game);
-      io.emit(action === "raise" ? "player_raised_bet" : "player_bet_placed", game);
+      io.emit(
+        action === "raise" ? "player_raised_bet" : "player_bet_placed",
+        game
+      );
     } catch (error) {
       console.error(error);
       socket.emit("playerBetError", { error: "Failed to place bet" });
@@ -222,76 +231,6 @@ function callSocket(socket, io) {
     }
   });
 }
-
-// Raise Socket
-
-// function raiseSocket(socket, io) {
-//   socket.on("player_raise", async (data) => {
-//     const { gameId, seatId, bet, action } = data; // Include action in the destructured data
-
-//     console.log("Received player_raise data:", data);
-
-//     try {
-//       const game = await Game.findById(gameId);
-
-//            if (!game) {
-//         return socket.emit("error", { message: "Game not found!" });
-//       }
-
-//       const seat = game.seats.find((s) => s._id.toString() === seatId);
-
-//       if (!seat) {
-//         return socket.emit("error", { message: "Seat not Found!" });
-//       }
-
-//       if (!seat.player) {
-//         return socket.emit("error", { message: "No Player at this Seat" });
-//       }
-
-//       const raiseAmount = Number(bet); // Assuming bet is the additional amount the player wants to raise by
-
-//       if (action !== "raise") {
-//         return socket.emit("error", { message: "Invalid Action" });
-//       }
-
-//       if (!raiseAmount || isNaN(raiseAmount) || raiseAmount <= game.highestBet) {
-//         return socket.emit("error", { message: "Invalid raise amount" });
-//       }
-
-//       if (seat.player.chips < raiseAmount) {
-//         return socket.emit("error", { message: "Not Enough Chips to Raise" });
-//       }
-      
-//       const additionalBet = raiseAmount - seat.player.bet; // Fixed variable name here
-//       seat.player.chips -= additionalBet;
-//       game.pot += additionalBet;
-//       seat.player.bet += additionalBet; // Fixed variable name here and adjusted logic
-//       seat.player.action = "raise";
-//       game.highestBet += raiseAmount; // Assuming this should be the new highest bet
-//       game.seats.forEach((s) => {
-//         if (s.player && s._id.toString() !== seatId) {
-//           s.player.checkBetFold = false;
-//         }
-//       });
-//       await game.save();
-
-
-//       game.currentPlayerTurn = findNextPosition(seatId, game.seats);
-//       await game.save();
-
-//       io.emit("player_raised_bet", game);
-
-
-//       io.emit("next_current_player", {
-//         currentPlayerTurn: game.currentPlayerTurn,
-//         highestBet: game.highestBet,
-//       });
-//     } catch (error) {
-//       console.error(error);
-//       socket.emit("playerRaiseError", { error: "Failed to raise bet" });
-//     }
-//   });
-// }
 
 function checkSocket(socket, io) {
   socket.on("check", async (data) => {

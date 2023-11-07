@@ -35,11 +35,9 @@ export default function BetBox({ playerChips, onBet, onCall, onAllIn, onCheck, o
   };
 
   const confirmBet = (betValue) => {
-    // If the highestBet is greater than 0, then it should be a raise.
     if (highestBet > 0) {
       onRaise(betValue);
     } else {
-      // If the highestBet is 0, then it's the first bet of the round.
       onBet(betValue);
     }
   };

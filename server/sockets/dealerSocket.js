@@ -29,7 +29,6 @@ function dealFlopSocket(socket, io) {
 
       resetActionNone(game);
 
-
       if (game.stage !== "flop" || game.communityCards.length > 0) {
         return socket.emit("dealFlopError", {
           message: "Conditions not met to deal the flop!",
@@ -80,7 +79,6 @@ function dealTurnSocket(socket, io) {
 
       resetActionNone(game);
 
-
       if (
         game.currentDeck.length < 2 ||
         game.stage !== "turn" ||
@@ -128,7 +126,6 @@ function dealRiverSocket(socket, io) {
       const game = await Game.findById(gameId);
 
       resetActionNone(game);
-
 
       if (
         game.currentDeck.length < 2 ||

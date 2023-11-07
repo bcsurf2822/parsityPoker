@@ -7,8 +7,6 @@ const updateGameState = (state, action) => {
   }
 };
 
-
-
 const currentGameSlice = createSlice({
   name: "game",
   initialState: {
@@ -161,20 +159,6 @@ const currentGameSlice = createSlice({
       state.error = action.payload;
     },
 
-    startPlayerRaise: (state, action) => {
-      console.log("startPlayerRaise called with payload:", action.payload);
-    },
-
-    playerRaiseSuccess: (state, action) => {
-      console.log("playerRaiseSuccess called with payload:", action.payload);
-      updateGameState(state, action);
-    },
-
-    playerRaiseError: (state, action) => {
-      console.log("playerRaiseError called with error:", action.payload);
-      state.error = action.payload;
-    },
-
     startPlayerCall: (state, action) => {
       console.log("startPlayerCall called with payload:", action.payload);
     },
@@ -219,7 +203,10 @@ const currentGameSlice = createSlice({
       console.log("startPotToPlayer called with payload:", action.payload);
     },
     potToPlayerSuccess: (state, action) => {
-      console.log("potToPlayerSuccess called with payload:", action.payload.winnerData);
+      console.log(
+        "potToPlayerSuccess called with payload:",
+        action.payload.winnerData
+      );
       updateGameState(state, action);
     },
     potToPlayerError: (state, action) => {
@@ -238,10 +225,10 @@ const currentGameSlice = createSlice({
 });
 
 export const showLoading = createAsyncThunk(
-  'game/showLoading',
+  "game/showLoading",
   async (_, { dispatch }) => {
     dispatch(currentGameSlice.actions.startLoading());
-    await new Promise(resolve => setTimeout(resolve, 1000)); 
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     dispatch(currentGameSlice.actions.endLoading());
   }
 );
@@ -277,9 +264,6 @@ export const {
   startPlayerBet,
   playerBetSuccess,
   playerBetError,
-  startPlayerRaise,
-  playerRaiseSuccess,
-  playerRaiseError,
   startPlayerCall,
   playerCallSuccess,
   playerCallError,

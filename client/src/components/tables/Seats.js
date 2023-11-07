@@ -59,7 +59,6 @@ const Seat = ({ seat, currentGame }) => {
   const [sliderValue, setSliderValue] = useState(minBuyIn);
   const [seatChoice, setSeatChoice] = useState(false);
 
-
   const handleClick = () => {
     setSeatChoice(true);
   };
@@ -153,7 +152,7 @@ const Seat = ({ seat, currentGame }) => {
                     </Grid>
                     <Grid item>
                       <Typography gutterBottom variant="h6" component="div">
-                      {formatBalance(seat.player.chips)}
+                        {formatBalance(seat.player.chips)}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -161,27 +160,26 @@ const Seat = ({ seat, currentGame }) => {
                 <Divider variant="middle" />
 
                 <Box sx={{ m: 2 }}>
-  <Stack direction="row" spacing={1}>
-    {isCurrentPlayer && (
-      <BetBox
-        chipsInPot={formatBalance(currentGame.pot)}
-        highestBet={formatBalance(currentGame.highestBet)}
-        playerChips={formatBalance(seat.player.chips)}
-        onBet={(betValue) =>
-          handleSliderBet(tableId, seat._id, betValue)
-        }
-        onCall={() => handleCall(tableId, seat._id)}
-        onAllIn={() => handleAllIn(tableId, seat._id)}
-        onCheck={() => handleCheck(tableId, seat._id)}
-        onFold={() => handleFold(tableId, seat._id)}
-        onRaise={(betValue) =>
-          handleRaise(tableId, seat._id, betValue)
-        }
-      />
-    )}
-
-  </Stack>
-</Box>
+                  <Stack direction="row" spacing={1}>
+                    {isCurrentPlayer && (
+                      <BetBox
+                        chipsInPot={formatBalance(currentGame.pot)}
+                        highestBet={formatBalance(currentGame.highestBet)}
+                        playerChips={formatBalance(seat.player.chips)}
+                        onBet={(betValue) =>
+                          handleSliderBet(tableId, seat._id, betValue)
+                        }
+                        onCall={() => handleCall(tableId, seat._id)}
+                        onAllIn={() => handleAllIn(tableId, seat._id)}
+                        onCheck={() => handleCheck(tableId, seat._id)}
+                        onFold={() => handleFold(tableId, seat._id)}
+                        onRaise={(betValue) =>
+                          handleRaise(tableId, seat._id, betValue)
+                        }
+                      />
+                    )}
+                  </Stack>
+                </Box>
                 <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
                   <p>{`Card 1 ${cards[0]}`}</p>
                   <p>{`Card 2 ${cards[1]}`}</p>

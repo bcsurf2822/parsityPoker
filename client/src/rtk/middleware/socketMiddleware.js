@@ -28,9 +28,6 @@ import {
   startPlayerBet,
   playerBetSuccess,
   playerBetError,
-  startPlayerRaise,
-  playerRaiseSuccess,
-  playerRaiseError,
   startPlayerCall,
   playerCallSuccess,
   playerCallError,
@@ -70,7 +67,7 @@ const socketMiddleware = (store) => {
   socket.on("playerJoin", (data) => {
     console.log("Received playerJoin event with data:", data);
     store.dispatch(joinGameSuccess(data));
-    store.dispatch(playerUpdate(data))
+    store.dispatch(playerUpdate(data));
   });
 
   socket.on("joinGameError", (error) => {
@@ -80,7 +77,7 @@ const socketMiddleware = (store) => {
   socket.on("playerLeft", (data) => {
     console.log("Received playerLeft event with data:", data);
     store.dispatch(leaveGameSuccess(data));
-    store.dispatch(playerUpdate(data))
+    store.dispatch(playerUpdate(data));
   });
 
   socket.on("leaveGameError", (error) => {
@@ -144,15 +141,6 @@ const socketMiddleware = (store) => {
     store.dispatch(playerBetError(error.message));
   });
 
-  socket.on("player_raised_bet", (data) => {
-    console.log("Received player_raised event with data:", data);
-    store.dispatch(playerRaiseSuccess(data));
-  });
-
-  socket.on("playerRaiseError", (error) => {
-    store.dispatch(playerRaiseError(error.message));
-  });
-
   socket.on("player_called_bet", (data) => {
     console.log("Received player_called event with data:", data);
     store.dispatch(playerCallSuccess(data));
@@ -182,14 +170,13 @@ const socketMiddleware = (store) => {
 
   socket.on("pot_transferred", (data) => {
     console.log("Received pot_transferred event with data:", data);
-    console.log("Reason for pot transfer:", data.winnerData.reason)
+    console.log("Reason for pot transfer:", data.winnerData.reason);
     store.dispatch(potToPlayerSuccess(data));
   });
 
   socket.on("potTransferError", (error) => {
     store.dispatch(potToPlayerError(error.message));
   });
-
 
   return (next) => (action) => {
     switch (action.type) {
@@ -264,16 +251,8 @@ const socketMiddleware = (store) => {
         break;
 
       case startPlayerBet.toString():
-        console.log(
-          "Emitting player_bet event with payload:",
-          action.payload
-        );
+        console.log("Emitting player_bet event with payload:", action.payload);
         socket.emit("player_bet", action.payload);
-        break;
-
-      case startPlayerRaise.toString():
-        console.log("Emitting raise event with payload:", action.payload);
-        socket.emit("player_raise", action.payload);
         break;
 
       case startPlayerCall.toString():
@@ -292,7 +271,10 @@ const socketMiddleware = (store) => {
         break;
 
       case startPotToPlayer.toString():
-        console.log("Emitting pot_to_player event with payload:", action.payload);
+        console.log(
+          "Emitting pot_to_player event with payload:",
+          action.payload
+        );
         socket.emit("pot_to_player", action.payload);
         break;
 

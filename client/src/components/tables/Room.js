@@ -37,7 +37,9 @@ const Room = () => {
   const currentGame = useSelector((state) => state.currentGame.currentGame);
   console.log("Current Game:", currentGame);
 
-  const currentGameLoading = useSelector(state => state.currentGame.currentGameLoading);
+  const currentGameLoading = useSelector(
+    (state) => state.currentGame.currentGameLoading
+  );
 
   const user = useSelector((state) => state.auth.user);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -96,10 +98,9 @@ const Room = () => {
       }
       setPreviousSeatCount(occupiedSeatCount);
     };
-  
+
     handlePlayerJoin();
   }, [seatArray, currentGame]);
-  
 
   //For when Only 1 player Remains EndGame Will be triggered
   useEffect(() => {
@@ -109,57 +110,56 @@ const Room = () => {
     }
   }, [occupiedSeatCount, id, dispatch]);
 
- //FLOP RULES
- useEffect(() => {
-  if (
-    currentGame &&
-    currentGame.stage === "flop" &&
-    currentGame.communityCards.length === 0 &&
-    playersWithHandCards.length > 1 &&
-    currentGame.gameRunning
-  ) {
-    dispatch(startDealFlop({ gameId: id }));
-  }
-}, [currentGame, id, dispatch]);
+  //FLOP RULES
+  useEffect(() => {
+    if (
+      currentGame &&
+      currentGame.stage === "flop" &&
+      currentGame.communityCards.length === 0 &&
+      playersWithHandCards.length > 1 &&
+      currentGame.gameRunning
+    ) {
+      dispatch(startDealFlop({ gameId: id }));
+    }
+  }, [currentGame, id, dispatch]);
 
-//TURN RULES
-useEffect(() => {
-  if (
-    currentGame &&
-    currentGame.stage === "turn" &&
-    currentGame.communityCards.length === 3 &&
-    playersWithHandCards.length > 1 &&
-    currentGame.gameRunning
-  ) {
-    dispatch(startDealTurn({ gameId: id }));
-  }
-}, [currentGame, id, dispatch]);
+  //TURN RULES
+  useEffect(() => {
+    if (
+      currentGame &&
+      currentGame.stage === "turn" &&
+      currentGame.communityCards.length === 3 &&
+      playersWithHandCards.length > 1 &&
+      currentGame.gameRunning
+    ) {
+      dispatch(startDealTurn({ gameId: id }));
+    }
+  }, [currentGame, id, dispatch]);
 
-//RIVER RULES
-useEffect(() => {
-  if (
-    currentGame &&
-    currentGame.stage === "river" &&
-    currentGame.communityCards.length === 4 &&
-    playersWithHandCards.length > 1 &&
-    currentGame.gameRunning
-  ) {
-    dispatch(startDealRiver({ gameId: id }));
-  }
-}, [currentGame, id, dispatch]);
+  //RIVER RULES
+  useEffect(() => {
+    if (
+      currentGame &&
+      currentGame.stage === "river" &&
+      currentGame.communityCards.length === 4 &&
+      playersWithHandCards.length > 1 &&
+      currentGame.gameRunning
+    ) {
+      dispatch(startDealRiver({ gameId: id }));
+    }
+  }, [currentGame, id, dispatch]);
 
   //When All players Fold
   useEffect(() => {
     if (
-      playersWithHandCards.length === 1 && 
-      currentGame && 
+      playersWithHandCards.length === 1 &&
+      currentGame &&
       currentGame.gameRunning
     ) {
       console.log("Only one player with hand cards. Transferring pot...");
       dispatch(startPotToPlayer({ gameId: id }));
     }
   }, [playersWithHandCards, currentGame, id, dispatch]);
-
 
   useEffect(() => {
     const restartGameIfConditionsMet = async () => {
@@ -177,16 +177,18 @@ useEffect(() => {
     restartGameIfConditionsMet();
   }, [currentGame, occupiedSeatCount, dispatch, id]);
 
-
   if (!currentGame) {
     return null;
   }
 
   return (
     <Container fluid className="h-100 bg">
- {currentGame.winnerData && currentGame.winnerData.winners && currentGame.winnerData.winners[0] && 
-      <WinnerAlert winnerData={currentGame.winnerData.winners[0]} />
-    }<Row className="mt-2">
+      {currentGame.winnerData &&
+        currentGame.winnerData.winners &&
+        currentGame.winnerData.winners[0] && (
+          <WinnerAlert winnerData={currentGame.winnerData.winners[0]} />
+        )}
+      <Row className="mt-2">
         <Col className="d-flex justify-content-center">
           <div className="table">{currentGame.name}</div>
           <Button
@@ -233,24 +235,22 @@ useEffect(() => {
         </Col>
         <Col></Col>
         <Col className="d-flex justify-content-center flex-column align-items-center">
-  <div className="loading">
-    {currentGameLoading && <Spinner />}
-  </div>
-  <div className="pot">
-    <AttachMoneyIcon />
-    {formatBalance(currentGame.pot)}
-  </div>
-  {currentGame.communityCards &&
-    currentGame.communityCards.length > 0 && (
-      <div className="community-cards">
-        {currentGame.communityCards.map((card, index) => (
-          <span key={index} className="card">
-            {card}
-          </span>
-        ))}
-      </div>
-    )}
-</Col>
+          <div className="loading">{currentGameLoading && <Spinner />}</div>
+          <div className="pot">
+            <AttachMoneyIcon />
+            {formatBalance(currentGame.pot)}
+          </div>
+          {currentGame.communityCards &&
+            currentGame.communityCards.length > 0 && (
+              <div className="community-cards">
+                {currentGame.communityCards.map((card, index) => (
+                  <span key={index} className="card">
+                    {card}
+                  </span>
+                ))}
+              </div>
+            )}
+        </Col>
         <Col></Col>
         <Col className="d-flex justify-content-center">
           <Seat seat={seatArray[3]} currentGame={currentGame} />
