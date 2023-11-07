@@ -1,14 +1,29 @@
 const Game = require("../models/gamesSchema");
 
-function playersHaveActed(game, currentSeatId) {
-  return game.seats.every((seat) => {
-    return (
-      !seat.player ||
-      seat._id.toString() === currentSeatId ||
-      seat.player.checkBetFold
-    );
-  });
+function playersHaveActed(game, currentSeatId, currentAction) {
+  // If the current action is a raise, then we must check that all players have either called, folded, or are all-in.
+  if (currentAction === 'raise') {
+    return game.seats.every((seat) => {
+      return (
+        !seat.player ||
+        seat._id.toString() === currentSeatId ||
+        seat.player.action === 'fold' ||
+        seat.player.action === 'all-in' ||
+        (seat.player.bet >= game.highestBet && seat.player.checkBetFold)
+      );
+    });
+  } else {
+    // Original logic for non-raise actions
+    return game.seats.every((seat) => {
+      return (
+        !seat.player ||
+        seat._id.toString() === currentSeatId ||
+        seat.player.checkBetFold
+      );
+    });
+  }
 }
+
 
 function resetCheckBetFold(game) {
   game.seats.forEach((seat) => {
@@ -148,7 +163,7 @@ function playerBetSocket(socket, io) {
 
       await game.save();
 
-      if (playersHaveActed(game, seatId)) {
+      if (playersHaveActed(game, seatId, action)) {
         proceedToNextStage(game);
         await game.save();
       } else {
