@@ -14,6 +14,15 @@ const findNextPosition = (startPosition, seats) => {
   return nextPosition;
 };
 
+function resetActionNone(game) {
+  game.seats.forEach((seat) => {
+    if (seat.player) {
+      seat.player.action = "none";
+    }
+  });
+}
+
+
 function updateCurrentPlayerSocket(socket, io) {
   socket.on("updateCurrentPlayer", async ({ gameId }) => {
     try {
@@ -58,6 +67,8 @@ function endGameSocket(socket, io) {
       }
 
       const occupiedSeatsCount = game.seats.filter(seat => seat.player !== null).length;
+
+      resetActionNone(game);
 
       game.currentDeck = [];
       game.communityCards = [];

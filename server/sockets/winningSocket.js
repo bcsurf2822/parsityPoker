@@ -1,5 +1,13 @@
 const Game = require("../models/gamesSchema");
 
+function resetActionNone(game) {
+  game.seats.forEach((seat) => {
+    if (seat.player) {
+      seat.player.action = "none";
+    }
+  });
+}
+
 function potToPlayerSocket(socket, io) {
   socket.on("pot_to_player", async (data) => {
     const { gameId } = data;
@@ -9,6 +17,9 @@ function potToPlayerSocket(socket, io) {
 
     try {
       const game = await Game.findById(gameId);
+
+      resetActionNone(game);
+      
       if (!game) {
         return socket.emit("error", { message: "Game not found!" });
       }

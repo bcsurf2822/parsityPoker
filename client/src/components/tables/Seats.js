@@ -22,7 +22,7 @@ import Typography from "@mui/material/Typography";
 import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 
 import Modal from "@mui/material/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BetBox from "./BetBox";
 
 const style = {
@@ -58,6 +58,7 @@ const Seat = ({ seat, currentGame }) => {
 
   const [sliderValue, setSliderValue] = useState(minBuyIn);
   const [seatChoice, setSeatChoice] = useState(false);
+
 
   const handleClick = () => {
     setSeatChoice(true);
@@ -166,7 +167,7 @@ const Seat = ({ seat, currentGame }) => {
         chipsInPot={formatBalance(currentGame.pot)}
         highestBet={formatBalance(currentGame.highestBet)}
         playerChips={formatBalance(seat.player.chips)}
-        onBetChange={(betValue) =>
+        onBet={(betValue) =>
           handleSliderBet(tableId, seat._id, betValue)
         }
         onCall={() => handleCall(tableId, seat._id)}

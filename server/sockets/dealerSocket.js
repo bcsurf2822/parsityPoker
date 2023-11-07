@@ -1,5 +1,13 @@
 const Game = require("../models/gamesSchema");
 
+function resetActionNone(game) {
+  game.seats.forEach((seat) => {
+    if (seat.player) {
+      seat.player.action = "none";
+    }
+  });
+}
+
 function findNextActivePlayer(game, startingPosition) {
   let nextPosition = startingPosition % game.seats.length;
   while (
@@ -18,6 +26,9 @@ function dealFlopSocket(socket, io) {
 
     try {
       const game = await Game.findById(gameId);
+
+      resetActionNone(game);
+
 
       if (game.stage !== "flop" || game.communityCards.length > 0) {
         return socket.emit("dealFlopError", {
@@ -67,6 +78,9 @@ function dealTurnSocket(socket, io) {
     try {
       const game = await Game.findById(gameId);
 
+      resetActionNone(game);
+
+
       if (
         game.currentDeck.length < 2 ||
         game.stage !== "turn" ||
@@ -112,6 +126,9 @@ function dealRiverSocket(socket, io) {
 
     try {
       const game = await Game.findById(gameId);
+
+      resetActionNone(game);
+
 
       if (
         game.currentDeck.length < 2 ||

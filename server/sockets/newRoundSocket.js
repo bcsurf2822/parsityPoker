@@ -25,8 +25,19 @@ async function fetchNewDeck() {
   }));
 }
 
+function resetActionNone(game) {
+  game.seats.forEach((seat) => {
+    if (seat.player) {
+      seat.player.action = "none";
+    }
+  });
+}
+
+
 async function updatePositionsAndBlinds(gameId) {
   const game = await Game.findById(gameId);
+
+  resetActionNone(game);
 
   if (!game) {
     throw new Error(`Game with ID: ${gameId} not found!`);
