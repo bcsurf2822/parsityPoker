@@ -166,7 +166,7 @@ function playerBetSocket(socket, io) {
 
 function callSocket(socket, io) {
   socket.on("player_call", async (data) => {
-    const { gameId, seatId } = data;
+    const { gameId, seatId, action } = data;
 
     console.log("Received player_call data:", data);
 
@@ -196,7 +196,7 @@ function callSocket(socket, io) {
       seat.player.chips -= callAmount;
       game.pot += callAmount;
       seat.player.bet += callAmount;
-      seat.player.action = "call";
+      seat.player.action = action;
       seat.player.checkBetFold = true;
 
       await game.save();
@@ -234,7 +234,7 @@ function callSocket(socket, io) {
 
 function checkSocket(socket, io) {
   socket.on("check", async (data) => {
-    const { gameId, seatId } = data;
+    const { gameId, seatId, action } = data;
     console.log("Received check event on server with data:", data);
     try {
       const game = await Game.findById(gameId);
@@ -253,7 +253,7 @@ function checkSocket(socket, io) {
         return socket.emit("error", { message: "No Player At Seat" });
       }
 
-      seat.player.action = "check";
+      seat.player.action = action;
       seat.player.checkBetFold = true;
 
       await game.save();
@@ -295,7 +295,7 @@ function checkSocket(socket, io) {
 
 function foldSocket(socket, io) {
   socket.on("fold", async (data) => {
-    const { gameId, seatId } = data;
+    const { gameId, seatId, action } = data;
 
     try {
       const game = await Game.findById(gameId);
@@ -315,7 +315,7 @@ function foldSocket(socket, io) {
       }
 
       seat.player.handCards = [];
-      seat.player.action = "fold";
+      seat.player.action = action;
       seat.player.checkBetFold = true;
 
       await game.save();

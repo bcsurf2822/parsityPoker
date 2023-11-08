@@ -79,12 +79,11 @@ const Seat = ({ seat, currentGame }) => {
 
   const handleFold = (gameId, seatId) => {
     console.log("Dispatching startPlayerFold with params:", gameId, seatId);
-    dispatch(startPlayerFold({ gameId: gameId, seatId: seatId }));
+    dispatch(startPlayerFold({ gameId: gameId, seatId: seatId, action: "fold" }));
   };
 
   const handleCheck = (gameId, seatId) => {
-    console.log("Dispatching startPlayerCheck with params:", gameId, seatId);
-    dispatch(startPlayerCheck({ gameId: gameId, seatId: seatId }));
+    dispatch(startPlayerCheck({ gameId: gameId, seatId: seatId, action: "check" }));
   };
 
   const handleAllIn = (gameId, seatId) => {
