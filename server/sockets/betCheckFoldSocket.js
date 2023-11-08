@@ -92,17 +92,23 @@ function playerBetSocket(socket, io) {
         return socket.emit("error", { message: "No Player at this Seat" });
       }
 
-      if (!betAmount || isNaN(betAmount) || (seat.player.chips < betAmount && action !== "all-in")) {
-        return socket.emit("error", { message: "Invalid Bet or Not Enough Chips" });
+      if (
+        !betAmount ||
+        isNaN(betAmount) ||
+        (seat.player.chips < betAmount && action !== "all-in")
+      ) {
+        return socket.emit("error", {
+          message: "Invalid Bet or Not Enough Chips",
+        });
       }
 
-      // Handle the 'bet' and 'raise' action to reset `checkBetFold` appropriately.
       if (action === "bet" || action === "raise") {
         if (action === "raise" && betAmount <= game.highestBet) {
-          return socket.emit("error", { message: "Raise must be higher than the current highest bet" });
+          return socket.emit("error", {
+            message: "Raise must be higher than the current highest bet",
+          });
         }
 
-        // New bet is placed, so reset `checkBetFold` for other players.
         if (game.highestBet === 0 || betAmount > game.highestBet) {
           game.seats.forEach((s) => {
             if (s.player && s._id.toString() !== seatId) {
@@ -111,7 +117,6 @@ function playerBetSocket(socket, io) {
           });
         }
 
-        // Update the highestBet for 'bet' and 'raise' actions.
         game.highestBet = betAmount;
       }
 
@@ -204,13 +209,17 @@ function callSocket(socket, io) {
         return socket.emit("error", { message: "Not Enough Chips to Call" });
       }
 
-      console.log(`Before calling - pot: ${game.pot}, callAmount: ${callAmount}, playerChips: ${seat.player.chips}`);
+      console.log(
+        `Before calling - pot: ${game.pot}, callAmount: ${callAmount}, playerChips: ${seat.player.chips}`
+      );
 
       seat.player.chips -= callAmount;
       game.pot += callAmount;
-      
-      console.log(`After calling - pot: ${game.pot}, playerChips: ${seat.player.chips}`);
-      
+
+      console.log(
+        `After calling - pot: ${game.pot}, playerChips: ${seat.player.chips}`
+      );
+
       seat.player.bet += callAmount;
       seat.player.action = action;
       seat.player.checkBetFold = true;

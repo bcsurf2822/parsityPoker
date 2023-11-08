@@ -7,7 +7,6 @@ import {
   startPlayerFold,
   startJoinGame,
   startPlayerCall,
-  startPlayerRaise,
 } from "../../rtk/slices/currentGameSlice";
 
 import IconButton from "@mui/material/IconButton";
@@ -22,7 +21,7 @@ import Typography from "@mui/material/Typography";
 import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 
 import Modal from "@mui/material/Modal";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import BetBox from "./BetBox";
 
 const style = {
