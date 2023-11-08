@@ -101,6 +101,7 @@ const Seat = ({ seat, currentGame }) => {
       startPlayerCall({
         gameId: gameId,
         seatId: seatId,
+        bet: currentGame.highestBet,
         action: "call",
       })
     );

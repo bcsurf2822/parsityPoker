@@ -177,7 +177,7 @@ function playerBetSocket(socket, io) {
 
 function callSocket(socket, io) {
   socket.on("player_call", async (data) => {
-    const { gameId, seatId, action } = data;
+    const { gameId, seatId, action, bet } = data;
 
     console.log("Received player_call data:", data);
 
@@ -198,12 +198,12 @@ function callSocket(socket, io) {
         return socket.emit("error", { message: "No Player at this Seat" });
       }
 
-      const callAmount = game.highestBet - seat.player.bet;
+      const callAmount = bet;
 
       if (seat.player.chips < callAmount) {
         return socket.emit("error", { message: "Not Enough Chips to Call" });
       }
-      
+
       console.log(`Before calling - pot: ${game.pot}, callAmount: ${callAmount}, playerChips: ${seat.player.chips}`);
 
       seat.player.chips -= callAmount;
