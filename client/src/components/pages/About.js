@@ -4,7 +4,10 @@ const About = () => {
   return (
     <div className="About">
 About
-<MyFirstGrid />
+<div className="tableGrid">
+  <MyFirstGrid/>
+</div>
+
     </div>
   );
 };

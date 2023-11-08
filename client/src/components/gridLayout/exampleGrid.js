@@ -37,13 +37,3 @@ class MyFirstGrid extends React.Component {
 }
 
 export default MyFirstGrid;
-
-//grid data from example on sandbox
-// Displayed as [x, y, w, h]:
-// 0: [2, 2, 6, 7]
-// 1: [4, 9, 2, 2]
-// 2: [0, 6, 2, 2]
-// 3: [0, 3, 2, 2]
-// 4: [4, 0, 2, 2]
-// 5: [8, 3, 2, 2]
-// 6: [8, 6, 2, 2]
