@@ -79,102 +79,80 @@ function playerBetSocket(socket, io) {
     const { gameId, seatId, bet, action } = data;
     let betAmount = Number(bet);
 
-    console.log("Received player_bet or all_in data:", data);
+    console.log(`Received player_bet event with action: ${action}, bet: ${bet}, seatId: ${seatId}, gameId: ${gameId}`);
 
     try {
       const game = await Game.findById(gameId);
       if (!game) {
+        console.error("Game not found!");
         return socket.emit("error", { message: "Game not found!" });
       }
 
       const seat = game.seats.find((s) => s._id.toString() === seatId);
       if (!seat || !seat.player) {
+        console.error("No Player at this Seat");
         return socket.emit("error", { message: "No Player at this Seat" });
       }
 
-      if (
-        !betAmount ||
-        isNaN(betAmount) ||
-        (seat.player.chips < betAmount && action !== "all-in")
-      ) {
-        return socket.emit("error", {
-          message: "Invalid Bet or Not Enough Chips",
-        });
+      if (!betAmount || isNaN(betAmount) || (seat.player.chips < betAmount && action !== "all-in")) {
+        console.error("Invalid Bet or Not Enough Chips");
+        return socket.emit("error", { message: "Invalid Bet or Not Enough Chips" });
+      }
+
+      // Handling bet, raise, and all-in actions
+      if (action === "all-in") {
+        betAmount = seat.player.chips; // Player goes all-in with their chips
       }
 
       if (action === "bet" || action === "raise") {
         if (action === "raise" && betAmount <= game.highestBet) {
-          return socket.emit("error", {
-            message: "Raise must be higher than the current highest bet",
-          });
+          console.error("Raise must be higher than the current highest bet");
+          return socket.emit("error", { message: "Raise must be higher than the current highest bet" });
         }
 
-        if (game.highestBet === 0 || betAmount > game.highestBet) {
-          game.seats.forEach((s) => {
-            if (s.player && s._id.toString() !== seatId) {
-              s.player.checkBetFold = false;
-            }
-          });
-        }
-
+        console.log(`Handling ${action} action, betAmount: ${betAmount}`);
         game.highestBet = betAmount;
+        game.seats.forEach((s) => {
+          if (s.player && s._id.toString() !== seatId) {
+            s.player.checkBetFold = false; // Reset checkBetFold for other players on a new highest bet
+          }
+        });
       }
 
-      switch (action) {
-        case "all-in":
-            betAmount = seat.player.chips;
-            break; 
-        case "bet":
-            if (betAmount > game.highestBet) {
-                game.highestBet = betAmount;
-            }
-            break;
-            case "raise":
-              if (betAmount <= game.highestBet) {
-                  return socket.emit("error", {
-                      message: "Raise must be higher than the current highest bet",
-                  });
-              }
-              game.highestBet = betAmount;
-              game.seats.forEach((s) => {
-                  if (s.player && s._id.toString() !== seatId) {
-                      s.player.checkBetFold = false;
-                  }
-              });
-              break;
-        default:
-          return socket.emit("error", { message: "Invalid Action" });
-      }
-
+      // Update player and game state with the bet amount
       seat.player.chips -= betAmount;
       game.pot += betAmount;
       seat.player.bet += betAmount;
       seat.player.action = action;
       seat.player.checkBetFold = true;
-      game.betPlaced = true;
 
       await game.save();
 
-      if (playersHaveActed(game, seatId, action)) {
+      // Check if all players have acted to decide whether to move to the next stage
+      const allHaveActed = playersHaveActed(game, seatId, action);
+      console.log(`All players have acted: ${allHaveActed}`);
+      if (allHaveActed) {
         proceedToNextStage(game);
         await game.save();
+        console.log(`Proceeding to next stage: ${game.stage}`);
       } else {
-        game.currentPlayerTurn = findNextPosition(
-          game.currentPlayerTurn,
-          game.seats
-        );
+        game.currentPlayerTurn = findNextPosition(game.currentPlayerTurn, game.seats);
+        console.log(`Next player's turn: ${game.currentPlayerTurn}`);
       }
 
       await game.save();
 
+      // Emit events for the next player and the action taken
       io.emit("next_current_player", game);
       io.emit("player_bet_placed", game);
     } catch (error) {
-      console.error(error);
+      console.error("Failed to place bet", error);
       socket.emit("playerBetError", { error: "Failed to place bet" });
     }
   });
 }
+
+
 
 //call socket
 
