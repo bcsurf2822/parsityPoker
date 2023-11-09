@@ -14,7 +14,7 @@ class MyFirstGrid extends React.Component {
     ];
 
     const itemStyle = {
-      border: '1px solid #333' 
+      border: '3px dotted red'
     };
     return (
       <GridLayout
