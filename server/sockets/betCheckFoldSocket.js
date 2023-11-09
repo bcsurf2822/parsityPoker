@@ -122,25 +122,26 @@ function playerBetSocket(socket, io) {
 
       switch (action) {
         case "all-in":
-          betAmount = seat.player.chips;
+            betAmount = seat.player.chips;
+            break; 
         case "bet":
-          if (betAmount > game.highestBet) {
-            game.highestBet = betAmount;
-          }
-          break;
-        case "raise":
-          if (betAmount <= game.highestBet) {
-            return socket.emit("error", {
-              message: "Raise must be higher than the current highest bet",
-            });
-          }
-          game.highestBet = betAmount;
-          game.seats.forEach((s) => {
-            if (s.player && s._id.toString() !== seatId) {
-              s.player.checkBetFold = false;
+            if (betAmount > game.highestBet) {
+                game.highestBet = betAmount;
             }
-          });
-          break;
+            break;
+            case "raise":
+              if (betAmount <= game.highestBet) {
+                  return socket.emit("error", {
+                      message: "Raise must be higher than the current highest bet",
+                  });
+              }
+              game.highestBet = betAmount;
+              game.seats.forEach((s) => {
+                  if (s.player && s._id.toString() !== seatId) {
+                      s.player.checkBetFold = false;
+                  }
+              });
+              break;
         default:
           return socket.emit("error", { message: "Invalid Action" });
       }
@@ -167,10 +168,7 @@ function playerBetSocket(socket, io) {
       await game.save();
 
       io.emit("next_current_player", game);
-      io.emit(
-        action === "raise" ? "player_raised_bet" : "player_bet_placed",
-        game
-      );
+      io.emit("player_bet_placed", game);
     } catch (error) {
       console.error(error);
       socket.emit("playerBetError", { error: "Failed to place bet" });
