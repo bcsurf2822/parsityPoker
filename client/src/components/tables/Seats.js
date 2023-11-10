@@ -163,9 +163,21 @@ const Seat = ({ seat, currentGame }) => {
                 </Box>
                 <Divider variant="middle" />
 
-                <Box sx={{ m: 2 }}>
-                  <Stack direction="row" spacing={1}>
-                    {isCurrentPlayer && (
+                <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
+                  {cards[0] && (
+                    <img src={getCards(cards[0])} alt={`Card 1 ${cards[0]}`} />
+                  )}
+                  {cards[1] && (
+                    <img src={getCards(cards[1])} alt={`Card 2 ${cards[1]}`} />
+                  )}
+                  <p>{`Check Bet Fold: ${seat.player.checkBetFold}`}</p>
+                  {isDealer && <RadioButtonCheckedIcon />}
+                  <p>Current Player: {isCurrentPlayer ? "True" : "False"}</p>
+                </Box>
+
+                {isCurrentPlayer && (
+                  <Box sx={{ m: 2 }}>
+                    <Stack direction="row" spacing={1}>
                       <BetBox
                         chipsInPot={formatBalance(currentGame.pot)}
                         highestBet={formatBalance(currentGame.highestBet)}
@@ -181,20 +193,9 @@ const Seat = ({ seat, currentGame }) => {
                           handleRaise(tableId, seat._id, betValue)
                         }
                       />
-                    )}
-                  </Stack>
-                </Box>
-                <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
-                  {cards[0] && (
-                    <img src={getCards(cards[0])} alt={`Card 1 ${cards[0]}`} />
-                  )}
-                  {cards[1] && (
-                    <img src={getCards(cards[1])} alt={`Card 2 ${cards[1]}`} />
-                  )}
-                  <p>{`Check Bet Fold: ${seat.player.checkBetFold}`}</p>
-                  {isDealer && <RadioButtonCheckedIcon />}
-                  <p>Current Player: {isCurrentPlayer ? "True" : "False"}</p>
-                </Box>
+                    </Stack>
+                  </Box>
+                )}
               </Box>
             </>
           ) : (
