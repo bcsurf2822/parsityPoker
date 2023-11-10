@@ -40,6 +40,9 @@ import {
   startPotToPlayer,
   potToPlayerSuccess,
   potToPlayerError,
+  startGetWinner,
+  getWinnerSuccess,
+  getWinnerError,
 } from "../slices/currentGameSlice";
 
 import {
@@ -178,6 +181,15 @@ const socketMiddleware = (store) => {
     store.dispatch(potToPlayerError(error.message));
   });
 
+  socket.on("winner_received", (data) => {
+    console.log("Received winner_received event with data:", data);
+    store.dispatch(getWinnerSuccess(data));
+  });
+
+  socket.on("winnerError", (error) => {
+    store.dispatch(getWinnerError(error.message));
+  });
+
   return (next) => (action) => {
     switch (action.type) {
       case requestGames.toString():
@@ -276,6 +288,12 @@ const socketMiddleware = (store) => {
           action.payload
         );
         socket.emit("pot_to_player", action.payload);
+        break;
+
+      case startGetWinner.toString():
+        console.log("Emitting get_winner event with payload:", action.payload);
+
+        socket.emit("get_winner", action.payload);
         break;
 
       default:

@@ -213,6 +213,21 @@ const currentGameSlice = createSlice({
       console.log("potToPlayerError called with error:", action.payload);
       state.error = action.payload;
     },
+
+    startGetWinner: (state, action) => {
+      console.log("startGetWinner called with payload:", action.payload);
+    },
+
+    getWinnerSuccess: (state, action) => {
+      console.log("getWinnerSuccess called with payload:", action.payload);
+      updateGameState(state, action);
+    },
+
+    getWinnerError: (state, action) => {
+      console.log("getWinnerError called with error:", action.payload);
+      state.error = action.payload;
+    },
+
     startLoading: (state) => {
       console.log("Starting the loading spinner");
       state.currentGameLoading = true;

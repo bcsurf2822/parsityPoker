@@ -47,11 +47,13 @@ function winnerSocket(socket, io) {
       // Logic to update the game state with the winner(s) info
       // (e.g., update the pot, player chips, game stage, etc.)
 
+      await game.save();
+
       // Emit an event with the updated game state
-      io.emit("winner_determined", { gameId, winnerData });
+      io.emit("winner_received", { gameId, winnerData });
     } catch (error) {
       console.error(error);
-      socket.emit("winnerDeterminationError", { error: "Failed to determine winner" });
+      socket.emit("winnerError", { error: "Failed to determine winner" });
     }
   });
 }
