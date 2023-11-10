@@ -10,7 +10,7 @@ export const getCards = (cardCode) => {
 
   const suit = cardCode[cardCode.length - 1];
 
-  const imageName = `${value}${suitMap[suit]}.png`;
+  const cardName = `${value}${suitMap[suit]}.png`;
 
-  return `/deck/${imageName}`;
+  return `/deck/${cardName}`;
 };

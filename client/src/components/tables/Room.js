@@ -236,24 +236,25 @@ const Room = () => {
           <Seat seat={seatArray[2]} currentGame={currentGame} />
         </Col>
         <Col></Col>
-        <Col className="d-flex justify-content-center flex-column align-items-center">
+        <Col className="communityCards d-flex justify-content-center flex-column align-items-center">
           <div className="loading">{currentGameLoading && <Spinner />}</div>
           <div className="pot">
             <AttachMoneyIcon />
             {formatBalance(currentGame.pot)}
           </div>
-          {currentGame.communityCards && currentGame.communityCards.length > 0 && (
-  <div className="community-cards">
-    {currentGame.communityCards.map((card, index) => (
-      <img 
-        key={index} 
-        src={getCards(card)} 
-        alt={`Card ${card}`} 
-        className="card-image" // Add a class for styling if needed
-      />
-    ))}
-  </div>
-)}
+          {currentGame.communityCards &&
+            currentGame.communityCards.length > 0 && (
+              <div className="community-cards">
+                {currentGame.communityCards.map((card, index) => (
+                  <img
+                    key={index}
+                    src={getCards(card)}
+                    alt={`Card ${card}`}
+                    className="card-image"
+                  />
+                ))}
+              </div>
+            )}
         </Col>
         <Col></Col>
         <Col className="d-flex justify-content-center">

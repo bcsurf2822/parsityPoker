@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-input-slider";
 
-
 import {
   startPlayerBet,
   startPlayerCheck,
@@ -22,7 +21,7 @@ import Typography from "@mui/material/Typography";
 import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 
 import Modal from "@mui/material/Modal";
-import {  useState } from "react";
+import { useState } from "react";
 import BetBox from "./BetBox";
 import { getCards } from "../../actions/getCards";
 
@@ -80,11 +79,15 @@ const Seat = ({ seat, currentGame }) => {
 
   const handleFold = (gameId, seatId) => {
     console.log("Dispatching startPlayerFold with params:", gameId, seatId);
-    dispatch(startPlayerFold({ gameId: gameId, seatId: seatId, action: "fold" }));
+    dispatch(
+      startPlayerFold({ gameId: gameId, seatId: seatId, action: "fold" })
+    );
   };
 
   const handleCheck = (gameId, seatId) => {
-    dispatch(startPlayerCheck({ gameId: gameId, seatId: seatId, action: "check" }));
+    dispatch(
+      startPlayerCheck({ gameId: gameId, seatId: seatId, action: "check" })
+    );
   };
 
   const handleAllIn = (gameId, seatId) => {
@@ -182,8 +185,12 @@ const Seat = ({ seat, currentGame }) => {
                   </Stack>
                 </Box>
                 <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
-                <img src={getCards(cards[0])} alt={`Card 1 ${cards[0]}`} />
-                <img src={getCards(cards[1])} alt={`Card 2 ${cards[1]}`} />
+                  {cards[0] && (
+                    <img src={getCards(cards[0])} alt={`Card 1 ${cards[0]}`} />
+                  )}
+                  {cards[1] && (
+                    <img src={getCards(cards[1])} alt={`Card 2 ${cards[1]}`} />
+                  )}
                   <p>{`Check Bet Fold: ${seat.player.checkBetFold}`}</p>
                   {isDealer && <RadioButtonCheckedIcon />}
                   <p>Current Player: {isCurrentPlayer ? "True" : "False"}</p>

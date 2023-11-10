@@ -112,6 +112,10 @@ code {
   margin-top: 10px;
 }
 
+.communityCards {
+  border: #000 1px solid;
+}
+
 .About {
   display: flex;
   justify-content: center;
