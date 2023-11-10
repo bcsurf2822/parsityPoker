@@ -8,6 +8,55 @@ function resetActionNone(game) {
   });
 }
 
+const axios = require('axios'); // Make sure you have axios installed
+
+function winnerSocket(socket, io) {
+  socket.on("get_winner", async (data) => {
+    const { gameId } = data;
+
+    try {
+      const game = await Game.findById(gameId);
+      if (!game) {
+        return socket.emit("error", { message: "Game not found!" });
+      }
+
+      // Ensure there are community cards and players with hand cards
+      if (game.communityCards.length === 0 || game.seats.every(seat => !seat.player || seat.player.handCards.length === 0)) {
+        return socket.emit("error", { message: "Not enough data to determine a winner." });
+      }
+
+      // Format the community cards and player cards for the API call
+      const communityCards = game.communityCards.join(',');
+      const playersData = game.seats
+        .filter(seat => seat.player && seat.player.handCards.length)
+        .map(seat => {
+          return {
+            seatId: seat._id,
+            handCards: seat.player.handCards.join(',')
+          };
+        });
+
+      // Construct the API URL
+      const playerCards = playersData.map(p => `pc[]=${p.handCards}`).join('&');
+      const url = `https://api.pokerapi.dev/v1/winner/texas_holdem?cc=${communityCards}&${playerCards}`;
+
+      // Make the API request
+      const response = await axios.get(url);
+      const winnerData = response.data;
+
+      // Logic to update the game state with the winner(s) info
+      // (e.g., update the pot, player chips, game stage, etc.)
+
+      // Emit an event with the updated game state
+      io.emit("winner_determined", { gameId, winnerData });
+    } catch (error) {
+      console.error(error);
+      socket.emit("winnerDeterminationError", { error: "Failed to determine winner" });
+    }
+  });
+}
+
+
 function potToPlayerSocket(socket, io) {
   socket.on("pot_to_player", async (data) => {
     const { gameId } = data;
@@ -101,4 +150,4 @@ function potToPlayerSocket(socket, io) {
   });
 }
 
-module.exports = potToPlayerSocket;
+module.exports = {winnerSocket, potToPlayerSocket}
