@@ -15,6 +15,8 @@ import {
   showLoading,
 } from "../../rtk/slices/currentGameSlice";
 
+import { getCards } from "../../actions/getCards";
+
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import Chatbox from "./Chatbox";
 import Seat from "./Seats";
@@ -240,16 +242,18 @@ const Room = () => {
             <AttachMoneyIcon />
             {formatBalance(currentGame.pot)}
           </div>
-          {currentGame.communityCards &&
-            currentGame.communityCards.length > 0 && (
-              <div className="community-cards">
-                {currentGame.communityCards.map((card, index) => (
-                  <span key={index} className="card">
-                    {card}
-                  </span>
-                ))}
-              </div>
-            )}
+          {currentGame.communityCards && currentGame.communityCards.length > 0 && (
+  <div className="community-cards">
+    {currentGame.communityCards.map((card, index) => (
+      <img 
+        key={index} 
+        src={getCards(card)} 
+        alt={`Card ${card}`} 
+        className="card-image" // Add a class for styling if needed
+      />
+    ))}
+  </div>
+)}
         </Col>
         <Col></Col>
         <Col className="d-flex justify-content-center">

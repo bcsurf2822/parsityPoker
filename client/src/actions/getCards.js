@@ -18,5 +18,5 @@ export const getCards = (cardCode) => {
   const imageName = `${value}${suitMap[suit]}.png`;
   console.log("GET CARD IMG NAME", imageName)
 
-  return `../../public/deck/${imageName}`; 
+  return `/deck/${imageName}`;
 };

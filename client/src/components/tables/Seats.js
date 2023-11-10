@@ -183,7 +183,7 @@ const Seat = ({ seat, currentGame }) => {
                 </Box>
                 <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
                 <img src={getCards(cards[0])} alt={`Card 1 ${cards[0]}`} />
-                  <p>{`Card 2 ${cards[1]}`}</p>
+                <img src={getCards(cards[1])} alt={`Card 2 ${cards[1]}`} />
                   <p>{`Check Bet Fold: ${seat.player.checkBetFold}`}</p>
                   {isDealer && <RadioButtonCheckedIcon />}
                   <p>Current Player: {isCurrentPlayer ? "True" : "False"}</p>
