@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-input-slider";
 
+
 import {
   startPlayerBet,
   startPlayerCheck,
@@ -23,6 +24,7 @@ import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import Modal from "@mui/material/Modal";
 import {  useState } from "react";
 import BetBox from "./BetBox";
+import { getCards } from "../../actions/getCards";
 
 const style = {
   position: "absolute",
@@ -180,7 +182,7 @@ const Seat = ({ seat, currentGame }) => {
                   </Stack>
                 </Box>
                 <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
-                  <p>{`Card 1 ${cards[0]}`}</p>
+                <img src={getCards(cards[0])} alt={`Card 1 ${cards[0]}`} />
                   <p>{`Card 2 ${cards[1]}`}</p>
                   <p>{`Check Bet Fold: ${seat.player.checkBetFold}`}</p>
                   {isDealer && <RadioButtonCheckedIcon />}

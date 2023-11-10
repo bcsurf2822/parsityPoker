@@ -112,11 +112,24 @@ code {
   margin-top: 10px;
 }
 
-.tableGrid {
+.About {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  flex-direction: column;
   text-align: center;
+}
+
+.tableGrid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Ensure grid container takes full width */
+}
+
+/* Responsive adjustments for smaller screens */
+@media screen and (max-width: 768px) {
+  .tableGrid {
+    width: auto; /* Adjust width or other properties as needed */
+  }
 }
