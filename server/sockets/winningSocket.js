@@ -1,4 +1,5 @@
 const Game = require("../models/gamesSchema");
+const axios = require('axios');
 
 function resetActionNone(game) {
   game.seats.forEach((seat) => {
@@ -7,8 +8,6 @@ function resetActionNone(game) {
     }
   });
 }
-
-const axios = require('axios'); // Make sure you have axios installed
 
 function winnerSocket(socket, io) {
   socket.on("get_winner", async (data) => {
@@ -31,8 +30,9 @@ function winnerSocket(socket, io) {
         .filter(seat => seat.player && seat.player.handCards.length)
         .map(seat => {
           return {
-            seatId: seat._id,
-            handCards: seat.player.handCards.join(',')
+            seatId: seat._id.toString(),
+            handCards: seat.player.handCards.join(','),
+            playerData: seat.player // Include player data
           };
         });
 
@@ -42,10 +42,21 @@ function winnerSocket(socket, io) {
 
       // Make the API request
       const response = await axios.get(url);
-      const winnerData = response.data.winners;
+      let winnerData = response.data.winners;
 
-      // Logic to update the game state with the winner(s) info
-      // (e.g., update the pot, player chips, game stage, etc.)
+      // Match winnerData with corresponding seats and add results
+      winnerData = winnerData.map(winner => {
+        const matchingSeat = playersData.find(p => p.handCards === winner.cards);
+        return {
+          ...winner,
+          seatId: matchingSeat?.seatId,
+          user: matchingSeat?.playerData.username,
+          winningHand: winner.result,
+          reward: game.pot,
+        };
+      });
+
+      // Update the game state with the winner(s) info
 
       await game.save();
 
@@ -57,7 +68,6 @@ function winnerSocket(socket, io) {
     }
   });
 }
-
 
 function potToPlayerSocket(socket, io) {
   socket.on("pot_to_player", async (data) => {
