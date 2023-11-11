@@ -210,22 +210,14 @@ const Room = () => {
           >
             Leave Table
           </Button>
+          <Button variant="success" onClick={closeTable}>
+              Tables
+            </Button>
         </Col>
       </Row>
       <Row className="mt-2">
         <Row className="mt-2">
           <Col className="d-flex justify-content-center">
-            <Button
-              variant="danger"
-              onClick={() => {
-                handleEndGame(id);
-              }}
-            >
-              EndGame
-            </Button>
-            <Button variant="success" onClick={handleGetWinner}>
-              Winner?
-            </Button>
           </Col>
         </Row>
       </Row>

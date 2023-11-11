@@ -96,6 +96,7 @@ const Seat = ({ seat, currentGame }) => {
         gameId: gameId,
         seatId: seatId,
         action: "all-in",
+        bet: seat.player.chips,
       })
     );
   };

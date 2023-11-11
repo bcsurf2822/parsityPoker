@@ -101,7 +101,7 @@ function playerBetSocket(socket, io) {
 
       // Handling bet, raise, and all-in actions
       if (action === "all-in") {
-        betAmount = seat.player.chips; // Player goes all-in with their chips
+        betAmount = bet; 
       }
 
       if (action === "bet" || action === "raise") {
@@ -114,7 +114,7 @@ function playerBetSocket(socket, io) {
         game.highestBet = betAmount;
         game.seats.forEach((s) => {
           if (s.player && s._id.toString() !== seatId) {
-            s.player.checkBetFold = false; // Reset checkBetFold for other players on a new highest bet
+            s.player.checkBetFold = false; 
           }
         });
       }
@@ -155,7 +155,6 @@ function playerBetSocket(socket, io) {
 
 
 //call socket
-
 function callSocket(socket, io) {
   socket.on("player_call", async (data) => {
     const { gameId, seatId, action, bet } = data;
