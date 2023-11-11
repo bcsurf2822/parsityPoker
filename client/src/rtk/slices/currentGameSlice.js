@@ -291,6 +291,9 @@ export const {
   startPotToPlayer,
   potToPlayerSuccess,
   potToPlayerError,
+  startGetWinner,
+  getWinnerSuccess,
+  getWinnerError,
   startLoading,
   endLoading,
 } = currentGameSlice.actions;
