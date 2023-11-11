@@ -11,6 +11,7 @@ import {
   startDealFlop,
   startDealTurn,
   startDealRiver,
+  startGetWinner,
   startPotToPlayer,
   showLoading,
 } from "../../rtk/slices/currentGameSlice";
@@ -150,6 +151,14 @@ const Room = () => {
       dispatch(startDealRiver({ gameId: id }));
     }
   }, [currentGame, id, dispatch]);
+
+  //When stage is showdown and there is more than 1 player with handCards
+  useEffect(() => {
+    if (currentGame && currentGame.stage === "showdown" && playersWithHandCards.length > 1) {
+      console.log("--------------------Showdown Stage. Getting winner-------------------------------------");
+      dispatch(startGetWinner({ gameId: id }));
+    }
+  }, [currentGame, playersWithHandCards, dispatch, id]);
 
   //When All players Fold
   useEffect(() => {

@@ -42,7 +42,7 @@ function winnerSocket(socket, io) {
 
       // Make the API request
       const response = await axios.get(url);
-      const winnerData = response.data;
+      const winnerData = response.data.winners;
 
       // Logic to update the game state with the winner(s) info
       // (e.g., update the pot, player chips, game stage, etc.)
