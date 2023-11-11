@@ -8,7 +8,6 @@ function resetActionNone(game) {
     }
   });
 }
-
 function winnerSocket(socket, io) {
   socket.on("get_winner", async (data) => {
     const { gameId } = data;
@@ -19,12 +18,10 @@ function winnerSocket(socket, io) {
         return socket.emit("error", { message: "Game not found!" });
       }
 
-      // Ensure there are community cards and players with hand cards
       if (game.communityCards.length === 0 || game.seats.every(seat => !seat.player || seat.player.handCards.length === 0)) {
         return socket.emit("error", { message: "Not enough data to determine a winner." });
       }
 
-      // Format the community cards and player cards for the API call
       const communityCards = game.communityCards.join(',');
       const playersData = game.seats
         .filter(seat => seat.player && seat.player.handCards.length)
@@ -32,19 +29,16 @@ function winnerSocket(socket, io) {
           return {
             seatId: seat._id.toString(),
             handCards: seat.player.handCards.join(','),
-            playerData: seat.player // Include player data
+            playerData: seat.player
           };
         });
 
-      // Construct the API URL
       const playerCards = playersData.map(p => `pc[]=${p.handCards}`).join('&');
       const url = `https://api.pokerapi.dev/v1/winner/texas_holdem?cc=${communityCards}&${playerCards}`;
 
-      // Make the API request
       const response = await axios.get(url);
       let winnerData = response.data.winners;
 
-      // Match winnerData with corresponding seats and add results
       winnerData = winnerData.map(winner => {
         const matchingSeat = playersData.find(p => p.handCards === winner.cards);
         return {
@@ -52,15 +46,22 @@ function winnerSocket(socket, io) {
           seatId: matchingSeat?.seatId,
           user: matchingSeat?.playerData.username,
           winningHand: winner.result,
-          reward: game.pot,
+          reward: game.pot / winnerData.length,
         };
       });
 
-      // Update the game state with the winner(s) info
+      winnerData.forEach(winner => {
+        const winningSeat = game.seats.find(seat => seat._id.toString() === winner.seatId);
+        if (winningSeat && winningSeat.player) {
+          winningSeat.player.chips += winner.reward; 
+        }
+      });
+
+      game.pot = 0;
+      game.winnerData = winnerData;
 
       await game.save();
 
-      // Emit an event with the updated game state
       io.emit("winner_received", { gameId, winnerData });
     } catch (error) {
       console.error(error);

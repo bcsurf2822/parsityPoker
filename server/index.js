@@ -46,12 +46,6 @@ app.use(loginRoute);
 const logoutRoute = require("./routes/logout");
 app.use(logoutRoute);
 
-// const deckofcardsapiRoute = require("./routes/deckOfCardsAPI");
-// app.use(deckofcardsapiRoute);
-
-const pokerApiRoute = require("./routes/winning");
-app.use(pokerApiRoute);
-
 const fundingRoute = require("./routes/funding");
 app.use(fundingRoute);
 
@@ -65,7 +59,6 @@ const userNameRoute = require("./routes/userNames");
 app.use(userNameRoute);
 
 setupSockets(io);
-
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
