@@ -1,5 +1,5 @@
 const Game = require("../models/gamesSchema");
-const axios = require('axios');
+const axios = require("axios");
 
 function resetActionNone(game) {
   game.seats.forEach((seat) => {
@@ -19,34 +19,48 @@ function winnerSocket(socket, io) {
         return socket.emit("error", { message: "Game not found!" });
       }
 
-      if (game.pot <= 0 || game.stage !== "showdown" || game.communityCards.length !== 5) {
-        return socket.emit("error", { message: "Not time to determine winner" });
+      if (
+        game.pot <= 0 ||
+        game.stage !== "showdown" ||
+        game.communityCards.length !== 5
+      ) {
+        return socket.emit("error", {
+          message: "Not time to determine winner",
+        });
       }
 
-      const playersActive = game.seats.filter(seat => seat.player && seat.player.handCards.length > 0);
+      const playersActive = game.seats.filter(
+        (seat) => seat.player && seat.player.handCards.length > 0
+      );
       if (playersActive.length <= 1) {
-        return socket.emit("error", { message: "Not enough active players to call API" });
+        return socket.emit("error", {
+          message: "Not enough active players to call API",
+        });
       }
 
-      const communityCards = game.communityCards.join(',');
+      const communityCards = game.communityCards.join(",");
       const playersData = game.seats
-        .filter(seat => seat.player && seat.player.handCards.length)
-        .map(seat => {
+        .filter((seat) => seat.player && seat.player.handCards.length)
+        .map((seat) => {
           return {
             seatId: seat._id.toString(),
-            handCards: seat.player.handCards.join(','),
-            playerData: seat.player
+            handCards: seat.player.handCards.join(","),
+            playerData: seat.player,
           };
         });
 
-      const playerCards = playersData.map(p => `pc[]=${p.handCards}`).join('&');
+      const playerCards = playersData
+        .map((p) => `pc[]=${p.handCards}`)
+        .join("&");
       const url = `https://api.pokerapi.dev/v1/winner/texas_holdem?cc=${communityCards}&${playerCards}`;
 
       const response = await axios.get(url);
       let winnerData = response.data.winners;
 
-      winnerData = winnerData.map(winner => {
-        const matchingSeat = playersData.find(p => p.handCards === winner.cards);
+      winnerData = winnerData.map((winner) => {
+        const matchingSeat = playersData.find(
+          (p) => p.handCards === winner.cards
+        );
         return {
           ...winner,
           seatId: matchingSeat?.seatId,
@@ -56,13 +70,16 @@ function winnerSocket(socket, io) {
         };
       });
 
-      winnerData.forEach(winner => {
-        const winningSeat = game.seats.find(seat => seat._id.toString() === winner.seatId);
+      winnerData.forEach((winner) => {
+        const winningSeat = game.seats.find(
+          (seat) => seat._id.toString() === winner.seatId
+        );
         if (winningSeat && winningSeat.player) {
-          winningSeat.player.chips += game.pot; 
+          winningSeat.player.chips += winner.reward; 
         }
       });
 
+      game.winnerData = winnerData;
       game.pot = 0;
       game.gameEnd = true;
       game.gameRunning = false;
@@ -70,7 +87,6 @@ function winnerSocket(socket, io) {
       game.highestBet = 0;
       game.betPlaced = false;
       game.stage = "end";
-      game.winnerData = winnerData;
 
       await game.save();
 
@@ -94,7 +110,7 @@ function potToPlayerSocket(socket, io) {
       const game = await Game.findById(gameId);
 
       resetActionNone(game);
-      
+
       if (!game) {
         return socket.emit("error", { message: "Game not found!" });
       }
@@ -176,4 +192,4 @@ function potToPlayerSocket(socket, io) {
   });
 }
 
-module.exports = {winnerSocket, potToPlayerSocket}
+module.exports = { winnerSocket, potToPlayerSocket };
