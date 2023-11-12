@@ -53,16 +53,23 @@ function winnerSocket(socket, io) {
       winnerData.forEach(winner => {
         const winningSeat = game.seats.find(seat => seat._id.toString() === winner.seatId);
         if (winningSeat && winningSeat.player) {
-          winningSeat.player.chips += winner.reward; 
+          winningSeat.player.chips += game.pot; 
         }
       });
 
       game.pot = 0;
+      game.gameEnd = true;
+      game.gameRunning = false;
+      game.currentDeck = [];
+      game.highestBet = 0;
+      game.betPlaced = false;
+      game.stage = "end";
       game.winnerData = winnerData;
 
       await game.save();
 
-      io.emit("winner_received", { gameId, winnerData });
+      console.log("Emitting winner_received with game:", game);
+      io.emit("winner_received", game);
     } catch (error) {
       console.error(error);
       socket.emit("winnerError", { error: "Failed to determine winner" });

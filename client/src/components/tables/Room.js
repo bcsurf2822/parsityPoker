@@ -78,15 +78,6 @@ const Room = () => {
     navigate("/Tables");
   };
 
-  const handleEndGame = (gameId) => {
-    console.log("Dispatching endGame with params:", gameId);
-    dispatch(startEndGame({ gameId: gameId }));
-  };
-
-  const handleGetWinner = () => {
-    console.log("get Winner called");
-  };
-
   //For Use When 2nd Player Joins Table
   useEffect(() => {
     const handlePlayerJoin = async () => {
