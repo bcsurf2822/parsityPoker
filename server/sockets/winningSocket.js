@@ -8,6 +8,7 @@ function resetActionNone(game) {
     }
   });
 }
+
 function winnerSocket(socket, io) {
   socket.on("get_winner", async (data) => {
     const { gameId } = data;
@@ -18,8 +19,13 @@ function winnerSocket(socket, io) {
         return socket.emit("error", { message: "Game not found!" });
       }
 
-      if (game.communityCards.length === 0 || game.seats.every(seat => !seat.player || seat.player.handCards.length === 0)) {
-        return socket.emit("error", { message: "Not enough data to determine a winner." });
+      if (game.pot <= 0 || game.stage !== "showdown" || game.communityCards.length !== 5) {
+        return socket.emit("error", { message: "Not time to determine winner" });
+      }
+
+      const playersActive = game.seats.filter(seat => seat.player && seat.player.handCards.length > 0);
+      if (playersActive.length <= 1) {
+        return socket.emit("error", { message: "Not enough active players to call API" });
       }
 
       const communityCards = game.communityCards.join(',');
