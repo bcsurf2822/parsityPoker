@@ -78,7 +78,6 @@ const Seat = ({ seat, currentGame }) => {
   const isCurrentPlayer = currentGame.currentPlayerTurn === seat.id - 1;
 
   const handleFold = (gameId, seatId) => {
-    console.log("Dispatching startPlayerFold with params:", gameId, seatId);
     dispatch(
       startPlayerFold({ gameId: gameId, seatId: seatId, action: "fold" })
     );
