@@ -16,8 +16,6 @@ import {
   showLoading,
 } from "../../rtk/slices/currentGameSlice";
 
-import { getCards } from "../../actions/getCards";
-
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import Chatbox from "./Chatbox";
 import Table from "./TableDetails/Table";
