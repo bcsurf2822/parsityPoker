@@ -264,11 +264,6 @@ const Room = () => {
         </Col>
         <Col></Col>
       </Row>
-      <Row>
-        <Col className="d-flex justify-content-center">
-          {isAuthenticated && <Chatbox gameId={id} currentGame={currentGame} />}
-        </Col>
-      </Row>
     </Container>
   );
 };
