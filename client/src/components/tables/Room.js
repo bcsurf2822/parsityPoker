@@ -16,7 +16,6 @@ import {
   showLoading,
 } from "../../rtk/slices/currentGameSlice";
 
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import Chatbox from "./Chatbox";
 import Table from "./TableDetails/Table";
 import Seat from "./Seats";
@@ -289,10 +288,9 @@ const Room = () => {
             className="communityCards d-flex justify-content-center flex-column align-items-center"
           >
               <Grid item xs={12}>
-          {/* Spinner logic */}
           {currentGameLoading && <Spinner />}
         </Grid>
-        
+
             <Table cards={currentGame.communityCards} pot={currentGame.pot} />
           </Grid>
           <Grid item xs={3} className="d-flex justify-content-center">
