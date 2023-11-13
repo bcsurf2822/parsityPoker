@@ -1,4 +1,4 @@
-import { Container, Row, Col, Button } from "react-bootstrap";
+// import { Container, Row, Col, Button } from "react-bootstrap";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +23,9 @@ import Chatbox from "./Chatbox";
 import Seat from "./Seats";
 import WinnerAlert from "./WinnerAlert";
 import Spinner from "./Spinner";
+
+import Grid from '@mui/material/Grid';
+import Container from '@mui/material/Container';
 
 const Room = () => {
   console.log("===============Room component rendered================");
@@ -183,72 +186,111 @@ const Room = () => {
     return null;
   }
 
-  return (
-    <Container fluid className="h-100 bg">
-      <Row className="mt-2">
-        <Col className="d-flex justify-content-center">
-        </Col>
-      </Row>
-      <Row className="mt-2">
-        <Row className="mt-2">
-          <Col className="d-flex justify-content-center">
-          </Col>
-        </Row>
-      </Row>
-      <Row className="h-50">
-        <Col></Col>
-        <Col className="d-flex justify-content-center">
-          <Seat seat={seatArray[0]} currentGame={currentGame} />
-        </Col>
-        <Col></Col>
-        <Col className="d-flex justify-content-center">
-          <Seat seat={seatArray[1]} currentGame={currentGame} />
-        </Col>
-        <Col></Col>
-      </Row>
-      <Row className="h-50">
-        <Col className="d-flex justify-content-center">
-          <Seat seat={seatArray[2]} currentGame={currentGame} />
-        </Col>
-        <Col></Col>
-        <Col className="communityCards d-flex justify-content-center flex-column align-items-center">
-          <div className="loading">{currentGameLoading && <Spinner />}</div>
-          <div className="pot">
-            <AttachMoneyIcon />
-            {formatBalance(currentGame.pot)}
-          </div>
-          {currentGame.communityCards &&
-            currentGame.communityCards.length > 0 && (
-              <div className="community-cards">
-                {currentGame.communityCards.map((card, index) => (
-                  <img
-                    key={index}
-                    src={getCards(card)}
-                    alt={`Card ${card}`}
-                    className="card-image"
-                  />
-                ))}
-              </div>
-            )}
-        </Col>
-        <Col></Col>
-        <Col className="d-flex justify-content-center">
-          <Seat seat={seatArray[3]} currentGame={currentGame} />
-        </Col>
-      </Row>
-      <Row className="h-50">
-        <Col></Col>
-        <Col className="d-flex justify-content-center">
-          <Seat seat={seatArray[4]} currentGame={currentGame} />
-        </Col>
-        <Col></Col>
-        <Col className="d-flex justify-content-center">
-          <Seat seat={seatArray[5]} currentGame={currentGame} />
-        </Col>
-        <Col></Col>
-      </Row>
-    </Container>
-  );
-};
+//   return (
+//     <Container fluid className="h-100 bg">
+//       <Row className="mt-2">
+//         <Col className="d-flex justify-content-center">
+//         </Col>
+//       </Row>
+//       <Row className="mt-2">
+//         <Row className="mt-2">
+//           <Col className="d-flex justify-content-center">
+//           </Col>
+//         </Row>
+//       </Row>
+//       <Row className="h-50">
+//         <Col></Col>
+//         <Col className="d-flex justify-content-center">
+//           <Seat seat={seatArray[0]} currentGame={currentGame} />
+//         </Col>
+//         <Col></Col>
+//         <Col className="d-flex justify-content-center">
+//           <Seat seat={seatArray[1]} currentGame={currentGame} />
+//         </Col>
+//         <Col></Col>
+//       </Row>
+//       <Row className="h-50">
+//         <Col className="d-flex justify-content-center">
+//           <Seat seat={seatArray[2]} currentGame={currentGame} />
+//         </Col>
+//         <Col></Col>
+//         <Col className="communityCards d-flex justify-content-center flex-column align-items-center">
+//           <div className="loading">{currentGameLoading && <Spinner />}</div>
+//           <div className="pot">
+//             <AttachMoneyIcon />
+//             {formatBalance(currentGame.pot)}
+//           </div>
+//           {currentGame.communityCards &&
+//             currentGame.communityCards.length > 0 && (
+//               <div className="community-cards">
+//                 {currentGame.communityCards.map((card, index) => (
+//                   <img
+//                     key={index}
+//                     src={getCards(card)}
+//                     alt={`Card ${card}`}
+//                     className="card-image"
+//                   />
+//                 ))}
+//               </div>
+//             )}
+//         </Col>
+//         <Col></Col>
+//         <Col className="d-flex justify-content-center">
+//           <Seat seat={seatArray[3]} currentGame={currentGame} />
+//         </Col>
+//       </Row>
+//       <Row className="h-50">
+//         <Col></Col>
+//         <Col className="d-flex justify-content-center">
+//           <Seat seat={seatArray[4]} currentGame={currentGame} />
+//         </Col>
+//         <Col></Col>
+//         <Col className="d-flex justify-content-center">
+//           <Seat seat={seatArray[5]} currentGame={currentGame} />
+//         </Col>
+//         <Col></Col>
+//       </Row>
+//     </Container>
+//   );
+// };
+return (
+  <Container maxWidth="lg" className="h-100 bg">
+    <Grid container spacing={2}>
+      {/* Top Row */}
+      <Grid item xs={3}></Grid>
+      <Grid item xs={3} className="d-flex justify-content-center">
+        <Seat seat={seatArray[0]} currentGame={currentGame} />
+      </Grid>
+      <Grid item xs={3} className="d-flex justify-content-center">
+        <Seat seat={seatArray[1]} currentGame={currentGame} />
+      </Grid>
+      <Grid item xs={3}></Grid>
+
+      {/* Middle Row with Table */}
+      <Grid item xs={3} className="d-flex justify-content-center">
+        <Seat seat={seatArray[2]} currentGame={currentGame} />
+      </Grid>
+      <Grid item xs={6} className="communityCards d-flex justify-content-center flex-column align-items-center">
+        {/* Community cards and pot here */}
+      </Grid>
+      <Grid item xs={3} className="d-flex justify-content-center">
+        <Seat seat={seatArray[3]} currentGame={currentGame} />
+      </Grid>
+
+      {/* Bottom Row */}
+      <Grid item xs={3}></Grid>
+      <Grid item xs={3} className="d-flex justify-content-center">
+        <Seat seat={seatArray[4]} currentGame={currentGame} />
+      </Grid>
+      <Grid item xs={3} className="d-flex justify-content-center">
+        <Seat seat={seatArray[5]} currentGame={currentGame} />
+      </Grid>
+      <Grid item xs={3}></Grid>
+    </Grid>
+  </Container>
+);
+}
+
+
 
 export default Room;
