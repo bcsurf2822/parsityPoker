@@ -288,6 +288,11 @@ const Room = () => {
             xs={6}
             className="communityCards d-flex justify-content-center flex-column align-items-center"
           >
+              <Grid item xs={12}>
+          {/* Spinner logic */}
+          {currentGameLoading && <Spinner />}
+        </Grid>
+        
             <Table cards={currentGame.communityCards} pot={currentGame.pot} />
           </Grid>
           <Grid item xs={3} className="d-flex justify-content-center">
