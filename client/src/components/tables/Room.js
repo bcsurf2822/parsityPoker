@@ -185,11 +185,6 @@ const Room = () => {
 
   return (
     <Container fluid className="h-100 bg">
-      {currentGame.winnerData &&
-        currentGame.winnerData.winners &&
-        currentGame.winnerData.winners[0] && (
-          <WinnerAlert winnerData={currentGame.winnerData.winners[0]} />
-        )}
       <Row className="mt-2">
         <Col className="d-flex justify-content-center">
         </Col>
