@@ -24,6 +24,8 @@ import Modal from "@mui/material/Modal";
 import { useState } from "react";
 import BetBox from "./BetBox";
 import { getCards } from "../../actions/getCards";
+import HandCards from "./SeatDetails/HandCards";
+import UserNameAndChips from "./SeatDetails/UserNameAndChips";
 
 const style = {
   position: "absolute",
@@ -148,28 +150,12 @@ const Seat = ({ seat, currentGame }) => {
                 }}
               >
                 <Box sx={{ my: 3, mx: 2 }}>
-                  <Grid container alignItems="center">
-                    <Grid item xs>
-                      <Typography gutterBottom variant="h4" component="div">
-                        {seat.player.username}
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography gutterBottom variant="h6" component="div">
-                        {formatBalance(seat.player.chips)}
-                      </Typography>
-                    </Grid>
-                  </Grid>
+<UserNameAndChips user={seat.player.username} chipCount={seat.player.chips} />
                 </Box>
                 <Divider variant="middle" />
 
                 <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
-                  {cards[0] && (
-                    <img src={getCards(cards[0])} alt={`Card 1 ${cards[0]}`} />
-                  )}
-                  {cards[1] && (
-                    <img src={getCards(cards[1])} alt={`Card 2 ${cards[1]}`} />
-                  )}
+          <HandCards cards={cards} />
                   <p>{`Check Bet Fold: ${seat.player.checkBetFold}`}</p>
                   {isDealer && <RadioButtonCheckedIcon />}
                   <p>Current Player: {isCurrentPlayer ? "True" : "False"}</p>
