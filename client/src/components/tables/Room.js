@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+
 import {
   startLeaveGame,
   requestGame,
@@ -16,15 +17,17 @@ import {
   showLoading,
 } from "../../rtk/slices/currentGameSlice";
 
+import Grid from "@mui/material/Grid";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+import CloseIcon from "@mui/icons-material/Close";
+import { IconButton } from "@mui/material";
+
 import Chatbox from "./Chatbox";
 import Table from "./TableDetails/Table";
 import Seat from "./Seats";
 import WinnerAlert from "./WinnerAlert";
 import Spinner from "./Spinner";
-
-import Grid from "@mui/material/Grid";
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
 
 const Room = () => {
   console.log("===============Room component rendered================");
@@ -191,83 +194,24 @@ const Room = () => {
     return null;
   }
 
-  //   return (
-  //     <Container fluid className="h-100 bg">
-  //       <Row className="mt-2">
-  //         <Col className="d-flex justify-content-center">
-  //         </Col>
-  //       </Row>
-  //       <Row className="mt-2">
-  //         <Row className="mt-2">
-  //           <Col className="d-flex justify-content-center">
-  //           </Col>
-  //         </Row>
-  //       </Row>
-  //       <Row className="h-50">
-  //         <Col></Col>
-  //         <Col className="d-flex justify-content-center">
-  //           <Seat seat={seatArray[0]} currentGame={currentGame} />
-  //         </Col>
-  //         <Col></Col>
-  //         <Col className="d-flex justify-content-center">
-  //           <Seat seat={seatArray[1]} currentGame={currentGame} />
-  //         </Col>
-  //         <Col></Col>
-  //       </Row>
-  //       <Row className="h-50">
-  //         <Col className="d-flex justify-content-center">
-  //           <Seat seat={seatArray[2]} currentGame={currentGame} />
-  //         </Col>
-  //         <Col></Col>
-  //         <Col className="communityCards d-flex justify-content-center flex-column align-items-center">
-  //           <div className="loading">{currentGameLoading && <Spinner />}</div>
-  //           <div className="pot">
-  //             <AttachMoneyIcon />
-  //             {formatBalance(currentGame.pot)}
-  //           </div>
-  //           {currentGame.communityCards &&
-  //             currentGame.communityCards.length > 0 && (
-  //               <div className="community-cards">
-  //                 {currentGame.communityCards.map((card, index) => (
-  //                   <img
-  //                     key={index}
-  //                     src={getCards(card)}
-  //                     alt={`Card ${card}`}
-  //                     className="card-image"
-  //                   />
-  //                 ))}
-  //               </div>
-  //             )}
-  //         </Col>
-  //         <Col></Col>
-  //         <Col className="d-flex justify-content-center">
-  //           <Seat seat={seatArray[3]} currentGame={currentGame} />
-  //         </Col>
-  //       </Row>
-  //       <Row className="h-50">
-  //         <Col></Col>
-  //         <Col className="d-flex justify-content-center">
-  //           <Seat seat={seatArray[4]} currentGame={currentGame} />
-  //         </Col>
-  //         <Col></Col>
-  //         <Col className="d-flex justify-content-center">
-  //           <Seat seat={seatArray[5]} currentGame={currentGame} />
-  //         </Col>
-  //         <Col></Col>
-  //       </Row>
-  //     </Container>
-  //   );
-  // };
   return (
     <Box
       display="flex"
       alignItems="center"
       justifyContent="center"
-      minHeight="100vh" // This makes the Box take up the full viewport height
+      minHeight="100vh"
       className="bg"
     >
       <Container maxWidth="xl">
         <Grid container spacing={2}>
+          <Grid item xs={12} style={{ textAlign: "right" }}>
+            <IconButton
+              onClick={() => handleLeaveGame(user.id, id)}
+              style={{ marginRight: "-12px", marginTop: "-12px" }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Grid>
           {/* Top Row */}
           <Grid item xs={3}></Grid>
           <Grid item xs={3} className="d-flex justify-content-center">
@@ -287,9 +231,9 @@ const Room = () => {
             xs={6}
             className="communityCards d-flex justify-content-center flex-column align-items-center"
           >
-              <Grid item xs={12}>
-          {currentGameLoading && <Spinner />}
-        </Grid>
+            <Grid item xs={12}>
+              {currentGameLoading && <Spinner />}
+            </Grid>
 
             <Table cards={currentGame.communityCards} pot={currentGame.pot} />
           </Grid>

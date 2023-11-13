@@ -150,12 +150,15 @@ const Seat = ({ seat, currentGame }) => {
                 }}
               >
                 <Box sx={{ my: 3, mx: 2 }}>
-<UserNameAndChips user={seat.player.username} chipCount={seat.player.chips} />
+                  <UserNameAndChips
+                    user={seat.player.username}
+                    chipCount={seat.player.chips}
+                  />
                 </Box>
                 <Divider variant="middle" />
 
                 <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
-          <HandCards cards={cards} />
+                  <HandCards cards={cards} />
                   <p>{`Check Bet Fold: ${seat.player.checkBetFold}`}</p>
                   {isDealer && <RadioButtonCheckedIcon />}
                   <p>Current Player: {isCurrentPlayer ? "True" : "False"}</p>
