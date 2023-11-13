@@ -192,18 +192,6 @@ const Room = () => {
         )}
       <Row className="mt-2">
         <Col className="d-flex justify-content-center">
-          <div className="table">{currentGame.name}</div>
-          <Button
-            variant="warning"
-            onClick={() => {
-              handleLeaveGame(user.id, id);
-            }}
-          >
-            Leave Table
-          </Button>
-          <Button variant="success" onClick={closeTable}>
-              Tables
-            </Button>
         </Col>
       </Row>
       <Row className="mt-2">
