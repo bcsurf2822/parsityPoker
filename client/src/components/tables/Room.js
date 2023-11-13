@@ -26,6 +26,7 @@ import Spinner from "./Spinner";
 
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
 
 const Room = () => {
   console.log("===============Room component rendered================");
@@ -254,8 +255,15 @@ const Room = () => {
 //   );
 // };
 return (
-  <Container maxWidth="lg" className="h-100 bg">
-    <Grid container spacing={2}>
+  <Box
+  display="flex"
+  alignItems="center"
+  justifyContent="center"
+  minHeight="100vh" // This makes the Box take up the full viewport height
+  className="bg"
+>
+<Container maxWidth="xl">
+        <Grid container spacing={2}>
       {/* Top Row */}
       <Grid item xs={3}></Grid>
       <Grid item xs={3} className="d-flex justify-content-center">
@@ -288,6 +296,7 @@ return (
       <Grid item xs={3}></Grid>
     </Grid>
   </Container>
+</Box>
 );
 }
 
