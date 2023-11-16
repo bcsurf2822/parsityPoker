@@ -23,7 +23,6 @@ import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
 import BetBox from "./BetBox";
-import { getCards } from "../../actions/getCards";
 import HandCards from "./SeatDetails/HandCards";
 import UserNameAndChips from "./SeatDetails/UserNameAndChips";
 
@@ -136,8 +135,7 @@ const Seat = ({ seat, currentGame }) => {
   };
 
   return (
-    <div className="d-flex justify-content-center seat">
-      {seat && (
+    <div className={`d-flex justify-content-center seat ${!seat.player ? 'unoccupiedSeat' : ''}`}>      {seat && (
         <>
           {seat.player ? (
             <>

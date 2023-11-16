@@ -83,6 +83,8 @@ const Room = () => {
     navigate("/Tables");
   };
 
+  console.log("occupied seat-------------", seatArray)
+
   //For Use When 2nd Player Joins Table
   useEffect(() => {
     const handlePlayerJoin = async () => {

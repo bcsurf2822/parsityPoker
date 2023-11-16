@@ -128,12 +128,21 @@ code {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%; /* Ensure grid container takes full width */
+  width: 100%;
 }
 
-/* Responsive adjustments for smaller screens */
 @media screen and (max-width: 768px) {
   .tableGrid {
-    width: auto; /* Adjust width or other properties as needed */
+    width: auto;
   }
+}
+
+.unoccupiedSeat {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+  border: 1px solid #d0d0d0;
 }
