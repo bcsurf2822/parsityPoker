@@ -224,7 +224,7 @@ const Room = () => {
 
           {/* Middle Row with Table */}
           <Grid item xs={3} className="d-flex justify-content-center">
-            <Seat seat={seatArray[2]} currentGame={currentGame} />
+            <Seat seat={seatArray[5]} currentGame={currentGame} />
           </Grid>
           <Grid
             item
@@ -239,7 +239,7 @@ const Room = () => {
             <Table cards={currentGame.communityCards} pot={currentGame.pot} />
           </Grid>
           <Grid item xs={3} className="d-flex justify-content-center">
-            <Seat seat={seatArray[3]} currentGame={currentGame} />
+            <Seat seat={seatArray[2]} currentGame={currentGame} />
           </Grid>
 
           {/* Bottom Row */}
@@ -248,7 +248,7 @@ const Room = () => {
             <Seat seat={seatArray[4]} currentGame={currentGame} />
           </Grid>
           <Grid item xs={3} className="d-flex justify-content-center">
-            <Seat seat={seatArray[5]} currentGame={currentGame} />
+            <Seat seat={seatArray[3]} currentGame={currentGame} />
           </Grid>
           <Grid item xs={3}></Grid>
         </Grid>
