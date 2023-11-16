@@ -221,27 +221,27 @@ const Room = () => {
             <Seat seat={seatArray[1]} currentGame={currentGame} />
           </Grid>
           <Grid item xs={3}></Grid>
-
+  
           {/* Middle Row with Table */}
-          <Grid item xs={3} className="d-flex justify-content-center">
+          <Grid item xs={3} className="d-flex align-items-center justify-content-center" style={{ height: '300px' }}>
             <Seat seat={seatArray[5]} currentGame={currentGame} />
           </Grid>
           <Grid
             item
             xs={6}
             className="pokerTable d-flex justify-content-center flex-column align-items-center"
-            style={{ height: '300px', width: '600px' }}
+            style={{ height: '300px', width: '600px', marginTop: '20px' }}
           >
             <Grid item xs={12}>
               {currentGameLoading && <Spinner />}
             </Grid>
-
+  
             <Table cards={currentGame.communityCards} pot={currentGame.pot} />
           </Grid>
-          <Grid item xs={3} className="d-flex justify-content-center">
+          <Grid item xs={3} className="d-flex align-items-center justify-content-center" style={{ height: '300px' }}>
             <Seat seat={seatArray[2]} currentGame={currentGame} />
           </Grid>
-
+  
           {/* Bottom Row */}
           <Grid item xs={3}></Grid>
           <Grid item xs={3} className="d-flex justify-content-center">
@@ -255,6 +255,8 @@ const Room = () => {
       </Container>
     </Box>
   );
+  
+  
 };
 
 export default Room;

@@ -139,7 +139,6 @@ const Seat = ({ seat, currentGame }) => {
     <div className="d-flex justify-content-center seat">
       {seat && (
         <>
-          <p>{`Seat ${seat.id}`}</p>
           {seat.player ? (
             <>
               <Box
@@ -160,6 +159,7 @@ const Seat = ({ seat, currentGame }) => {
                   <UserNameAndChips
                     user={seat.player.username}
                     chipCount={seat.player.chips}
+                    seatNumber={seat.id}
                   />
                 </Box>
 
