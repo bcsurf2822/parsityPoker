@@ -229,7 +229,8 @@ const Room = () => {
           <Grid
             item
             xs={6}
-            className="pokerTable"
+            className="pokerTable d-flex justify-content-center flex-column align-items-center"
+            style={{ height: '300px', width: '600px' }}
           >
             <Grid item xs={12}>
               {currentGameLoading && <Spinner />}

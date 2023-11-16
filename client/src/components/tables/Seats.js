@@ -135,6 +135,8 @@ const Seat = ({ seat, currentGame }) => {
     );
   };
 
+  
+
   return (
     <div className="d-flex justify-content-center seat">
       {seat && (
@@ -159,9 +161,9 @@ const Seat = ({ seat, currentGame }) => {
 
                 <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
                   <HandCards cards={cards} />
-                  <p>{`Check Bet Fold: ${seat.player.checkBetFold}`}</p>
+                  {/* <p>{`Check Bet Fold: ${seat.player.checkBetFold}`}</p>
                   {isDealer && <RadioButtonCheckedIcon />}
-                  <p>Current Player: {isCurrentPlayer ? "True" : "False"}</p>
+                  <p>Current Player: {isCurrentPlayer ? "True" : "False"}</p> */}
                 </Box>
 
                 {isCurrentPlayer && (
