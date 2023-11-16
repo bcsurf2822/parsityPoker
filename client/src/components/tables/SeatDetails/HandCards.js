@@ -21,11 +21,10 @@ export default function HandCards({ cards }) {
           <img key={index} src={getCards(card)} alt={`Card ${index + 1} ${card}`} style={cardStyle} />
         ))
       ) : (
-        // Display placeholders if there are no cards
         <>
           {cardPlaceholder}
           {cardPlaceholder}
-          {/* Add more placeholders if necessary */}
+
         </>
       )}
     </div>

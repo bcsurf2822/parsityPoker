@@ -15,7 +15,7 @@ const cardStyle = {
 };
 
 const imgStyle = {
-  maxWidth: "100%", // Ensure image doesn't exceed card style dimensions
+  maxWidth: "100%", 
   maxHeight: "100%",
 };
 
@@ -27,7 +27,7 @@ export default function Table({ pot, cards }) {
       alignItems="center"
       justifyContent="center"
     >
-      {/* Community Cards */}
+
       <Box display="flex" justifyContent="center" width="100%" mb={2}>
         {[...Array(5)].map((_, index) => (
           <Box key={index} style={cardStyle}>
@@ -41,12 +41,9 @@ export default function Table({ pot, cards }) {
           </Box>
         ))}
       </Box>
-
-      {/* Pot Amount */}
       <Typography variant="h6">Pot: {pot}</Typography>
 
-      {/* Placeholder for Chip Animation */}
-      <Box mt={2}>{/* Chip animation will go here */}</Box>
+      <Box mt={2}></Box>
     </Box>
   );
 }
