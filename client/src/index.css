@@ -74,13 +74,6 @@ code {
   font-size: 0.8em;
 }
 
-.bg {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100vh;
-}
-
 .containerBox {
   width: 200px;
   height: 300px;
@@ -135,14 +128,4 @@ code {
   .tableGrid {
     width: auto;
   }
-}
-
-.unoccupiedSeat {
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f0f0f0;
-  border: 1px solid #d0d0d0;
 }

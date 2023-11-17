@@ -38,8 +38,13 @@ const style = {
   p: 4,
 };
 
-const Seat = ({ seat, currentGame }) => {
+const Seat = ({ seatIndex }) => {
   const user = useSelector((state) => state.auth.user);
+
+  const seat = useSelector(
+    (state) => state.currentGame.currentGame.seats[seatIndex]
+  );
+  const currentGame = useSelector((state) => state.currentGame.currentGame);
 
   const formatBalance = (balance) => balance.toFixed(2);
 
@@ -135,7 +140,9 @@ const Seat = ({ seat, currentGame }) => {
   };
 
   return (
-    <div className={`d-flex justify-content-center seat ${!seat.player ? 'unoccupiedSeat' : ''}`}>      {seat && (
+    <div className="d-flex justify-content-center seat">
+      {" "}
+      {seat && (
         <>
           {seat.player ? (
             <>
