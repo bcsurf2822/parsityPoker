@@ -74,11 +74,6 @@ const Room = () => {
   ).length;
   console.log("Occupied Seat Count:", occupiedSeatCount);
 
-  const handleLeaveGame = (userId, gameId) => {
-    console.log("Dispatching startLeaveGame with params:", userId, gameId);
-    dispatch(startLeaveGame({ userId, gameId }));
-  };
-
   const closeTable = () => {
     navigate("/Tables");
   };
@@ -206,14 +201,7 @@ const Room = () => {
     >
       <Container maxWidth="xl">
         <Grid container spacing={2}>
-          <Grid item xs={12} style={{ textAlign: "right" }}>
-            <IconButton
-              onClick={() => handleLeaveGame(user.id, id)}
-              style={{ marginRight: "-12px", marginTop: "-12px" }}
-            >
-              <CloseIcon />
-            </IconButton>
-          </Grid>
+
           {/* Top Row */}
           <Grid item xs={3}></Grid>
           <Grid item xs={3} className="d-flex justify-content-center">

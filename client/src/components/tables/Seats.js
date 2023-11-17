@@ -7,6 +7,7 @@ import {
   startPlayerFold,
   startJoinGame,
   startPlayerCall,
+  startLeaveGame,
 } from "../../rtk/slices/currentGameSlice";
 
 import IconButton from "@mui/material/IconButton";
@@ -19,6 +20,7 @@ import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
+import CloseIcon from "@mui/icons-material/Close";
 
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
@@ -82,6 +84,11 @@ const Seat = ({ seatIndex }) => {
 
   const isDealer = currentGame.dealerPosition === seat.id - 1;
   const isCurrentPlayer = currentGame.currentPlayerTurn === seat.id - 1;
+
+  const handleLeaveGame = (userId, gameId) => {
+    console.log("Dispatching startLeaveGame with params:", userId, gameId);
+    dispatch(startLeaveGame({ userId, gameId }));
+  };
 
   const handleFold = (gameId, seatId) => {
     dispatch(
@@ -166,6 +173,9 @@ const Seat = ({ seatIndex }) => {
                     chipCount={seat.player.chips}
                     seatNumber={seat.id}
                   />
+                  <IconButton onClick={() => handleLeaveGame(user.id, tableId)}>
+                    <CloseIcon />
+                  </IconButton>
                 </Box>
 
                 {isCurrentPlayer && (
