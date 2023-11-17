@@ -12,6 +12,10 @@ code {
     monospace;
 }
 
+.App {
+  text-align: center;
+}
+
 .app {
   overflow: hidden;
   position: relative;
@@ -115,17 +119,4 @@ code {
   align-items: center;
   min-height: 100vh;
   text-align: center;
-}
-
-.tableGrid {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-@media screen and (max-width: 768px) {
-  .tableGrid {
-    width: auto;
-  }
 }

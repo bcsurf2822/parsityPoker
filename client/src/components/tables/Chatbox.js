@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Form, ListGroup } from "react-bootstrap";
-import { socket } from "../../socket";
 import { addMessage } from "../../rtk/slices/chatSlice";
 
 export default function Chatbox({ gameId }) {
@@ -17,12 +16,6 @@ export default function Chatbox({ gameId }) {
         dispatch(addMessage(msg));
       }
     }
-
-    socket.on("chat message", onChatMessage);
-
-    return () => {
-      socket.off("chat message", onChatMessage);
-    };
   }, [gameId, dispatch]);
 
   const handleMessageChange = (e) => {
@@ -32,8 +25,6 @@ export default function Chatbox({ gameId }) {
   const handleMessageSend = () => {
     if (message !== "") {
       console.log(`Sending message: ${message}`);
-      socket.emit("chat message", { user: user.username, message, gameId });
-      setMessage("");
     }
   };
 

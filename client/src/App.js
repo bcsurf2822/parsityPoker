@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import "./App.css";
 
 import Home from "./components/Home";
 import About from "./components/pages/About";
@@ -23,7 +22,6 @@ import { initializeAuth } from "./rtk/actions/auth";
 
 
 function App() {
-  console.log("App Rendered")
   const dispatch = useDispatch();
 
   useEffect(() => {
