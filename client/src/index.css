@@ -112,11 +112,3 @@ code {
 .pokerTable {
   border: #000 1px solid;
 }
-
-.About {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  text-align: center;
-}
