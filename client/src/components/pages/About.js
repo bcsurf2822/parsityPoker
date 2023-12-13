@@ -27,7 +27,7 @@ const About = () => {
       One of three columns
     </div>
     <div class="col">
-      One of three columns
+      Chatbox area
     </div>
     <div class="col">
       One of three columns
