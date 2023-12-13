@@ -112,3 +112,9 @@ code {
 .pokerTable {
   border: #000 1px solid;
 }
+
+.bordered-col {
+  border: 1px solid black;
+  padding: 25px;
+  margin: 5px;
+}

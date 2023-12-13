@@ -2,19 +2,25 @@
 
 const About = () => {
   return (
-    
-<div class="container text-center">
-  <div class="row">
-    <div class="col">col</div>
-    <div class="col">col</div>
-    <div class="col">col</div>
-    <div class="col">col</div>
-  </div>
-  <div class="row">
-    <div class="col-8">col-8</div>
-    <div class="col-4">col-4</div>
-  </div>
-</div>
+    <div className="container text-center">
+      <div className="row">
+        <div className="col bordered-col">col</div>
+        <div className="col bordered-col">col</div>
+        <div className="col bordered-col">col</div>
+        <div className="col bordered-col">col</div>
+      </div>
+      <div className="row">
+      <div className="col-2 bordered-col">col-2</div>
+        <div className="col-6 bordered-col">col-8</div>
+        <div className="col-2 bordered-col">col-2</div>
+      </div>
+      <div className="row">
+        <div className="col bordered-col">col</div>
+        <div className="col bordered-col">col</div>
+        <div className="col bordered-col">col</div>
+        <div className="col bordered-col">col</div>
+      </div>
+    </div>
   );
 };
 
