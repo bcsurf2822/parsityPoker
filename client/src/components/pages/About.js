@@ -20,7 +20,22 @@ const About = () => {
         <div className="col bordered-col">col</div>
         <div className="col bordered-col">col</div>
       </div>
+
+      <div class="container text-center">
+  <div class="row align-items-end">
+    <div class="col">
+      One of three columns
     </div>
+    <div class="col">
+      One of three columns
+    </div>
+    <div class="col">
+      One of three columns
+    </div>
+  </div>
+</div>
+    </div>
+  
   );
 };
 
