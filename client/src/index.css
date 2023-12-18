@@ -121,4 +121,9 @@ code {
 
 .table-row {
   margin-left: 150px;
+  height: 200px;
+}
+
+.seat-row {
+  height: 200px;
 }
