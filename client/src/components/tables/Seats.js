@@ -15,11 +15,9 @@ import AddIcon from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
 import Button from "@mui/joy/Button";
 
-import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import CloseIcon from "@mui/icons-material/Close";
 
 import Modal from "@mui/material/Modal";
@@ -153,34 +151,28 @@ const Seat = ({ seatIndex }) => {
         <>
           {seat.player ? (
             <>
-              <Box
-                sx={{
-                  width: "100%",
-                  maxWidth: 360,
-                  bgcolor: "background.paper",
-                }}
-              >
-                <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
+              <div className="bg-light p-3" style={{ maxWidth: "360px" }}>
+                <div className="mt-3 ml-1 mb-1">
                   <HandCards cards={cards} />
-                  {/* <p>{`Check Bet Fold: ${seat.player.checkBetFold}`}</p>
-                  {isDealer && <RadioButtonCheckedIcon />}
-                  <p>Current Player: {isCurrentPlayer ? "True" : "False"}</p> */}
-                </Box>
-                <Divider variant="middle" />
-                <Box sx={{ my: 3, mx: 2 }}>
+                </div>
+                <hr />
+                <div className="my-3 mx-2">
                   <UserNameAndChips
                     user={seat.player.username}
                     chipCount={seat.player.chips}
                     seatNumber={seat.id}
                   />
-                  <IconButton onClick={() => handleLeaveGame(user.id, tableId)}>
-                    <CloseIcon />
-                  </IconButton>
-                </Box>
+                  <Button
+                    variant="outline-secondary"
+                    onClick={() => handleLeaveGame(user.id, tableId)}
+                  >
+                    Leave
+                  </Button>
+                </div>
 
                 {isCurrentPlayer && (
-                  <Box sx={{ m: 2 }}>
-                    <Stack direction="row" spacing={1}>
+                  <div className="m-2">
+                    <div className="d-flex justify-content-between">
                       <BetBox
                         chipsInPot={formatBalance(currentGame.pot)}
                         highestBet={formatBalance(currentGame.highestBet)}
@@ -196,10 +188,10 @@ const Seat = ({ seatIndex }) => {
                           handleRaise(tableId, seat._id, betValue)
                         }
                       />
-                    </Stack>
-                  </Box>
+                    </div>
+                  </div>
                 )}
-              </Box>
+              </div>
             </>
           ) : (
             <>
