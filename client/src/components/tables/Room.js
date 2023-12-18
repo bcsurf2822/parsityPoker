@@ -190,62 +190,51 @@ const Room = () => {
   }
 
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      minHeight="90vh"
-      position={"relative"}
-      boxSizing={"border-box"}
-    >
-      <Container maxWidth="xl">
-        <Grid container spacing={2}>
 
-          {/* Top Row */}
-          <Grid item xs={3}></Grid>
-          <Grid item xs={3} className="d-flex justify-content-center">
-            <Seat seatIndex={0} />
-          </Grid>
-          <Grid item xs={3} className="d-flex justify-content-center">
-            <Seat seatIndex={1} />
-          </Grid>
-          <Grid item xs={3}></Grid>
+
+          <div
+      className="room-new container text-center d-flex flex-column justify-content-center"
+      style={{ height: "97vh" }}
+    >
+
+          <div className="seat-row row">
+        <div className="empty-l-top col bordered-col">          {currentGameLoading && <Spinner />}</div>
+        <div className="seat-top col-2 bordered-col">
+        <Seat seatIndex={0} />
+        </div>
+        <div className="seat-top col-2 bordered-col">
+        <Seat seatIndex={1} />
+        </div>
+        <div className="empty-r-top col bordered-col">Empty R Top</div>
+      </div>
   
-          {/* Middle Row with Table */}
-          <Grid item xs={3} className="d-flex align-items-center justify-content-center" style={{ height: '300px' }}>
-            <Seat seatIndex={5} />
-          </Grid>
-          <Grid
-            item
-            xs={6}
-            className="pokerTable d-flex justify-content-center flex-column align-items-center"
-            style={{ height: '250px', width: '40px', marginTop: '20px' }}
-          >
-            <Grid item xs={12}>
-              {currentGameLoading && <Spinner />}
-            </Grid>
-  
-            <Table cards={currentGame.communityCards} pot={currentGame.pot} />
-          </Grid>
-          <Grid item xs={3} className="d-flex align-items-center justify-content-center" style={{ height: '300px' }}>
-            <Seat seatIndex={3} />
-          </Grid>
-  
-          {/* Bottom Row */}
-          <Grid item xs={3}></Grid>
-          <Grid item xs={3} className="d-flex justify-content-center">
-            <Seat seatIndex={4} />
-          </Grid>
-          <Grid item xs={3} className="d-flex justify-content-center">
-            <Seat seatIndex={3} />
-          </Grid>
-          <Grid item xs={3}></Grid>
-        </Grid>
-      </Container>
-    </Box>
-  );
-  
-  
+
+          <div className="table-row row ml-3">
+        <div className="seat-mid-l col-2 bordered-col seat-height">
+        <Seat seatIndex={5} />
+        </div>
+        <div className="table-mid col-6 bordered-col table-css" >
+        <Table cards={currentGame.communityCards} pot={currentGame.pot} />
+        </div>
+        <div className="seat-mid-r col-2 bordered-col seat-height">
+        <Seat seatIndex={2} />
+        </div>
+      </div>
+
+
+        <div className="seat-row row">
+        <div className="empty-l-bot col bordered-col">Empty L Bottom</div>
+        <div className="seat-bot col-2 bordered-col">
+        <Seat seatIndex={3} />
+        </div>
+        <div className="seat-bot col-2 bordered-col">
+        <Seat seatIndex={4} />
+        </div>
+        <div className="empty-r-bot col bordered-col">Empty R Bottom</div>
+      </div>
+      </div>
+
+  ); 
 };
 
 export default Room;

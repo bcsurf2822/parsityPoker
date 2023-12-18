@@ -1,3 +1,5 @@
+
+
 const About = () => {
   return (
     <div
@@ -11,9 +13,9 @@ const About = () => {
         <div className="empty-r-top col bordered-col">Empty R Top</div>
       </div>
       <div className="table-row row ml-3">
-        <div className="seat-mid-l col-2 bordered-col">Seat 6</div>
-        <div className="table-mid col-6 bordered-col" >Table</div>
-        <div className="seat-mid-r col-2 bordered-col">Seat 3</div>
+        <div className="seat-mid-l col-2 bordered-col seat-height">Seat 6</div>
+        <div className="table-mid col-6 bordered-col table-css" >Table</div>
+        <div className="seat-mid-r col-2 bordered-col seat-height">Seat 3</div>
       </div>
       <div className="seat-row row">
         <div className="empty-l-bot col bordered-col">Empty L Bottom</div>

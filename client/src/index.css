@@ -121,6 +121,13 @@ code {
 
 .table-row {
   margin-left: 150px;
+}
+
+.table-css {
+  height: 300px;
+}
+
+.seat-height {
   height: 200px;
 }
 
