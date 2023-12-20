@@ -2,39 +2,20 @@ import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-input-slider";
 
 import {
-  startPlayerBet,
-  startPlayerCheck,
-  startPlayerFold,
   startJoinGame,
-  startPlayerCall,
   startLeaveGame,
 } from "../../rtk/slices/currentGameSlice";
 
-import IconButton from "@mui/material/IconButton";
-import AddIcon from "@mui/icons-material/Add";
-import Box from "@mui/material/Box";
-import Button from "@mui/joy/Button";
-
-import Typography from "@mui/material/Typography";
+import { Button, Modal } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 
-import Modal from "@mui/material/Modal";
+
 import { useState } from "react";
-import BetBox from "./BetBox";
 import HandCards from "./SeatDetails/HandCards";
 import UserNameAndChips from "./SeatDetails/UserNameAndChips";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
 
 const Seat = ({ seatIndex }) => {
   const user = useSelector((state) => state.auth.user);
@@ -87,87 +68,49 @@ const Seat = ({ seatIndex }) => {
 
   return (
     <div className="d-flex justify-content-center seat">
-      {" "}
       {seat && (
         <>
           {seat.player ? (
-            <>
-              <div className="bg-light p-3" style={{ maxWidth: "360px" }}>
-                <div className="mt-3 ml-1 mb-1">
-                  <HandCards cards={cards} />
-                </div>
-                <hr />
-                <div className="my-3 mx-2">
-                  <UserNameAndChips
-                    user={seat.player.username}
-                    chipCount={seat.player.chips}
-                    seatNumber={seat.id}
-                  />
-                  <Button
-                    variant="outline-secondary"
-                    onClick={() => handleLeaveGame(user.id, tableId)}
-                  >
-                    Leave
-                  </Button>
-                </div>
+            <div className="bg-light p-3" style={{ maxWidth: '360px' }}>
+              <div className="mt-3 ml-1 mb-1">
+              <Button variant="primary" type="button" onClick={() => handleLeaveGame(user.id, tableId)}>
+    Leave
+</Button>
+                <HandCards cards={cards} />
               </div>
-            </>
+              <hr />
+              <div className="my-3 mx-2">
+                <UserNameAndChips
+                  user={seat.player.username}
+                  chipCount={seat.player.chips}
+                  seatNumber={seat.id}
+                />
+              </div>
+            </div>
           ) : (
             <>
               {seatChoice ? (
-                <>
-                  <Modal
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                  >
-                    <Box sx={style}>
-                      <Typography
-                        id="modal-modal-title"
-                        variant="h6"
-                        component="h2"
-                      >
-                        Select Buy-In Amount
-                      </Typography>
-                      <Slider
-                        xstep={1}
-                        xmin={minBuyIn}
-                        xmax={maxBuyIn}
-                        x={sliderValue}
-                        onChange={({ x }) => setSliderValue(x)}
-                      />
-                      <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        Do you wish to buy in with {sliderValue} chips and sit
-                        here?
-                      </Typography>
-                      <Button
-                        className="buyIn"
-                        onClick={() => {
-                          handleConfirm(
-                            tableId,
-                            user.id,
-                            seat._id,
-                            sliderValue
-                          );
-                          handleClose();
-                        }}
-                      >
-                        Buy In for ${sliderValue}
-                      </Button>
-                    </Box>
-                  </Modal>
-                </>
+                <Modal show={open} onHide={handleClose}>
+                  <Modal.Body>
+                    <h6>Select Buy-In Amount</h6>
+                    <p className="mt-2">
+                      Do you wish to buy in with {sliderValue} chips and sit here?
+                    </p>
+                    <Button className="buyIn" onClick={() => {
+                      handleConfirm(tableId, user.id, seat._id, sliderValue);
+                      handleClose();
+                    }}>
+                      Buy In for ${sliderValue}
+                    </Button>
+                  </Modal.Body>
+                </Modal>
               ) : (
-                <IconButton
-                  aria-label="add"
-                  onClick={() => {
-                    handleClick();
-                    handleOpen();
-                  }}
-                >
-                  <AddIcon />
-                </IconButton>
+                <Button variant="outline-secondary" onClick={() => {
+                  handleClick();
+                  handleOpen();
+                }}>
+                  <FontAwesomeIcon icon={faPlus} />
+                </Button>
               )}
             </>
           )}
