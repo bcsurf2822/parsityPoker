@@ -109,28 +109,46 @@ code {
   margin-top: 10px;
 }
 
+@media (max-width: 768px) {
+  .bordered-col,
+  .seat-height,
+  .table-css {
+    padding: 10px; /* Smaller padding */
+    height: auto; /* Make height more flexible */
+  }
+
+  .table-row {
+    margin-left: 0; /* Adjust margin for smaller screens */
+  }
+
+  .seat-row,
+  .table-row {
+    flex-direction: column; /* Stack elements vertically on small screens */
+  }
+}
+
 .pokerTable {
   border: #000 1px solid;
 }
 
 .bordered-col {
   border: 1px solid black;
-  padding: 25px;
+  padding: 15px;
   margin: 5px;
 }
 
 .table-row {
-  margin-left: 150px;
+  margin-left: 100px;
 }
 
 .table-css {
-  height: 300px;
+  height: auto;
 }
 
 .seat-height {
-  height: 200px;
+  height: auto;
 }
 
 .seat-row {
-  height: 200px;
+  height: auto;
 }
