@@ -10,9 +10,6 @@ export default function UserNameAndChips({ user, chipCount, seatNumber }) {
       <Typography gutterBottom variant="h6" component="div" align="center">
         ${chipCount}
       </Typography>
-      {/* <Typography gutterBottom variant="h6" component="div" align="center">
-        Seat {seatNumber}
-      </Typography> */}
     </div>
   );
 }

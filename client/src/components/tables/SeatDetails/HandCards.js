@@ -3,8 +3,8 @@ import { getCards } from '../../../actions/getCards';
 
 export default function HandCards({ cards }) {
   const cardStyle = {
-    width: '100px',
-    height: '140px',
+    width: '50px',
+    height: '70px',
     margin: '0 5px',
     backgroundColor: 'gray',
     border: '1px solid black'
