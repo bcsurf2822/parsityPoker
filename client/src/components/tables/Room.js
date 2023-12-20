@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import {
-  startLeaveGame,
   requestGame,
   startUpdatePositionsAndBlinds,
   startEndGame,
@@ -15,21 +14,22 @@ import {
   startGetWinner,
   startPotToPlayer,
   showLoading,
+  startPlayerFold,
+  startPlayerCheck,
+  startPlayerBet,
+  startPlayerCall,
 } from "../../rtk/slices/currentGameSlice";
 
-import Grid from "@mui/material/Grid";
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
 
 import Chatbox from "./Chatbox";
 import Table from "./TableDetails/Table";
 import Seat from "./Seats";
 import WinnerAlert from "./WinnerAlert";
 import Spinner from "./Spinner";
+import BetBox from "./BetBox";
 
 const Room = () => {
   console.log("===============Room component rendered================");
-  const formatBalance = (balance) => balance.toFixed(2);
 
   const { id } = useParams();
   console.log("Game ID:", id);
@@ -65,6 +65,69 @@ const Room = () => {
         )
       : [];
   console.log("PLayers with cards--", playersWithHandCards);
+
+    //xBetFoldCall For betBox to be transferred 
+  // const seat = useSelector(
+  //   (state) => state.currentGame.currentGame.seats[seatIndex]
+  // );
+
+  // const isCurrentPlayer = currentGame.currentPlayerTurn === seat.id - 1;
+  
+  const handleFold = (gameId, seatId) => {
+    dispatch(
+      startPlayerFold({ gameId: gameId, seatId: seatId, action: "fold" })
+    );
+  };
+
+  const handleCheck = (gameId, seatId) => {
+    dispatch(
+      startPlayerCheck({ gameId: gameId, seatId: seatId, action: "check" })
+    );
+  };
+
+  const handleAllIn = (gameId, seatId) => {
+    dispatch(
+      startPlayerBet({
+        gameId: gameId,
+        seatId: seatId,
+        action: "all-in",
+        // bet: seat.player.chips,
+      })
+    );
+  };
+
+  const handleCall = (gameId, seatId) => {
+    dispatch(
+      startPlayerCall({
+        gameId: gameId,
+        seatId: seatId,
+        bet: currentGame.highestBet,
+        action: "call",
+      })
+    );
+  };
+
+  const handleSliderBet = (gameId, seatId, betValue) => {
+    dispatch(
+      startPlayerBet({
+        gameId: gameId,
+        seatId: seatId,
+        bet: betValue,
+        action: "bet",
+      })
+    );
+  };
+
+  const handleRaise = (gameId, seatId, raiseValue) => {
+    dispatch(
+      startPlayerBet({
+        gameId: gameId,
+        seatId: seatId,
+        bet: raiseValue,
+        action: "raise",
+      })
+    );
+  };
 
   //How many players are at the table?
   const occupiedSeatCount = seatArray.filter(
@@ -230,7 +293,7 @@ const Room = () => {
         <div className="seat-bot col-2 bordered-col">
         <Seat seatIndex={4} />
         </div>
-        <div className="empty-r-bot col bordered-col">Empty R Bottom</div>
+        <div className="empty-r-bot col bordered-col"><BetBox /></div>
       </div>
       </div>
 

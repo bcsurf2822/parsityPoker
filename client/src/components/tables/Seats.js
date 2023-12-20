@@ -44,7 +44,6 @@ const Seat = ({ seatIndex }) => {
   );
   const currentGame = useSelector((state) => state.currentGame.currentGame);
 
-  const formatBalance = (balance) => balance.toFixed(2);
 
   const dispatch = useDispatch();
 
@@ -86,62 +85,6 @@ const Seat = ({ seatIndex }) => {
     dispatch(startLeaveGame({ userId, gameId }));
   };
 
-  const handleFold = (gameId, seatId) => {
-    dispatch(
-      startPlayerFold({ gameId: gameId, seatId: seatId, action: "fold" })
-    );
-  };
-
-  const handleCheck = (gameId, seatId) => {
-    dispatch(
-      startPlayerCheck({ gameId: gameId, seatId: seatId, action: "check" })
-    );
-  };
-
-  const handleAllIn = (gameId, seatId) => {
-    dispatch(
-      startPlayerBet({
-        gameId: gameId,
-        seatId: seatId,
-        action: "all-in",
-        bet: seat.player.chips,
-      })
-    );
-  };
-
-  const handleCall = (gameId, seatId) => {
-    dispatch(
-      startPlayerCall({
-        gameId: gameId,
-        seatId: seatId,
-        bet: currentGame.highestBet,
-        action: "call",
-      })
-    );
-  };
-
-  const handleSliderBet = (gameId, seatId, betValue) => {
-    dispatch(
-      startPlayerBet({
-        gameId: gameId,
-        seatId: seatId,
-        bet: betValue,
-        action: "bet",
-      })
-    );
-  };
-
-  const handleRaise = (gameId, seatId, raiseValue) => {
-    dispatch(
-      startPlayerBet({
-        gameId: gameId,
-        seatId: seatId,
-        bet: raiseValue,
-        action: "raise",
-      })
-    );
-  };
-
   return (
     <div className="d-flex justify-content-center seat">
       {" "}
@@ -167,28 +110,6 @@ const Seat = ({ seatIndex }) => {
                     Leave
                   </Button>
                 </div>
-
-                {isCurrentPlayer && (
-                  <div className="m-2">
-                    <div className="d-flex justify-content-between">
-                      <BetBox
-                        chipsInPot={formatBalance(currentGame.pot)}
-                        highestBet={formatBalance(currentGame.highestBet)}
-                        playerChips={formatBalance(seat.player.chips)}
-                        onBet={(betValue) =>
-                          handleSliderBet(tableId, seat._id, betValue)
-                        }
-                        onCall={() => handleCall(tableId, seat._id)}
-                        onAllIn={() => handleAllIn(tableId, seat._id)}
-                        onCheck={() => handleCheck(tableId, seat._id)}
-                        onFold={() => handleFold(tableId, seat._id)}
-                        onRaise={(betValue) =>
-                          handleRaise(tableId, seat._id, betValue)
-                        }
-                      />
-                    </div>
-                  </div>
-                )}
               </div>
             </>
           ) : (
