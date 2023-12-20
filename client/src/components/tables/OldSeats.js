@@ -36,7 +36,7 @@ const style = {
   p: 4,
 };
 
-const Seat = ({ seatIndex }) => {
+const OldSeat = ({ seatIndex }) => {
   const user = useSelector((state) => state.auth.user);
 
   const seat = useSelector(
@@ -256,4 +256,4 @@ const Seat = ({ seatIndex }) => {
   );
 };
 
-export default Seat;
+export default OldSeat;

@@ -1,15 +1,10 @@
 import React from "react";
-import Typography from "@mui/material/Typography";
 
 export default function UserNameAndChips({ user, chipCount, seatNumber }) {
   return (
     <div>
-      <Typography gutterBottom variant="h4" component="div" align="center">
-        {user}
-      </Typography>
-      <Typography gutterBottom variant="h6" component="div" align="center">
-        ${chipCount}
-      </Typography>
+ <h4 className="text-center mb-3">{user}</h4> 
+      <h6 className="text-center mb-3">${chipCount}</h6>
     </div>
   );
 }
