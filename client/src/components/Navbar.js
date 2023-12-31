@@ -1,9 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Navbar, Nav, NavDropdown } from "react-bootstrap";
-import Chip from '@mui/material/Chip';
-import Stack from '@mui/material/Stack';
-import BeachAccessIcon from '@mui/icons-material/BeachAccess';import { logout } from "../rtk/actions/auth";
+import { Navbar, Nav, NavDropdown, Badge } from "react-bootstrap";
+import { logout } from "../rtk/actions/auth";
 import { TbPokerChip } from "react-icons/tb";
 
 const MyNav = () => {
@@ -21,20 +19,44 @@ const MyNav = () => {
     fontFamily: "Lobster, cursive",
   };
 
+  const customNavStyle = {
+    display: 'flex',
+    justifyContent: 'center',
+    width: '100%',
+  };
+
+  const navLinkStyle = {
+    margin: '0 10px',
+    position: 'relative',
+  };
+
+  const navLinkDividerStyle = {
+    position: 'absolute',
+    right: 0,
+    top: '50%',
+    transform: 'translateY(-50%)',
+    height: '24px',
+    borderRight: '1px solid #ccc',
+  };
+
   return (
     <Navbar style={navStyle} bg="light" expand="lg" sticky="top">
-      <Navbar.Brand href="#">
-        {" "}
-        <TbPokerChip />{" "}
-      </Navbar.Brand>
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="mr-auto">
-        <Nav.Link as={Link} to="/">Home</Nav.Link>
-
-          <Nav.Link as={Link} to="/About">About</Nav.Link>
-          <Nav.Link as={Link} to="/Promotions">Promotions</Nav.Link>
-          <Nav.Link as={Link} to="/Tables">Tables</Nav.Link>
+    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+   <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="justify-content-center" style={customNavStyle}>
+          <Nav.Link as={Link} to="/" style={navLinkStyle}>
+            Home
+            <span style={navLinkDividerStyle}></span>
+          </Nav.Link>
+          <Nav.Link as={Link} to="/About"  style={navLinkStyle}>About
+          <span style={navLinkDividerStyle}></span>
+          </Nav.Link>
+          <Nav.Link as={Link} to="/Promotions"  style={navLinkStyle}>Promotions
+          <span style={navLinkDividerStyle}></span>
+          </Nav.Link>
+          <Nav.Link as={Link} to="/Tables"  style={navLinkStyle}>Tables
+          <span style={navLinkDividerStyle}></span>
+          </Nav.Link>
           {isAuthenticated && (
             <NavDropdown title="Settings" id="basic-nav-dropdown">
               <NavDropdown.Item as={Link} to="/Profile">
@@ -62,14 +84,10 @@ const MyNav = () => {
       </Navbar.Collapse>
       {isAuthenticated && (
         <Navbar.Text style={{ marginRight: "20px" }}>
-   <Stack direction="row" spacing={1}>
-      <Chip
+          <Badge pill bg="secondary">
+            {userInfo.username}
 
-        label={userInfo.username}
-        icon={<BeachAccessIcon />} 
-        variant="outlined"
-      />
-    </Stack>
+          </Badge>
         </Navbar.Text>
       )}
     </Navbar>
