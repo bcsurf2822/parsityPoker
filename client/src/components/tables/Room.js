@@ -85,12 +85,8 @@ const Room = () => {
       : [];
   console.log("PLayers with cards--", playersWithHandCards);
 
-  //xBetFoldCall For betBox to be transferred
-  // const seat = useSelector(
-  //   (state) => state.currentGame.currentGame.seats[seatIndex]
-  // );
+  //Is Dealer or current Player for betBox
 
-  // const isCurrentPlayer = currentGame.currentPlayerTurn === seat.id - 1;
 
   const handleFold = (gameId, seatId) => {
     dispatch(
