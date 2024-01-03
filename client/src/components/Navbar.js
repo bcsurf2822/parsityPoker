@@ -55,8 +55,7 @@ const MyNav = () => {
           <span style={navLinkDividerStyle}></span>
           </Nav.Link>
           <Nav.Link as={Link} to="/Tables"  style={navLinkStyle}>Tables
-          <span style={navLinkDividerStyle}></span>
-          </Nav.Link>
+          {isAuthenticated && <span style={navLinkDividerStyle}></span>}          </Nav.Link>
           {isAuthenticated && (
             <NavDropdown title="Settings" id="basic-nav-dropdown">
               <NavDropdown.Item as={Link} to="/Profile">
