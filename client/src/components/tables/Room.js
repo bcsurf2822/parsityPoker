@@ -20,7 +20,6 @@ import {
   startPlayerCall,
 } from "../../rtk/slices/currentGameSlice";
 
-
 import Chatbox from "./Chatbox";
 import Table from "./TableDetails/Table";
 import Seat from "./Seats";
@@ -50,10 +49,19 @@ const Room = () => {
   const user = useSelector((state) => state.auth.user);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
+  console.log("USER:", user.username);
+
   const [previousSeatCount, setPreviousSeatCount] = useState(0);
 
   const seatArray = currentGame ? currentGame.seats : [];
   console.log("Seat Array:", seatArray);
+
+  const isUserSeated = () => {
+    return seatArray.some(seat => seat.player && seat.player.username === user.username);
+  };
+
+  const userIsSeated = isUserSeated();
+  console.log("Is User Seated:", userIsSeated);
 
   const playersWithHandCards =
     currentGame && currentGame.seats
@@ -66,13 +74,13 @@ const Room = () => {
       : [];
   console.log("PLayers with cards--", playersWithHandCards);
 
-    //xBetFoldCall For betBox to be transferred 
+  //xBetFoldCall For betBox to be transferred
   // const seat = useSelector(
   //   (state) => state.currentGame.currentGame.seats[seatIndex]
   // );
 
   // const isCurrentPlayer = currentGame.currentPlayerTurn === seat.id - 1;
-  
+
   const handleFold = (gameId, seatId) => {
     dispatch(
       startPlayerFold({ gameId: gameId, seatId: seatId, action: "fold" })
@@ -138,8 +146,6 @@ const Room = () => {
   const closeTable = () => {
     navigate("/Tables");
   };
-
-  console.log("occupied seat-------------", seatArray)
 
   //For Use When 2nd Player Joins Table
   useEffect(() => {
@@ -253,51 +259,51 @@ const Room = () => {
   }
 
   return (
-
-
-          <div
+    <div
       className="room-new container text-center d-flex flex-column justify-content-center"
       style={{ height: "97vh" }}
     >
-
-          <div className="seat-row row">
-        <div className="empty-l-top col bordered-col">          {currentGameLoading && <Spinner />}</div>
-        <div className="seat-top col-2 bordered-col">
-        <Seat seatIndex={0} />
+      <div className="seat-row row">
+        <div className="empty-l-top col bordered-col">
+          {" "}
+          {currentGameLoading && <Spinner />}
         </div>
         <div className="seat-top col-2 bordered-col">
-        <Seat seatIndex={1} />
+          <Seat seatIndex={0} />
+        </div>
+        <div className="seat-top col-2 bordered-col">
+          <Seat seatIndex={1} />
         </div>
         <div className="empty-r-top col bordered-col">Empty R Top</div>
       </div>
-  
 
-          <div className="table-row row ml-3">
+      <div className="table-row row ml-3">
         <div className="seat-mid-l col-2 bordered-col seat-height">
-        <Seat seatIndex={5} />
+          <Seat seatIndex={5} />
         </div>
-        <div className="table-mid col-6 bordered-col table-css" >
-        <Table cards={currentGame.communityCards} pot={currentGame.pot} />
+        <div className="table-mid col-6 bordered-col table-css">
+          <Table cards={currentGame.communityCards} pot={currentGame.pot} />
         </div>
         <div className="seat-mid-r col-2 bordered-col seat-height">
-        <Seat seatIndex={2} />
+          <Seat seatIndex={2} />
         </div>
       </div>
 
-
-        <div className="seat-row row">
+      <div className="seat-row row">
         <div className="empty-l-bot col bordered-col">Empty L Bottom</div>
         <div className="seat-bot col-2 bordered-col">
-        <Seat seatIndex={3} />
+          <Seat seatIndex={3} />
         </div>
         <div className="seat-bot col-2 bordered-col">
-        <Seat seatIndex={4} />
+          <Seat seatIndex={4} />
         </div>
-        <div className="empty-r-bot col bordered-col"><BetBox /></div>
+        <div className="empty-r-bot col bordered-col">
+          {" "}
+          {userIsSeated && <BetBox />}
+        </div>
       </div>
-      </div>
-
-  ); 
+    </div>
+  );
 };
 
 export default Room;
