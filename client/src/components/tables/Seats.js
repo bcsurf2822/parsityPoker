@@ -84,6 +84,8 @@ const Seat = ({ seatIndex }) => {
                   user={seat.player.username}
                   chipCount={seat.player.chips}
                   seatNumber={seat.id}
+                  isDealer={isDealer}
+                  isCurrentPlayer={isCurrentPlayer}
                 />
               </div>
             </div>

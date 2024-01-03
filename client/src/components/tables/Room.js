@@ -35,6 +35,8 @@ const Room = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const formatBalance = (balance) => balance.toFixed(2);
+
   useEffect(() => {
     dispatch(requestGame(id));
   }, [dispatch, id]);
@@ -56,12 +58,21 @@ const Room = () => {
   const seatArray = currentGame ? currentGame.seats : [];
   console.log("Seat Array:", seatArray);
 
+  //User if logged in user is seated at the table
   const isUserSeated = () => {
     return seatArray.some(seat => seat.player && seat.player.username === user.username);
   };
-
   const userIsSeated = isUserSeated();
   console.log("Is User Seated:", userIsSeated);
+
+  const findUserSeat = () => {
+    return seatArray.find(seat => seat.player && seat.player.username === user.username);
+  };
+
+  // Use the function to get the user's seat information
+  const userSeat = findUserSeat();
+
+  console.log("userSeat", userSeat);
 
   const playersWithHandCards =
     currentGame && currentGame.seats
@@ -299,7 +310,20 @@ const Room = () => {
         </div>
         <div className="empty-r-bot col bordered-col">
           {" "}
-          {userIsSeated && <BetBox />}
+          {userIsSeated && <BetBox
+                chipsInPot={formatBalance(currentGame.pot)}
+                highestBet={formatBalance(currentGame.highestBet)}
+                playerChips={formatBalance(userSeat.player.chips)}
+                onBet={(betValue) =>
+                  handleSliderBet(currentGame._id, userSeat._id, betValue)
+                }
+                onCall={() => handleCall(currentGame._id, userSeat._id)}
+                onAllIn={() => handleAllIn(currentGame._id, userSeat._id)}
+                onCheck={() => handleCheck(currentGame._id, userSeat._id)}
+                onFold={() => handleFold(currentGame._id, userSeat._id)}
+                onRaise={(betValue) =>
+                  handleRaise(currentGame, userSeat._id, betValue)}
+                 />}
         </div>
       </div>
     </div>
