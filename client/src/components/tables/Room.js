@@ -60,19 +60,29 @@ const Room = () => {
 
   //User if logged in user is seated at the table
   const isUserSeated = () => {
-    return seatArray.some(seat => seat.player && seat.player.username === user.username);
+    return seatArray.some(
+      (seat) => seat.player && seat.player.username === user.username
+    );
   };
   const userIsSeated = isUserSeated();
   console.log("Is User Seated:", userIsSeated);
 
   const findUserSeat = () => {
-    return seatArray.find(seat => seat.player && seat.player.username === user.username);
+    return seatArray.find(
+      (seat) => seat.player && seat.player.username === user.username
+    );
   };
 
   // Use the function to get the user's seat information
   const userSeat = findUserSeat();
 
   console.log("userSeat", userSeat);
+
+  console.log("User Seat ID - 1:", userSeat.id - 1);
+  console.log("CurrentPlayerTurn:", currentGame.currentPlayerTurn);
+
+  const isCurrentPlayer = userSeat.id - 1 === currentGame.currentPlayerTurn;
+  console.log("Is Current Player:", isCurrentPlayer);
 
   const playersWithHandCards =
     currentGame && currentGame.seats
@@ -86,7 +96,6 @@ const Room = () => {
   console.log("PLayers with cards--", playersWithHandCards);
 
   //Is Dealer or current Player for betBox
-
 
   const handleFold = (gameId, seatId) => {
     dispatch(
@@ -306,20 +315,24 @@ const Room = () => {
         </div>
         <div className="empty-r-bot col bordered-col">
           {" "}
-          {userIsSeated && <BetBox
-                chipsInPot={formatBalance(currentGame.pot)}
-                highestBet={formatBalance(currentGame.highestBet)}
-                playerChips={formatBalance(userSeat.player.chips)}
-                onBet={(betValue) =>
-                  handleSliderBet(currentGame._id, userSeat._id, betValue)
-                }
-                onCall={() => handleCall(currentGame._id, userSeat._id)}
-                onAllIn={() => handleAllIn(currentGame._id, userSeat._id)}
-                onCheck={() => handleCheck(currentGame._id, userSeat._id)}
-                onFold={() => handleFold(currentGame._id, userSeat._id)}
-                onRaise={(betValue) =>
-                  handleRaise(currentGame, userSeat._id, betValue)}
-                 />}
+          {userIsSeated && (
+            <BetBox
+              currentPlayer={isCurrentPlayer}
+              chipsInPot={formatBalance(currentGame.pot)}
+              highestBet={formatBalance(currentGame.highestBet)}
+              playerChips={formatBalance(userSeat.player.chips)}
+              onBet={(betValue) =>
+                handleSliderBet(currentGame._id, userSeat._id, betValue)
+              }
+              onCall={() => handleCall(currentGame._id, userSeat._id)}
+              onAllIn={() => handleAllIn(currentGame._id, userSeat._id)}
+              onCheck={() => handleCheck(currentGame._id, userSeat._id)}
+              onFold={() => handleFold(currentGame._id, userSeat._id)}
+              onRaise={(betValue) =>
+                handleRaise(currentGame, userSeat._id, betValue)
+              }
+            />
+          )}
         </div>
       </div>
     </div>

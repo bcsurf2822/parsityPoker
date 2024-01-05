@@ -11,7 +11,7 @@ const Input = styled(MuiInput)`
   width: 42px;
 `;
 
-export default function BetBox({ playerChips, onBet, onCall, onAllIn, onCheck, onFold, onRaise, chipsInPot, highestBet, currentPlayer }) {
+export default function DeactivatedBetBox ({ playerChips, onBet, onCall, onAllIn, onCheck, onFold, onRaise, chipsInPot, highestBet }) {
   const [selectedBet, setSelectedBet] = useState(highestBet);
 
   useEffect(() => {
@@ -62,16 +62,17 @@ export default function BetBox({ playerChips, onBet, onCall, onAllIn, onCheck, o
   onClick={onCall}
   variant="contained"
   color="primary"
-  disabled={!currentPlayer || highestBet <= 0}>
+  disabled={highestBet <= 0} 
+>
   Call {highestBet}
 </Button>
-        <Button onClick={onAllIn} variant="contained" color="secondary" disabled={!currentPlayer} >
+        <Button onClick={onAllIn} variant="contained" color="secondary">
           All In
         </Button>
-        <Button onClick={onCheck} variant="contained" color="secondary" disabled={!currentPlayer}>
+        <Button onClick={onCheck} variant="contained" color="secondary">
           Check
         </Button>
-        <Button onClick={onFold} variant="contained" color="secondary" disabled={!currentPlayer}>
+        <Button onClick={onFold} variant="contained" color="secondary">
           Fold
         </Button>
       </ButtonGroup>
@@ -89,7 +90,6 @@ export default function BetBox({ playerChips, onBet, onCall, onAllIn, onCheck, o
             valueLabelDisplay="auto"
             value={selectedBet} 
             onChange={handleSliderChange}
-            disabled={!currentPlayer}
           />
         </Grid>
         <Grid item>
@@ -112,7 +112,7 @@ export default function BetBox({ playerChips, onBet, onCall, onAllIn, onCheck, o
       <Button
   variant="outlined"
   onClick={() => confirmBet(selectedBet)} 
-  disabled={!currentPlayer || !canRaise}
+  disabled={!canRaise}
 >
   {highestBet > 0 ? `Raise to $${selectedBet}` : `Bet $${selectedBet}`}
 </Button>
