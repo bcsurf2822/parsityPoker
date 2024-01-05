@@ -19,6 +19,7 @@ import UserNameAndChips from "./SeatDetails/UserNameAndChips";
 
 const Seat = ({ seatIndex }) => {
   const user = useSelector((state) => state.auth.user);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const seat = useSelector(
     (state) => state.currentGame.currentGame.seats[seatIndex]

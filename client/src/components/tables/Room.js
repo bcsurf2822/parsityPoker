@@ -78,11 +78,13 @@ const Room = () => {
 
   console.log("userSeat", userSeat);
 
-  console.log("User Seat ID - 1:", userSeat.id - 1);
-  console.log("CurrentPlayerTurn:", currentGame.currentPlayerTurn);
-
+  //For if the user is the current player
   const isCurrentPlayer = userSeat.id - 1 === currentGame.currentPlayerTurn;
   console.log("Is Current Player:", isCurrentPlayer);
+
+  //For if the user is the dealer
+  const isDealer = userSeat.id - 1 === currentGame.dealerPosition;
+  console.log("Is Dealer:", isDealer);
 
   const playersWithHandCards =
     currentGame && currentGame.seats
@@ -94,8 +96,6 @@ const Room = () => {
         )
       : [];
   console.log("PLayers with cards--", playersWithHandCards);
-
-  //Is Dealer or current Player for betBox
 
   const handleFold = (gameId, seatId) => {
     dispatch(
