@@ -50,6 +50,7 @@ const Room = () => {
 
   const user = useSelector((state) => state.auth.user);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  console.log("Is Authenticated:", isAuthenticated);
 
   console.log("USER:", user.username);
 
@@ -79,11 +80,11 @@ const Room = () => {
   console.log("userSeat", userSeat);
 
   //For if the user is the current player
-  const isCurrentPlayer = userSeat.id - 1 === currentGame.currentPlayerTurn;
+  const isCurrentPlayer = userSeat && (userSeat.id - 1) === currentGame.currentPlayerTurn;
   console.log("Is Current Player:", isCurrentPlayer);
 
   //For if the user is the dealer
-  const isDealer = userSeat.id - 1 === currentGame.dealerPosition;
+  const isDealer = userSeat && (userSeat.id - 1) === currentGame.dealerPosition;
   console.log("Is Dealer:", isDealer);
 
   const playersWithHandCards =
