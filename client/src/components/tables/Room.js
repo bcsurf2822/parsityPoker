@@ -52,7 +52,7 @@ const Room = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   console.log("Is Authenticated:", isAuthenticated);
 
-  console.log("USER:", user.username);
+  // console.log("USER:", user.username);
 
   const [previousSeatCount, setPreviousSeatCount] = useState(0);
 
