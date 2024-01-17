@@ -166,74 +166,10 @@ code {
   box-sizing: border-box; /* Include border in the width and height calculations */
 }
 
-.poker-table {
-  width: 100%;
-  text-align: center;
-  padding: 20px 0;
-  border: 1px solid black; /* For visibility */
-  margin-bottom: 20px;
-}
-
-.poker-seat {
-  position: absolute;
-  width: 100px; /* Adjust as needed */
-  height: 50px; /* Adjust as needed */
-  border: 1px solid blue; /* For visibility */
-  text-align: center;
-  padding: 10px 0;
-}
-
-/* Positioning seats around the table */
-.seat-1 {
-  top: 0;
-  left: 50%;
-  transform: translateX(-200%);
-}
-.seat-6 {
-  top: 50%;
-  right: 100%;
-  transform: translateY(-50%);
-}
-.seat-3 {
-  bottom: 0;
-  right: 50%;
-  transform: translateX(50%);
-}
-.seat-4 {
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-}
-.seat-5 {
-  top: 50%;
-  left: 100%;
-  transform: translateY(-50%);
-}
-.seat-2 {
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.poker-clock {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  padding: 10px;
-  border: 1px solid green; /* For visibility */
-}
-
 @media (max-width: 768px) {
   .poker-room {
     width: 90vw; /* Adjust width on smaller screens */
     height: 90vw; /* Maintain the square aspect on smaller screens */
     flex-direction: column; /* Stack elements vertically */
-  }
-
-  .poker-seat {
-    /* Adjust seat size and positioning for smaller screens */
-  }
-  .poker-clock {
-    /* Adjust clock position for smaller screens */
   }
 }

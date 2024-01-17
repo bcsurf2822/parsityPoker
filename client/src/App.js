@@ -6,6 +6,7 @@ import Home from "./components/Home";
 import About from "./components/pages/About";
 import Promotions from "./components/pages/Promotions";
 import MyNav from "./components/Navbar";
+import NavbarWrapper from "./components/NavBarWrapper";
 import Tables from "./components/pages/Tables";
 import Profile from "./components/settings/Profile";
 import Hands from "./components/settings/Hands";
@@ -17,9 +18,7 @@ import Room from "./components/tables/Room";
 
 import ProtectedRoute from "./components/Protected";
 
-
 import { initializeAuth } from "./rtk/actions/auth";
-
 
 function App() {
   const dispatch = useDispatch();
@@ -31,7 +30,7 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <MyNav />
+        <NavbarWrapper />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
