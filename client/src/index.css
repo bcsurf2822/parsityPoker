@@ -157,8 +157,13 @@ code {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Use the full viewport height */
+  height: 90vh; /* Adjust as needed */
+  width: 90vh; /* Maintain a square aspect */
+  max-width: 100%; /* Ensure it doesn't overflow the viewport width */
+  margin: auto; /* Center the square in the viewport */
   position: relative;
+  border: 2px solid black; /* Your desired border */
+  box-sizing: border-box; /* Include border in the width and height calculations */
 }
 
 .poker-table {
@@ -220,7 +225,9 @@ code {
 
 @media (max-width: 768px) {
   .poker-room {
-    flex-direction: column; /* Stack elements vertically on smaller screens */
+    width: 90vw; /* Adjust width on smaller screens */
+    height: 90vw; /* Maintain the square aspect on smaller screens */
+    flex-direction: column; /* Stack elements vertically */
   }
 
   .poker-seat {
