@@ -50,17 +50,7 @@ const Tables = () => {
               </td>
               <td>
                 {" "}
-                {/* <Link
-                  to={`/room/${game._id}`}
-                  style={{ textDecoration: "none" }}
-                >
-                  <Chip
-                    label="View"
-                    color="success"
-                    variant="solid"
-                    clickable
-                  />
-                </Link> */}
+             
                 <OpenPokerRoomButton gameId = {game._id} />
               </td>
             </tr>
