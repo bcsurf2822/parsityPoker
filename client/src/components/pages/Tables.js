@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { requestGames } from "../../rtk/slices/allGamesSlice";
 import Table from "@mui/joy/Table";
 import Chip from "@mui/material/Chip";
+import OpenPokerRoomButton from "./OpenRoomButton";
 
 const Tables = () => {
   console.log("Tables component rendered");
@@ -49,7 +50,7 @@ const Tables = () => {
               </td>
               <td>
                 {" "}
-                <Link
+                {/* <Link
                   to={`/room/${game._id}`}
                   style={{ textDecoration: "none" }}
                 >
@@ -59,7 +60,8 @@ const Tables = () => {
                     variant="solid"
                     clickable
                   />
-                </Link>
+                </Link> */}
+                <OpenPokerRoomButton gameId = {game._id} />
               </td>
             </tr>
           ))}

@@ -1,14 +1,15 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 
-const OpenPokerRoomButton = () => {
+const OpenPokerRoomButton = ({gameId}) => {
     const openPokerRoom = () => {
-        const pokerRoomUrl = "/poker-room"; // URL of your poker room route
+        const pokerRoomUrl = `/room/${gameId}`; 
         const windowFeatures = "menubar=no,toolbar=no,status=no,width=800,height=600";
         window.open(pokerRoomUrl, 'PokerRoomWindow', windowFeatures);
     };
 
     return (
-        <button onClick={openPokerRoom}>Open Poker Room</button>
+        <Button variant='primary' onClick={openPokerRoom}>View</Button>
     );
 };
 
