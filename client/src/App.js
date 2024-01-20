@@ -19,6 +19,7 @@ import Room from "./components/tables/Room";
 import ProtectedRoute from "./components/Protected";
 
 import { initializeAuth } from "./rtk/actions/auth";
+import SampleRoom from "./components/tables/SampleRoom";
 
 function App() {
   const dispatch = useDispatch();
@@ -62,6 +63,7 @@ function App() {
             element={<ProtectedRoute element={<Withdrawl />} />}
           />
           <Route path="/room/:id" element={<Room />} />
+          <Route path="/poker-room" element={<SampleRoom />} />
         </Routes>
       </Router>
     </div>

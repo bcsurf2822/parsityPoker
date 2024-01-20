@@ -173,3 +173,55 @@ code {
     flex-direction: column; /* Stack elements vertically */
   }
 }
+
+/* Sample room */
+
+.sample-room {
+  height: 100vh; /* Full height of the viewport */
+  overflow: hidden; /* Hide overflow to prevent scrolling */
+  display: flex;
+  flex-direction: column;
+  border: 2px solid black;
+  margin: auto;
+  width: 80vw;
+  max-width: 800px;
+  min-width: 300px;
+}
+
+.row {
+  flex: 1; /* Distribute space evenly among rows */
+  display: flex; /* Apply flex to each row for inner columns */
+}
+
+.square,
+.rectangle {
+  border: 1px solid red;
+  margin: 5px 0;
+  background-color: blue; /* For visibility */
+  min-height: 50px; /* Minimum height */
+  flex-grow: 1;
+}
+
+.square {
+  height: 15vw; /* Height relative to the viewport width */
+  max-height: 40%;
+  min-height: 50px; /* Minimum height */
+}
+
+.rectangle {
+  height: 30vw; /* Height relative to the viewport width */
+  max-height: 40%; /* Adjust the max height as needed */
+  min-height: 100px; /* Minimum height */
+}
+
+.row.align-items-center {
+  display: flex;
+  align-items: center; /* This will vertically center the squares relative to the rectangle */
+}
+
+@media (max-width: 768px) {
+  .square,
+  .rectangle {
+    height: auto; /* Adjust height on smaller screens */
+  }
+}
