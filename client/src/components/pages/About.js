@@ -1,25 +1,9 @@
-// import AboutOpenPokerRoomButton from "./AboutOpen";
-
-
-
-
-// const About = () => {
-//     return (
-//         <div className="poker-room container">
-// <AboutOpenPokerRoomButton />
-//         </div>
-//     );
-// };
-
-// export default About;
-
-import React from 'react';
-
+import AboutOpenPokerRoomButton from "./AboutOpen";
 
 const About = () => {
   return (
-    <div className="responsive-box">
-      Responsive Box
+    <div className="poker-room container">
+      <AboutOpenPokerRoomButton />
     </div>
   );
 };
