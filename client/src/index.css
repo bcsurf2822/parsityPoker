@@ -225,3 +225,16 @@ code {
     height: auto; /* Adjust height on smaller screens */
   }
 }
+
+.responsive-box {
+  width: 50vw; /* Width is 50% of the viewport width */
+  height: 30vh; /* Height is 30% of the viewport height */
+  background-color: #4caf50; /* A nice shade of green for visibility */
+  color: white; /* Text color */
+  display: flex;
+  justify-content: center; /* Center the text horizontally */
+  align-items: center; /* Center the text vertically */
+  border: 2px solid #388e3c; /* A darker shade of green for the border */
+  margin: 10vh auto; /* Center the box vertically with margin */
+  font-size: 2vw; /* Font size adjusts with viewport width */
+}

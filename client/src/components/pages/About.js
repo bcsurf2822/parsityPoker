@@ -1,16 +1,27 @@
-import AboutOpenPokerRoomButton from "./AboutOpen";
-// import Table1 from "./Table1";
-// import Seat1 from "./Seat1";
-// import Clock from "./Clock";
+// import AboutOpenPokerRoomButton from "./AboutOpen";
 
+
+
+
+// const About = () => {
+//     return (
+//         <div className="poker-room container">
+// <AboutOpenPokerRoomButton />
+//         </div>
+//     );
+// };
+
+// export default About;
+
+import React from 'react';
 
 
 const About = () => {
-    return (
-        <div className="poker-room container">
-<AboutOpenPokerRoomButton />
-        </div>
-    );
+  return (
+    <div className="responsive-box">
+      Responsive Box
+    </div>
+  );
 };
 
 export default About;
