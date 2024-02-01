@@ -1,4 +1,5 @@
 import React from 'react';
+import RectangleContent from './RectangleContent';
 
 const ChildComponent = () => {
   return (
@@ -7,10 +8,11 @@ const ChildComponent = () => {
         <div className="responsive-square">Square 1</div>
         <div className="responsive-square">Square 2</div>
       </div>
-      <div className="rectangle-row"> {/* Container for the middle row */}
-        <div className="responsive-square">Square 5</div> {/* Square to the left */}
-        <div className="responsive-rectangle">Rectangle</div>
-        <div className="responsive-square">Square 6</div> {/* Square to the right */}
+      <div className="rectangle-row">
+        <div className="responsive-square">Square 5</div> 
+        <div className="responsive-rectangle">
+          <RectangleContent /> 
+        </div>        <div className="responsive-square">Square 6</div> 
       </div>
       <div className="square-row bottom">
         <div className="responsive-square">Square 3</div>
