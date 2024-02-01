@@ -220,18 +220,19 @@ code {
 
 .placeholders {
   display: flex;
-  justify-content: space-around; /* Evenly space the placeholder squares */
+  justify-content: space-between; /* Evenly space the placeholder squares */
   flex-grow: 1; /* Allow this area to take up available space */
 }
 
 .placeholder-square {
-  width: 15%; /* Relative width to the rectangle */
+  width: 40%; /* Relative width to the rectangle */
   height: 80%; /* Relative height to the rectangle, adjust based on design */
-  background-color: #f0f0f0; /* Light background for placeholders */
+  background-color: #af9d9d; /* Light background for placeholders */
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #ccc; /* Light border for the squares */
+  border: 1px solid #090707; /* Light border for the squares */
+  margin: 0 5%;
 }
 
 .amount-display {
