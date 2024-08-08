@@ -1,7 +1,7 @@
 import React from 'react';
 import RectangleContent from './RectangleContent';
 
-const ChildComponent = () => {
+const TableAndChairs = () => {
   return (
     <div className="layout">
       <div className="square-row top">
@@ -22,4 +22,4 @@ const ChildComponent = () => {
   );
 };
 
-export default ChildComponent;
+export default TableAndChairs;

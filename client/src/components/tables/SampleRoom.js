@@ -1,5 +1,5 @@
 import React from "react";
-import ChildComponent from "../pages/ChildComponent";
+import ChildComponent from "../pages/TableAndChairs";
 
 export default function SampleRoom() {
   return (
