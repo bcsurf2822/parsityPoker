@@ -191,7 +191,7 @@ code {
 .responsive-square {
   width: 15vw; /* Adjust based on your design */
   height: 15vw; /* Keeping the square aspect ratio */
-  background-color: #2196f3; /* Different color for squares */
+  background-color: #f7f9fa; /* Different color for squares */
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,11 +1,14 @@
 import React from 'react';
 import RectangleContent from './RectangleContent';
+import SquareContent from './SquareContent';
 
 const TableAndChairs = () => {
   return (
     <div className="layout">
       <div className="square-row top">
-        <div className="responsive-square">Square 1</div>
+        <div className="responsive-square">
+        <button type="button" class="btn btn-outline-secondary">Secondary</button>
+        </div>
         <div className="responsive-square">Square 2</div>
       </div>
       <div className="rectangle-row">
