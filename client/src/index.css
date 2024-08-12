@@ -214,23 +214,30 @@ code {
 .rectangle-content {
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Space between card slots and amount display */
-  height: 100%;
+  align-items: center;
+  padding: 20px;
+  background-color: #f5f5f5; /* Example background color */
 }
 
 .card-slots {
   display: flex;
-  width: 100%; /* Full width of the rectangle */
-  height: auto; /* Adjust based on content */
+  justify-content: space-between;
+  width: 100%;
+  max-width: 600px; /* Adjust this to control the total width of the cards section */
+  margin-bottom: 20px;
 }
 
 .card-slot {
-  flex-grow: 1; /* Allow each slot to grow equally */
-  display: flex;
-  justify-content: center; /* Center content horizontally */
-  align-items: center; /* Center content vertically */
-  border-left: 1px solid #020202; /* Border between slots */
-  background-color: #f0f0f0; /* Light background for visibility */
+  flex: 1;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.card-image {
+  width: 100%;
+  height: auto;
+  max-width: 100px; /* Adjust the size of the card image */
+  object-fit: contain;
 }
 
 .card-slot:first-child {
