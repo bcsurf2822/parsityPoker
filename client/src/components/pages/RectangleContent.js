@@ -1,4 +1,5 @@
 import React from 'react';
+import { getCardColor } from '../../actions/getCardColor';
 
 
 const RectangleContent = () => {
@@ -8,7 +9,7 @@ const RectangleContent = () => {
       {[...Array(5)].map((_, index) => (
         <div key={index} className="card-slot">
           <img 
-            src={`${process.env.PUBLIC_URL}/cardBack\Blue Bicycle card back.png`} 
+            src={getCardColor()} 
             alt={`Card ${index + 1}`} 
             className="card-image"
           />
