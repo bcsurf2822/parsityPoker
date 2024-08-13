@@ -1,5 +1,5 @@
 export const getCardColor = () => {
 
 
-  return `/cardBack/blueBicycle.png`;
+  return `/cardBack/blueCard.png`;
 };
