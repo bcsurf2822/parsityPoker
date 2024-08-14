@@ -1,5 +1,6 @@
 import React from 'react';
 import { getCardColor } from '../../actions/getCardColor';
+// import { getCards } from '../../actions/getCards';
 
 
 const RectangleContent = () => {

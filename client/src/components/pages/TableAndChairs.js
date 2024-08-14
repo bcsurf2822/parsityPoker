@@ -1,6 +1,6 @@
 import React from 'react';
 import RectangleContent from './RectangleContent';
-import SquareContent from './SquareContent';
+// import SquareContent from './SquareContent';
 
 const TableAndChairs = () => {
   return (
