@@ -1,25 +1,52 @@
 import React from 'react';
 import RectangleContent from './RectangleContent';
-// import SquareContent from './SquareContent';
+import SquareContent from './SquareContent';
 
 const TableAndChairs = () => {
+  const handleSeatClick = (seatNumber) => {
+    console.log(`Seat ${seatNumber} clicked`);
+  };
+
   return (
     <div className="layout">
       <div className="square-row top">
-        <div className="responsive-square">
-        <button type="button" class="btn btn-outline-secondary">Sit Here 1</button>
-        </div>
-        <div className="responsive-square">        <button type="button" class="btn btn-outline-secondary">Sit Here 2</button></div>
+        <SquareContent 
+          seatNumber={1} 
+          onClick={() => handleSeatClick(1)} 
+          className="responsive-square" 
+        />
+        <SquareContent 
+          seatNumber={2} 
+          onClick={() => handleSeatClick(2)} 
+          className="responsive-square" 
+        />
       </div>
       <div className="rectangle-row">
-        <div className="responsive-square">        <button type="button" class="btn btn-outline-secondary">Sit Here 6</button></div> 
+        <SquareContent 
+          seatNumber={3} 
+          onClick={() => handleSeatClick(3)} 
+          className="responsive-square" 
+        />
         <div className="responsive-rectangle">
-          <RectangleContent /> 
-        </div>        <div className="responsive-square">        <button type="button" class="btn btn-outline-secondary">Sit Here 3</button></div> 
+          <RectangleContent />
+        </div>
+        <SquareContent 
+          seatNumber={4} 
+          onClick={() => handleSeatClick(4)} 
+          className="responsive-square" 
+        />
       </div>
       <div className="square-row bottom">
-        <div className="responsive-square">        <button type="button" class="btn btn-outline-secondary">Sit Here 5</button></div>
-        <div className="responsive-square">        <button type="button" class="btn btn-outline-secondary">Sit Here 6</button></div>
+        <SquareContent 
+          seatNumber={5} 
+          onClick={() => handleSeatClick(5)} 
+          className="responsive-square" 
+        />
+        <SquareContent 
+          seatNumber={6} 
+          onClick={() => handleSeatClick(6)} 
+          className="responsive-square" 
+        />
       </div>
     </div>
   );

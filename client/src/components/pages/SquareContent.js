@@ -1,11 +1,15 @@
-import React from 'react'
+import React from "react";
 
-export default function SquareContent({  playerName, isDealer, card1, card2, chipCount }) {
+export default function SquareContent({ seatNumber, onClick, className }) {
   return (
-    <div className="square-content">  
-<button type="button" class="btn btn-outline-secondary">Sit Here</button>
-
-   
+    <div className={className}>
+      <button
+        type="button"
+        className="btn btn-outline-secondary"
+        onClick={onClick}
+      >
+        Sit Here {seatNumber}
+      </button>
     </div>
-  )
+  );
 }
