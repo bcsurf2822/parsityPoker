@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import SampleCards from "./SampleCards";
 
 export default function SquareContent({
   seatNumber,
@@ -21,8 +22,7 @@ export default function SquareContent({
         <div className="player-info">
           {" "}
           <div className="s-player-cards">
-          
-            <sample card1={card1} card2={card2} />
+            <SampleCards card1={card1} card2={card2} />
           </div>
           <div className="player-chips">$0.00</div>
           <div className="player-name">
