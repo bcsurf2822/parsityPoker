@@ -198,6 +198,21 @@ code {
   margin: 1vw;
 }
 
+/*exit button*/
+.sRoomExit {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px;
+}
+
+.btn-close {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+}
+
 /*all has to do with everything inside of the rectangle pot and the cards*/
 :root {
   --card-width: 33%;

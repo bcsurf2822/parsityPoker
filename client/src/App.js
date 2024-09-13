@@ -19,7 +19,7 @@ import Room from "./components/tables/Room";
 import ProtectedRoute from "./components/Protected";
 
 import { initializeAuth } from "./rtk/actions/auth";
-import SampleRoom from "./components/tables/SampleRoom";
+import SampleRoom from "./components/pages/sampleWork/SampleRoom";
 
 function App() {
   const dispatch = useDispatch();
