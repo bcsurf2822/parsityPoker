@@ -20,9 +20,9 @@ export default function SquareContent({
       {isSeatTaken ? (
         <div className="player-info">
           {" "}
-          <div className="player-cards">
-            <div className="card">{card1 || "Card 1"}</div>
-            <div className="card">{card2 || "Card 2"}</div>
+          <div className="s-player-cards">
+          
+            <sample card1={card1} card2={card2} />
           </div>
           <div className="player-chips">$0.00</div>
           <div className="player-name">

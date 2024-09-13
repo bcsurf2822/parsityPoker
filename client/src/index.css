@@ -189,8 +189,8 @@ code {
 }
 
 .responsive-square {
-  width: 15vw;
-  height: 15vw;
+  width: 19vw;
+  height: 19vw;
   background-color: #f7f9fa;
   display: flex;
   justify-content: center;
