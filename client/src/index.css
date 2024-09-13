@@ -290,6 +290,7 @@ code {
   align-items: center;
   width: 10vw; /* You can adjust the size here */
   height: 12vw; /* Adjust card height */
+  border: #000 1px solid;
 }
 
 .s-card-image {
