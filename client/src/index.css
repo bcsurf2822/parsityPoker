@@ -188,16 +188,6 @@ code {
   width: 100%;
 }
 
-.responsive-square {
-  width: 19vw;
-  height: 19vw;
-  background-color: #f7f9fa;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 1vw;
-}
-
 /*exit button*/
 .sRoomExit {
   position: absolute;
@@ -213,7 +203,7 @@ code {
   font-size: 20px;
 }
 
-/*all has to do with everything inside of the rectangle pot and the cards*/
+/*table pot and the community cards*/
 :root {
   --card-width: 33%;
   --card-height: auto;
@@ -274,4 +264,35 @@ code {
   width: 100%;
   position: absolute;
   bottom: 4vh;
+}
+
+/*Player Card Slot , chips, and their cards*/
+
+.responsive-square {
+  width: 19vw;
+  height: 19vw;
+  background-color: #f7f9fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1vw;
+}
+
+.s-card-container {
+  display: flex;
+  justify-content: space-between; /* Ensures cards are spaced evenly */
+  align-items: center; /* Aligns cards in the center vertically */
+}
+
+.s-card-slot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 10vw; /* You can adjust the size here */
+  height: 12vw; /* Adjust card height */
+}
+
+.s-card-image {
+  width: 100%; /* Fill the card-slot */
+  height: auto; /* Maintain aspect ratio */
 }
