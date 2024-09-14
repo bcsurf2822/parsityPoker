@@ -153,6 +153,7 @@ code {
   height: auto;
 }
 
+/*Sample poker room layout*/
 .poker-room {
   display: flex;
   justify-content: center;
