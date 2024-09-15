@@ -1,11 +1,11 @@
 import React from "react";
-import TableAndChairs from "./TableAndChairs";
+import SampleTableChairs from "./SampleTableChairs";
 
 export default function SampleRoom() {
   return (
     <div className="responsive-box">
       <div className="sRoomExit"><button type="button" class="btn-close" aria-label="Close"></button></div>
-      <TableAndChairs />
+      <SampleTableChairs />
   </div>
   );
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import RectangleContent from './RectangleContent';
 import SquareContent from './SquareContent';
 
-const TableAndChairs = () => {
+const SampleTableChairs = () => {
   const handleSeatClick = (seatNumber) => {
     console.log(`Seat ${seatNumber} clicked`);
   };
@@ -52,4 +52,4 @@ const TableAndChairs = () => {
   );
 };
 
-export default TableAndChairs;
+export default SampleTableChairs;
