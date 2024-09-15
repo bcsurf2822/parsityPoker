@@ -4,14 +4,26 @@ import { Button } from 'react-bootstrap';
 const OpenPokerRoomButton = ({ gameId }) => {
     const openPokerRoom = () => {
         const pokerRoomUrl = `/room/${gameId}`;
-        const windowFeatures = "menubar=no,toolbar=no,status=no,width=800,height=600";
-        // Use gameId to create a unique window name for each game
+        const windowFeatures =
+        "menubar=no,toolbar=no,status=no,width=800,height=600";
         window.open(pokerRoomUrl, `PokerRoomWindow_${gameId}`, windowFeatures);
     };
+  const openSamplePokerRoom = () => {
+    const pokerRoomUrl = "/poker-room";
 
-    return (
-        <Button variant='primary' onClick={openPokerRoom}>View</Button>
-    );
+    const windowFeatures =
+      "menubar=no,toolbar=no,status=no,width=800,height=600";
+    window.open(pokerRoomUrl, "PokerRoomWindow", windowFeatures);
+  };
+
+  return (
+    <div>
+      <Button variant='secondary' onClick={openPokerRoom}>Main</Button>
+      <Button variant="primary" onClick={openSamplePokerRoom}>
+        Sample
+      </Button>
+    </div>
+  );
 };
 
 export default OpenPokerRoomButton;
