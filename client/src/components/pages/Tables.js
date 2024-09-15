@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { requestGames } from "../../rtk/slices/allGamesSlice";
 import Table from "@mui/joy/Table";
-import OpenPokerRoomButton from "./OpenRoomButton";
+import OpenRoomButton from "./OpenRoomButton";
 
 
 const Tables = () => {
@@ -51,7 +51,7 @@ const Tables = () => {
               <td>
                 {" "}
              
-                <OpenPokerRoomButton gameId = {game._id} />
+                <OpenRoomButton gameId = {game._id} />
 
               </td>
             </tr>

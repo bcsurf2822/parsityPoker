@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 
-const OpenPokerRoomButton = ({ gameId }) => {
+const OpenRoomButton = ({ gameId }) => {
     const openPokerRoom = () => {
         const pokerRoomUrl = `/room/${gameId}`;
         const windowFeatures =
@@ -26,4 +26,4 @@ const OpenPokerRoomButton = ({ gameId }) => {
   );
 };
 
-export default OpenPokerRoomButton;
+export default OpenRoomButton;
