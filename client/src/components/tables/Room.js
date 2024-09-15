@@ -20,7 +20,7 @@ import {
   startPlayerCall,
 } from "../../rtk/slices/currentGameSlice";
 
-import Chatbox from "./Chatbox";
+
 import Table from "./TableDetails/Table";
 import Seat from "./Seats";
 import WinnerAlert from "./WinnerAlert";

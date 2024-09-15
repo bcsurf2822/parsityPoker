@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SampleCards from "./SampleCards";
 
-export default function SquareContent({
+export default function SampleSeats({
   seatNumber,
   playerName,
   isDealer,
