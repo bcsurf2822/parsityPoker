@@ -153,27 +153,7 @@ code {
   height: auto;
 }
 
-/*Sample poker room layout*/
-.poker-room {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 90vh;
-  width: 90vh;
-  max-width: 100%;
-  margin: auto;
-  position: relative;
-  border: 2px solid black;
-  box-sizing: border-box;
-}
-
-@media (max-width: 768px) {
-  .poker-room {
-    width: 90vw;
-    height: 90vw;
-    flex-direction: column;
-  }
-}
+/*i think from sampleroom code*/
 
 .layout {
   display: flex;
