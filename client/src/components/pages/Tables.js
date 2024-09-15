@@ -3,9 +3,8 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { requestGames } from "../../rtk/slices/allGamesSlice";
 import Table from "@mui/joy/Table";
-import Chip from "@mui/material/Chip";
 import OpenPokerRoomButton from "./OpenRoomButton";
-import AboutOpenPokerRoomButton from "./AboutOpen";
+
 
 const Tables = () => {
   console.log("Tables component rendered");
