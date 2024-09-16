@@ -20,12 +20,12 @@ import {
   startPlayerCall,
 } from "../../rtk/slices/currentGameSlice";
 
-
 import Table from "./TableDetails/Table";
-import Seat from "./Seats";
+import NewSeats from "./NewSeats";
 import WinnerAlert from "./WinnerAlert";
 import Spinner from "./Spinner";
 import BetBox from "./BetBox";
+import RectangleContent from "../pages/sampleWork/RectangleContent";
 
 const NewRoom = () => {
   console.log("===============Room component rendered================");
@@ -80,11 +80,12 @@ const NewRoom = () => {
   console.log("userSeat", userSeat);
 
   //For if the user is the current player
-  const isCurrentPlayer = userSeat && (userSeat.id - 1) === currentGame.currentPlayerTurn;
+  const isCurrentPlayer =
+    userSeat && userSeat.id - 1 === currentGame.currentPlayerTurn;
   console.log("Is Current Player:", isCurrentPlayer);
 
   //For if the user is the dealer
-  const isDealer = userSeat && (userSeat.id - 1) === currentGame.dealerPosition;
+  const isDealer = userSeat && userSeat.id - 1 === currentGame.dealerPosition;
   console.log("Is Dealer:", isDealer);
 
   const playersWithHandCards =
@@ -276,44 +277,32 @@ const NewRoom = () => {
   }
 
   return (
-    <div
-      className="layout"
-    >
+    <div className="layout">
       <div className="square-row top">
         {/* <div className="empty-l-top col bordered-col">
           {" "}
           {currentGameLoading && <Spinner />}
         </div> */}
 
-          <Seat seatIndex={0} />
+        <NewSeats seatIndex={0} className="responsive-square" />
 
-
-          <Seat seatIndex={1} />
- 
-
+        <NewSeats seatIndex={1} className="responsive-square" />
       </div>
 
-      <div className="table-row row ml-3">
-        <div className="seat-mid-l col-2 bordered-col seat-height">
-          <Seat seatIndex={5} />
+      <div className="rectangle-row">
+        <NewSeats seatIndex={5} className="responsive-square" />
+        <div className="responsive-rectangle">
+          <RectangleContent />
         </div>
-        <div className="table-mid col-6 bordered-col table-css">
-          <Table cards={currentGame.communityCards} pot={currentGame.pot} />
-        </div>
-        <div className="seat-mid-r col-2 bordered-col seat-height">
-          <Seat seatIndex={2} />
-        </div>
+        <NewSeats seatIndex={2} className="responsive-square" />
       </div>
 
-      <div className="seat-row row">
-        <div className="empty-l-bot col bordered-col">Empty L Bottom</div>
-        <div className="seat-bot col-2 bordered-col">
-          <Seat seatIndex={3} />
-        </div>
-        <div className="seat-bot col-2 bordered-col">
-          <Seat seatIndex={4} />
-        </div>
-        <div className="empty-r-bot col bordered-col">
+      <div className="square-row bottom">
+        <NewSeats seatIndex={4} className="responsive-square" />
+        <NewSeats seatIndex={3} className="responsive-square" />
+      </div>
+
+      {/* <div className="empty-r-bot col bordered-col">
           {" "}
           {userIsSeated && (
             <BetBox
@@ -333,8 +322,7 @@ const NewRoom = () => {
               }
             />
           )}
-        </div>
-      </div>
+        </div> */}
     </div>
   );
 };
