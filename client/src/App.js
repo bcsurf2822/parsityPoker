@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 import Home from "./components/Home";
 import About from "./components/pages/About";
 import Promotions from "./components/pages/Promotions";
-import MyNav from "./components/Navbar";
 import NavbarWrapper from "./components/NavBarWrapper";
 import Tables from "./components/pages/Tables";
 import Profile from "./components/settings/Profile";
@@ -16,11 +15,12 @@ import Withdrawl from "./components/settings/Withdrawl";
 import Deposit from "./components/settings/Deposit";
 import Room from "./components/tables/Room";
 import SampleRoom from "./components/pages/sampleWork/SampleRoom";
-import RoomParent from "./components/tables/RoomParent";
+import NewRoom from "./components/tables/NewRoom";
 
 import ProtectedRoute from "./components/Protected";
 
 import { initializeAuth } from "./rtk/actions/auth";
+
 
 function App() {
   const dispatch = useDispatch();
@@ -65,7 +65,7 @@ function App() {
           />
           <Route path="/room/:id" element={<Room />} />
           <Route path="/poker-room" element={<SampleRoom />} />
-          <Route path="/poker/:id" element={<RoomParent />} />
+          <Route path="/poker/:id" element={<NewRoom />} />
         </Routes>
       </Router>
     </div>

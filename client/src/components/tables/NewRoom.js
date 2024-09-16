@@ -277,32 +277,33 @@ const NewRoom = () => {
   }
 
   return (
-    <div className="layout">
-      <div className="square-row top">
-        {/* <div className="empty-l-top col bordered-col">
+    <div className="responsive-box">
+      <div className="layout">
+        <div className="square-row top">
+          {/* <div className="empty-l-top col bordered-col">
           {" "}
           {currentGameLoading && <Spinner />}
         </div> */}
 
-        <NewSeats seatIndex={0} className="responsive-square" />
+          <NewSeats seatIndex={0} className="responsive-square" />
 
-        <NewSeats seatIndex={1} className="responsive-square" />
-      </div>
-
-      <div className="rectangle-row">
-        <NewSeats seatIndex={5} className="responsive-square" />
-        <div className="responsive-rectangle">
-          <RectangleContent />
+          <NewSeats seatIndex={1} className="responsive-square" />
         </div>
-        <NewSeats seatIndex={2} className="responsive-square" />
-      </div>
 
-      <div className="square-row bottom">
-        <NewSeats seatIndex={4} className="responsive-square" />
-        <NewSeats seatIndex={3} className="responsive-square" />
-      </div>
+        <div className="rectangle-row">
+          <NewSeats seatIndex={5} className="responsive-square" />
+          <div className="responsive-rectangle">
+            <RectangleContent />
+          </div>
+          <NewSeats seatIndex={2} className="responsive-square" />
+        </div>
 
-      {/* <div className="empty-r-bot col bordered-col">
+        <div className="square-row bottom">
+          <NewSeats seatIndex={4} className="responsive-square" />
+          <NewSeats seatIndex={3} className="responsive-square" />
+        </div>
+
+        {/* <div className="empty-r-bot col bordered-col">
           {" "}
           {userIsSeated && (
             <BetBox
@@ -323,6 +324,7 @@ const NewRoom = () => {
             />
           )}
         </div> */}
+      </div>
     </div>
   );
 };

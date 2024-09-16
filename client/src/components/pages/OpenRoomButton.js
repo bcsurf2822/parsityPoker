@@ -33,7 +33,7 @@ const OpenRoomButton = ({ gameId }) => {
         Sample
       </Button>
       <Button variant="primary" onClick={switchedRoom}>
-      New
+        New
       </Button>
     </div>
   );
