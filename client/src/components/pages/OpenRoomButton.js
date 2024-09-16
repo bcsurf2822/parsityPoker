@@ -17,7 +17,7 @@ const OpenRoomButton = ({ gameId }) => {
   };
 
   const switchedRoom = () => {
-    const pokerRoomUrl = `/new-room/${gameId}`;
+    const pokerRoomUrl = `/poker/${gameId}`;
 
     const windowFeatures =
       "menubar=no,toolbar=no,status=no,width=800,height=600";

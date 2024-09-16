@@ -2,20 +2,19 @@ import React from "react";
 import NewRoom from "./NewRoom";
 
 import { useDispatch } from "react-redux";
-
-import { startLeaveGame } from "../../rtk/slices/currentGameSlice";
+import { useSelector } from "react-redux";
 
 export default function RoomParent() {
-  const dispatch = useDispatch();
 
-  const handleLeaveGame = (userId, gameId) => {
-    console.log("Dispatching startLeaveGame with params:", userId, gameId);
-    dispatch(startLeaveGame({ userId, gameId }));
-  };
+
+  const currentGame = useSelector((state) => state.currentGame.currentGame);
+  console.log("Current Game Parent Room:", currentGame);
+
+
+
 
   return (
     <div className="responsive-box">
-      <button type="button" class="btn-close" aria-label="Close"></button>
 
       <NewRoom />
     </div>

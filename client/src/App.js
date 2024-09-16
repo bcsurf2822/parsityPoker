@@ -15,12 +15,12 @@ import History from "./components/settings/History";
 import Withdrawl from "./components/settings/Withdrawl";
 import Deposit from "./components/settings/Deposit";
 import Room from "./components/tables/Room";
+import SampleRoom from "./components/pages/sampleWork/SampleRoom";
+import RoomParent from "./components/tables/RoomParent";
 
 import ProtectedRoute from "./components/Protected";
 
 import { initializeAuth } from "./rtk/actions/auth";
-import SampleRoom from "./components/pages/sampleWork/SampleRoom";
-import RoomParent from "./components/tables/RoomParent";
 
 function App() {
   const dispatch = useDispatch();
@@ -65,7 +65,7 @@ function App() {
           />
           <Route path="/room/:id" element={<Room />} />
           <Route path="/poker-room" element={<SampleRoom />} />
-          <Route path="/new-room/:id" element={<RoomParent />} />
+          <Route path="/poker/:id" element={<RoomParent />} />
         </Routes>
       </Router>
     </div>
