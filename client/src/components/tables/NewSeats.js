@@ -68,17 +68,13 @@ const NewSeats = ({ seatIndex }) => {
   };
 
   return (
-    <div className="d-flex justify-content-center seat">
+    <div className="sample-seat">
       {seat && (
         <>
           {seat.player ? (
-            <div className="bg-light p-3" style={{ maxWidth: '360px' }}>
-              <div className="mt-3 ml-1 mb-1">
-              {/* <Button variant="primary" type="button" onClick={() => handleLeaveGame(user.id, tableId)}>
-    Leave
-</Button> */}
-                {/* <HandCards cards={cards} /> */}
-              </div>
+            <div className="player-info">
+       
+
               <hr />
               <div className="player-info">
                 <UserNameAndChips
