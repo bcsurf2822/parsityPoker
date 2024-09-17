@@ -74,13 +74,13 @@ const NewSeats = ({ seatIndex }) => {
           {seat.player ? (
             <div className="bg-light p-3" style={{ maxWidth: '360px' }}>
               <div className="mt-3 ml-1 mb-1">
-              <Button variant="primary" type="button" onClick={() => handleLeaveGame(user.id, tableId)}>
+              {/* <Button variant="primary" type="button" onClick={() => handleLeaveGame(user.id, tableId)}>
     Leave
-</Button>
-                <HandCards cards={cards} />
+</Button> */}
+                {/* <HandCards cards={cards} /> */}
               </div>
               <hr />
-              <div className="my-3 mx-2">
+              <div className="player-info">
                 <UserNameAndChips
                   user={seat.player.username}
                   chipCount={seat.player.chips}

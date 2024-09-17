@@ -17,7 +17,7 @@ export default function SampleSeats({
   };
 
   return (
-    <div className={className}>
+    <div className="sample-seat">
       {isSeatTaken ? (
         <div className="player-info">
           {" "}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { getCards } from '../../../actions/getCards';
+import SampleCards from '../../pages/sampleWork/SampleCards';
 
 export default function HandCards({ cards }) {
   const cardStyle = {
