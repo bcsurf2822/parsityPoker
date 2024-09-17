@@ -108,7 +108,7 @@ const NewSeats = ({ seatIndex }) => {
                   handleClick();
                   handleOpen();
                 }}>
-                  <FontAwesomeIcon icon={faPlus} />
+                  Sit here
                 </Button>
               )}
             </>
