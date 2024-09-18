@@ -73,7 +73,7 @@ const NewSeats = ({ seatIndex, card1, card2 }) => {
               <div className="s-player-cards">
                 <CardBack card1={card1} card2={card2} />
               </div>
-              <hr />
+              {/* <hr /> */}
               <UserNameAndChips
                 user={seat.player.username}
                 chipCount={seat.player.chips}
