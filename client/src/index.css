@@ -153,6 +153,21 @@ code {
   height: auto;
 }
 
+/*CSS for NavBar*/
+.nav {
+  display: flex;
+  justify-content: center; /* Center the navigation items */
+  align-items: center; /* Vertically align the items */
+  width: 100%; /* Take up full width */
+  margin: 0;
+  padding: 0;
+  list-style: none; /* Remove default list styling */
+  position: fixed; /* Fix it at the top */
+  top: 0;
+  background-color: #fff; /* Optional: add background color */
+  z-index: 1000; /* Ensure it stays on top of other content */
+}
+
 /*NEW CSS for newRoom*/
 
 /*s room exit button*/
