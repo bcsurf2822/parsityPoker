@@ -299,8 +299,10 @@ const NewRoom = () => {
         </div>
 
         <div className="square-row bottom">
+          <div className="options-square">Options</div>
           <NewSeats seatIndex={4}  />
           <NewSeats seatIndex={3}  />
+          <div className="bets-square">Betting</div>
         </div>
 
         {/* <div className="empty-r-bot col bordered-col">

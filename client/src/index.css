@@ -201,6 +201,16 @@ code {
   position: relative;
 }
 
+.options-square {
+  border: 2px solid #000000;
+  box-sizing: border-box;
+}
+
+.bets-square {
+  border: 2px solid #000000;
+  box-sizing: border-box;
+}
+
 /*in Rectangle comp*/
 .rectangle-content {
   display: flex;
