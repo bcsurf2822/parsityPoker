@@ -8,13 +8,6 @@ const OpenRoomButton = ({ gameId }) => {
       "menubar=no,toolbar=no,status=no,width=800,height=600";
     window.open(pokerRoomUrl, `PokerRoomWindow_${gameId}`, windowFeatures);
   };
-  const openSamplePokerRoom = () => {
-    const pokerRoomUrl = "/poker-room";
-
-    const windowFeatures =
-      "menubar=no,toolbar=no,status=no,width=800,height=600";
-    window.open(pokerRoomUrl, "PokerRoomWindow", windowFeatures);
-  };
 
   const switchedRoom = () => {
     const pokerRoomUrl = `/poker/${gameId}`;
@@ -28,9 +21,6 @@ const OpenRoomButton = ({ gameId }) => {
     <div>
       <Button variant="secondary" onClick={openPokerRoom}>
         Main
-      </Button>
-      <Button variant="primary" onClick={openSamplePokerRoom}>
-        Sample
       </Button>
       <Button variant="primary" onClick={switchedRoom}>
         New

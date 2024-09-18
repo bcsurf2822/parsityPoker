@@ -25,7 +25,7 @@ import NewSeats from "./NewSeats";
 import WinnerAlert from "./WinnerAlert";
 import Spinner from "./Spinner";
 import BetBox from "./BetBox";
-import RectangleContent from "../pages/sampleWork/RectangleContent";
+import RectangleContent from "./TableDetails/RectangleContent";
 
 const NewRoom = () => {
   console.log("===============Room component rendered================");

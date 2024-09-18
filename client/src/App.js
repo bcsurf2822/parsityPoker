@@ -14,7 +14,6 @@ import History from "./components/settings/History";
 import Withdrawl from "./components/settings/Withdrawl";
 import Deposit from "./components/settings/Deposit";
 import Room from "./components/tables/Room";
-import SampleRoom from "./components/pages/sampleWork/SampleRoom";
 import NewRoom from "./components/tables/NewRoom";
 
 import ProtectedRoute from "./components/Protected";
@@ -64,7 +63,6 @@ function App() {
             element={<ProtectedRoute element={<Withdrawl />} />}
           />
           <Route path="/room/:id" element={<Room />} />
-          <Route path="/poker-room" element={<SampleRoom />} />
           <Route path="/poker/:id" element={<NewRoom />} />
         </Routes>
       </Router>

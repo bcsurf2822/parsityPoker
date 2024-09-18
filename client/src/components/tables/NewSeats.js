@@ -13,7 +13,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import HandCards from "./SeatDetails/HandCards";
 import UserNameAndChips from "./SeatDetails/UserNameAndChips";
-import SampleCards from "../pages/sampleWork/SampleCards";
+import SampleCards from "./SeatDetails/SampleCards";
 
 const NewSeats = ({ seatIndex, card1, card2 }) => {
   const user = useSelector((state) => state.auth.user);
