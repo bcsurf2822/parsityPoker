@@ -11,11 +11,11 @@ export default function UserNameAndChips({
     <div>
       <div className="player-name">{user}</div>
       <div className="player-chips">${chipCount}</div>
-      <div className="dealer">
+      {/* <div className="dealer">
         {" "}
         Dealer: {isDealer ? "Yes" : "No"} | Current Player:{" "}
         {isCurrentPlayer ? "Yes" : "No"}{" "}
-      </div>
+      </div> */}
     </div>
   );
 }

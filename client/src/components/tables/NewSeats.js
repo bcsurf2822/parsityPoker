@@ -6,16 +6,13 @@ import {
   startLeaveGame,
 } from "../../rtk/slices/currentGameSlice";
 
-import { Button, Modal } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-
-
+import { Button, Modal } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import { useState } from "react";
 import HandCards from "./SeatDetails/HandCards";
 import UserNameAndChips from "./SeatDetails/UserNameAndChips";
-
 
 const NewSeats = ({ seatIndex }) => {
   const user = useSelector((state) => state.auth.user);
@@ -25,7 +22,6 @@ const NewSeats = ({ seatIndex }) => {
     (state) => state.currentGame.currentGame.seats[seatIndex]
   );
   const currentGame = useSelector((state) => state.currentGame.currentGame);
-
 
   const dispatch = useDispatch();
 
@@ -73,8 +69,6 @@ const NewSeats = ({ seatIndex }) => {
         <>
           {seat.player ? (
             <div className="player-info">
-       
-
               <hr />
               <div className="player-info">
                 <UserNameAndChips
@@ -93,21 +87,28 @@ const NewSeats = ({ seatIndex }) => {
                   <Modal.Body>
                     <h6>Select Buy-In Amount</h6>
                     <p className="mt-2">
-                      Do you wish to buy in with {sliderValue} chips and sit here?
+                      Do you wish to buy in with {sliderValue} chips and sit
+                      here?
                     </p>
-                    <Button className="buyIn" onClick={() => {
-                      handleConfirm(tableId, user.id, seat._id, sliderValue);
-                      handleClose();
-                    }}>
+                    <Button
+                      className="buyIn"
+                      onClick={() => {
+                        handleConfirm(tableId, user.id, seat._id, sliderValue);
+                        handleClose();
+                      }}
+                    >
                       Buy In for ${sliderValue}
                     </Button>
                   </Modal.Body>
                 </Modal>
               ) : (
-                <Button variant="outline-secondary" onClick={() => {
-                  handleClick();
-                  handleOpen();
-                }}>
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => {
+                    handleClick();
+                    handleOpen();
+                  }}
+                >
                   Sit here
                 </Button>
               )}
