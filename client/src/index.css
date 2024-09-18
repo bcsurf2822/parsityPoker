@@ -156,16 +156,16 @@ code {
 /*CSS for NavBar*/
 .nav {
   display: flex;
-  justify-content: center; /* Center the navigation items */
-  align-items: center; /* Vertically align the items */
-  width: 100%; /* Take up full width */
+  justify-content: center;
+  align-items: center;
+  width: 100%;
   margin: 0;
   padding: 0;
-  list-style: none; /* Remove default list styling */
-  position: fixed; /* Fix it at the top */
+  list-style: none;
+  position: fixed;
   top: 0;
-  background-color: #fff; /* Optional: add background color */
-  z-index: 1000; /* Ensure it stays on top of other content */
+  background-color: #fff;
+  z-index: 1000;
 }
 
 /*NEW CSS for newRoom*/

@@ -65,21 +65,7 @@ const MyNav = () => {
                     Withdrawl
                   </Link>
                 </li>
-                <li>
-                  <Link className="dropdown-item" to="/advancedsettings">
-                    Advanced Settings
-                  </Link>
-                </li>
-                <li>
-                  <Link className="dropdown-item" to="/handhistory">
-                    Hand History
-                  </Link>
-                </li>
-                <li>
-                  <Link className="dropdown-item" to="/accounthistory">
-                    Account History
-                  </Link>
-                </li>
+    
                 <li>
                   <button className="dropdown-item" onClick={toLogout}>
                     Log Out

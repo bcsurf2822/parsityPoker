@@ -8,9 +8,6 @@ import Promotions from "./components/pages/Promotions";
 import NavbarWrapper from "./components/NavBarWrapper";
 import Tables from "./components/pages/Tables";
 import Profile from "./components/settings/Profile";
-import Hands from "./components/settings/Hands";
-import Advanced from "./components/settings/Advanced";
-import History from "./components/settings/History";
 import Withdrawl from "./components/settings/Withdrawl";
 import Deposit from "./components/settings/Deposit";
 import Room from "./components/tables/Room";
@@ -19,7 +16,6 @@ import NewRoom from "./components/tables/NewRoom";
 import ProtectedRoute from "./components/Protected";
 
 import { initializeAuth } from "./rtk/actions/auth";
-
 
 function App() {
   const dispatch = useDispatch();
@@ -42,18 +38,6 @@ function App() {
             path="/profile"
             element={<ProtectedRoute element={<Profile />} />}
           />{" "}
-          <Route
-            path="/handhistory"
-            element={<ProtectedRoute element={<Hands />} />}
-          />
-          <Route
-            path="/accounthistory"
-            element={<ProtectedRoute element={<History />} />}
-          />
-          <Route
-            path="/advancedsettings"
-            element={<ProtectedRoute element={<Advanced />} />}
-          />
           <Route
             path="/deposit"
             element={<ProtectedRoute element={<Deposit />} />}
