@@ -65,14 +65,14 @@ const NewSeats = ({ seatIndex, card1, card2 }) => {
   };
 
   return (
-    <div className="responsive-square">
+    <div className="player-square">
       {seat && (
         <>
           {seat.player ? (
             <div className="player-info">
-                     <div className="s-player-cards">
-            <CardBack card1={card1} card2={card2} />
-          </div>
+              <div className="s-player-cards">
+                <CardBack card1={card1} card2={card2} />
+              </div>
               <hr />
               <div className="player-info">
                 <UserNameAndChips

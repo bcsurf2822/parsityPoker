@@ -155,13 +155,6 @@ code {
 
 /*i think from newRoom code*/
 
-.layout {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
 .square-row,
 .rectangle-row {
   display: flex;
@@ -191,6 +184,13 @@ code {
 }
 
 /*in newRoom comp*/
+.layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
 .responsive-rectangle {
   width: 70vw;
   height: 40vh;
@@ -207,6 +207,7 @@ code {
   position: relative;
 }
 
+/*in Rectangle comp*/
 .rectangle-content {
   display: flex;
   flex-direction: column;
@@ -249,10 +250,15 @@ code {
   position: absolute;
   bottom: 4vh;
 }
+.layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+/*PlayerSquare*/
 
-/*Player Card Slot , chips, and their cards*/
-
-.responsive-square {
+.player-square {
   width: 19vw;
   height: 19vw;
   background-color: #f7f9fa;
@@ -262,13 +268,15 @@ code {
   margin: 1vw;
 }
 
-.s-card-container {
+/*Back of card css in playerSquare*/
+
+.blue-card-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.s-card-slot {
+.blue-card-slot {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -278,7 +286,7 @@ code {
   overflow: hidden;
 }
 
-.s-card-image {
+.blue-card-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
