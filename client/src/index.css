@@ -153,14 +153,7 @@ code {
   height: auto;
 }
 
-/*i think from newRoom code*/
-
-.square-row,
-.rectangle-row {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
+/*NEW CSS for newRoom*/
 
 /*s room exit button*/
 .sRoomExit {
@@ -177,17 +170,18 @@ code {
   font-size: 20px;
 }
 
-/*table pot and the community cards*/
-:root {
-  --card-width: 33%;
-  --card-height: auto;
-}
-
 /*in newRoom comp*/
 .layout {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+}
+
+.square-row,
+.rectangle-row {
+  display: flex;
+  justify-content: center;
   width: 100%;
 }
 
@@ -225,6 +219,12 @@ code {
   margin: 0;
   height: auto;
   overflow: hidden;
+}
+
+/*table pot and the community cards*/
+:root {
+  --card-width: 33%;
+  --card-height: auto;
 }
 
 .card-slot {
