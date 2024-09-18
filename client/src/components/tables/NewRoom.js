@@ -285,22 +285,22 @@ const NewRoom = () => {
           {currentGameLoading && <Spinner />}
         </div> */}
 
-          <NewSeats seatIndex={0} className="responsive-square" />
+          <NewSeats seatIndex={0}  />
 
-          <NewSeats seatIndex={1} className="responsive-square" />
+          <NewSeats seatIndex={1}  />
         </div>
 
         <div className="rectangle-row">
-          <NewSeats seatIndex={5} className="responsive-square" />
+          <NewSeats seatIndex={5}  />
           <div className="responsive-rectangle">
             <RectangleContent />
           </div>
-          <NewSeats seatIndex={2} className="responsive-square" />
+          <NewSeats seatIndex={2} />
         </div>
 
         <div className="square-row bottom">
-          <NewSeats seatIndex={4} className="responsive-square" />
-          <NewSeats seatIndex={3} className="responsive-square" />
+          <NewSeats seatIndex={4}  />
+          <NewSeats seatIndex={3}  />
         </div>
 
         {/* <div className="empty-r-bot col bordered-col">

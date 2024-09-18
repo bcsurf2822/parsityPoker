@@ -1,7 +1,7 @@
 import React from "react";
 import { getCardColor } from "../../../actions/getCardColor";
 
-export default function SampleCards({ card1, card2 }) {
+export default function CardBack({ card1, card2 }) {
   return (
     <div className="s-card-container">
       {[card1, card2].map((card, index) => (

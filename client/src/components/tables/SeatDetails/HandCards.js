@@ -1,6 +1,6 @@
 import React from 'react';
 import { getCards } from '../../../actions/getCards';
-import SampleCards from './SampleCards';
+import SampleCards from './CardBack';
 
 export default function HandCards({ cards }) {
 
