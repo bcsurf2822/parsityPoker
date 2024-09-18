@@ -74,15 +74,13 @@ const NewSeats = ({ seatIndex, card1, card2 }) => {
                 <CardBack card1={card1} card2={card2} />
               </div>
               <hr />
-              <div className="player-info">
-                <UserNameAndChips
-                  user={seat.player.username}
-                  chipCount={seat.player.chips}
-                  seatNumber={seat.id}
-                  isDealer={isDealer}
-                  isCurrentPlayer={isCurrentPlayer}
-                />
-              </div>
+              <UserNameAndChips
+                user={seat.player.username}
+                chipCount={seat.player.chips}
+                seatNumber={seat.id}
+                isDealer={isDealer}
+                isCurrentPlayer={isCurrentPlayer}
+              />
             </div>
           ) : (
             <>

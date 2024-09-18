@@ -261,6 +261,8 @@ code {
   justify-content: center;
   align-items: center;
   margin: 1vw;
+  overflow: hidden;
+  border: 2px solid #000000;
 }
 
 /*Back of card css in playerSquare*/
