@@ -202,13 +202,17 @@ code {
 }
 
 .options-square {
+  flex-grow: 2;
   border: 2px solid #000000;
   box-sizing: border-box;
+  padding: 1vw;
 }
 
 .bets-square {
+  flex-grow: 2;
   border: 2px solid #000000;
   box-sizing: border-box;
+  padding: 1vw;
 }
 
 /*in Rectangle comp*/
