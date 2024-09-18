@@ -68,7 +68,7 @@ const NewSeats = ({ seatIndex }) => {
   };
 
   return (
-    <div className="sample-seat">
+    <div className="responsive-square">
       {seat && (
         <>
           {seat.player ? (
