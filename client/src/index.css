@@ -281,7 +281,7 @@ code {
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-bottom: 1vw; /* Ensure space between cards and player info */
+  margin-bottom: 1vw;
 }
 
 /*Back of card css in playerSquare*/
@@ -311,7 +311,7 @@ code {
 /*UserNameAndChips*/
 .player-name,
 .player-chips {
-  font-size: 1.2vw; /* Font size scales with screen */
+  font-size: 1.2vw;
   text-align: center;
   margin: 0.5vw 0;
 }
