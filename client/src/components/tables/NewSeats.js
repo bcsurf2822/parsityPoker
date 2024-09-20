@@ -107,6 +107,7 @@ const NewSeats = ({ seatIndex, card1, card2 }) => {
                     handleClick();
                     handleOpen();
                   }}
+                  disabled={!isAuthenticated} 
                 >
                   Sit here
                 </Button>
