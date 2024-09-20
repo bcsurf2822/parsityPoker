@@ -7,8 +7,6 @@ import {
 } from "../../rtk/slices/currentGameSlice";
 
 import { Button, Modal } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import { useState } from "react";
 import HandCards from "./SeatDetails/HandCards";
