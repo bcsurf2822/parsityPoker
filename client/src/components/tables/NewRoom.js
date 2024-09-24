@@ -277,7 +277,7 @@ const NewRoom = () => {
   }
 
   return (
-    <div className="responsive-box">
+    <div className="container-fluid">
       <div className="layout">
         <div className="square-row top">
           {/* <div className="empty-l-top col bordered-col">
@@ -285,13 +285,13 @@ const NewRoom = () => {
           {currentGameLoading && <Spinner />}
         </div> */}
 
-          <NewSeats seatIndex={0}  />
+          <NewSeats seatIndex={0} />
 
-          <NewSeats seatIndex={1}  />
+          <NewSeats seatIndex={1} />
         </div>
 
         <div className="rectangle-row">
-          <NewSeats seatIndex={5}  />
+          <NewSeats seatIndex={5} />
           <div className="responsive-rectangle">
             <RectangleContent />
           </div>
@@ -300,8 +300,8 @@ const NewRoom = () => {
 
         <div className="square-row bottom">
           <div className="options-square">Options</div>
-          <NewSeats seatIndex={4}  />
-          <NewSeats seatIndex={3}  />
+          <NewSeats seatIndex={4} />
+          <NewSeats seatIndex={3} />
           <div className="bets-square">Betting</div>
         </div>
 

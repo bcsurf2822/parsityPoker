@@ -1,7 +1,19 @@
 const About = () => {
   return (
-    <div className="about-tab">
-This project is a poker room simulation for my final project at parsity. -explain what tech was used what i learned etc
+    <div className="container d-flex flex-column justify-content-center align-items-center min-vh-100 text-center exp-rm">
+      <div className="row align-items-start tb-seats">
+        <div className="col">One of three columns</div>
+        <div className="col">One of three columns</div>
+      </div>
+      <div className="row align-items-start">
+        <div className="col">One of three columns</div>
+        <div className="col">One of three columns</div>
+        <div className="col">One of three columns</div>
+      </div>
+      <div className="row align-items-start">
+        <div className="col">One of three columns</div>
+        <div className="col">One of three columns</div>
+      </div>
     </div>
   );
 };

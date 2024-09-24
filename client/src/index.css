@@ -154,6 +154,10 @@ code {
 }
 
 /*CSS for NavBar*/
+.my-nav {
+  margin-bottom: 10px;
+}
+
 .nav {
   display: flex;
   justify-content: center;
@@ -191,6 +195,7 @@ code {
   flex-direction: column;
   align-items: center;
   width: 100%;
+  margin: 10px 10px 10px 10px;
 }
 
 .square-row,
@@ -344,4 +349,77 @@ code {
   font-size: 1.2vw;
   text-align: center;
   margin: 0.5vw 0;
+}
+
+/* gpt example of vh vs px */
+/* Fixed size layout with px */
+.fixed-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Forcing the layout to take the full viewport height */
+}
+
+.fixed-header {
+  height: 100px;
+
+  background-color: #4caf50;
+  text-align: center;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fixed-content {
+  flex-grow: 1;
+  height: 600px; /* Fixed height for content */
+  background-color: #f0f0f0;
+  text-align: center;
+  padding: 20px;
+}
+
+.fixed-footer {
+  height: 50px;
+  background-color: #333;
+  color: white;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive layout with vh */
+.responsive-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full viewport height */
+}
+
+.responsive-header {
+  height: 10vh; /* 10% of viewport height */
+  background-color: #4caf50;
+  margin-top: 10px;
+  text-align: center;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.responsive-content {
+  flex-grow: 1;
+  height: 80vh; /* 80% of viewport height */
+  background-color: #f0f0f0;
+  text-align: center;
+  padding: 20px;
+}
+
+.responsive-footer {
+  height: 10vh; /* 10% of viewport height */
+  background-color: #333;
+  color: white;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
