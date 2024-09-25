@@ -1,0 +1,101 @@
+/*old css for ogPokerTable*/
+.player-spot {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.table {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.login-container {
+  padding: 10px;
+}
+
+.seat {
+  border: 1px solid #000;
+  padding: 10px;
+}
+
+.sit-here {
+  display: block;
+  margin: 10px auto;
+  width: 80px;
+  font-size: 0.8em;
+}
+
+.containerBox {
+  width: 200px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.chatArea {
+  flex: 1;
+  overflow-y: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.chatText {
+  resize: none;
+  height: 40px;
+}
+
+.countdown-display {
+  font-size: 24px;
+  font-weight: bold;
+  color: red;
+  text-align: center;
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .bordered-col,
+  .seat-height,
+  .table-css {
+    padding: 10px;
+    height: auto;
+  }
+
+  .table-row {
+    margin-left: 0;
+  }
+
+  .seat-row,
+  .table-row {
+    flex-direction: column;
+  }
+}
+
+.pokerTable {
+  border: #000 1px solid;
+}
+
+.bordered-col {
+  border: 1px solid black;
+  padding: 15px;
+  margin: 5px;
+}
+
+.table-row {
+  margin-left: 100px;
+}
+
+.table-css {
+  height: auto;
+}
+
+.seat-height {
+  height: auto;
+}
+
+.seat-row {
+  height: auto;
+}

@@ -2,9 +2,8 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { requestGames } from "../../rtk/slices/allGamesSlice";
-import Table from "@mui/joy/Table";
 import OpenRoomButton from "./OpenRoomButton";
-
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Tables = () => {
   console.log("Tables component rendered");
@@ -20,7 +19,7 @@ const Tables = () => {
     <div style={{ maxHeight: "80vh", overflowY: "scroll" }}>
       <h1>Available Tables</h1>
 
-      <Table hoverRow>
+      <table className="table table-hover">
         <thead>
           <tr>
             <th>
@@ -49,15 +48,12 @@ const Tables = () => {
                 {game.seats.length}
               </td>
               <td>
-                {" "}
-             
-                <OpenRoomButton gameId = {game._id} />
-
+                <OpenRoomButton gameId={game._id} />
               </td>
             </tr>
           ))}
         </tbody>
-      </Table>
+      </table>
     </div>
   );
 };
