@@ -1,6 +1,7 @@
-# Poker by [Benjamin Corbett]
+# Poker Clone
 
 ## Description
+-  A poker clone where the user can play texas hold em
 
 ## APIs
 
@@ -34,7 +35,7 @@
 
 If you have any questions, feedback, or want to get involved, please feel free to reach out to me:
 
-- **Name:** [Benjamin Corbett]
-- **Email:** [ben.corbett.44@icloud.com]
+- **Name:** Benjamin Corbet]
+- **Email:** ben.corbett.44@icloud.com
 
 ## License
