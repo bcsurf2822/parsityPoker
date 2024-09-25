@@ -1,4 +1,4 @@
-# All World! Poker by [Benjamin Corbett]
+# Poker by [Benjamin Corbett]
 
 ## Description
 
