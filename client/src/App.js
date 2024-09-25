@@ -25,7 +25,7 @@ function App() {
   }, [dispatch]);
 
   return (
-    <div className="App">
+    <div className="app">
       <Router>
         <div className="my-nav">
           <NavbarWrapper />

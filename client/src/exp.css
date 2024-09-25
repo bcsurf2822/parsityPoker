@@ -1,0 +1,85 @@
+/* Room Layout */
+.mid-row {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.bs-table {
+  height: 300px;
+  width: 600px;
+  border-radius: 50px;
+  border: 2px solid #000000;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tb-seats {
+  border: 2px solid #000000;
+  border-radius: 20px;
+  padding: 10px 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+/* Additional class for controlling the side seats */
+.side-seats {
+  margin-left: 10px; /* Bring seats on the left closer */
+  margin-right: 10px; /* Bring seats on the right closer */
+}
+
+/* New class to control top and bottom seat placement */
+.top-bottom-seats {
+  position: absolute; /* Position them inside the corners of the table */
+  transform: translateX(-50%); /* Center them horizontally */
+}
+
+.top-seats {
+  top: -40px; /* Adjust value to position above the table */
+}
+
+.bottom-seats {
+  bottom: -40px; /* Adjust value to position below the table */
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+  border-bottom: 2px solid #000000;
+}
+
+.card-space {
+  height: 80px;
+  width: 50px;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+}
+
+.pot-amount {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+}
+
+.col-auto {
+  flex: 0 0 auto;
+}
+
+.row {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}

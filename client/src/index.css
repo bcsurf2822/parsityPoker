@@ -1,13 +1,7 @@
-.App {
+.app {
   text-align: center;
   padding-top: 60px;
 }
-
-/* .app {
-  overflow: hidden;
-  position: relative;
-  height: 100vh;
-} */
 
 /*CSS for NavBar*/
 .my-nav {
@@ -210,65 +204,4 @@
   font-size: 1.2vw;
   text-align: center;
   margin: 0.5vw 0;
-}
-
-/*exp room*/
-.mid-row {
-  margin-top: 50px;
-  margin-bottom: 50px;
-}
-
-.bs-table {
-  height: 300px;
-  width: 600px;
-  border-radius: 50px;
-  border: 2px solid #000000;
-  position: relative;
-}
-
-.tb-seats {
-  border: 2px solid #000000;
-  border-radius: 20px;
-  padding: 10px 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.card-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 2px solid #000000;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.card-space {
-  height: 80px;
-  width: 50px;
-  border: 1px solid black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 5px;
-}
-
-.pot-amount {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 18px;
-}
-
-.col-auto {
-  flex: 0 0 auto;
-}
-
-.row {
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
 }

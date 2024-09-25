@@ -7,6 +7,7 @@ import "/node_modules/react-grid-layout/css/styles.css";
 import "/node_modules/react-resizable/css/styles.css";
 import "./index.css";
 import  "./oldTable.css"
+import "./exp.css"
 import App from "./App";
 
 import store from "./rtk/store";
