@@ -3,11 +3,11 @@
   padding-top: 60px;
 }
 
-.app {
+/* .app {
   overflow: hidden;
   position: relative;
   height: 100vh;
-}
+} */
 
 /*CSS for NavBar*/
 .my-nav {
@@ -15,8 +15,8 @@
   top: 0;
   width: 100%;
   z-index: 1000;
-  background-color: #fff;
-  height: 60px; /* Set the height of your navbar */
+  background-color: #796565;
+  height: 60px;
 }
 
 .nav {
