@@ -25,24 +25,22 @@
   margin: 0;
 }
 
-/* Additional class for controlling the side seats */
 .side-seats {
-  margin-left: 10px; /* Bring seats on the left closer */
-  margin-right: 10px; /* Bring seats on the right closer */
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
-/* New class to control top and bottom seat placement */
 .top-bottom-seats {
-  position: absolute; /* Position them inside the corners of the table */
-  transform: translateX(-50%); /* Center them horizontally */
+  position: absolute;
+  transform: translateX(-50%);
 }
 
 .top-seats {
-  top: -40px; /* Adjust value to position above the table */
+  top: -40px;
 }
 
 .bottom-seats {
-  bottom: -40px; /* Adjust value to position below the table */
+  bottom: -40px;
 }
 
 .card-row {
