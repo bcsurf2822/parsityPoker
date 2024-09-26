@@ -1,16 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-input-slider";
 
-import {
-  startJoinGame,
-} from "../../rtk/slices/currentGameSlice";
+import { startJoinGame } from "../../rtk/slices/currentGameSlice";
 
 import { Button, Modal } from "react-bootstrap";
 
 import { useState } from "react";
 import HandCards from "./SeatDetails/HandCards";
 import UserNameAndChips from "./SeatDetails/UserNameAndChips";
-import CardBack from "./SeatDetails/CardBack";
 
 const NewSeats = ({ seatIndex, card1, card2 }) => {
   const user = useSelector((state) => state.auth.user);
@@ -35,9 +32,12 @@ const NewSeats = ({ seatIndex, card1, card2 }) => {
     setSeatChoice(false);
   };
 
-  const hasHandCards = currentGame && currentGame.seats.some(
-    (seat) => seat.player && seat.player.handCards && seat.player.handCards.length > 0
-  );
+  const hasHandCards =
+    currentGame &&
+    currentGame.seats.some(
+      (seat) =>
+        seat.player && seat.player.handCards && seat.player.handCards.length > 0
+    );
 
   const [sliderValue, setSliderValue] = useState(minBuyIn);
   const [seatChoice, setSeatChoice] = useState(false);
@@ -66,13 +66,14 @@ const NewSeats = ({ seatIndex, card1, card2 }) => {
         <>
           {seat.player ? (
             <div className="player-info">
-         {!hasHandCards ? (
-  <div className="s-player-cards">
-    <CardBack card1={card1} card2={card2} />
-  </div>
-) : (
-  <HandCards cards={cards} />
-)}
+      <div className="s-player-cards">
+              <HandCards
+                cards={cards} 
+                card1={card1} 
+                card2={card2} 
+              />
+            </div>
+              
               <UserNameAndChips
                 user={seat.player.username}
                 chipCount={seat.player.chips}
@@ -109,7 +110,7 @@ const NewSeats = ({ seatIndex, card1, card2 }) => {
                     handleClick();
                     handleOpen();
                   }}
-                  disabled={!isAuthenticated} 
+                  disabled={!isAuthenticated}
                 >
                   Sit here
                 </Button>
