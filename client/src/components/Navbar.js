@@ -16,7 +16,7 @@ const MyNav = () => {
 
   return (
     <>
-      <ul className="nav nav-underline">
+      <ul className="nav nav-underline my-nav">
         <li className="nav-item">
           <Link className="nav-link" to="/">
             Home
