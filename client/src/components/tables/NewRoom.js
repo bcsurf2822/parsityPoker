@@ -171,6 +171,7 @@ const NewRoom = () => {
     navigate("/Tables");
   };
 
+
   //For Use When 2nd Player Joins Table
   useEffect(() => {
     const handlePlayerJoin = async () => {

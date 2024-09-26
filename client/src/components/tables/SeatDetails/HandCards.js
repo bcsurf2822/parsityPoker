@@ -1,6 +1,7 @@
 import React from 'react';
 import { getCards } from '../../../actions/getCards';
 import SampleCards from './CardBack';
+import { getCardColor } from '../../../actions/getCardColor';
 
 export default function HandCards({ cards }) {
 

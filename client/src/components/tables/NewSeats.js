@@ -3,7 +3,6 @@ import Slider from "react-input-slider";
 
 import {
   startJoinGame,
-  startLeaveGame,
 } from "../../rtk/slices/currentGameSlice";
 
 import { Button, Modal } from "react-bootstrap";
@@ -36,6 +35,10 @@ const NewSeats = ({ seatIndex, card1, card2 }) => {
     setSeatChoice(false);
   };
 
+  const hasHandCards = currentGame && currentGame.seats.some(
+    (seat) => seat.player && seat.player.handCards && seat.player.handCards.length > 0
+  );
+
   const [sliderValue, setSliderValue] = useState(minBuyIn);
   const [seatChoice, setSeatChoice] = useState(false);
 
@@ -57,20 +60,19 @@ const NewSeats = ({ seatIndex, card1, card2 }) => {
   const isDealer = currentGame.dealerPosition === seat.id - 1;
   const isCurrentPlayer = currentGame.currentPlayerTurn === seat.id - 1;
 
-  const handleLeaveGame = (userId, gameId) => {
-    console.log("Dispatching startLeaveGame with params:", userId, gameId);
-    dispatch(startLeaveGame({ userId, gameId }));
-  };
-
   return (
     <div className="player-square">
       {seat && (
         <>
           {seat.player ? (
             <div className="player-info">
-              <div className="s-player-cards">
-                <CardBack card1={card1} card2={card2} />
-              </div>
+         {!hasHandCards ? (
+  <div className="s-player-cards">
+    <CardBack card1={card1} card2={card2} />
+  </div>
+) : (
+  <HandCards cards={cards} />
+)}
               <UserNameAndChips
                 user={seat.player.username}
                 chipCount={seat.player.chips}
