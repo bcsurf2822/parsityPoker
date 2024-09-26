@@ -302,7 +302,7 @@ const NewRoom = () => {
         <div className="rectangle-row">
           <NewSeats seatIndex={5} />
           <div className="responsive-rectangle">
-            <RectangleContent />
+            <RectangleContent cards={currentGame.communityCards} pot={currentGame.pot}  />
           </div>
           <NewSeats seatIndex={2} />
         </div>
