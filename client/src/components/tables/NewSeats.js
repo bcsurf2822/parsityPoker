@@ -66,13 +66,13 @@ const NewSeats = ({ seatIndex, card1, card2 }) => {
         <>
           {seat.player ? (
             <div className="player-info">
-      <div className="s-player-cards">
+
               <HandCards
                 cards={cards} 
                 card1={card1} 
                 card2={card2} 
               />
-            </div>
+         
               
               <UserNameAndChips
                 user={seat.player.username}
