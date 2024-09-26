@@ -19,9 +19,9 @@ const OpenRoomButton = ({ gameId }) => {
 
   return (
     <div>
-      <Button variant="secondary" onClick={openPokerRoom}>
+      {/* <Button variant="secondary" onClick={openPokerRoom}>
         Main
-      </Button>
+      </Button> */}
       <Button variant="primary" onClick={switchedRoom}>
         New
       </Button>

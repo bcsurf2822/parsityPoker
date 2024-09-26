@@ -10,7 +10,7 @@ import Tables from "./components/pages/Tables";
 import Profile from "./components/settings/Profile";
 import Withdrawl from "./components/settings/Withdrawl";
 import Deposit from "./components/settings/Deposit";
-import Room from "./components/tables/Room";
+// import Room from "./components/tables/Room";
 import NewRoom from "./components/tables/NewRoom";
 
 import ProtectedRoute from "./components/Protected";
@@ -48,7 +48,7 @@ function App() {
             path="/withdrawl"
             element={<ProtectedRoute element={<Withdrawl />} />}
           />
-          <Route path="/room/:id" element={<Room />} />
+          {/* <Route path="/room/:id" element={<Room />} /> */}
           <Route path="/poker/:id" element={<NewRoom />} />
         </Routes>
       </Router>

@@ -18,10 +18,8 @@ import {
   startPlayerCheck,
   startPlayerBet,
   startPlayerCall,
-  startLeaveGame
+  startLeaveGame,
 } from "../../rtk/slices/currentGameSlice";
-
-
 
 import Table from "./TableDetails/Table";
 import NewSeats from "./NewSeats";
@@ -171,7 +169,6 @@ const NewRoom = () => {
     navigate("/Tables");
   };
 
-
   //For Use When 2nd Player Joins Table
   useEffect(() => {
     const handlePlayerJoin = async () => {
@@ -285,36 +282,38 @@ const NewRoom = () => {
 
   return (
     <div className="container-fluid layout">
-  <div className="leave-btn">
-    <button variant="primary" onClick={() => handleLeaveGame(user.id, id)}>Leave</button>
-  </div>
-        <div className="square-row top">
-          {/* <div className="empty-l-top col bordered-col">
+      <div className="leave-btn">
+        <button variant="primary" onClick={() => handleLeaveGame(user.id, id)}>
+          Leave
+        </button>
+      </div>
+      <div className="square-row top">
+        {/* <div className="empty-l-top col bordered-col">
           {" "}
           {currentGameLoading && <Spinner />}
         </div> */}
 
-          <NewSeats seatIndex={0} />
+        <NewSeats seatIndex={0} />
 
-          <NewSeats seatIndex={1} />
+        <NewSeats seatIndex={1} />
+      </div>
+
+      <div className="rectangle-row">
+        <NewSeats seatIndex={5} />
+        <div className="responsive-rectangle">
+          <RectangleContent
+            cards={currentGame.communityCards}
+            pot={currentGame.pot}
+          />
         </div>
+        <NewSeats seatIndex={2} />
+      </div>
 
-        <div className="rectangle-row">
-          <NewSeats seatIndex={5} />
-          <div className="responsive-rectangle">
-            <RectangleContent cards={currentGame.communityCards} pot={currentGame.pot}  />
-          </div>
-          <NewSeats seatIndex={2} />
-        </div>
-
-        <div className="square-row bottom">
-          <div className="options-square">Options</div>
-          <NewSeats seatIndex={4} />
-          <NewSeats seatIndex={3} />
-          <div className="bets-square">Betting</div>
-        </div>
-
-        {/* <div className="empty-r-bot col bordered-col">
+      <div className="square-row bottom">
+        <div className="options-square">Options</div>
+        <NewSeats seatIndex={4} />
+        <NewSeats seatIndex={3} />
+        <div className="bets-square">
           {" "}
           {userIsSeated && (
             <BetBox
@@ -334,8 +333,8 @@ const NewRoom = () => {
               }
             />
           )}
-        </div> */}
-    
+        </div>
+      </div>
     </div>
   );
 };
