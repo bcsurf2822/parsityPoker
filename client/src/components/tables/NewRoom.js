@@ -18,7 +18,10 @@ import {
   startPlayerCheck,
   startPlayerBet,
   startPlayerCall,
+  startLeaveGame
 } from "../../rtk/slices/currentGameSlice";
+
+
 
 import Table from "./TableDetails/Table";
 import NewSeats from "./NewSeats";
@@ -51,8 +54,6 @@ const NewRoom = () => {
   const user = useSelector((state) => state.auth.user);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   console.log("Is Authenticated:", isAuthenticated);
-
-  // console.log("USER:", user.username);
 
   const [previousSeatCount, setPreviousSeatCount] = useState(0);
 
@@ -98,6 +99,11 @@ const NewRoom = () => {
         )
       : [];
   console.log("PLayers with cards--", playersWithHandCards);
+
+  const handleLeaveGame = (userId, gameId) => {
+    console.log("Dispatching startLeaveGame with params:", userId, gameId);
+    dispatch(startLeaveGame({ userId, gameId }));
+  };
 
   const handleFold = (gameId, seatId) => {
     dispatch(
@@ -277,8 +283,10 @@ const NewRoom = () => {
   }
 
   return (
-    <div className="container-fluid">
-      <div className="layout">
+    <div className="container-fluid layout">
+  <div className="leave-btn">
+    <button variant="primary" onClick={() => handleLeaveGame(user.id, id)}>Leave</button>
+  </div>
         <div className="square-row top">
           {/* <div className="empty-l-top col bordered-col">
           {" "}
@@ -326,7 +334,7 @@ const NewRoom = () => {
             />
           )}
         </div> */}
-      </div>
+    
     </div>
   );
 };
