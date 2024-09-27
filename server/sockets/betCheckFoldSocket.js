@@ -79,7 +79,6 @@ function playerBetSocket(socket, io) {
     const { gameId, seatId, bet, action } = data;
     let betAmount = Number(bet);
 
-    console.log(`Received player_bet event with action: ${action}, bet: ${bet}, seatId: ${seatId}, gameId: ${gameId}`);
 
     try {
       const game = await Game.findById(gameId);
@@ -130,7 +129,7 @@ function playerBetSocket(socket, io) {
 
       // Check if all players have acted to decide whether to move to the next stage
       const allHaveActed = playersHaveActed(game, seatId, action);
-      console.log(`All players have acted: ${allHaveActed}`);
+
       if (allHaveActed) {
         proceedToNextStage(game);
         await game.save();

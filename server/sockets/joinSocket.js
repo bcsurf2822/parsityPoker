@@ -8,7 +8,6 @@ const isSeatAvailable = (seats, seatId) => {
 function joinSocket(socket, io) {
   socket.on('joinGame', async (data) => {
     try {
-      console.log("Received joinGame event with data:", data); 
 
       const { userId, gameId, seatId, buyIn } = data;
 
@@ -59,10 +58,8 @@ function joinSocket(socket, io) {
       await game.save();
       await user.save();
 
-      console.log("Emitting playerJoin event...");
       io.emit("playerJoin", game); 
 
-      console.log("Emitting gameJoined event...");
       socket.emit("gameJoined", { message: "Successfully joined the game!", game });
 
     } catch (err) {

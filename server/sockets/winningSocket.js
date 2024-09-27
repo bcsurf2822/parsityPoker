@@ -1,5 +1,6 @@
 const Game = require("../models/gamesSchema");
 const axios = require("axios");
+var Hand = require('pokersolver').Hand;
 
 
 function resetActionNone(game) {
@@ -15,16 +16,22 @@ function winnerSocket(socket, io) {
     const { gameId } = data;
 
     try {
+      console.log("Received data:", data);
+
       const game = await Game.findById(gameId);
       if (!game) {
+        console.log("Game not found!");
         return socket.emit("error", { message: "Game not found!" });
       }
+
+      console.log("Game data:", game);
 
       if (
         game.pot <= 0 ||
         game.stage !== "showdown" ||
         game.communityCards.length !== 5
       ) {
+        console.log("Not time to determine winner. Pot:", game.pot, "Stage:", game.stage, "Community cards:", game.communityCards);
         return socket.emit("error", {
           message: "Not time to determine winner",
         });
@@ -34,43 +41,60 @@ function winnerSocket(socket, io) {
         (seat) => seat.player && seat.player.handCards.length > 0
       );
       if (playersActive.length <= 1) {
+        console.log("Not enough active players to determine a winner.");
         return socket.emit("error", {
           message: "Not enough active players to determine a winner",
         });
       }
 
-      const communityCards = game.communityCards; // Keep community cards as an array
+
+      const communityCards = game.communityCards.map(card => 
+        card[0].toUpperCase() + card.slice(1).toLowerCase()
+      );
+      console.log("Community Cards:", communityCards);
+
       const playersData = game.seats
         .filter((seat) => seat.player && seat.player.handCards.length)
         .map((seat) => {
           return {
             seatId: seat._id.toString(),
-            handCards: seat.player.handCards,
+
+            handCards: seat.player.handCards.map(card => 
+              card[0].toUpperCase() + card.slice(1).toLowerCase()
+            ),
             playerData: seat.player,
           };
         });
 
-      // Use pokersolver to evaluate all players' hands
+      console.log("Players Data:", playersData);
+
+
       const hands = playersData.map((player) => {
+        const fullHand = [...communityCards, ...player.handCards];
+        console.log(`Evaluating hand for player ${player.seatId}:`, fullHand);
+
         return {
           seatId: player.seatId,
           playerData: player.playerData,
-          hand: Hand.solve([...communityCards, ...player.handCards])
+          hand: Hand.solve(fullHand)
         };
       });
 
-      // Determine the winning hand(s)
-      const winningHands = Hand.winners(hands.map(h => h.hand));
+      console.log("Evaluated Hands:", hands);
 
-      // Find the matching player(s) using the winning hands
+
+      const winningHands = Hand.winners(hands.map(h => h.hand));
+      console.log("Winning Hands:", winningHands);
+
+
       const winnerData = winningHands.map((winner) => {
         return hands.find(h => h.hand.toString() === winner.toString());
       });
 
-      // Emit the winner data
-      socket.emit("winner_data", { winners: winnerData });
+      console.log("Winner Data:", winnerData);
 
-      // Reset actions after determining the winner
+
+      socket.emit("winner_data", { winners: winnerData });
       resetActionNone(game);
     } catch (error) {
       console.error("Error determining winner:", error);
@@ -78,6 +102,9 @@ function winnerSocket(socket, io) {
     }
   });
 }
+
+
+
 
 function potToPlayerSocket(socket, io) {
   socket.on("pot_to_player", async (data) => {

@@ -2,11 +2,9 @@ const Game = require("../models/gamesSchema");
 
 function allGamesSocket(socket) {
   socket.on("getGames", async () => {
-    console.log(`Received 'getGames' request from socket: ${socket.id}`);
 
     try {
       const games = await Game.find({});
-      console.log(`Sending 'gamesData' to all clients with ${games.length} game(s).`);
       socket.emit("gamesData", games);
     } catch (error) {
       console.error(`Error fetching games for socket: ${socket.id}. Error: ${error}`);
@@ -17,7 +15,6 @@ function allGamesSocket(socket) {
 
 function gameSocket (socket) {
   socket.on("getGame", async (gameId) => {
-    console.log(`Received 'getGame' request for gameId: ${gameId} from socket: ${socket.id}`);
   
     try {
       const game = await Game.findById(gameId);

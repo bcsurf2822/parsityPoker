@@ -6,10 +6,8 @@ function roomSocket(socket) {
     try {
       const game = await Game.findById(gameId);
       if (game) {
-        console.log("Sending game data for ID:", gameId);
         socket.emit("gameData", game);
       } else {
-        console.log("No game found for ID:", gameId);
         socket.emit("gameError", "Game not found");
       }
     } catch (error) {

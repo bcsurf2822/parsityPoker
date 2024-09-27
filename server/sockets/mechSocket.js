@@ -34,8 +34,6 @@ function updateCurrentPlayerSocket(socket, io) {
         return;
       }
 
-      console.log(`Updating current player for game ${gameId}`);
-
       game.currentPlayerTurn = findNextPosition(
         game.currentPlayerTurn,
         game.seats
@@ -43,9 +41,6 @@ function updateCurrentPlayerSocket(socket, io) {
 
       await game.save();
 
-      console.log(
-        `Updated current player position for game ${gameId}. Current Turn: ${game.currentPlayerTurn}`
-      );
 
       io.emit("next_current_player", game);
     } catch (error) {
