@@ -1,5 +1,6 @@
 const Game = require("../models/gamesSchema");
 const axios = require("axios");
+var Hand = require('pokersolver').Hand;
 
 function resetActionNone(game) {
   game.seats.forEach((seat) => {
