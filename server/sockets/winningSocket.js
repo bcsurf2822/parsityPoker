@@ -1,6 +1,6 @@
 const Game = require("../models/gamesSchema");
 const axios = require("axios");
-var Hand = require('pokersolver').Hand;
+
 
 function resetActionNone(game) {
   game.seats.forEach((seat) => {
@@ -35,67 +35,46 @@ function winnerSocket(socket, io) {
       );
       if (playersActive.length <= 1) {
         return socket.emit("error", {
-          message: "Not enough active players to call API",
+          message: "Not enough active players to determine a winner",
         });
       }
 
-      const communityCards = game.communityCards.join(",");
+      const communityCards = game.communityCards; // Keep community cards as an array
       const playersData = game.seats
         .filter((seat) => seat.player && seat.player.handCards.length)
         .map((seat) => {
           return {
             seatId: seat._id.toString(),
-            handCards: seat.player.handCards.join(","),
+            handCards: seat.player.handCards,
             playerData: seat.player,
           };
         });
 
-      const playerCards = playersData
-        .map((p) => `pc[]=${p.handCards}`)
-        .join("&");
-      const url = `https://api.pokerapi.dev/v1/winner/texas_holdem?cc=${communityCards}&${playerCards}`;
-
-      const response = await axios.get(url);
-      let winnerData = response.data.winners;
-
-      winnerData = winnerData.map((winner) => {
-        const matchingSeat = playersData.find(
-          (p) => p.handCards === winner.cards
-        );
+      // Use pokersolver to evaluate all players' hands
+      const hands = playersData.map((player) => {
         return {
-          ...winner,
-          seatId: matchingSeat?.seatId,
-          user: matchingSeat?.playerData.username,
-          winningHand: winner.result,
-          reward: game.pot / winnerData.length,
+          seatId: player.seatId,
+          playerData: player.playerData,
+          hand: Hand.solve([...communityCards, ...player.handCards])
         };
       });
 
-      winnerData.forEach((winner) => {
-        const winningSeat = game.seats.find(
-          (seat) => seat._id.toString() === winner.seatId
-        );
-        if (winningSeat && winningSeat.player) {
-          winningSeat.player.chips += winner.reward; 
-        }
+      // Determine the winning hand(s)
+      const winningHands = Hand.winners(hands.map(h => h.hand));
+
+      // Find the matching player(s) using the winning hands
+      const winnerData = winningHands.map((winner) => {
+        return hands.find(h => h.hand.toString() === winner.toString());
       });
 
-      game.winnerData = winnerData;
-      game.pot = 0;
-      game.gameEnd = true;
-      game.gameRunning = false;
-      game.currentDeck = [];
-      game.highestBet = 0;
-      game.betPlaced = false;
-      game.stage = "end";
+      // Emit the winner data
+      socket.emit("winner_data", { winners: winnerData });
 
-      await game.save();
-
-      console.log("Emitting winner_received with game:", game);
-      io.emit("winner_received", game);
+      // Reset actions after determining the winner
+      resetActionNone(game);
     } catch (error) {
-      console.error(error);
-      socket.emit("winnerError", { error: "Failed to determine winner" });
+      console.error("Error determining winner:", error);
+      socket.emit("error", { message: "An error occurred while determining the winner." });
     }
   });
 }
