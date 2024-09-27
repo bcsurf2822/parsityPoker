@@ -16,15 +16,12 @@ function winnerSocket(socket, io) {
     const { gameId } = data;
 
     try {
-      console.log("Received data:", data);
 
       const game = await Game.findById(gameId);
       if (!game) {
         console.log("Game not found!");
         return socket.emit("error", { message: "Game not found!" });
       }
-
-      console.log("Game data:", game);
 
       if (
         game.pot <= 0 ||
@@ -51,7 +48,6 @@ function winnerSocket(socket, io) {
       const communityCards = game.communityCards.map(card => 
         card[0].toUpperCase() + card.slice(1).toLowerCase()
       );
-      console.log("Community Cards:", communityCards);
 
       const playersData = game.seats
         .filter((seat) => seat.player && seat.player.handCards.length)
@@ -66,9 +62,7 @@ function winnerSocket(socket, io) {
           };
         });
 
-      console.log("Players Data:", playersData);
-
-
+        
       const hands = playersData.map((player) => {
         const fullHand = [...communityCards, ...player.handCards];
         console.log(`Evaluating hand for player ${player.seatId}:`, fullHand);
