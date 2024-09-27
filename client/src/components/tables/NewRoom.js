@@ -281,7 +281,7 @@ const NewRoom = () => {
   }
 
   return (
-    <div className="container-fluid layout">
+    <div className="room-layout">
       <div className="leave-btn">
         <button variant="primary" onClick={() => handleLeaveGame(user.id, id)}>
           Leave

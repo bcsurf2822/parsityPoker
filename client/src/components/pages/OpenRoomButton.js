@@ -5,7 +5,7 @@ const OpenRoomButton = ({ gameId }) => {
   const openPokerRoom = () => {
     const pokerRoomUrl = `/room/${gameId}`;
     const windowFeatures =
-      "menubar=no,toolbar=no,status=no,width=800,height=600";
+      "menubar=no,toolbar=no,status=no,width=900,height=900";
     window.open(pokerRoomUrl, `PokerRoomWindow_${gameId}`, windowFeatures);
   };
 
@@ -13,7 +13,7 @@ const OpenRoomButton = ({ gameId }) => {
     const pokerRoomUrl = `/poker/${gameId}`;
 
     const windowFeatures =
-      "menubar=no,toolbar=no,status=no,width=800,height=600";
+      "menubar=no,toolbar=no,status=no,width=900,height=900";
     window.open(pokerRoomUrl, `PokerRoomWindow_${gameId}`, windowFeatures);
   };
 
