@@ -47,9 +47,9 @@
 /*in newRoom comp*/
 .room-layout {
   width: 97%;
-  height: 100%;
+  height: 97%;
   overflow: hidden;
-  margin: 30px;
+  margin: 30px auto;
   border: 4px solid black;
 }
 
