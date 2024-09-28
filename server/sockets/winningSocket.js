@@ -1,5 +1,4 @@
 const Game = require("../models/gamesSchema");
-const axios = require("axios");
 var Hand = require('pokersolver').Hand;
 
 
@@ -70,12 +69,9 @@ function winnerSocket(socket, io) {
         return {
           seatId: player.seatId,
           playerData: player.playerData,
-          hand: Hand.solve(fullHand)
+          handData: Hand.solve(fullHand)
         };
       });
-
-      console.log("Evaluated Hands:", hands);
-
 
       const winningHands = Hand.winners(hands.map(h => h.hand));
       console.log("Winning Hands:", winningHands);

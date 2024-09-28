@@ -37,6 +37,7 @@ function setupSockets(io) {
     foldSocket(socket, io);
     potToPlayerSocket(socket, io);
     winnerSocket(socket, io);
+    winnerSocket(socket, io);
     playerBetSocket(socket, io);
 
     socket.on("disconnect", () => {
