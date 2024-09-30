@@ -16,12 +16,10 @@ function winningSocket(socket, io) {
     try {
       const game = await Game.findById(gameId);
       if (!game) {
-        console.log("Game not found!");
         return socket.emit("error", { message: "Game not found!" });
       }
 
       if (game.pot <= 0 || game.stage !== "showdown" || game.communityCards.length !== 5) {
-        console.log("Not time to determine winner. Pot:", game.pot, "Stage:", game.stage, "Community cards:", game.communityCards);
         return socket.emit("winnerError", { message: "Not time to determine winner" });
       }
 
@@ -29,7 +27,6 @@ function winningSocket(socket, io) {
         (seat) => seat.player && seat.player.handCards.length > 0
       );
       if (playersActive.length <= 1) {
-        console.log("Not enough active players to determine a winner.");
         return socket.emit("winnerError", { message: "Not enough active players to determine a winner" });
       }
 
@@ -55,10 +52,10 @@ function winningSocket(socket, io) {
 
       const hands = playersData.map((player, index) => {
         const fullHand = [...communityCards, ...player.handCards];
-        console.log(`Player ${index + 1} (Seat ID: ${player.seatId}) Hand:`, fullHand);
+
 
         const handSolved = Hand.solve(fullHand);
-        console.log(`Player ${index + 1} (Seat ID: ${player.seatId}) Evaluated Hand:`, handSolved.descr);
+
 
         return {
           seatId: player.seatId,
