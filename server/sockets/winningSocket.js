@@ -10,27 +10,21 @@ function resetActionNone(game) {
   });
 }
 
+
 function winnerSocket(socket, io) {
   socket.on("get_winner", async (data) => {
     const { gameId } = data;
 
     try {
-
       const game = await Game.findById(gameId);
       if (!game) {
         console.log("Game not found!");
         return socket.emit("error", { message: "Game not found!" });
       }
 
-      if (
-        game.pot <= 0 ||
-        game.stage !== "showdown" ||
-        game.communityCards.length !== 5
-      ) {
+      if (game.pot <= 0 || game.stage !== "showdown" || game.communityCards.length !== 5) {
         console.log("Not time to determine winner. Pot:", game.pot, "Stage:", game.stage, "Community cards:", game.communityCards);
-        return socket.emit("error", {
-          message: "Not time to determine winner",
-        });
+        return socket.emit("error", { message: "Not time to determine winner" });
       }
 
       const playersActive = game.seats.filter(
@@ -38,22 +32,21 @@ function winnerSocket(socket, io) {
       );
       if (playersActive.length <= 1) {
         console.log("Not enough active players to determine a winner.");
-        return socket.emit("error", {
-          message: "Not enough active players to determine a winner",
-        });
+        return socket.emit("error", { message: "Not enough active players to determine a winner" });
       }
 
 
       const communityCards = game.communityCards.map(card => 
         card[0].toUpperCase() + card.slice(1).toLowerCase()
       );
+      console.log("Community Cards:", communityCards);
+
 
       const playersData = game.seats
-        .filter((seat) => seat.player && seat.player.handCards.length)
-        .map((seat) => {
+        .filter(seat => seat.player && seat.player.handCards.length)
+        .map(seat => {
           return {
             seatId: seat._id.toString(),
-
             handCards: seat.player.handCards.map(card => 
               card[0].toUpperCase() + card.slice(1).toLowerCase()
             ),
@@ -61,30 +54,44 @@ function winnerSocket(socket, io) {
           };
         });
 
-        
-      const hands = playersData.map((player) => {
+      console.log("Players Data:", playersData);
+
+
+      const hands = playersData.map((player, index) => {
+
         const fullHand = [...communityCards, ...player.handCards];
-        console.log(`Evaluating hand for player ${player.seatId}:`, fullHand);
+        console.log(`Player ${index + 1} (Seat ID: ${player.seatId}) Hand:`, fullHand);
+
+        const handSolved = Hand.solve(fullHand);
+        console.log(`Player ${index + 1} (Seat ID: ${player.seatId}) Evaluated Hand:`, handSolved.descr);
 
         return {
           seatId: player.seatId,
           playerData: player.playerData,
-          handData: Hand.solve(fullHand)
+          hand: handSolved
         };
       });
+
 
       const winningHands = Hand.winners(hands.map(h => h.hand));
       console.log("Winning Hands:", winningHands);
 
 
-      const winnerData = winningHands.map((winner) => {
-        return hands.find(h => h.hand.toString() === winner.toString());
+      const winnerData = winningHands.map(winner => {
+        const matchingSeat = hands.find(h => h.hand.toString() === winner.toString());
+        return {
+          seatId: matchingSeat?.seatId,
+          user: matchingSeat?.playerData.username,
+          winningHand: winner.descr,
+        };
       });
 
       console.log("Winner Data:", winnerData);
 
 
       socket.emit("winner_data", { winners: winnerData });
+
+
       resetActionNone(game);
     } catch (error) {
       console.error("Error determining winner:", error);
@@ -92,8 +99,6 @@ function winnerSocket(socket, io) {
     }
   });
 }
-
-
 
 
 function potToPlayerSocket(socket, io) {
