@@ -17,7 +17,7 @@
 //     try {
 //       const game = await Game.findById(gameId);
 //       if (!game) {
-//         console.log("Game not found!");
+
 //         return socket.emit("error", { message: "Game not found!" });
 //       }
 
