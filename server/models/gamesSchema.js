@@ -133,8 +133,15 @@ const GameSchema = new Schema({
     default: [],
   },
   winnerData: {
-    type: Schema.Types.Mixed,
-    default: {},
+    type: [
+      {
+        seatId: String,
+        user: String,
+        handName: String,
+        potAmount: Number,
+      },
+    ],
+    default: [],
   },
   seats: {
     type: [SeatSchema],

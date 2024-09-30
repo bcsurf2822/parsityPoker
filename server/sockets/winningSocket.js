@@ -9,6 +9,7 @@ function resetActionNone(game) {
   });
 }
 
+
 function winnerSocket(socket, io) {
   socket.on("get_winner", async (data) => {
     const { gameId } = data;
@@ -20,20 +21,13 @@ function winnerSocket(socket, io) {
         return socket.emit("error", { message: "Game not found!" });
       }
 
-      if (
-        game.pot <= 0 ||
-        game.stage !== "showdown" ||
-        game.communityCards.length !== 5
-      ) {
+      if (game.pot <= 0 || game.stage !== "showdown" || game.communityCards.length !== 5) {
         console.log(
-          "Not time to determine winner. Pot:",
-          game.pot,
-          "Stage:",
-          game.stage,
-          "Community cards:",
-          game.communityCards
+          "Not time to determine winner. Pot:", game.pot,
+          "Stage:", game.stage,
+          "Community cards:", game.communityCards
         );
-        return socket.emit("error", {
+        return socket.emit("winnerError", {
           message: "Not time to determine winner",
         });
       }
@@ -43,16 +37,18 @@ function winnerSocket(socket, io) {
       );
       if (playersActive.length <= 1) {
         console.log("Not enough active players to determine a winner.");
-        return socket.emit("error", {
+        return socket.emit("winnerError", {
           message: "Not enough active players to determine a winner",
         });
       }
 
+      // Format community cards
       const communityCards = game.communityCards.map(
         (card) => card[0].toUpperCase() + card.slice(1).toLowerCase()
       );
       console.log("Community Cards:", communityCards);
 
+      // Format players' hands
       const playersData = game.seats
         .filter((seat) => seat.player && seat.player.handCards.length)
         .map((seat) => {
@@ -67,12 +63,10 @@ function winnerSocket(socket, io) {
 
       console.log("Players Data:", playersData);
 
+      // Evaluate each player's hand
       const hands = playersData.map((player, index) => {
         const fullHand = [...communityCards, ...player.handCards];
-        console.log(
-          `Player ${index + 1} (Seat ID: ${player.seatId}) Hand:`,
-          fullHand
-        );
+        console.log(`Player ${index + 1} (Seat ID: ${player.seatId}) Hand:`, fullHand);
 
         const handSolved = Hand.solve(fullHand);
         console.log(
@@ -87,9 +81,11 @@ function winnerSocket(socket, io) {
         };
       });
 
+      // Determine the winner(s)
       const winningHands = Hand.winners(hands.map((h) => h.hand));
       console.log("Winning Hands:", winningHands);
 
+      // Map winning hands to player data for `winnerData`
       const winnerData = winningHands.map((winner) => {
         const matchingSeat = hands.find(
           (h) => h.hand.toString() === winner.toString()
@@ -102,13 +98,22 @@ function winnerSocket(socket, io) {
         };
       });
 
-      console.log("Winner Data:", winnerData);
+      console.log("Final Winner Data before assignment:", winnerData);
 
-      game.winnerData = winnerData;
-      await game.save();
+      try {
+        // Update game document with the new `winnerData`
+        game.winnerData = winnerData;
+        await game.save();
+      } catch (saveError) {
+        console.error("Error saving game document:", saveError);
+        socket.emit("winnerError", { message: "Failed to save game state." });
+        return;
+      }
 
-      socket.emit("winner_recieved", { winners: winnerData });
+      // Emit the winner data to the client
+      socket.emit("winner_received", { winnerData: winnerData });
 
+      // Reset player actions
       resetActionNone(game);
     } catch (error) {
       console.error("Error determining winner:", error);
@@ -121,93 +126,61 @@ function winnerSocket(socket, io) {
 
 
 
-
 function potToPlayerSocket(socket, io) {
   socket.on("pot_to_player", async (data) => {
     const { gameId } = data;
-    console.log(
-      `Received pot_to_player event on server for game ID: ${gameId}`
-    );
+    console.log(`Received pot_to_player event on server for game ID: ${gameId}`);
 
     try {
       const game = await Game.findById(gameId);
-
-      resetActionNone(game);
 
       if (!game) {
         return socket.emit("error", { message: "Game not found!" });
       }
 
       if (game.pot <= 0) {
-        return socket.emit("error", {
+        return socket.emit("potTransferError", {
           message: "Pot is not greater than 0. Pot transfer aborted.",
         });
       }
 
-      if (Object.keys(game.winnerData).length) {
-        console.log("Winner data already present, skipping pot transfer.");
-        return socket.emit("error", {
-          message: "Winner data already present. Pot transfer aborted.",
+
+      if (game.winnerData && game.winnerData.length > 0) {
+        console.log("Using existing winner data for pot transfer.");
+
+
+        game.winnerData.forEach(winner => {
+          const winningSeat = game.seats.find(seat => seat._id.toString() === winner.seatId);
+          if (winningSeat && winningSeat.player) {
+            winningSeat.player.chips += winner.potAmount;
+          }
+        });
+
+        game.seats.forEach(seat => {
+          if (seat.player) {
+            seat.player.handCards = [];
+          }
+        });
+
+        game.pot = 0;
+        game.gameEnd = true;
+        game.gameRunning = false;
+        game.currentDeck = [];
+        game.highestBet = 0;
+        game.betPlaced = false;
+        game.stage = "end";
+
+        await game.save();
+
+        console.log("Emitting pot_transfer with game:", game);
+        io.emit("pot_transferred", game);
+
+        console.log(`Pot transferred using winner data.`);
+      } else {
+        return socket.emit("potTransferError", {
+          message: "No winner data found. Cannot transfer pot.",
         });
       }
-
-      const occupiedSeats = game.seats.filter(
-        (seat) => seat.player && seat.player.handCards.length
-      );
-
-      if (occupiedSeats.length !== 1) {
-        return socket.emit("error", {
-          message:
-            "There is more than one player remaining. Can't determine who to transfer the pot to.",
-        });
-      }
-
-      const remainingSeat = occupiedSeats[0];
-      const potBeforeTransfer = game.pot;
-      remainingSeat.player.chips += game.pot;
-
-      for (let seat of game.seats) {
-        if (seat.player) {
-          seat.player.handCards = [];
-        }
-      }
-
-      game.winnerData = {
-        players: [
-          {
-            cards: remainingSeat.player.handCards.join(","),
-            chips: remainingSeat.player.chips,
-            seatId: remainingSeat.id,
-            user: remainingSeat.player.username,
-          },
-        ],
-        winners: [
-          {
-            cards: remainingSeat.player.handCards.join(","),
-            chips: potBeforeTransfer,
-            seatId: remainingSeat.id,
-            user: remainingSeat.player.username,
-          },
-        ],
-        reason: "Last remaining player awarded the pot",
-      };
-
-      game.pot = 0;
-      game.gameEnd = true;
-      game.gameRunning = false;
-      game.currentDeck = [];
-      game.highestBet = 0;
-      game.betPlaced = false;
-      game.stage = "end";
-
-      await game.save();
-
-      console.log("Emitting pot_transfer with game:", game);
-      io.emit("pot_transferred", game);
-
-      console.log(
-        `Pot transferred to the remaining player in seat: ${remainingSeat._id}.`
-      );
     } catch (error) {
       console.error(error);
       socket.emit("potTransferError", { error: "Failed to transfer the pot" });
