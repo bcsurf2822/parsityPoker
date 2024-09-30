@@ -15,7 +15,7 @@ const {
   foldSocket,
 } = require("./betCheckFoldSocket");
 const positionsAndBlindsSocket = require("./newRoundSocket");
-const {winnerSocket, potToPlayerSocket} = require("./winningSocket");
+const {winningSocket} = require("./winner")
 
 function setupSockets(io) {
   io.on("connection", (socket) => {
@@ -35,10 +35,8 @@ function setupSockets(io) {
     callSocket(socket, io);
     checkSocket(socket, io);
     foldSocket(socket, io);
-    potToPlayerSocket(socket, io);
-    winnerSocket(socket, io);
-    winnerSocket(socket, io);
     playerBetSocket(socket, io);
+    winningSocket(socket, io);
 
     socket.on("disconnect", () => {
       console.log("user disconnected");
