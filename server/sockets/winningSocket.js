@@ -1,6 +1,5 @@
 const Game = require("../models/gamesSchema");
-var Hand = require('pokersolver').Hand;
-
+var Hand = require("pokersolver").Hand;
 
 function resetActionNone(game) {
   game.seats.forEach((seat) => {
@@ -9,7 +8,6 @@ function resetActionNone(game) {
     }
   });
 }
-
 
 function winnerSocket(socket, io) {
   socket.on("get_winner", async (data) => {
@@ -22,9 +20,22 @@ function winnerSocket(socket, io) {
         return socket.emit("error", { message: "Game not found!" });
       }
 
-      if (game.pot <= 0 || game.stage !== "showdown" || game.communityCards.length !== 5) {
-        console.log("Not time to determine winner. Pot:", game.pot, "Stage:", game.stage, "Community cards:", game.communityCards);
-        return socket.emit("error", { message: "Not time to determine winner" });
+      if (
+        game.pot <= 0 ||
+        game.stage !== "showdown" ||
+        game.communityCards.length !== 5
+      ) {
+        console.log(
+          "Not time to determine winner. Pot:",
+          game.pot,
+          "Stage:",
+          game.stage,
+          "Community cards:",
+          game.communityCards
+        );
+        return socket.emit("error", {
+          message: "Not time to determine winner",
+        });
       }
 
       const playersActive = game.seats.filter(
@@ -32,23 +43,23 @@ function winnerSocket(socket, io) {
       );
       if (playersActive.length <= 1) {
         console.log("Not enough active players to determine a winner.");
-        return socket.emit("error", { message: "Not enough active players to determine a winner" });
+        return socket.emit("error", {
+          message: "Not enough active players to determine a winner",
+        });
       }
 
-
-      const communityCards = game.communityCards.map(card => 
-        card[0].toUpperCase() + card.slice(1).toLowerCase()
+      const communityCards = game.communityCards.map(
+        (card) => card[0].toUpperCase() + card.slice(1).toLowerCase()
       );
       console.log("Community Cards:", communityCards);
 
-
       const playersData = game.seats
-        .filter(seat => seat.player && seat.player.handCards.length)
-        .map(seat => {
+        .filter((seat) => seat.player && seat.player.handCards.length)
+        .map((seat) => {
           return {
             seatId: seat._id.toString(),
-            handCards: seat.player.handCards.map(card => 
-              card[0].toUpperCase() + card.slice(1).toLowerCase()
+            handCards: seat.player.handCards.map(
+              (card) => card[0].toUpperCase() + card.slice(1).toLowerCase()
             ),
             playerData: seat.player,
           };
@@ -56,49 +67,59 @@ function winnerSocket(socket, io) {
 
       console.log("Players Data:", playersData);
 
-
       const hands = playersData.map((player, index) => {
-
         const fullHand = [...communityCards, ...player.handCards];
-        console.log(`Player ${index + 1} (Seat ID: ${player.seatId}) Hand:`, fullHand);
+        console.log(
+          `Player ${index + 1} (Seat ID: ${player.seatId}) Hand:`,
+          fullHand
+        );
 
         const handSolved = Hand.solve(fullHand);
-        console.log(`Player ${index + 1} (Seat ID: ${player.seatId}) Evaluated Hand:`, handSolved.descr);
+        console.log(
+          `Player ${index + 1} (Seat ID: ${player.seatId}) Evaluated Hand:`,
+          handSolved.descr
+        );
 
         return {
           seatId: player.seatId,
           playerData: player.playerData,
-          hand: handSolved
+          hand: handSolved,
         };
       });
 
-
-      const winningHands = Hand.winners(hands.map(h => h.hand));
+      const winningHands = Hand.winners(hands.map((h) => h.hand));
       console.log("Winning Hands:", winningHands);
 
-
-      const winnerData = winningHands.map(winner => {
-        const matchingSeat = hands.find(h => h.hand.toString() === winner.toString());
+      const winnerData = winningHands.map((winner) => {
+        const matchingSeat = hands.find(
+          (h) => h.hand.toString() === winner.toString()
+        );
         return {
           seatId: matchingSeat?.seatId,
           user: matchingSeat?.playerData.username,
-          winningHand: winner.descr,
+          handName: winner.name,
+          potAmount: game.pot / winningHands.length,
         };
       });
 
       console.log("Winner Data:", winnerData);
 
+      game.winnerData = winnerData;
+      await game.save();
 
-      socket.emit("winner_data", { winners: winnerData });
-
+      socket.emit("winner_recieved", { winners: winnerData });
 
       resetActionNone(game);
     } catch (error) {
       console.error("Error determining winner:", error);
-      socket.emit("error", { message: "An error occurred while determining the winner." });
+      socket.emit("winnerError", {
+        message: "An error occurred while determining the winner.",
+      });
     }
   });
 }
+
+
 
 
 function potToPlayerSocket(socket, io) {
