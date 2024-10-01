@@ -50,6 +50,7 @@ const NewRoom = () => {
   );
 
   const user = useSelector((state) => state.auth.user);
+  console.log("user: " , user)
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   console.log("Is Authenticated:", isAuthenticated);
 

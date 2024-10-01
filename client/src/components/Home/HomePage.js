@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../rtk/actions/auth";
 import Registration from "../pages/Registration";
 import "./HomePage.css"
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 
 
 function HomePage() {
@@ -13,6 +13,9 @@ function HomePage() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const [showModal, setShowModal] = useState(false);
+
+  const user = useSelector((state) => state.auth.user);
+  console.log("USERINFO", user)
 
   const closeModal = () => setShowModal(false);
   const openModal = () => setShowModal(true);
@@ -35,15 +38,22 @@ function HomePage() {
 <Container>
   <Row className="homepage">
     <Col className = "title">
-    <h1>Welcome</h1>
-    <h1>to Poker Clone</h1>
+    <h1>Poker Clone</h1>
+    <h1>Texas Hold 'Em</h1>
     </Col>
 
     
     {isAuthenticated && (
-      <h3>
-        Welcome Back Glad you are here
-      </h3>
+       <Alert variant="success">
+       <Alert.Heading>Welcome Back {user.username}</Alert.Heading>
+       <p>
+Click on tables to join a game of texas hold'em!
+       </p>
+       <hr />
+       <p className="mb-0">
+Last Login:  {user.lastLogin}
+       </p>
+     </Alert>
     )}
 
     {!isAuthenticated && (
@@ -58,7 +68,7 @@ function HomePage() {
               <Form.Label id="bold-font">Password</Form.Label>
               <Form.Control type="password" ref={passwordRef} placeholder="Password" />
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" disabled={loading}>
               Submit
             </Button>
             <p className="mt-3">

@@ -20,10 +20,33 @@ export const login = createAsyncThunk(
 
 export const logout = createAsyncThunk(
   "authentication/logout",
-  async (userId, thunkAPI) => {
-    const response = await axios.post(`http://localhost:4000/logout/${userId}`);
-    localStorage.removeItem("token");
-    return response.data;
+  async (_, thunkAPI) => { // No need to pass userId
+    try {
+      // Get the token from localStorage
+      const token = localStorage.getItem("token");
+
+      // Make sure to include the Authorization header with the JWT token
+      const response = await axios.post(
+        `http://localhost:4000/logout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // Remove the token from localStorage
+      localStorage.removeItem("token");
+
+      // Return the response data
+      return response.data;
+    } catch (error) {
+      // Handle errors and pass them to the thunkAPI
+      return thunkAPI.rejectWithValue(
+        error.response ? error.response.data : "Logout failed"
+      );
+    }
   }
 );
 
