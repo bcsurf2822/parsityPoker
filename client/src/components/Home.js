@@ -31,7 +31,7 @@ const Home = () => {
             <Card.Body>
               {!isAuthenticated && <Login />}
               {isAuthenticated && (
-                <Card.Text>Welcome back, {userInfo.username}!</Card.Text>
+                <Card.Text>Welcome , {userInfo.username}!</Card.Text>
               )}
             </Card.Body>
           </Card>

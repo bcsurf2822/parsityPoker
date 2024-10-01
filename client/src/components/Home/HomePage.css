@@ -1,0 +1,32 @@
+.title {
+  border-bottom: 2px solid black;
+  border-top: 2px solid black;
+  font-family: "Anton", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: rgb(0, 0, 9);
+  font-size: x-large;
+  margin-bottom: 60px;
+  text-shadow: 2px 2px 5px rgb(111, 91, 91);
+}
+
+.homepage {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.login {
+  width: 400px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+}
+
+#bold-font {
+  font-weight: 600;
+}

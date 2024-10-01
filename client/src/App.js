@@ -16,6 +16,7 @@ import NewRoom from "./components/tables/NewRoom";
 import ProtectedRoute from "./components/Protected";
 
 import { initializeAuth } from "./rtk/actions/auth";
+import HomePage from "./components/Home/HomePage";
 
 function App() {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ function App() {
     
 
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<About />} />
           <Route path="/promotions" element={<Promotions />} />
           <Route path="/tables" element={<Tables />} />
