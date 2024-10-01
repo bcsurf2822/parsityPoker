@@ -10,7 +10,6 @@ const jwtMiddleware = expressJwt({
 
 router.post("/logout", jwtMiddleware, async (req, res) => {
   try {
-    console.log("Decoded JWT:", req.user); 
     const userId = req.user._id; 
     console.log("User ID from JWT:", userId);
 
