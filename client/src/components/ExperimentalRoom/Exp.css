@@ -1,0 +1,29 @@
+.container {
+  border: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+}
+
+.mid-row {
+  display: flex;
+  /* margin: 30px auto; */
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.table {
+  border: 3px solid black;
+  height: 40vh;
+  width: 80vh;
+  margin-left: 1px;
+  margin-right: 1px;
+  border-radius: 40px;
+  align-items: end;
+}
+
+#sit-btn {
+  height: 10vh;
+  margin-left: 5px;
+  margin-right: 5px;
+}

@@ -6,7 +6,8 @@ const NavbarWrapper = () => {
   const location = useLocation();
   const isPokerRoom =
     location.pathname.startsWith("/room/") ||
-    location.pathname.startsWith("/poker/");
+    location.pathname.startsWith("/poker/") ||
+    location.pathname.startsWith("/exp/");
 
   return <>{!isPokerRoom && <MyNav />}</>;
 };

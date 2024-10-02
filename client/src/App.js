@@ -12,6 +12,7 @@ import Withdrawl from "./components/settings/Withdrawl";
 import Deposit from "./components/settings/Deposit";
 // import Room from "./components/tables/Room";
 import NewRoom from "./components/tables/NewRoom";
+import ExperimentalRoom from "./components/ExperimentalRoom/Exp";
 
 import ProtectedRoute from "./components/Protected";
 
@@ -51,6 +52,7 @@ function App() {
           />
           {/* <Route path="/room/:id" element={<Room />} /> */}
           <Route path="/poker/:id" element={<NewRoom />} />
+          <Route path="/exp/:id" element={<ExperimentalRoom />} />
         </Routes>
       </Router>
     </div>
