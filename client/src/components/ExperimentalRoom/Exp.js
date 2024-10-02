@@ -11,7 +11,7 @@ export default function ExperimentalRoom() {
         <Button id="sit-btn">Sit Here</Button>
       </div>
       <div className="mid-row">
-        <Button id="sit-btn">Sit Here</Button>
+        <Button id="sit-btn">Sit Her</Button>
         <div className="table">
           <div className="cards">
             {Array.from({ length: 5 }).map((_, index) => (
