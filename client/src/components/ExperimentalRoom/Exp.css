@@ -9,7 +9,7 @@
 .mid-row {
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-around;
 }
 
 .table {
@@ -39,12 +39,6 @@
   height: 10vh;
   margin-left: 5px;
   margin-right: 5px;
-}
-
-.bot-btns {
-  display: flex;
-  justify-content: center;
-  width: max-content;
 }
 
 #bet-btn {
