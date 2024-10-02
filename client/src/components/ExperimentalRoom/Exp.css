@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: column;
   height: 80vh;
+  padding: 1%;
 }
 
 .mid-row {
@@ -19,11 +20,21 @@
   margin-left: 1px;
   margin-right: 1px;
   border-radius: 40px;
-  align-items: end;
+  display: flex;
+  justify-content: center;
 }
 
 #sit-btn {
   height: 10vh;
   margin-left: 5px;
   margin-right: 5px;
+}
+
+.bot-btns {
+  display: flex;
+  justify-content: center;
+}
+
+.bet-box {
+  justify-items: end;
 }
