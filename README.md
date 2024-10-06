@@ -6,8 +6,7 @@
 ## APIs
 - Deck of Cards [api](https://www.deckofcardsapi.com/)
 - [PokerSolver](https://github.com/goldfire/pokersolver)
-
-## Why I Created This Project
+  
 
 ## Tech Stack
 
@@ -20,9 +19,5 @@
 - Mongoose
 - Axios
 - React Router DOM
-
-## Contact
-
-- [**Email:**](ben.corbett.44@icloud.com)
 
 
