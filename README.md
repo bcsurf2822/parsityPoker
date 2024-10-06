@@ -4,14 +4,8 @@
 -  A poker clone where the user can play texas hold em
 
 ## APIs
-
-### Deck of Cards API
-
-- https://www.deckofcardsapi.com/
-
-### Poker API
-
-- https://www.pokerapi.dev/
+- Deck of Cards [api](https://www.deckofcardsapi.com/)
+- [PokerSolver](https://github.com/goldfire/pokersolver)
 
 ## Why I Created This Project
 
@@ -27,15 +21,8 @@
 - Axios
 - React Router DOM
 
-## Challenges
-
-## What I Learned
-
 ## Contact
 
-If you have any questions, feedback, or want to get involved, please feel free to reach out to me:
+- [**Email:**](ben.corbett.44@icloud.com)
 
-- **Name:** Benjamin Corbet]
-- **Email:** ben.corbett.44@icloud.com
 
-## License
